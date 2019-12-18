@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_login_ui/screens/login_screen.dart';
 import 'package:grades/screens/login_screen.dart';
 
 void main() => runApp(MyApp());
@@ -12,6 +11,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Login UI',
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
     );
   }
 }
