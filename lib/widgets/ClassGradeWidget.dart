@@ -8,6 +8,21 @@ class ClassGradeWidget extends StatelessWidget {
   final String letterGrade;
   final num percent;
 
+  Widget _buildColumn(
+      String topText, String bottomText, CrossAxisAlignment alignment) {
+    return Expanded(
+        child: Column(crossAxisAlignment: alignment, children: <Widget>[
+      Text(
+        topText,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+      ),
+      Padding(
+        child: Text(this.teacher),
+        padding: EdgeInsets.only(top: 30),
+      ),
+    ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,34 +32,8 @@ class ClassGradeWidget extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             borderRadius: new BorderRadius.all(const Radius.circular(10))),
         child: Row(children: <Widget>[
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                this.course,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-              ),
-              Padding(
-                child: Text(this.teacher),
-                padding: EdgeInsets.only(top: 30),
-              )
-            ],
-          )),
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                '$percent%',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
-              ),
-              Padding(
-                child: Text(this.letterGrade),
-                padding: EdgeInsets.only(top: 30),
-              )
-            ],
-          )),
+          _buildColumn(this.course, this.teacher, CrossAxisAlignment.start),
+          _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end)
         ]));
   }
 }
