@@ -9,8 +9,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _rememberMe = false;
-
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+        SizedBox(height: 10.0),
       ],
     );
   }
@@ -84,11 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        color: Colors.white,
+        color: Color(0xff07b5d0),
+        // background: linear-gradient(100deg, #4cc6b9, #07b5d0);
+
         child: Text(
           'LOGIN',
           style: TextStyle(
-            color: Color(0xFF527DAA),
+            color: Color(0xFFffffff),
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -112,17 +113,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: double.infinity,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.9],
-                  ),
+                  color: Color(0xff2d3d54),
+                  // gradient: LinearGradient(
+                  //   begin: Alignment.topCenter,
+                  //   end: Alignment.bottomCenter,
+                  //   colors: [
+                  //     Color(0xFF73AEF5),
+                  //     Color(0xFF61A4F1),
+                  //     Color(0xFF478DE0),
+                  //     Color(0xFF398AE5),
+                  //   ],
+                  //   stops: [0.1, 0.4, 0.7, 0.9],
+                  // ),
                 ),
               ),
               Container(
@@ -145,6 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      SizedBox(height: 25.0),
                       Text(
                         'Your grades at a glance',
                         style: TextStyle(
@@ -154,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 35.0),
                       _buildEmailTF(),
                       SizedBox(
                         height: 30.0,
