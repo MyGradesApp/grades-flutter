@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_login_ui/utilities/constants.dart';
 import 'package:grades/utilities/constants.dart';
+import 'package:grades/widgets/ClassGradeWidget.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        ClassGradeWidget(
+            course: "Foo", teacher: "bar", letterGrade: "baz", percent: 5),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
