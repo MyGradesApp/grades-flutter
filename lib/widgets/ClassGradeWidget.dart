@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ClassGradeWidget extends StatelessWidget {
-  ClassGradeWidget({this.course, this.teacher, this.letterGrade, this.percent});
+  ClassGradeWidget(
+      {@required this.course,
+      @required this.teacher,
+      @required this.letterGrade,
+      @required this.percent});
 
   final String course;
   final String teacher;
@@ -25,15 +29,16 @@ class ClassGradeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding:
-            const EdgeInsets.only(left: 22, right: 22, top: 28, bottom: 16),
-        decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: new BorderRadius.all(const Radius.circular(10))),
-        child: Row(children: <Widget>[
-          _buildColumn(this.course, this.teacher, CrossAxisAlignment.start),
-          _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end)
-        ]));
+    return Card(
+        color: Theme.of(context).primaryColor,
+        elevation: 3,
+        margin: EdgeInsets.all(15),
+        child: Padding(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 25, bottom: 15),
+          child: Row(children: <Widget>[
+            _buildColumn(this.course, this.teacher, CrossAxisAlignment.start),
+            _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end)
+          ]),
+        ));
   }
 }
