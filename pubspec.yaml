@@ -1,0 +1,15 @@
+name: sis_loader
+description: A library to fetch grades from sis
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+
+dependencies:
+  http: ^0.12.0+2
+  client_cookie: ^2.2.1
+  intl: ^0.16.0
+
+
+dev_dependencies:
+  test: ^1.9.4
+  pedantic: ^1.9.0
