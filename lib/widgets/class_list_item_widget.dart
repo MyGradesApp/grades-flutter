@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ClassGradeWidget extends StatelessWidget {
-  ClassGradeWidget(
+class ClassListItemWidget extends StatelessWidget {
+  ClassListItemWidget(
       {@required this.course,
       @required this.teacher,
       @required this.letterGrade,
@@ -21,7 +21,7 @@ class ClassGradeWidget extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
       ),
       Padding(
-        child: Text(this.teacher),
+        child: Text(bottomText),
         padding: EdgeInsets.only(top: 30),
       ),
     ]));
