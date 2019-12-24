@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () => Navigator.pushNamed(context, "/courses"),
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Text(
           'LOGIN',
           style: TextStyle(
-            color: Color(0xFFffffff),
+            color: Colors.white,
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
