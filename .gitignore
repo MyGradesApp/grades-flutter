@@ -22,6 +22,9 @@
 
 # Platform specific generated code
 /ios/
+/macos/
+/windows/
+/web/
 /android/
 
 # Flutter/Dart/Pub related
