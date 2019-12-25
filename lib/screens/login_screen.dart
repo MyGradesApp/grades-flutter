@@ -49,7 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
           _loading = true;
         });
         await loader.login(email, password);
-        Provider.of<CurrentSession>(context).setSisLoader(loader);
+        Provider.of<CurrentSession>(context, listen: false)
+            .setSisLoader(loader);
         Navigator.pushNamed(context, '/courses');
       } catch (e) {
         print(e);
