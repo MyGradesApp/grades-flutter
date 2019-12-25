@@ -8,6 +8,9 @@ class SISLoader {
   Future<void> login(String username, String password) async {
     var response = await _client
         .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
+    if (response.statusCode == 200 && response.redirects.isEmpty) {
+      return;
+    }
 
     var body = await response.bodyAsString();
     var authState =

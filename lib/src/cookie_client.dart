@@ -1,6 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+class _RedirectInfo implements RedirectInfo {
+  final int statusCode;
+  final String method;
+  final Uri location;
+
+  const _RedirectInfo(this.statusCode, this.method, this.location);
+}
+
 extension StringBody on HttpClientResponse {
   Future<String> bodyAsString() async {
     var body = await utf8.decoder.bind(this).toList();
@@ -34,6 +42,7 @@ class CookieClient {
       if ((newLocation as String).startsWith('/')) {
         newLocation = url.scheme + '://' + url.host + newLocation;
       }
+      var oldCode = response.statusCode;
       response = await get(Uri.parse(newLocation)).catchError((error) async {
         // TODO: Fix this for real
         if (newLocation == 'Modules.php?modname=misc/Portal.php') {
@@ -45,6 +54,8 @@ class CookieClient {
         }
         return response;
       });
+      response.redirects
+          .add(_RedirectInfo(oldCode, 'GET', Uri.parse(newLocation)));
     }
 
     return response;
@@ -69,7 +80,10 @@ class CookieClient {
 
     if ((response.statusCode == 302 || response.statusCode == 303) &&
         location != null) {
+      var oldCode = response.statusCode;
       response = await get(Uri.parse(location[0]));
+      response.redirects
+          .add(_RedirectInfo(oldCode, 'GET', Uri.parse(location[0])));
     }
 
     return response;

@@ -8,6 +8,8 @@ Future<void> main() async {
   var loader = SISLoader();
 
   await loader.login(username, password);
+  // Repeated logins work
+  await loader.login(username, password);
 
   var courses = await loader.getCourses();
 
