@@ -14,7 +14,9 @@ class Course {
   final int gradePercent;
   final String gradeLetter;
 
-  const Course(
+  Future<List<Map<String, dynamic>>> _grades;
+
+  Course(
       {this.client,
       this.gradesUrl,
       this.courseName,
@@ -23,7 +25,16 @@ class Course {
       this.gradePercent,
       this.gradeLetter});
 
-  Future<List<Map<String, dynamic>>> getGrades() async {
+  Future<List<Map<String, dynamic>>> getGrades([force = false]) {
+    if (_grades == null || force) {
+      _grades = _fetchRawGrades();
+      return _grades;
+    } else {
+      return _grades;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchRawGrades() async {
     var gradePage = await client
         .get(Uri.parse('https://sis.palmbeachschools.org/focus/' + gradesUrl));
 
