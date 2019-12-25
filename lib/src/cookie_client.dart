@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 class _RedirectInfo implements RedirectInfo {
+  @override
   final int statusCode;
+  @override
   final String method;
+  // ignore: annotate_overrides
   final Uri location;
 
   const _RedirectInfo(this.statusCode, this.method, this.location);
