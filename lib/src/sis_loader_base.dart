@@ -1,3 +1,5 @@
+import 'package:sis_loader/src/exceptions.dart';
+
 import 'cookie_client.dart';
 import 'course.dart';
 
@@ -53,9 +55,19 @@ class SISLoader {
       'AuthenticationBadgeToken': '',
     });
 
+    var authResponse = await authRequest.bodyAsString();
+    // Check if it succeeded (failure gives 200 code)
+    var authError = RegExp(
+            '<span class="field-validation-error text-danger" data-valmsg-for="ErrorMessage" data-valmsg-replace="true">(.*?)</span>')
+        .firstMatch(authResponse);
+
+    if (authError != null) {
+      throw InvalidAuthException(authError.group(1));
+    }
+
     var samlResponse = RegExp(
             r'<input name="SAMLResponse" type="hidden" id="SAMLResponse" value="(.*?)"')
-        .firstMatch(await authRequest.bodyAsString())
+        .firstMatch(authResponse)
         .group(1);
 
     var enboardRequest = await _client.post(
