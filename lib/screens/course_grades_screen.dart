@@ -53,18 +53,16 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   }
 
   Widget _createTable(AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-    final data = snapshot.data;
-    final cols = data[0]
+    final tableCols = snapshot.data[0]
         .map((k, v) {
           return MapEntry(k, DataColumn(label: Text(k)));
         })
         .values
         .toList();
 
-    final List<DataRow> rows = [];
-    for (var entry in data) {
-      final List<DataCell> cells = [];
-      cells.addAll(entry
+    final List<DataRow> tableRows = [];
+    for (var row in snapshot.data) {
+      final List<DataCell> tableCells = row
           .map((k, v) {
             if (v == null) {
               return MapEntry(k, DataCell(Text("")));
@@ -76,16 +74,16 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
             }
           })
           .values
-          .toList());
+          .toList();
 
-      rows.add(DataRow(cells: cells));
+      tableRows.add(DataRow(cells: tableCells));
     }
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: DataTable(
-        columns: cols,
-        rows: rows,
+        columns: tableCols,
+        rows: tableRows,
         columnSpacing: 5,
       ),
     );
