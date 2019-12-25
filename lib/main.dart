@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/login_screen.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               brightness: Brightness.dark, primaryColor: Colors.blueGrey),
           routes: <String, WidgetBuilder>{
-            '/courses': (BuildContext context) => CourseListScreen()
+            '/courses': (BuildContext context) => CourseListScreen(),
+            '/course_grades': (BuildContext context) => CourseGradesScreen(),
           },
         ));
   }

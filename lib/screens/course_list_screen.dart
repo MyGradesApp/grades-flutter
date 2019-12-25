@@ -11,11 +11,22 @@ class CourseListScreen extends StatefulWidget {
 
 class _CourseListScreenState extends State<CourseListScreen> {
   Future<List<Course>> _courses;
+  bool _complete = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _courses = Provider.of<CurrentSession>(context).sisLoader.getCourses();
+    if (!_complete) {
+      _courses = Provider.of<CurrentSession>(context)
+          .sisLoader
+          .getCourses()
+          .then((courses) {
+        setState(() {
+          _complete = true;
+        });
+        return courses;
+      });
+    }
   }
 
   @override
@@ -33,6 +44,10 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   var course = snapshot.data[index];
                   return ClassListItemWidget(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/course_grades',
+                            arguments: course);
+                      },
                       course: course.courseName,
                       letterGrade: course.gradeLetter,
                       teacher: course.teacherName,
