@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:grades/models/current_session.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/login_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'models/current_session.dart';
 
 void main() => runApp(MyApp());
 
