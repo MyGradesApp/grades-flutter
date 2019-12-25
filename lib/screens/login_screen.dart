@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -8,6 +12,69 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _loading = false;
+
+  @override
+  void initState() {
+    _loadStoredAuth();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  _loadStoredAuth() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = prefs.getString('sis_email');
+    var password = prefs.getString('sis_password');
+    _emailController.value = _emailController.value.copyWith(text: email);
+    _passwordController.value =
+        _passwordController.value.copyWith(text: password);
+    _attemptLogin(email, password);
+  }
+
+  Future<void> _attemptLogin(String email, String password) async {
+    if (email != null &&
+        email.isNotEmpty &&
+        password != null &&
+        password.isNotEmpty) {
+      var loader = SISLoader();
+      try {
+        setState(() {
+          _loading = true;
+        });
+        await loader.login(email, password);
+        Provider.of<CurrentSession>(context).setSisLoader(loader);
+        Navigator.pushNamed(context, '/courses');
+      } catch (e) {
+        print(e);
+        // TODO: Handle login failure
+        // For now just clear password so we don't get stuck in a loop
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('sis_password', '');
+        _loadStoredAuth();
+      } finally {
+        setState(() {
+          _loading = false;
+        });
+      }
+    }
+  }
+
+  _handleLoginPressed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = _emailController.text;
+    var password = _passwordController.text;
+    prefs.setString('sis_email', email);
+    prefs.setString('sis_password', password);
+    _attemptLogin(email, password);
+  }
+
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.white,
@@ -49,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _passwordController,
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
@@ -77,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => Navigator.pushNamed(context, "/courses"),
+        onPressed: _handleLoginPressed,
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -163,6 +232,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       _buildPasswordTF(),
                       _buildLoginBtn(),
+                      Visibility(
+                        visible: _loading,
+                        child: CircularProgressIndicator(),
+                      )
                     ],
                   ),
                 ),
