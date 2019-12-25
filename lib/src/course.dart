@@ -2,6 +2,9 @@ import 'package:intl/intl.dart';
 
 import 'cookie_client.dart';
 
+final shortMonthDateFormat = DateFormat('MMM dd, yyyy hh:mm aa');
+final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
+
 class Course {
   final CookieClient client;
   final String gradesUrl;
@@ -44,13 +47,13 @@ class Course {
           if ((content as String).isEmpty) {
             content = null;
           } else {
-            content = DateFormat('MMM dd, yyyy hh:mm aa').parse(content);
+            content = shortMonthDateFormat.parse(content);
           }
         } else if (field == 'modified_date') {
           if ((content as String).isEmpty) {
             content = null;
           } else {
-            content = DateFormat('MMMM dd, yyyy, hh:mm aa').parseLoose(content);
+            content = longMonthDateFormat.parseLoose(content);
           }
         } else if (field == 'assignment_files') {
           if (content == '&nbsp;') {
