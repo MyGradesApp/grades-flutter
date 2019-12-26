@@ -38,7 +38,8 @@ class Course {
     var gradePage = await client
         .get(Uri.parse('https://sis.palmbeachschools.org/focus/' + gradesUrl));
 
-    Map<String, dynamic> extractRowFields(String row) {
+    Map<String, dynamic> extractRowFields(
+        String row, Map<String, String> headers) {
       var fieldsMatches = RegExp(
               r'<TD class="LO_field" style="white-space:normal !important;" data-col="(.*?)">(?:<DIV.*?>)?(.*?)(?:<\/DIV>)?<\/TD>')
           .allMatches(row);
@@ -47,26 +48,27 @@ class Course {
       Map<String, dynamic> fields = {};
 
       for (var match in fieldsMatches) {
-        var field = match.group(1).toLowerCase();
+        var rawField = match.group(1).toLowerCase();
+        var field = headers[rawField];
         dynamic content = match.group(2);
 
-        if (field == 'comment') {
+        if (rawField == 'comment') {
           if (content == '<span class="unreset"></span>') {
             content = null;
           }
-        } else if (field == 'assigned_date' || field == 'due_date') {
+        } else if (rawField == 'assigned_date' || rawField == 'due_date') {
           if ((content as String).isEmpty) {
             content = null;
           } else {
             content = shortMonthDateFormat.parse(content);
           }
-        } else if (field == 'modified_date') {
+        } else if (rawField == 'modified_date') {
           if ((content as String).isEmpty) {
             content = null;
           } else {
             content = longMonthDateFormat.parseLoose(content);
           }
-        } else if (field == 'assignment_files') {
+        } else if (rawField == 'assignment_files') {
           if (content == '&nbsp;') {
             content = null;
           }
@@ -78,9 +80,23 @@ class Course {
     }
 
     var b = await gradePage.bodyAsString();
+
+    var headerMatches = RegExp(
+            '<TD class="LO_header" data-assoc="(.*?)"><A HREF=\'.*?\'>(.*?)<')
+        .allMatches(b);
+
+    // ignore: omit_local_variable_types
+    Map<String, String> headers = {};
+
+    for (var match in headerMatches) {
+      headers[match.group(1).toLowerCase()] = match.group(2);
+    }
+
     var gradesMatches = RegExp('<TR id="LOy_row.+?"(.*?)<\/TR>').allMatches(b);
 
-    return gradesMatches.map((m) => extractRowFields(m.group(1))).toList();
+    return gradesMatches
+        .map((m) => extractRowFields(m.group(1), headers))
+        .toList();
   }
 
   @override
