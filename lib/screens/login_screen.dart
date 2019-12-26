@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _loading = false;
+  String _errorMessage;
 
   @override
   void initState() {
@@ -47,18 +48,20 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         setState(() {
           _loading = true;
+          _errorMessage = null;
         });
         await loader.login(email, password);
         Provider.of<CurrentSession>(context, listen: false)
             .setSisLoader(loader);
         Navigator.pushNamed(context, '/courses');
+      } on InvalidAuthException catch (e) {
+        setState(() {
+          _errorMessage = e.message;
+        });
       } catch (e) {
-        print(e);
-        // TODO: Handle login failure
-        // For now just clear password so we don't get stuck in a loop
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('sis_password', '');
-        _loadStoredAuth();
+        setState(() {
+          _errorMessage = "Unknown error:\n$e";
+        });
       } finally {
         setState(() {
           _loading = false;
@@ -154,7 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         color: Color(0xff07b5d0),
         // background: linear-gradient(100deg, #4cc6b9, #07b5d0);
-
         child: Text(
           'LOGIN',
           style: TextStyle(
@@ -234,9 +236,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       _buildPasswordTF(),
                       _buildLoginBtn(),
                       Visibility(
+                        visible: _errorMessage != null,
+                        child: Text(
+                          _errorMessage ?? "",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontFamily: 'OpenSans',
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                      Visibility(
                         visible: _loading,
                         child: CircularProgressIndicator(),
-                      )
+                      ),
                     ],
                   ),
                 ),
