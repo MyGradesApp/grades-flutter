@@ -36,21 +36,38 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.value = _emailController.value.copyWith(text: email);
     _passwordController.value =
         _passwordController.value.copyWith(text: password);
-    _attemptLogin(email, password);
+    _attemptLogin(
+      email,
+      password,
+    );
   }
 
-  Future<void> _attemptLogin(String email, String password) async {
-    if (email != null &&
-        email.isNotEmpty &&
-        password != null &&
-        password.isNotEmpty) {
-      var loader = SISLoader();
+  Future<void> _attemptLogin(
+    String email,
+    String password,
+  ) async {
+    var loader = SISLoader();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var session = prefs.getString('sis_session');
+
+    if (session != null) {
+      loader.sessionCookies = session;
+    }
+
+    if ((email != null &&
+            email.isNotEmpty &&
+            password != null &&
+            password.isNotEmpty) ||
+        session != null) {
       try {
         setState(() {
           _loading = true;
           _errorMessage = null;
         });
         await loader.login(email, password);
+        prefs.setString('sis_session', loader.sessionCookies);
+
         Provider.of<CurrentSession>(context, listen: false)
             .setSisLoader(loader);
         Navigator.pushNamed(context, '/courses');
@@ -59,9 +76,16 @@ class _LoginScreenState extends State<LoginScreen> {
           _errorMessage = e.message;
         });
       } catch (e) {
+        // If the session is invalid, clear it and force a normal login
+        if (session != null) {
+          prefs.remove('sis_session');
+          _attemptLogin(email, password);
+          return;
+        }
         setState(() {
           _errorMessage = "Unknown error:\n$e";
         });
+        rethrow;
       } finally {
         setState(() {
           _loading = false;
