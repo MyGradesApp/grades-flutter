@@ -11,6 +11,8 @@ Future<void> main() async {
   // Repeated logins work
   await loader.login(username, password);
 
+  print((await loader.getUserProfile()).cumulative_gpa);
+
   var courses = await loader.getCourses();
 
   for (var course in courses) {

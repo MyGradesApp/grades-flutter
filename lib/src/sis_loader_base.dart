@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/exceptions.dart';
+import 'package:sis_loader/src/profile.dart';
 
 import 'cookie_client.dart';
 import 'course.dart';
@@ -143,5 +145,57 @@ class SISLoader {
     }).toList();
 
     return courses;
+  }
+
+  Future<dynamic> getRawUserProfile() async {
+    assert(_loggedIn);
+
+    var graduationReqsRequest = await _client.get(Uri.parse(
+        'https://sis.palmbeachschools.org/focus/Modules.php?modname=GraduationRequirements/GraduationRequirements.php&student_id=new&top_deleted_student=true'));
+
+    var bearerTokenCookie = graduationReqsRequest.headers['set-cookie']
+        .firstWhere((c) => c.startsWith('Module::'));
+    assert(bearerTokenCookie != null);
+
+    var startIndex = bearerTokenCookie.indexOf('=') + 1;
+    var endIndex = bearerTokenCookie.indexOf(';');
+    var bearerToken = bearerTokenCookie.substring(startIndex, endIndex);
+
+    var graduationReqsBody = await graduationReqsRequest.bodyAsString();
+
+    var requestToken = RegExp(r'request_token   = "(.*?)"')
+        .firstMatch(graduationReqsBody)
+        .group(1);
+
+    var studentId =
+        RegExp(r'student_id":(.*?),').firstMatch(graduationReqsBody).group(1);
+
+    var today = DateTime.now();
+    var todaysDate = '${today.month}/${today.day}/${today.year}';
+    var requestData =
+        '{"requests":[{"controller":"GraduationRequirementsReportController","method":"getOneStudentReportData","args":[[[{"ID":1,"TITLE":"Main","TEMPLATE":"main_category","CLASS_NAME":"MainCategoryGraduationRequirementsReport","CREATED_BY_CLASS":null,"CREATED_BY_ID":null,"CREATED_AT":null,"UPDATED_BY_CLASS":null,"UPDATED_BY_ID":null,"UPDATED_AT":null}],$studentId,"COURSE_HISTORY","$todaysDate",""]],"session":null}],"cache":{}}';
+    var dataRequest = await _client.post(
+        Uri.parse(
+            'https://sis.palmbeachschools.org/focus/classes/FocusModule.class.php?modname=GraduationRequirements%2FGraduationRequirements.php&student_id=new&top_deleted_student=true&type=SISStudent&id=' +
+                studentId),
+        '--FormBoundary\r\nContent-Disposition: form-data; name="__call__"\r\n\r\n$requestData\r\n--FormBoundary\r\nContent-Disposition: form-data; name="__token__"\r\n\r\n$requestToken\r\n--FormBoundary--',
+        headers: {
+          'authorization': 'Bearer ' + bearerToken,
+          'content-type': 'multipart/form-data; boundary=FormBoundary',
+        });
+
+    return json.decode(await dataRequest.bodyAsString())[0]['result'];
+  }
+
+  Future<Profile> getUserProfile() async {
+    var rawProfile = (await getRawUserProfile())['Top'];
+
+    var classRankPieces = rawProfile['class_rank'].split(' / ');
+    return Profile(
+        cumulative_gpa: double.parse(rawProfile['cumluative_gpa']),
+        cumulative_weighted_gpa:
+            double.parse(rawProfile['cumulative_weighted_gpa']),
+        class_rank_numerator: int.parse(classRankPieces[0]),
+        class_rank_denominator: int.parse(classRankPieces[1]));
   }
 }

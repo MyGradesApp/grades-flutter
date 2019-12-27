@@ -6,6 +6,7 @@ class _RedirectInfo implements RedirectInfo {
   final int statusCode;
   @override
   final String method;
+
   // ignore: annotate_overrides
   final Uri location;
 
@@ -33,8 +34,14 @@ class CookieClient {
       request.cookies.addAll(cookies.values);
       return request.close();
     }).then((HttpClientResponse response) {
-      cookies.addEntries(
-          response.cookies.map((cookie) => MapEntry(cookie.name, cookie)));
+      var values = response.headers[HttpHeaders.setCookieHeader] ?? [];
+      // GraduationRequirments page returns an illegal cookie, strip that
+      var newCookies = values
+          .where((v) => !v.startsWith('Module::'))
+          .map((v) => Cookie.fromSetCookieValue(v))
+          .map((cookie) => MapEntry(cookie.name, cookie));
+
+      cookies.addEntries(newCookies);
       location = response.headers['location'];
       return response;
     });
@@ -64,15 +71,24 @@ class CookieClient {
     return response;
   }
 
-  Future<HttpClientResponse> post(Uri url, Object data) async {
+  Future<HttpClientResponse> post(Uri url, Object data,
+      {Map<String, Object> headers}) async {
     var location;
     var response = await _client.postUrl(url).then((HttpClientRequest request) {
       // We need to handle redirects ourselves
       request.followRedirects = false;
       request.cookies.addAll(cookies.values);
-      request.headers.add('content-type', 'application/x-www-form-urlencoded');
+      headers?.forEach((name, value) {
+        request.headers.add(name, value);
+      });
 
-      request.write(Uri(queryParameters: data).query);
+      if (data is String) {
+        request.write(data);
+      } else {
+        request.headers
+            .add('content-type', 'application/x-www-form-urlencoded');
+        request.write(Uri(queryParameters: data).query);
+      }
       return request.close();
     }).then((HttpClientResponse response) {
       cookies.addEntries(
