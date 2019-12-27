@@ -23,17 +23,17 @@ extension StringBody on HttpClientResponse {
 // it should be improved for general use (proper cookie handling and redirects, etc)
 class CookieClient {
   final HttpClient _client = HttpClient();
-  final Map<String, Cookie> _cookies = {};
+  final Map<String, Cookie> cookies = {};
 
   Future<HttpClientResponse> get(Uri url) async {
     var location;
     var response = await _client.getUrl(url).then((HttpClientRequest request) {
       // We need to handle redirects ourselves
       request.followRedirects = false;
-      request.cookies.addAll(_cookies.values);
+      request.cookies.addAll(cookies.values);
       return request.close();
     }).then((HttpClientResponse response) {
-      _cookies.addEntries(
+      cookies.addEntries(
           response.cookies.map((cookie) => MapEntry(cookie.name, cookie)));
       location = response.headers['location'];
       return response;
@@ -69,13 +69,13 @@ class CookieClient {
     var response = await _client.postUrl(url).then((HttpClientRequest request) {
       // We need to handle redirects ourselves
       request.followRedirects = false;
-      request.cookies.addAll(_cookies.values);
+      request.cookies.addAll(cookies.values);
       request.headers.add('content-type', 'application/x-www-form-urlencoded');
 
       request.write(Uri(queryParameters: data).query);
       return request.close();
     }).then((HttpClientResponse response) {
-      _cookies.addEntries(
+      cookies.addEntries(
           response.cookies.map((cookie) => MapEntry(cookie.name, cookie)));
       location = response.headers['location'];
       return response;

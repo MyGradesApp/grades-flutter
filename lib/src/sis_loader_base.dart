@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:sis_loader/src/exceptions.dart';
 
 import 'cookie_client.dart';
@@ -7,10 +10,30 @@ class SISLoader {
   final CookieClient _client = CookieClient();
   bool _loggedIn = false;
 
+  String get sessionCookies {
+    return json.encode(_client.cookies, toEncodable: (value) {
+      if (value is Cookie) {
+        return value.toString();
+      } else {
+        return value.toJson();
+      }
+    });
+  }
+
+  set sessionCookies(String cookies) {
+    var newCookiesRaw = json.decode(cookies, reviver: (key, value) {
+      if (key == null) return value;
+      return Cookie.fromSetCookieValue(value);
+    });
+
+    _client.cookies.addAll(Map<String, Cookie>.from(newCookiesRaw));
+  }
+
   Future<void> login(String username, String password) async {
     var response = await _client
         .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
     if (response.statusCode == 200 && response.redirects.isEmpty) {
+      _loggedIn = true;
       return;
     }
 
