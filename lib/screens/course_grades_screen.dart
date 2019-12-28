@@ -34,7 +34,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${course.courseName}"),
+        title: Text("Grades for ${course.courseName}"),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
           future: _grades,
