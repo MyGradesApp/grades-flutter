@@ -33,7 +33,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Courses'),
+        title: const Text('COURSES'),
       ),
       body: FutureBuilder<List<Course>>(
         future: _courses,
@@ -47,6 +47,13 @@ class _CourseListScreenState extends State<CourseListScreen> {
                       onTap: () {
                         Navigator.pushNamed(context, '/course_grades',
                             arguments: course);
+                        style:
+                        TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'OpenSans',
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold,
+                        );
                       },
                       course: course.courseName,
                       letterGrade: course.gradeLetter,
