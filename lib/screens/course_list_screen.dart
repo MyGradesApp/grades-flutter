@@ -33,7 +33,13 @@ class _CourseListScreenState extends State<CourseListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('COURSES'),
+        title: const Text('Courses'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+          )
+        ],
       ),
       body: FutureBuilder<List<Course>>(
         future: _courses,

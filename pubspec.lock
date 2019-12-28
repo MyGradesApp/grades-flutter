@@ -92,7 +92,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+2"
+    version: "0.12.0+3"
   http_parser:
     dependency: transitive
     description:
@@ -203,7 +203,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "03d5a57af9981958293db44db5011699d82f58ea"
+      resolved-ref: "81e3b9a1edbbf8787b4210d0ea2d157f881043d6"
       url: "https://github.com/Noskcaj19/dart-sis-loader.git"
     source: git
     version: "0.0.0"
