@@ -98,6 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var email = _emailController.text;
     var password = _passwordController.text;
+    if (email != prefs.getString('sis_email') ||
+        password != prefs.getString('sis_password')) {
+      prefs.remove('sis_session');
+    }
     prefs.setString('sis_email', email);
     prefs.setString('sis_password', password);
     _attemptLogin(email, password);
