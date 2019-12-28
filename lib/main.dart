@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/login_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
           routes: <String, WidgetBuilder>{
             '/courses': (BuildContext context) => CourseListScreen(),
             '/course_grades': (BuildContext context) => CourseGradesScreen(),
+            '/academic_info': (BuildContext context) => AcademicInfoScreen(),
           },
         ));
   }

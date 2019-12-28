@@ -34,6 +34,12 @@ class _CourseListScreenState extends State<CourseListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Courses'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+          )
+        ],
       ),
       body: FutureBuilder<List<Course>>(
         future: _courses,
