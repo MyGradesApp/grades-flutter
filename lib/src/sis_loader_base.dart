@@ -190,12 +190,17 @@ class SISLoader {
   Future<Profile> getUserProfile() async {
     var rawProfile = (await getRawUserProfile())['Top'];
 
-    var classRankPieces = rawProfile['class_rank'].split(' / ');
+    List<String> classRankPieces = rawProfile['class_rank']?.split(' / ');
     return Profile(
-        cumulative_gpa: double.parse(rawProfile['cumluative_gpa']),
-        cumulative_weighted_gpa:
-            double.parse(rawProfile['cumulative_weighted_gpa']),
-        class_rank_numerator: int.parse(classRankPieces[0]),
-        class_rank_denominator: int.parse(classRankPieces[1]));
+        cumulative_gpa: rawProfile['cumluative_gpa'] != null
+            ? double.parse(rawProfile['cumluative_gpa'])
+            : null,
+        cumulative_weighted_gpa: rawProfile['cumulative_weighted_gpa'] != null
+            ? double.parse(rawProfile['cumulative_weighted_gpa'])
+            : null,
+        class_rank_numerator:
+            classRankPieces != null ? int.parse(classRankPieces[0]) : null,
+        class_rank_denominator:
+            classRankPieces != null ? int.parse(classRankPieces[1]) : null);
   }
 }
