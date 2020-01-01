@@ -44,19 +44,21 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 },
                 child: Column(
                   children: <Widget>[
-                    SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          _buildCard(
-                              "Cumulative GPA", info.cumulative_gpa.toString()),
-                          _buildCard("Cumulative Weighted GPA",
-                              info.cumulative_weighted_gpa.toString()),
-                          if (info.class_rank_numerator != null &&
-                              info.class_rank_denominator != null)
-                            _buildCard("Class Rank",
-                                '${info.class_rank_numerator} / ${info.class_rank_denominator}'),
-                        ],
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            _buildCard("Cumulative GPA",
+                                info.cumulative_gpa.toString()),
+                            _buildCard("Cumulative Weighted GPA",
+                                info.cumulative_weighted_gpa.toString()),
+                            if (info.class_rank_numerator != null &&
+                                info.class_rank_denominator != null)
+                              _buildCard("Class Rank",
+                                  '${info.class_rank_numerator} / ${info.class_rank_denominator}'),
+                          ],
+                        ),
                       ),
                     ),
                   ],
