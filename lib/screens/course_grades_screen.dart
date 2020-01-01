@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:grades/widgets/course_grades_full_display.dart';
+import 'package:grades/widgets/course_grades_minimal_display.dart';
 import 'package:sis_loader/sis_loader.dart';
+
+enum DisplayStyle { Full, Minimal }
 
 class CourseGradesScreen extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class CourseGradesScreen extends StatefulWidget {
 class _CourseGradesScreenState extends State<CourseGradesScreen> {
   Future<List<Map<String, dynamic>>> _grades;
   bool _loaded = false;
+  DisplayStyle _displayStyle = DisplayStyle.Minimal;
 
   @override
   void didChangeDependencies() {
@@ -38,13 +42,32 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
           elevation: 0.0,
           centerTitle: true,
           title: Text("${course.courseName}"),
+          actions: [
+            IconButton(
+              // TODO: Pick a better icon
+              icon: Icon(_displayStyle == DisplayStyle.Minimal
+                  ? Icons.unfold_more
+                  : Icons.unfold_less),
+              onPressed: () {
+                setState(() {
+                  _displayStyle = _displayStyle == DisplayStyle.Minimal
+                      ? DisplayStyle.Full
+                      : DisplayStyle.Minimal;
+                });
+              },
+            )
+          ],
         ),
         body: RefreshIndicator(
           child: FutureBuilder<List<Map<String, dynamic>>>(
               future: _grades,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return _createTable(snapshot);
+                  if (_displayStyle == DisplayStyle.Full) {
+                    return CourseGradesFullDisplay(snapshot.data);
+                  } else {
+                    return CourseGradesMinimalDisplay(snapshot.data);
+                  }
                 } else if (snapshot.hasError) {
                   return Center(
                       child: Text(
@@ -58,43 +81,5 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
             return _grades;
           },
         ));
-  }
-
-  Widget _createTable(AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-    final tableCols = snapshot.data[0]
-        .map((k, v) {
-          return MapEntry(k, DataColumn(label: Text(k)));
-        })
-        .values
-        .toList();
-
-    final List<DataRow> tableRows = [];
-    for (var row in snapshot.data) {
-      final List<DataCell> tableCells = row
-          .map((k, v) {
-            if (v == null) {
-              return MapEntry(k, DataCell(Text("")));
-            }
-            if (v is DateTime) {
-              return MapEntry(k, DataCell(Text(DateFormat.yMMMd().format(v))));
-            } else {
-              return MapEntry(k, DataCell(Text(v.toString())));
-            }
-          })
-          .values
-          .toList();
-
-      tableRows.add(DataRow(cells: tableCells));
-    }
-
-    return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      child: DataTable(
-        columns: tableCols,
-        rows: tableRows,
-        columnSpacing: 5,
-      ),
-    );
   }
 }
