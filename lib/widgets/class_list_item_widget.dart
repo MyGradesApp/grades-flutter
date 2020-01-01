@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/widgets/colored_grade_dot.dart';
 
 class ClassListItemWidget extends StatelessWidget {
   ClassListItemWidget(
@@ -16,7 +17,7 @@ class ClassListItemWidget extends StatelessWidget {
 
   Widget _buildColumn(
       String topText, String bottomText, CrossAxisAlignment alignment,
-      {bool chevron = false}) {
+      {bool chevron = false, String grade}) {
     return Column(crossAxisAlignment: alignment, children: <Widget>[
       Text(
         topText,
@@ -27,6 +28,8 @@ class ClassListItemWidget extends StatelessWidget {
         child: Container(
           child: Row(
             children: <Widget>[
+              if (grade != null) ColoredGradeDot.grade(grade),
+              SizedBox(width: 3),
               Text(
                 bottomText,
                 style: TextStyle(fontSize: 15, color: Colors.black),
@@ -64,7 +67,7 @@ class ClassListItemWidget extends StatelessWidget {
                   this.course, this.teacher, CrossAxisAlignment.start),
             ),
             _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end,
-                chevron: true),
+                chevron: true, grade: this.letterGrade),
           ]),
         ),
       ),
