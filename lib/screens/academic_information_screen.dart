@@ -38,15 +38,27 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var info = snapshot.data;
-              return SingleChildScrollView(
+              // TODO: Fix issue with bottom clipping
+              return RefreshIndicator(
+                onRefresh: () {
+                  _fetchInfo();
+                  return _info;
+                },
                 child: Column(
-                  children: [
-                    _buildCard(
-                        "Cumulative GPA", info.cumulative_gpa.toString()),
-                    _buildCard("Cumulative Weighted GPA",
-                        info.cumulative_weighted_gpa.toString()),
-                    _buildCard("Class Rank",
-                        '${info.class_rank_numerator} / ${info.class_rank_denominator}')
+                  children: <Widget>[
+                    SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          _buildCard(
+                              "Cumulative GPA", info.cumulative_gpa.toString()),
+                          _buildCard("Cumulative Weighted GPA",
+                              info.cumulative_weighted_gpa.toString()),
+                          _buildCard("Class Rank",
+                              '${info.class_rank_numerator} / ${info.class_rank_denominator}'),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -66,14 +78,14 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      color: Color(0xff216bac),
+      color: const Color(0xff216bac),
       margin: const EdgeInsets.all(10),
       child: Padding(
           padding: const EdgeInsets.all(9.0),
           child: ListTile(
             title: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
                 color: Colors.white,

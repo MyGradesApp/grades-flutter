@@ -16,13 +16,13 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     super.didChangeDependencies();
     if (!_loaded) {
       _fetchGrades();
-    } else {}
+    }
   }
 
-  _fetchGrades() {
+  _fetchGrades([bool force = false]) {
     final Course course = ModalRoute.of(context).settings.arguments;
 
-    _grades = course.getGrades().then((grades) {
+    _grades = course.getGrades(force).then((grades) {
       _loaded = true;
       return grades;
     });
@@ -33,27 +33,32 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     final Course course = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-      backgroundColor: Color(0xff216bac),
-      appBar: AppBar(
-        backgroundColor: Color(0xff2a84d2),
-        elevation: 0.0,
-        centerTitle: true,
-        title: Text("${course.courseName}"),
-      ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-          future: _grades,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return _createTable(snapshot);
-            } else if (snapshot.hasError) {
-              return Center(
-                  child: Text(
-                      "An error occured fetching grades:\n${snapshot.error}"));
-            }
+        backgroundColor: Color(0xff216bac),
+        appBar: AppBar(
+          backgroundColor: Color(0xff2a84d2),
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text("${course.courseName}"),
+        ),
+        body: RefreshIndicator(
+          child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: _grades,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _createTable(snapshot);
+                } else if (snapshot.hasError) {
+                  return Center(
+                      child: Text(
+                          "An error occured fetching grades:\n${snapshot.error}"));
+                }
 
-            return Center(child: CircularProgressIndicator());
-          }),
-    );
+                return Center(child: CircularProgressIndicator());
+              }),
+          onRefresh: () {
+            _fetchGrades(true);
+            return _grades;
+          },
+        ));
   }
 
   Widget _createTable(AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
@@ -84,6 +89,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     }
 
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
       child: DataTable(
         columns: tableCols,

@@ -17,16 +17,20 @@ class _CourseListScreenState extends State<CourseListScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_complete) {
-      _courses = Provider.of<CurrentSession>(context)
-          .sisLoader
-          .getCourses()
-          .then((courses) {
-        setState(() {
-          _complete = true;
-        });
-        return courses;
-      });
+      _fetchCourses();
     }
+  }
+
+  _fetchCourses() {
+    _courses = Provider.of<CurrentSession>(context, listen: false)
+        .sisLoader
+        .getCourses()
+        .then((courses) {
+      setState(() {
+        _complete = true;
+      });
+      return courses;
+    });
   }
 
   @override
@@ -59,20 +63,26 @@ class _CourseListScreenState extends State<CourseListScreen> {
         future: _courses,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var course = snapshot.data[index];
-                  return ClassListItemWidget(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/course_grades',
-                            arguments: course);
-                      },
-                      course: course.courseName,
-                      letterGrade: course.gradeLetter,
-                      teacher: course.teacherName,
-                      percent: course.gradePercent);
-                });
+            return RefreshIndicator(
+              onRefresh: () {
+                _fetchCourses();
+                return _courses;
+              },
+              child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var course = snapshot.data[index];
+                    return ClassListItemWidget(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/course_grades',
+                              arguments: course);
+                        },
+                        course: course.courseName,
+                        letterGrade: course.gradeLetter,
+                        teacher: course.teacherName,
+                        percent: course.gradePercent);
+                  }),
+            );
           } else if (snapshot.hasError) {
             return Center(
                 child: Text(
