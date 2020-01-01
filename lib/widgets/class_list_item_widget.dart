@@ -17,8 +17,7 @@ class ClassListItemWidget extends StatelessWidget {
   Widget _buildColumn(
       String topText, String bottomText, CrossAxisAlignment alignment,
       {bool chevron = false}) {
-    return Expanded(
-        child: Column(crossAxisAlignment: alignment, children: <Widget>[
+    return Column(crossAxisAlignment: alignment, children: <Widget>[
       Text(
         topText,
         style: TextStyle(
@@ -27,7 +26,6 @@ class ClassListItemWidget extends StatelessWidget {
       Padding(
         child: Container(
           child: Row(
-            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
                 bottomText,
@@ -43,7 +41,7 @@ class ClassListItemWidget extends StatelessWidget {
         ),
         padding: EdgeInsets.only(top: 30),
       ),
-    ]));
+    ]);
   }
 
   @override
@@ -61,7 +59,10 @@ class ClassListItemWidget extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 15),
           child: Row(children: <Widget>[
-            _buildColumn(this.course, this.teacher, CrossAxisAlignment.start),
+            Expanded(
+              child: _buildColumn(
+                  this.course, this.teacher, CrossAxisAlignment.start),
+            ),
             _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end,
                 chevron: true),
           ]),
