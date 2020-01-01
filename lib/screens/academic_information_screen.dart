@@ -26,7 +26,13 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Academic Information")),
+      backgroundColor: Color(0xff2a84d2),
+      appBar: AppBar(
+        title: Text("Academic Information"),
+        backgroundColor: Color(0xff2a84d2),
+        elevation: 0.0,
+        centerTitle: true,
+      ),
       body: FutureBuilder<Profile>(
           future: _info,
           builder: (context, snapshot) {
@@ -57,12 +63,26 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
 
   Widget _buildCard(String title, String body) {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      color: Color(0xff216bac),
       margin: const EdgeInsets.all(10),
       child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(9.0),
           child: ListTile(
-            title: Text(title),
-            subtitle: Text(body),
+            title: Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+            subtitle: Text(
+              body,
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
           )),
     );
   }

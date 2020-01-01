@@ -238,11 +238,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Welcome to Alto',
+                        'Grades on the Go',
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'OpenSans',
-                          fontSize: 40.0,
+                          fontSize: 36.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

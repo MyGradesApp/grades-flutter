@@ -33,8 +33,12 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     final Course course = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
+      backgroundColor: Color(0xff216bac),
       appBar: AppBar(
-        title: Text("Grades for ${course.courseName}"),
+        backgroundColor: Color(0xff2a84d2),
+        elevation: 0.0,
+        centerTitle: true,
+        title: Text("${course.courseName}"),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
           future: _grades,

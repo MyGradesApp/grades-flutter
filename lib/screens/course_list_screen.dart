@@ -32,8 +32,12 @@ class _CourseListScreenState extends State<CourseListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff2a84d2),
       appBar: AppBar(
-        title: const Text('Courses'),
+        backgroundColor: Color(0xff2a84d2),
+        elevation: 0.0,
+        centerTitle: true,
+        title: const Text('COURSES'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person),
