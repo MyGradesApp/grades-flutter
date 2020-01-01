@@ -15,7 +15,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _loading = false;
+  bool _forceUi = false;
   String _errorMessage;
+  String _session;
 
   @override
   void initState() {
@@ -49,17 +51,19 @@ class _LoginScreenState extends State<LoginScreen> {
     var loader = SISLoader();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var session = prefs.getString('sis_session');
+    setState(() {
+      _session = prefs.getString('sis_session');
+    });
 
-    if (session != null) {
-      loader.sessionCookies = session;
+    if (_session != null) {
+      loader.sessionCookies = _session;
     }
 
     if ((email != null &&
             email.isNotEmpty &&
             password != null &&
             password.isNotEmpty) ||
-        session != null) {
+        _session != null) {
       try {
         setState(() {
           _loading = true;
@@ -70,14 +74,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
         Provider.of<CurrentSession>(context, listen: false)
             .setSisLoader(loader);
-        Navigator.pushNamed(context, '/courses');
+        var response = await Navigator.pushNamed(context, '/courses');
+        print(response);
+        if (response is bool) {
+          setState(() {
+            _forceUi = response;
+          });
+        }
       } on InvalidAuthException catch (e) {
         setState(() {
           _errorMessage = e.message;
         });
       } catch (e) {
         // If the session is invalid, clear it and force a normal login
-        if (session != null) {
+        if (_session != null) {
           prefs.remove('sis_session');
           _attemptLogin(email, password);
           return;
@@ -257,12 +267,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: 35.0),
-                      _buildEmailTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildPasswordTF(),
-                      _buildLoginBtn(),
+                      Visibility(
+                          visible: !_loading || _session == null || _forceUi,
+                          // Fixes alignment issues
+                          replacement: Container(),
+                          child: Column(
+                            children: <Widget>[
+                              _buildEmailTF(),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              _buildPasswordTF(),
+                              _buildLoginBtn(),
+                            ],
+                          )),
                       Visibility(
                         visible: _errorMessage != null,
                         child: Text(

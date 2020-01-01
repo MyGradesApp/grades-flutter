@@ -38,6 +38,16 @@ class _CourseListScreenState extends State<CourseListScreen> {
         elevation: 0.0,
         centerTitle: true,
         title: const Text('COURSES'),
+        leading: IconButton(
+          tooltip: "Logout",
+          icon: Icon(
+            // TODO: Find a better icon for "logout"
+            Icons.exit_to_app,
+          ),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person),
