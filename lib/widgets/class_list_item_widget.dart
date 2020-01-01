@@ -15,7 +15,8 @@ class ClassListItemWidget extends StatelessWidget {
   final void Function() onTap;
 
   Widget _buildColumn(
-      String topText, String bottomText, CrossAxisAlignment alignment) {
+      String topText, String bottomText, CrossAxisAlignment alignment,
+      {bool chevron = false}) {
     return Expanded(
         child: Column(crossAxisAlignment: alignment, children: <Widget>[
       Text(
@@ -24,9 +25,21 @@ class ClassListItemWidget extends StatelessWidget {
             fontWeight: FontWeight.bold, fontSize: 19, color: Colors.black),
       ),
       Padding(
-        child: Text(
-          bottomText,
-          style: TextStyle(fontSize: 15, color: Colors.black),
+        child: Container(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                bottomText,
+                style: TextStyle(fontSize: 15, color: Colors.black),
+              ),
+              if (chevron)
+                Icon(
+                  Icons.chevron_right,
+                  color: Colors.black26,
+                )
+            ],
+          ),
         ),
         padding: EdgeInsets.only(top: 30),
       ),
@@ -49,7 +62,8 @@ class ClassListItemWidget extends StatelessWidget {
           padding: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 15),
           child: Row(children: <Widget>[
             _buildColumn(this.course, this.teacher, CrossAxisAlignment.start),
-            _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end)
+            _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end,
+                chevron: true),
           ]),
         ),
       ),
