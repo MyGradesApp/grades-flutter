@@ -35,7 +35,6 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     return Scaffold(
         backgroundColor: Color(0xff216bac),
         appBar: AppBar(
-          backgroundColor: Color(0xff2a84d2),
           elevation: 0.0,
           centerTitle: true,
           title: Text("${course.courseName}"),

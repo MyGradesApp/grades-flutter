@@ -20,7 +20,12 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: LoginScreen(),
           theme: ThemeData(
-              brightness: Brightness.dark, primaryColor: Colors.blueGrey),
+            brightness: Brightness.dark,
+            primaryColor: Colors.blueGrey,
+//            backgroundColor: Color(0xff2a84d2),
+            appBarTheme: AppBarTheme(color: Color(0xff2a84d2)),
+            scaffoldBackgroundColor: Color(0xff2a84d2),
+          ),
           routes: <String, WidgetBuilder>{
             '/courses': (BuildContext context) => CourseListScreen(),
             '/course_grades': (BuildContext context) => CourseGradesScreen(),

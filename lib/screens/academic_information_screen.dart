@@ -26,10 +26,8 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff2a84d2),
       appBar: AppBar(
         title: Text("Academic Information"),
-        backgroundColor: Color(0xff2a84d2),
         elevation: 0.0,
         centerTitle: true,
       ),
