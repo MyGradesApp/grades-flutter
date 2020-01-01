@@ -40,6 +40,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Text(
                 gradeString,
+                textAlign: TextAlign.end,
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
