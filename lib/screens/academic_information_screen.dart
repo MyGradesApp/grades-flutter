@@ -28,6 +28,16 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Academic Information"),
+        leading: IconButton(
+          tooltip: "Back",
+          icon: Icon(
+            // TODO: Find a better icon for "logout"
+            Icons.arrow_back_ios,
+          ),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
         elevation: 0.0,
         centerTitle: true,
       ),

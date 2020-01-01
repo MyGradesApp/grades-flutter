@@ -37,11 +37,19 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     final Course course = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-        backgroundColor: Color(0xff216bac),
         appBar: AppBar(
           elevation: 0.0,
           centerTitle: true,
           title: Text("${course.courseName}"),
+          leading: IconButton(
+            tooltip: "Back",
+            icon: Icon(
+              Icons.arrow_back_ios,
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          ),
           actions: [
             IconButton(
               // TODO: Pick a better icon

@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        color: Color(0xff07b5d0),
+        color: Color(0xff2a84d2),
         // background: linear-gradient(100deg, #4cc6b9, #07b5d0);
         child: Text(
           'LOGIN',
@@ -248,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Grades on the Go',
+                        'Grades to Go',
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'OpenSans',

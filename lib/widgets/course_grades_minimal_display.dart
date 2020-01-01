@@ -19,6 +19,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Padding(
         padding: const EdgeInsets.all(17.0),
         child: Row(
