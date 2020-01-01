@@ -35,12 +35,15 @@ class CourseGradesFullDisplay extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
-      child: DataTable(
-        columns: tableCols,
-        rows: tableRows,
-        columnSpacing: 5,
+      physics: AlwaysScrollableScrollPhysics(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columns: tableCols,
+          rows: tableRows,
+          columnSpacing: 5,
+        ),
       ),
     );
   }
