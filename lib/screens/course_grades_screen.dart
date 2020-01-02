@@ -82,7 +82,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                           "An error occured fetching grades:\n${snapshot.error}"));
                 }
 
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }),
           onRefresh: () {
             _fetchGrades(true);

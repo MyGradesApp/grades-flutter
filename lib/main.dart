@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             primaryColor: Colors.blueGrey,
 //            backgroundColor: Color(0xff2a84d2),
-            appBarTheme: AppBarTheme(color: Color(0xff2a84d2)),
-            scaffoldBackgroundColor: Color(0xff2a84d2),
+            appBarTheme: const AppBarTheme(color: Color(0xff2a84d2)),
+            scaffoldBackgroundColor: const Color(0xff2a84d2),
           ),
           routes: <String, WidgetBuilder>{
             '/courses': (BuildContext context) => CourseListScreen(),

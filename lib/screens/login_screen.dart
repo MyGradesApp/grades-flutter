@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.value = _emailController.value.copyWith(text: email);
     _passwordController.value =
         _passwordController.value.copyWith(text: password);
-    _attemptLogin(
+    await _attemptLogin(
       email,
       password,
     );
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _errorMessage = null;
         });
         await loader.login(email, password);
-        prefs.setString('sis_session', loader.sessionCookies);
+        await prefs.setString('sis_session', loader.sessionCookies);
 
         Provider.of<CurrentSession>(context, listen: false)
             .setSisLoader(loader);
@@ -88,8 +88,8 @@ class _LoginScreenState extends State<LoginScreen> {
       } catch (e) {
         // If the session is invalid, clear it and force a normal login
         if (_session != null) {
-          prefs.remove('sis_session');
-          _attemptLogin(email, password);
+          await prefs.remove('sis_session');
+          await _attemptLogin(email, password);
           return;
         }
         setState(() {
@@ -110,18 +110,18 @@ class _LoginScreenState extends State<LoginScreen> {
     var password = _passwordController.text;
     if (email != prefs.getString('sis_email') ||
         password != prefs.getString('sis_password')) {
-      prefs.remove('sis_session');
+      await prefs.remove('sis_session');
     }
-    prefs.setString('sis_email', email);
-    prefs.setString('sis_password', password);
-    _attemptLogin(email, password);
+    await prefs.setString('sis_email', email);
+    await prefs.setString('sis_password', password);
+    await _attemptLogin(email, password);
   }
 
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
@@ -129,13 +129,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
+              contentPadding: const EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.person,
                 color: Colors.white,
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
@@ -161,13 +161,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: TextField(
             controller: _passwordController,
             obscureText: true,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
+              contentPadding: const EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.lock,
                 color: Colors.white,
@@ -177,23 +177,23 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
       ],
     );
   }
 
   Widget _buildLoginBtn() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 25.0),
+      padding: const EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
         onPressed: _handleLoginPressed,
-        padding: EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        color: Color(0xff2a84d2),
+        color: const Color(0xff2a84d2),
         // background: linear-gradient(100deg, #4cc6b9, #07b5d0);
         child: Text(
           'LOGIN',
@@ -221,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 height: double.infinity,
                 width: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Color(0xff2d3d54),
                   // gradient: LinearGradient(
                   //   begin: Alignment.topCenter,
@@ -239,8 +239,8 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 height: double.infinity,
                 child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 40.0,
                     vertical: 120.0,
                   ),
@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 25.0),
+                      const SizedBox(height: 25.0),
                       Text(
                         'Your grades at a glance',
                         style: TextStyle(
@@ -266,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 35.0),
+                      const SizedBox(height: 35.0),
                       Visibility(
                           visible: !_loading || _session == null || _forceUi,
                           // Fixes alignment issues
@@ -274,7 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             children: <Widget>[
                               _buildEmailTF(),
-                              SizedBox(
+                              const SizedBox(
                                 height: 30.0,
                               ),
                               _buildPasswordTF(),
@@ -294,7 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Visibility(
                         visible: _loading,
-                        child: CircularProgressIndicator(),
+                        child: const CircularProgressIndicator(),
                       ),
                     ],
                   ),

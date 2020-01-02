@@ -86,7 +86,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 child: Text(
                     "An error occured loading courses:\n${snapshot.error}"));
           }
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
