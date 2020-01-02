@@ -54,7 +54,6 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_data.length);
     return ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _data.length,

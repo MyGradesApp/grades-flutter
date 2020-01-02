@@ -1,13 +1,44 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/login_screen.dart';
+import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
 
 import 'models/current_session.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  FlutterError.onError = (details, {bool forceReport = false}) {
+    try {
+      sentry.captureException(
+        exception: details.exception,
+        stackTrace: details.stack,
+      );
+    } catch (e) {
+      print('Sending report to sentry.io failed: $e');
+    } finally {
+      // Also use Flutter's pretty error logging to the device's console.
+      FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
+    }
+  };
+
+  runZoned(() => runApp(MyApp()),
+      onError: (Object error, StackTrace stackTrace) {
+    try {
+      sentry.captureException(
+        exception: error,
+        stackTrace: stackTrace,
+      );
+      print('Error sent to sentry.io: $error');
+    } catch (e) {
+      print('Sending report to sentry.io failed: $e');
+      print('Original error: $error');
+    }
+  });
+}
 
 class MyApp extends StatelessWidget {
   // root of application.

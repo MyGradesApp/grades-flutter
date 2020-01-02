@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/constants.dart';
+import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -76,7 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
         Provider.of<CurrentSession>(context, listen: false)
             .setSisLoader(loader);
         var response = await Navigator.pushNamed(context, '/courses');
-        print(response);
         if (response is bool) {
           setState(() {
             _forceUi = response;
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _errorMessage = e.message;
         });
-      } catch (e) {
+      } catch (e, stackTrace) {
         // If the session is invalid, clear it and force a normal login
         if (_session != null) {
           await prefs.remove('sis_session');
@@ -96,7 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _errorMessage = "Unknown error:\n$e";
         });
-        rethrow;
+        await sentry.captureException(
+          exception: e,
+          stackTrace: stackTrace,
+        );
       } finally {
         setState(() {
           _loading = false;
