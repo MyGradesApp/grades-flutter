@@ -14,7 +14,6 @@ class ClassListItemWidget extends StatelessWidget {
   final String letterGrade;
   final num percent;
   final void Function() onTap;
-
   Widget _buildColumn(
       String topText, String bottomText, CrossAxisAlignment alignment,
       {bool chevron = false, String grade}) {
@@ -64,8 +63,8 @@ class ClassListItemWidget extends StatelessWidget {
               const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 15),
           child: Row(children: <Widget>[
             Expanded(
-              child: _buildColumn(
-                  this.course, this.teacher, CrossAxisAlignment.start),
+              child: _buildColumn(this.course,
+                  this.teacher.replaceAll('  ', ' '), CrossAxisAlignment.start),
             ),
             _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end,
                 chevron: true, grade: this.letterGrade),

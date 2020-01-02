@@ -10,7 +10,12 @@ class CourseGradesFullDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final tableCols = _data[0]
         .map((k, v) {
-          return MapEntry(k, DataColumn(label: Text(k)));
+          return MapEntry(
+              k,
+              DataColumn(
+                  label: Text(k,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))));
         })
         .values
         .toList();
@@ -20,12 +25,26 @@ class CourseGradesFullDisplay extends StatelessWidget {
       final List<DataCell> tableCells = row
           .map((k, v) {
             if (v == null) {
-              return MapEntry(k, const DataCell(Text("")));
+              return MapEntry(
+                  k,
+                  const DataCell(Text("",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))));
             }
             if (v is DateTime) {
-              return MapEntry(k, DataCell(Text(DateFormat.yMMMd().format(v))));
+              return MapEntry(
+                  k,
+                  DataCell(Text(DateFormat.yMMMd().format(v),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))));
             } else {
-              return MapEntry(k, DataCell(Text(v.toString())));
+              return MapEntry(
+                  k,
+                  DataCell(Text(
+                    v.toString(),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )));
             }
           })
           .values

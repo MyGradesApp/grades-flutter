@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
@@ -10,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'models/current_session.dart';
 
-void main() {
+void main() async {
   FlutterError.onError = (details, {bool forceReport = false}) {
     try {
       sentry.captureException(
@@ -24,6 +25,8 @@ void main() {
       FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
     }
   };
+// fix force portrait
+  //   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   runZoned(() => runApp(MyApp()),
       onError: (Object error, StackTrace stackTrace) {
@@ -57,9 +60,9 @@ class MyApp extends StatelessWidget {
             // DECIDE ON COLOR SCHEME
             //backgroundColor: Color(0xff2a84d2),
             // appBarTheme: AppBarTheme(color: Color(0xff2980b9)),
-            appBarTheme: AppBarTheme(color: Color(0xff2a84d2)),
+            appBarTheme: const AppBarTheme(color: Color(0xff2a84d2)),
             // scaffoldBackgroundColor: Color(0xff2980b9),
-            scaffoldBackgroundColor: Color(0xff2a84d2),
+            scaffoldBackgroundColor: const Color(0xff2a84d2),
           ),
           routes: <String, WidgetBuilder>{
             '/courses': (BuildContext context) => CourseListScreen(),
