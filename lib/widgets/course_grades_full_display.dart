@@ -20,7 +20,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
       final List<DataCell> tableCells = row
           .map((k, v) {
             if (v == null) {
-              return MapEntry(k, DataCell(Text("")));
+              return MapEntry(k, const DataCell(Text("")));
             }
             if (v is DateTime) {
               return MapEntry(k, DataCell(Text(DateFormat.yMMMd().format(v))));
@@ -36,7 +36,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      physics: AlwaysScrollableScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(

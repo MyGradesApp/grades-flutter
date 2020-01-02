@@ -27,7 +27,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Academic Information"),
+        title: const Text("Academic Information"),
         leading: IconButton(
           tooltip: "Back",
           icon: Icon(
@@ -56,7 +56,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                   children: <Widget>[
                     Expanded(
                       child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
+                        physics: const AlwaysScrollableScrollPhysics(),
                         child: Column(
                           children: [
                             _buildCard("Cumulative GPA",
@@ -80,7 +80,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                       "An error occured fetching information:\n${snapshot.error}"));
             }
 
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -105,7 +105,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
             ),
             subtitle: Text(
               body,
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
           )),
     );

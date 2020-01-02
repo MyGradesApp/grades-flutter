@@ -15,11 +15,11 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
           double.parse(gradeString.substring(0, percentIndex)));
     }
     return Card(
-      color: Color(0xFFFFFFFF),
+      color: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Padding(
         padding: const EdgeInsets.all(17.0),
         child: Row(
@@ -56,7 +56,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     print(_data.length);
     return ListView.builder(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _data.length,
         itemBuilder: (context, i) {
           return _buildCard(_data[i]);

@@ -29,7 +29,7 @@ class ClassListItemWidget extends StatelessWidget {
           child: Row(
             children: <Widget>[
               if (grade != null) ColoredGradeDot.grade(grade),
-              SizedBox(width: 3),
+              const SizedBox(width: 3),
               Text(
                 bottomText,
                 style: TextStyle(fontSize: 15, color: Colors.black),
@@ -42,7 +42,7 @@ class ClassListItemWidget extends StatelessWidget {
             ],
           ),
         ),
-        padding: EdgeInsets.only(top: 30),
+        padding: const EdgeInsets.only(top: 30),
       ),
     ]);
   }
@@ -51,16 +51,17 @@ class ClassListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       // color: Theme.of(context).primaryColor,
-      color: Color(0xffffffff),
+      color: const Color(0xffffffff),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      margin: EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+      margin: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 15),
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 15),
           child: Row(children: <Widget>[
             Expanded(
               child: _buildColumn(
