@@ -28,10 +28,13 @@ dependencies:
   provider: 4.0.0-hotfix.1
   shared_preferences: ^0.5.6
 
+  sentry: ^3.0.0+1
+
   sis_loader:
     git: https://github.com/Noskcaj19/dart-sis-loader.git
 
-flutter_spinkit: ^3.1.0
+  flutter_spinkit: ^4.1.1+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
