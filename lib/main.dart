@@ -25,9 +25,6 @@ void main() async {
       FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
     }
   };
-// fix force portrait
-  //   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
   runZoned(() => runApp(MyApp()),
       onError: (Object error, StackTrace stackTrace) {
     try {
@@ -43,10 +40,11 @@ void main() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget with PortraitModeMixin {
   // root of application.
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MultiProvider(
         providers: [ChangeNotifierProvider(create: (_) => CurrentSession())],
         child: MaterialApp(
@@ -71,4 +69,43 @@ class MyApp extends StatelessWidget {
           },
         ));
   }
+}
+
+mixin PortraitModeMixin on StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    _portraitModeOnly();
+    return null;
+  }
+}
+
+/// Forces portrait-only mode in mixin
+mixin PortraitStatefulModeMixin<T extends StatefulWidget> on State<T> {
+  @override
+  Widget build(BuildContext context) {
+    _portraitModeOnly();
+    return null;
+  }
+
+  @override
+  void dispose() {
+    _enableRotation();
+  }
+}
+
+/// blocks rotation; sets orientation to: portrait
+void _portraitModeOnly() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+}
+
+void _enableRotation() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
 }
