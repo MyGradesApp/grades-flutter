@@ -6,7 +6,7 @@ class LoaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // const spinkit = SpinKitSquareCircle(
     // const spinkit = SpinKitWave(
-    const spinkit = SpinKitDualRing(
+    const spinkit = SpinKitRing(
       color: Colors.white,
       size: 50.0,
     );

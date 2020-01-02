@@ -51,8 +51,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: LoginScreen(),
           theme: ThemeData(
-            brightness: Brightness.dark,
-            primaryColor: Colors.blueGrey,
+            brightness: Brightness.light,
+            primaryColor: const Color(0xff2a84d2),
+
             // DECIDE ON COLOR SCHEME
             //backgroundColor: Color(0xff2a84d2),
             // appBarTheme: AppBarTheme(color: Color(0xff2980b9)),

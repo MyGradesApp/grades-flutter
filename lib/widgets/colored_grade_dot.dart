@@ -10,9 +10,9 @@ class ColoredGradeDot extends StatelessWidget {
       case 'A':
         return ColoredGradeDot(Colors.green);
       case 'B':
-        return ColoredGradeDot(Colors.amber);
+        return ColoredGradeDot(Colors.lightGreen);
       case 'C':
-        return ColoredGradeDot(Colors.orange);
+        return ColoredGradeDot(Colors.amber);
       case 'D':
         return ColoredGradeDot(Colors.deepOrangeAccent);
       case 'F':

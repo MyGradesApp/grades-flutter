@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/utilities/grades.dart';
+import 'package:grades/widgets/colored_grade_dot.dart';
 
 class CourseGradesMinimalDisplay extends StatelessWidget {
   final List<Map<String, dynamic>> _data;
@@ -30,6 +31,9 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
                 style: TextStyle(color: Colors.black),
               ),
             ),
+            if (grade != null && gradeLetter != null)
+              ColoredGradeDot.grade(gradeLetter),
+            const SizedBox(width: 4),
             if (gradeLetter != null)
               Text(
                 gradeLetter,
