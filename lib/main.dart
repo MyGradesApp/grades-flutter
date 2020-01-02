@@ -22,8 +22,11 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             brightness: Brightness.dark,
             primaryColor: Colors.blueGrey,
-//            backgroundColor: Color(0xff2a84d2),
+            // DECIDE ON COLOR SCHEME
+            //backgroundColor: Color(0xff2a84d2),
+            // appBarTheme: AppBarTheme(color: Color(0xff2980b9)),
             appBarTheme: AppBarTheme(color: Color(0xff2a84d2)),
+            // scaffoldBackgroundColor: Color(0xff2980b9),
             scaffoldBackgroundColor: Color(0xff2a84d2),
           ),
           routes: <String, WidgetBuilder>{
