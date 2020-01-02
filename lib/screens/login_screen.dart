@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/constants.dart';
+import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -294,7 +295,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Visibility(
                         visible: _loading,
-                        child: const CircularProgressIndicator(),
+                        child: LoaderWidget(),
                       ),
                     ],
                   ),

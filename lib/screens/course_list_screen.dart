@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
+import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -86,7 +87,9 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 child: Text(
                     "An error occured loading courses:\n${snapshot.error}"));
           }
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: LoaderWidget(),
+          );
         },
       ),
     );
