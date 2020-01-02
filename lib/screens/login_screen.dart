@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/constants.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -88,6 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
           _errorMessage = e.message;
         });
       } catch (e, stackTrace) {
+        if (e is SocketException || e is HttpException) {
+          setState(() {
+            _errorMessage = "An error occured connecting to SIS";
+          });
+          return;
+        }
         // If the session is invalid, clear it and force a normal login
         if (_session != null) {
           await prefs.remove('sis_session');
