@@ -76,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
         Provider.of<CurrentSession>(context, listen: false)
             .setSisLoader(loader);
         var response = await Navigator.pushNamed(context, '/courses');
-        print(response);
         if (response is bool) {
           setState(() {
             _forceUi = response;
