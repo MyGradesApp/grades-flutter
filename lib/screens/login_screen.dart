@@ -1,21 +1,38 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/constants.dart';
+import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: _InnerLoginScreen(),
+        ),
+      ),
+    );
+  }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _InnerLoginScreen extends StatefulWidget {
+  @override
+  _InnerLoginScreenState createState() => _InnerLoginScreenState();
+}
+
+class _InnerLoginScreenState extends State<_InnerLoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _loading = false;
@@ -88,6 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _errorMessage = e.message;
         });
+      } on SocketException catch (_) {
+        showErrorSnackbar(context, 'There was an issue connecting to SIS');
       } catch (e, stackTrace) {
         if (e is SocketException || e is HttpException) {
           setState(() {
@@ -223,99 +242,91 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Color(0xff2d3d54),
-                  // gradient: LinearGradient(
-                  //   begin: Alignment.topCenter,
-                  //   end: Alignment.bottomCenter,
-                  //   colors: [
-                  //     Color(0xFF73AEF5),
-                  //     Color(0xFF61A4F1),
-                  //     Color(0xFF478DE0),
-                  //     Color(0xFF398AE5),
-                  //   ],
-                  //   stops: [0.1, 0.4, 0.7, 0.9],
-                  // ),
-                ),
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Grades to Go',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 36.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 25.0),
-                      Text(
-                        'Your grades at a glance',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 35.0),
-                      Visibility(
-                          visible: !_loading || _session == null || _forceUi,
-                          // Fixes alignment issues
-                          replacement: Container(),
-                          child: Column(
-                            children: <Widget>[
-                              _buildEmailTF(),
-                              const SizedBox(
-                                height: 30.0,
-                              ),
-                              _buildPasswordTF(),
-                              _buildLoginBtn(),
-                            ],
-                          )),
-                      Visibility(
-                        visible: _errorMessage != null,
-                        child: Text(
-                          _errorMessage ?? "",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontFamily: 'OpenSans',
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: _loading,
-                        child: LoaderWidget(),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Color(0xff2d3d54),
+            // gradient: LinearGradient(
+            //   begin: Alignment.topCenter,
+            //   end: Alignment.bottomCenter,
+            //   colors: [
+            //     Color(0xFF73AEF5),
+            //     Color(0xFF61A4F1),
+            //     Color(0xFF478DE0),
+            //     Color(0xFF398AE5),
+            //   ],
+            //   stops: [0.1, 0.4, 0.7, 0.9],
+            // ),
           ),
         ),
-      ),
+        Container(
+          height: double.infinity,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40.0,
+              vertical: 120.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Grades to Go',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 36.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 25.0),
+                Text(
+                  'Your grades at a glance',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 35.0),
+                Visibility(
+                    visible: !_loading || _session == null || _forceUi,
+                    // Fixes alignment issues
+                    replacement: Container(),
+                    child: Column(
+                      children: <Widget>[
+                        _buildEmailTF(),
+                        const SizedBox(
+                          height: 30.0,
+                        ),
+                        _buildPasswordTF(),
+                        _buildLoginBtn(),
+                      ],
+                    )),
+                Visibility(
+                  visible: _errorMessage != null,
+                  child: Text(
+                    _errorMessage ?? "",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontFamily: 'OpenSans',
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _loading,
+                  child: LoaderWidget(),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }
