@@ -90,6 +90,7 @@ mixin PortraitStatefulModeMixin<T extends StatefulWidget> on State<T> {
   @override
   void dispose() {
     _enableRotation();
+    super.dispose();
   }
 }
 
