@@ -18,8 +18,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   bool _showError = false;
-  String _errorMessage;
 
   @override
   void initState() {
@@ -63,18 +63,19 @@ class _SplashScreenState extends State<SplashScreen> {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
     } on HttpException catch (_) {
+      _scaffoldKey.currentState.showSnackBar(
+          errorSnackbar('Login failed due to connection issues.'));
       setState(() {
-        _errorMessage = 'Login failed due to connection issues.\nTry again?';
         _showError = true;
       });
     } on SocketException catch (_) {
+      _scaffoldKey.currentState.showSnackBar(
+          errorSnackbar('Login failed due to connection issues.'));
       setState(() {
-        _errorMessage = 'Login failed due to connection issues.\nTry again?';
         _showError = true;
       });
     } catch (e, stackTrace) {
       setState(() {
-        _errorMessage = 'An unknown error occured.\nTry again?';
         _showError = true;
       });
       await sentry.captureException(
@@ -89,6 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -148,29 +150,13 @@ class _SplashScreenState extends State<SplashScreen> {
                       Visibility(
                         visible: !_showError,
                         child: LoaderWidget(),
-                        replacement: Column(
-                          children: [
-                            FlatButton(
-                                child: Icon(
-                                  Icons.refresh,
-                                  color: Colors.white,
-                                  size: 55,
-                                ),
-                                shape: const CircleBorder(),
-                                onPressed: () => _loadStoredAuth()),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              _errorMessage ?? '',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ],
+                        replacement: Padding(
+                          padding: const EdgeInsets.only(top: 55.0),
+                          child: Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 60,
+                          ),
                         ),
                       ),
                     ],
@@ -180,6 +166,29 @@ class _SplashScreenState extends State<SplashScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  SnackBar errorSnackbar(String message) {
+    return SnackBar(
+      backgroundColor: Colors.red,
+      // HACK: Persistent display
+      duration: const Duration(days: 1),
+      action: SnackBarAction(
+        label: "Try again",
+        textColor: Colors.white,
+        onPressed: () {
+          setState(() {
+            _showError = false;
+          });
+          _loadStoredAuth();
+        },
+      ),
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.white, fontSize: 16),
       ),
     );
   }
