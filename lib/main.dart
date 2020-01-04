@@ -6,6 +6,7 @@ import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/login_screen.dart';
+import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
         child: MaterialApp(
           title: 'Flutter Login UI',
           debugShowCheckedModeBanner: false,
-          home: LoginScreen(),
+          home: SplashScreen(),
           theme: ThemeData(
             brightness: Brightness.light,
             primaryColor: const Color(0xff2a84d2),
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
             scaffoldBackgroundColor: const Color(0xff2a84d2),
           ),
           routes: <String, WidgetBuilder>{
+            '/login': (BuildContext context) => LoginScreen(),
             '/courses': (BuildContext context) => CourseListScreen(),
             '/course_grades': (BuildContext context) => CourseGradesScreen(),
             '/academic_info': (BuildContext context) => AcademicInfoScreen(),

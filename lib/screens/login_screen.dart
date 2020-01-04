@@ -1,151 +1,137 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:grades/models/current_session.dart';
-import 'package:grades/utilities/constants.dart';
+import 'package:grades/utilities/auth.dart';
 import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: _InnerLoginScreen(),
-        ),
-      ),
-    );
-  }
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _InnerLoginScreen extends StatefulWidget {
-  @override
-  _InnerLoginScreenState createState() => _InnerLoginScreenState();
-}
-
-class _InnerLoginScreenState extends State<_InnerLoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _loading = false;
-  bool _forceUi = false;
-  String _errorMessage;
-  String _session;
+  bool _loggingIn = false;
 
   @override
-  void initState() {
-    _loadStoredAuth();
+  initState() {
     super.initState();
+    _loadSavedCreds();
   }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  _loadStoredAuth() async {
+  Future<void> _loadSavedCreds() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var email = prefs.getString('sis_email');
     var password = prefs.getString('sis_password');
     _emailController.value = _emailController.value.copyWith(text: email);
     _passwordController.value =
         _passwordController.value.copyWith(text: password);
-    await _attemptLogin(
-      email,
-      password,
-    );
-  }
-
-  Future<void> _attemptLogin(
-    String email,
-    String password,
-  ) async {
-    var loader = SISLoader();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      _session = prefs.getString('sis_session');
-    });
-
-    if (_session != null) {
-      loader.sessionCookies = _session;
-    }
-
-    if ((email != null &&
-            email.isNotEmpty &&
-            password != null &&
-            password.isNotEmpty) ||
-        _session != null) {
-      try {
-        setState(() {
-          _loading = true;
-          _errorMessage = null;
-        });
-        await loader.login(email, password);
-        await prefs.setString('sis_session', loader.sessionCookies);
-
-        Provider.of<CurrentSession>(context, listen: false)
-            .setSisLoader(loader);
-        var response = await Navigator.pushNamed(context, '/courses');
-        if (response is bool) {
-          setState(() {
-            _forceUi = response;
-          });
-        }
-      } on InvalidAuthException catch (e) {
-        setState(() {
-          _errorMessage = e.message;
-        });
-      } on SocketException catch (_) {
-        showErrorSnackbar(context, 'There was an issue connecting to SIS');
-      } catch (e, stackTrace) {
-        if (e is SocketException || e is HttpException) {
-          setState(() {
-            _errorMessage = "An error occured connecting to SIS";
-          });
-          return;
-        }
-        // If the session is invalid, clear it and force a normal login
-        if (_session != null) {
-          await prefs.remove('sis_session');
-          await _attemptLogin(email, password);
-          return;
-        }
-        setState(() {
-          _errorMessage = "Unknown error:\n$e";
-        });
-        await sentry.captureException(
-          exception: e,
-          stackTrace: stackTrace,
-        );
-      } finally {
-        setState(() {
-          _loading = false;
-        });
-      }
-    }
   }
 
   _handleLoginPressed() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     var email = _emailController.text;
     var password = _passwordController.text;
-    if (email != prefs.getString('sis_email') ||
-        password != prefs.getString('sis_password')) {
-      await prefs.remove('sis_session');
+
+    if (email.isEmpty || password.isEmpty) {
+      return;
     }
-    await prefs.setString('sis_email', email);
-    await prefs.setString('sis_password', password);
-    await _attemptLogin(email, password);
+
+    try {
+      setState(() {
+        _loggingIn = true;
+      });
+      var loader = await attemptLogin(email, password);
+      setState(() {
+        _loggingIn = false;
+      });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('sis_email', email);
+      await prefs.setString('sis_password', password);
+      await prefs.setString('sis_session', loader.sessionCookies);
+
+      Navigator.pop(context, loader);
+    } on InvalidAuthException catch (e) {
+      showErrorSnackbar(_scaffoldKey.currentState, e.message);
+    } on SocketException catch (_) {
+      showErrorSnackbar(
+          _scaffoldKey.currentState, 'There was an issue connecting to SIS');
+    } on HttpException catch (_) {
+      showErrorSnackbar(
+          _scaffoldKey.currentState, 'There was an issue connecting to SIS');
+    } catch (e, stackTrace) {
+      showErrorSnackbar(_scaffoldKey.currentState, 'An unknown error occurred');
+      await sentry.captureException(
+        exception: e,
+        stackTrace: stackTrace,
+      );
+      print(e);
+      print(stackTrace);
+    } finally {
+      setState(() {
+        _loggingIn = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: const Color(0xff2d3d54),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SizedBox.expand(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40.0,
+              vertical: 120.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Grades to Go',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 36.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 45.0),
+                Column(
+                  children: <Widget>[
+                    _buildEmailTF(),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    _buildPasswordTF(),
+                    Visibility(
+                      visible: !_loggingIn,
+                      child: _buildLoginBtn(),
+                      replacement: Padding(
+                        padding: const EdgeInsets.only(top: 32.0),
+                        child: LoaderWidget(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildEmailTF() {
@@ -155,7 +141,7 @@ class _InnerLoginScreenState extends State<_InnerLoginScreen> {
         const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: boxDecorationStyle,
           height: 60.0,
           child: TextField(
             controller: _emailController,
@@ -172,7 +158,7 @@ class _InnerLoginScreenState extends State<_InnerLoginScreen> {
                 color: Colors.white,
               ),
               hintText: 'Username',
-              hintStyle: kHintTextStyle,
+              hintStyle: hintTextStyle,
             ),
           ),
         ),
@@ -187,7 +173,7 @@ class _InnerLoginScreenState extends State<_InnerLoginScreen> {
         const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: boxDecorationStyle,
           height: 60.0,
           child: TextField(
             controller: _passwordController,
@@ -204,7 +190,7 @@ class _InnerLoginScreenState extends State<_InnerLoginScreen> {
                 color: Colors.white,
               ),
               hintText: 'Password',
-              hintStyle: kHintTextStyle,
+              hintStyle: hintTextStyle,
             ),
           ),
         ),
@@ -239,94 +225,27 @@ class _InnerLoginScreenState extends State<_InnerLoginScreen> {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Color(0xff2d3d54),
-            // gradient: LinearGradient(
-            //   begin: Alignment.topCenter,
-            //   end: Alignment.bottomCenter,
-            //   colors: [
-            //     Color(0xFF73AEF5),
-            //     Color(0xFF61A4F1),
-            //     Color(0xFF478DE0),
-            //     Color(0xFF398AE5),
-            //   ],
-            //   stops: [0.1, 0.4, 0.7, 0.9],
-            // ),
-          ),
-        ),
-        Container(
-          height: double.infinity,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40.0,
-              vertical: 120.0,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Grades to Go',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontSize: 36.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 25.0),
-                Text(
-                  'Your grades at a glance',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 35.0),
-                Visibility(
-                    visible: !_loading || _session == null || _forceUi,
-                    // Fixes alignment issues
-                    replacement: Container(),
-                    child: Column(
-                      children: <Widget>[
-                        _buildEmailTF(),
-                        const SizedBox(
-                          height: 30.0,
-                        ),
-                        _buildPasswordTF(),
-                        _buildLoginBtn(),
-                      ],
-                    )),
-                Visibility(
-                  visible: _errorMessage != null,
-                  child: Text(
-                    _errorMessage ?? "",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontFamily: 'OpenSans',
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: _loading,
-                  child: LoaderWidget(),
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
 }
+
+final hintTextStyle = TextStyle(
+  color: Colors.white54,
+  fontFamily: 'OpenSans',
+);
+
+final labelStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'OpenSans',
+);
+
+final boxDecorationStyle = BoxDecoration(
+  color: const Color(0xFF3f5573),
+  borderRadius: BorderRadius.circular(10.0),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black12,
+      blurRadius: 6.0,
+      offset: const Offset(0, 2),
+    ),
+  ],
+);
