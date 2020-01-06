@@ -42,13 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
       var loader = await Navigator.pushNamed(context, '/login');
       Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
 
-      var logoff = await Navigator.pushNamed(context, '/courses');
-      // We return true from courses if the logout button is pressed,
-      // so we need to show the login screen and clear the session values
-      if (logoff is bool && logoff) {
-        await prefs.remove('sis_session');
-        _loadStoredAuth();
-      }
+      await _showCourses(prefs);
       return;
     }
 
@@ -61,13 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
       );
       Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
 
-      var logoff = await Navigator.pushNamed(context, '/courses');
-      // We return true from courses if the logout button is pressed,
-      // so we need to show the login screen and clear the session values
-      if (logoff is bool && logoff) {
-        await prefs.remove('sis_session');
-        _loadStoredAuth(force: true);
-      }
+      await _showCourses(prefs);
       return;
     } on NoSuchMethodError catch (_) {
       // TODO: Pass login failure error message to login page
@@ -97,6 +85,16 @@ class _SplashScreenState extends State<SplashScreen> {
       );
       print(e);
       print(stackTrace);
+    }
+  }
+
+  Future _showCourses(SharedPreferences prefs) async {
+    var logoff = await Navigator.pushNamed(context, '/courses');
+    // We return true from courses if the logout button is pressed,
+    // so we need to show the login screen and clear the session values
+    if (logoff is bool && logoff) {
+      await prefs.remove('sis_session');
+      _loadStoredAuth();
     }
   }
 
