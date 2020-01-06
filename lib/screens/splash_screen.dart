@@ -54,11 +54,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Re-auth flow
     try {
-      await attemptLogin(
+      var loader = await attemptLogin(
         email,
         password,
         session,
       );
+      Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
+
+      var logoff = await Navigator.pushNamed(context, '/courses');
+      // We return true from courses if the logout button is pressed,
+      // so we need to show the login screen and clear the session values
+      if (logoff is bool && logoff) {
+        await prefs.remove('sis_session');
+        _loadStoredAuth(force: true);
+      }
+      return;
+    } on NoSuchMethodError catch (_) {
+      // TODO: Pass login failure error message to login page
+      _loadStoredAuth(force: true);
     } on InvalidAuthException catch (_) {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
