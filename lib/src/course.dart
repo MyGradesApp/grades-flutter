@@ -11,7 +11,7 @@ class Course {
   final String courseName;
   final String periodString;
   final String teacherName;
-  final int gradePercent;
+  final dynamic gradePercent;
   final String gradeLetter;
 
   Future<List<Map<String, dynamic>>> _grades;

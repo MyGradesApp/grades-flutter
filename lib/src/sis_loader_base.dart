@@ -132,15 +132,22 @@ class SISLoader {
 
     var courses = coursesMatches.map((match) {
       var gradeParts = match[5].split('&nbsp;');
-      var percent = gradeParts[0].substring(0, gradeParts[0].length - 1);
+      dynamic percent;
+      // TODO: Make more general
+      if (gradeParts[0] != 'Not Graded') {
+        percent =
+            int.tryParse(gradeParts[0].substring(0, gradeParts[0].length - 1));
+      } else {
+        percent = gradeParts[0];
+      }
 
       return Course(
           gradesUrl: match[1],
           courseName: match[2],
           periodString: match[3],
           teacherName: match[4],
-          gradePercent: int.parse(percent),
-          gradeLetter: gradeParts[1],
+          gradePercent: int.tryParse(percent) ?? percent,
+          gradeLetter: gradeParts.length > 1 ? gradeParts[1] : null,
           client: _client);
     }).toList();
 
