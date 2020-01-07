@@ -7,6 +7,7 @@ import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/login_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
+import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
 
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
           ),
           routes: <String, WidgetBuilder>{
             '/login': (BuildContext context) => LoginScreen(),
+            '/terms': (BuildContext context) => TermsScreen(),
             '/courses': (BuildContext context) => CourseListScreen(),
             '/course_grades': (BuildContext context) => CourseGradesScreen(),
             '/academic_info': (BuildContext context) => AcademicInfoScreen(),

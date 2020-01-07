@@ -29,6 +29,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _loadStoredAuth({bool force = false}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    var hasAcceptedTerms = prefs.getBool("accepted_terms") ?? false;
+
+    if (!hasAcceptedTerms) {
+      await Navigator.pushNamed(context, '/terms');
+    }
+
     var email = prefs.getString('sis_email');
     var password = prefs.getString('sis_password');
     var session = prefs.getString('sis_session');
@@ -199,7 +205,7 @@ class _SplashScreenState extends State<SplashScreen> {
       content: Text(
         message,
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white, fontSize: 16),
+        style: const TextStyle(color: Colors.white, fontSize: 16),
       ),
     );
   }
