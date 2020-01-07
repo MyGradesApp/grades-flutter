@@ -72,6 +72,17 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
               future: _grades,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  if (snapshot.data.isEmpty) {
+                    return const Center(
+                        child: Text(
+                      "There are currently no grades in this class",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'OpenSans',
+                        fontSize: 17.0,
+                      ),
+                    ));
+                  }
                   if (_displayStyle == DisplayStyle.Full) {
                     return CourseGradesFullDisplay(snapshot.data);
                   } else {
