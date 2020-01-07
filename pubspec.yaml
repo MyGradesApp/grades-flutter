@@ -17,6 +17,8 @@ environment:
   sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
+  rflutter_alert:
+    git: git://github.com/RatelHub/rflutter_alert.git
   flutter:
     sdk: flutter
 

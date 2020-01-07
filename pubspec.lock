@@ -158,6 +158,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0-hotfix.1"
+  rflutter_alert:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "2d099a8109ab9fb96f9d1aa72670fa5414118d9b"
+      url: "git://github.com/RatelHub/rflutter_alert.git"
+    source: git
+    version: "1.0.3"
   sentry:
     dependency: "direct main"
     description:

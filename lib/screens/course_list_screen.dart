@@ -5,6 +5,7 @@ import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CourseListScreen extends StatefulWidget {
   @override
@@ -49,7 +50,26 @@ class _CourseListScreenState extends State<CourseListScreen> {
             Icons.exit_to_app,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, '/login');
+            Alert(
+              context: context,
+              // type: AlertType.error,
+              title: "Sign Out",
+              desc: "Are you sure you want to log out?",
+              buttons: [
+                DialogButton(
+                  child: Text(
+                    "Confirm",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/login').then((result) {
+                    Navigator.of(context).pop();
+                  }),
+                  width: 120,
+                )
+              ],
+            ).show();
+
             // Navigator.pop(context, true);
           },
         ),

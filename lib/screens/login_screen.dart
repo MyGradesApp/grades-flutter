@@ -167,11 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.person,
                 color: Colors.white,
               ),
-              suffixIcon: CircleIconButton(onPressed: () {
-                this.setState(() {
-                  _emailController.clear();
-                });
-              }),
+              // suffixIcon: CircleIconButton(onPressed: () {
+              //   this.setState(() {
+              //     _emailController.clear();
+              //   });
+              // }),
               hintText: 'Username',
               hintStyle: hintTextStyle,
             ),
@@ -204,11 +204,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.lock,
                 color: Colors.white,
               ),
-              suffixIcon: CircleIconButton(onPressed: () {
-                this.setState(() {
-                  _passwordController.clear();
-                });
-              }),
+              // suffixIcon: CircleIconButton(onPressed: () {
+              //   this.setState(() {
+              //     _passwordController.clear();
+              //   });
+              // }),
               hintText: 'Password',
               hintStyle: hintTextStyle,
             ),
