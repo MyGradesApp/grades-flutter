@@ -21,7 +21,7 @@ class CircleIconButton extends StatelessWidget {
                   width: size,
                   height: size,
                   decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: const Color(0xff6b87ae)),
+                      shape: BoxShape.circle, color: Color(0xff6b87ae)),
                 ),
                 Icon(
                   icon,

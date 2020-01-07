@@ -24,7 +24,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     }
   }
 
-  _fetchGrades([bool force = false]) {
+  void _fetchGrades([bool force = false]) {
     final Course course = ModalRoute.of(context).settings.arguments;
 
     _grades = course.getGrades(force).then((grades) {

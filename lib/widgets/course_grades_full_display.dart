@@ -14,7 +14,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
               k,
               DataColumn(
                   label: Text(k,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))));
         })
         .values
@@ -35,14 +35,14 @@ class CourseGradesFullDisplay extends StatelessWidget {
               return MapEntry(
                   k,
                   DataCell(Text(DateFormat.yMMMd().format(v),
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))));
             } else {
               return MapEntry(
                   k,
                   DataCell(Text(
                     v.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   )));
             }

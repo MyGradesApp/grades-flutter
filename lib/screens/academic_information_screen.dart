@@ -18,7 +18,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
     _fetchInfo();
   }
 
-  _fetchInfo() {
+  void _fetchInfo() {
     _info = Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getUserProfile();
@@ -28,9 +28,9 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Academic Information"),
+        title: const Text('Academic Information'),
         leading: IconButton(
-          tooltip: "Back",
+          tooltip: 'Back',
           icon: Icon(
             // TODO: Find a better icon for "logout"
             Icons.arrow_back_ios,
@@ -60,13 +60,13 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                         physics: const AlwaysScrollableScrollPhysics(),
                         child: Column(
                           children: [
-                            _buildCard("Cumulative GPA",
+                            _buildCard('Cumulative GPA',
                                 info.cumulative_gpa.toString()),
-                            _buildCard("Cumulative Weighted GPA",
+                            _buildCard('Cumulative Weighted GPA',
                                 info.cumulative_weighted_gpa.toString()),
                             if (info.class_rank_numerator != null &&
                                 info.class_rank_denominator != null)
-                              _buildCard("Class Rank",
+                              _buildCard('Class Rank',
                                   '${info.class_rank_numerator} / ${info.class_rank_denominator}'),
                           ],
                         ),
@@ -78,7 +78,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
             } else if (snapshot.hasError) {
               return Center(
                   child: Text(
-                      "An error occured fetching information:\n${snapshot.error}"));
+                      'An error occured fetching information:\n${snapshot.error}'));
             }
 
             // return const Center(child: CircularProgressIndicator());

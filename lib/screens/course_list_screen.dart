@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
-import 'package:grades/screens/login_screen.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:sis_loader/sis_loader.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class CourseListScreen extends StatefulWidget {
   @override
