@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/screens/login_screen.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,11 @@ class _CourseListScreenState extends State<CourseListScreen> {
             Icons.exit_to_app,
           ),
           onPressed: () {
-            Navigator.pop(context, true);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+            // Navigator.pop(context, true);
           },
         ),
         actions: <Widget>[

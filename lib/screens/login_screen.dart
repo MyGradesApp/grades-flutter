@@ -100,11 +100,20 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Grades to Go',
+                  'SwiftGrade',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'OpenSans',
                     fontSize: 36.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Your grades at a glance',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 25.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

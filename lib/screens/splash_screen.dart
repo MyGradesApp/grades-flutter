@@ -139,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Grades to Go',
+                        'SwiftGrade',
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'OpenSans',
