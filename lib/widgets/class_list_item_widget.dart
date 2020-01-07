@@ -7,13 +7,18 @@ class ClassListItemWidget extends StatelessWidget {
       @required this.teacher,
       @required this.letterGrade,
       @required this.percent,
-      this.onTap});
+      this.onTap})
+      : assert(percent is int || percent is String),
+        assert(course != null),
+        assert(teacher != null),
+        assert(percent != null);
 
   final String course;
   final String teacher;
   final String letterGrade;
-  final num percent;
+  final dynamic percent;
   final void Function() onTap;
+
   Widget _buildColumn(
       String topText, String bottomText, CrossAxisAlignment alignment,
       {bool chevron = false, String grade}) {
@@ -66,7 +71,8 @@ class ClassListItemWidget extends StatelessWidget {
               child: _buildColumn(this.course,
                   this.teacher.replaceAll('  ', ' '), CrossAxisAlignment.start),
             ),
-            _buildColumn('$percent%', this.letterGrade, CrossAxisAlignment.end,
+            _buildColumn(percent is int ? '$percent%' : percent,
+                this.letterGrade ?? "N/A", CrossAxisAlignment.end,
                 chevron: true, grade: this.letterGrade),
           ]),
         ),

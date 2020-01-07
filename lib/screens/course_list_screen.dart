@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
@@ -104,6 +105,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
                   }),
             );
           } else if (snapshot.hasError) {
+            sentry.captureException(exception: snapshot.error);
+
             return Center(
                 child: Text(
                     "An error occured loading courses:\n${snapshot.error}"));
