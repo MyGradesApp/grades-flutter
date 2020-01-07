@@ -49,10 +49,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
             Icons.exit_to_app,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
+            Navigator.pushNamed(context, '/login');
             // Navigator.pop(context, true);
           },
         ),

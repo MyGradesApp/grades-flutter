@@ -15,13 +15,13 @@ class CircleIconButton extends StatelessWidget {
             width: size,
             height: size,
             child: Stack(
-              alignment: Alignment(0.0, 0.0), // all centered
+              alignment: const Alignment(0.0, 0.0), // all centered
               children: <Widget>[
                 Container(
                   width: size,
                   height: size,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.grey[350]),
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: const Color(0xff6b87ae)),
                 ),
                 Icon(
                   icon,
