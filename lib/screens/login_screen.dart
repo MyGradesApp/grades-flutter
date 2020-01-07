@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:grades/utilities/auth.dart';
 import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
+import 'package:grades/widgets/circle_icon_button_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -166,6 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.person,
                 color: Colors.white,
               ),
+              suffixIcon: CircleIconButton(onPressed: () {
+                this.setState(() {
+                  _emailController.clear();
+                });
+              }),
               hintText: 'Username',
               hintStyle: hintTextStyle,
             ),
@@ -198,6 +204,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.lock,
                 color: Colors.white,
               ),
+              suffixIcon: CircleIconButton(onPressed: () {
+                this.setState(() {
+                  _passwordController.clear();
+                });
+              }),
               hintText: 'Password',
               hintStyle: hintTextStyle,
             ),
