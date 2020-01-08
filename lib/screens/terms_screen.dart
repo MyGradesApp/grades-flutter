@@ -6,41 +6,61 @@ class TermsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff2d3d54),
       body: Center(
         child: Column(
           children: [
             Expanded(
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   Text(
-                    "Terms of Service",
+                    "Welcome to SwiftGrade",
                     style: TextStyle(
                       color: Colors.white,
-                      letterSpacing: 1.5,
-                      fontSize: 29.0,
+                      letterSpacing: 1.0,
+                      fontSize: 22.0,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'OpenSans',
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   const Divider(
                     thickness: 5,
                   ),
-                  const Text(
-                    TOS_STRING,
-                    style: TextStyle(
-                      color: Colors.white,
+                  Expanded(
+                    flex: 1,
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(15.0),
+                      child: const Text(
+                        TOS_STRING,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 10),
             RaisedButton(
-              child: const Text("Accept the terms and conditions"),
+              child: const Text("I accept the terms and conditions",
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 1.0,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'OpenSans',
+                  )),
+              color: const Color(0xff2a84d2),
+              padding: const EdgeInsets.all(15.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
               onPressed: () => _acceptAndReturn(context),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 35),
           ],
         ),
       ),
