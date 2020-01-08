@@ -220,25 +220,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildLoginBtn() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 25.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: _handleLoginPressed,
-        padding: const EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: const Color(0xff2a84d2),
-        // background: linear-gradient(100deg, #4cc6b9, #07b5d0);
-        child: Text(
-          'LOGIN',
-          style: TextStyle(
-            color: Colors.white,
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
+      // TODO FIX close keyboard on sumbit press
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          width: double.infinity,
+          child: RaisedButton(
+            elevation: 5.0,
+            onPressed: _handleLoginPressed,
+            padding: const EdgeInsets.all(15.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            color: const Color(0xff2a84d2),
+            // background: linear-gradient(100deg, #4cc6b9, #07b5d0);
+            child: Text(
+              'LOGIN',
+              style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 1.5,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'OpenSans',
+              ),
+            ),
           ),
         ),
       ),
