@@ -54,7 +54,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
               context: context,
               // type: AlertType.error,
               title: "Sign Out",
-              desc: "Are you sure you want to log out?",
+              desc: "You will no longer automatically log in",
               buttons: [
                 DialogButton(
                   child: Text(
