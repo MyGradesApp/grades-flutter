@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/sentry.dart';
@@ -106,6 +108,13 @@ class _CourseListScreenState extends State<CourseListScreen> {
                   }),
             );
           } else if (snapshot.hasError) {
+            if (snapshot.error is SocketException ||
+                snapshot.error is HttpException) {
+              // TODO: Error message rewrite
+              return const Center(
+                  child: Text("There was an issue connecting to SIS"));
+            }
+
             sentry.captureException(exception: snapshot.error);
 
             return Center(
