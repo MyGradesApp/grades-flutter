@@ -146,7 +146,7 @@ class SISLoader {
           courseName: match[2],
           periodString: match[3],
           teacherName: match[4],
-          gradePercent: int.tryParse(percent) ?? percent,
+          gradePercent: percent ?? gradeParts[0],
           gradeLetter: gradeParts.length > 1 ? gradeParts[1] : null,
           client: _client);
     }).toList();
