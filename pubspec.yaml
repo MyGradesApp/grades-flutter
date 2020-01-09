@@ -35,6 +35,8 @@ dependencies:
   sis_loader:
     git: https://github.com/Noskcaj19/dart-sis-loader.git
 
+  recase: ^3.0.0
+
   flutter_spinkit: ^4.1.1+1
 
 dev_dependencies:

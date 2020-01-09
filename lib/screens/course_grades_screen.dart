@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grades/widgets/course_grades_full_display.dart';
 import 'package:grades/widgets/course_grades_minimal_display.dart';
 import 'package:grades/widgets/loader_widget.dart';
+import 'package:recase/recase.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 enum DisplayStyle { Full, Minimal }
@@ -41,7 +42,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         appBar: AppBar(
           elevation: 0.0,
           centerTitle: true,
-          title: Text("${course.courseName}"),
+          title: Text("${course.courseName.titleCase}"),
           leading: IconButton(
             tooltip: "Back",
             icon: Icon(
