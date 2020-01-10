@@ -45,7 +45,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
       appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
-        title: const Text('Courses'),
+        title: const Text('COURSES'),
         leading: IconButton(
           tooltip: "Logout",
           icon: Icon(
@@ -56,12 +56,12 @@ class _CourseListScreenState extends State<CourseListScreen> {
             Alert(
               context: context,
               // type: AlertType.error,
-              title: "Sign Out",
+              title: "Confirmation",
               desc: "You will no longer automatically log in",
               buttons: [
                 DialogButton(
                   child: Text(
-                    "Confirm",
+                    "Sign Out",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   onPressed: () =>
@@ -101,7 +101,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
                           Navigator.pushNamed(context, '/course_grades',
                               arguments: course);
                         },
-                        course: course.courseName.titleCase,
+                        // course: course.courseName.titleCase,
+                        course: course.courseName,
                         letterGrade: course.gradeLetter,
                         teacher: course.teacherName,
                         percent: course.gradePercent);

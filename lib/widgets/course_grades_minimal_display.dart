@@ -15,6 +15,12 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
       gradeLetter = letterGradeForPercent(
           double.parse(gradeString.substring(0, percentIndex)));
     }
+    double gradeSize;
+    if (grade != null && gradeLetter != null) {
+      gradeSize = 50;
+    } else {
+      gradeSize = 100;
+    }
     return Card(
       color: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(
@@ -41,7 +47,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             Container(
-              width: 50,
+              width: gradeSize,
               alignment: Alignment.centerRight,
               child: Text(
                 gradeString,

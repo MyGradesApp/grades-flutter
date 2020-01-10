@@ -42,7 +42,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         appBar: AppBar(
           elevation: 0.0,
           centerTitle: true,
-          title: Text("${course.courseName.titleCase}"),
+          title: Text("${course.courseName}"),
           leading: IconButton(
             tooltip: "Back",
             icon: Icon(
@@ -76,7 +76,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   if (snapshot.data.isEmpty) {
                     return const Center(
                         child: Text(
-                      "There are currently no grades in this class",
+                      "There are no grades listed in this class",
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'OpenSans',
