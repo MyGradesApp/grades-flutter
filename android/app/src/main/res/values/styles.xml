@@ -7,5 +7,5 @@
 
         <!--<item name="android:windowFullscreen">true</item> -->
     </style>
-    <color name="background">#3f5573</color>
+    <color name="background">#2d3d54</color>
 </resources>

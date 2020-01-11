@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,17 @@ class LoaderWidget extends StatelessWidget {
       color: Colors.white,
       size: 50.0,
     );
+    // Timer(Duration(seconds: 7), () {
+    //   Text(
+    //     'Poor connection',
+    //     style: TextStyle(
+    //       color: Colors.white,
+    //       fontFamily: 'OpenSans',
+    //       fontSize: 25.0,
+    //       fontWeight: FontWeight.bold,
+    //     ),
+    //   );
+    // });
     return spinkit;
   }
 }

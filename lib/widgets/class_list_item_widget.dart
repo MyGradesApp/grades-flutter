@@ -54,7 +54,6 @@ class ClassListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      // color: Theme.of(context).primaryColor,
       color: const Color(0xffffffff),
       elevation: 0,
       shape: RoundedRectangleBorder(

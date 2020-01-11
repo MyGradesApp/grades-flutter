@@ -56,12 +56,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
           theme: ThemeData(
             brightness: Brightness.light,
             primaryColor: const Color(0xff2a84d2),
-
-            // DECIDE ON COLOR SCHEME
-            //backgroundColor: Color(0xff2a84d2),
-            // appBarTheme: AppBarTheme(color: Color(0xff2980b9)),
             appBarTheme: const AppBarTheme(color: Color(0xff2a84d2)),
-            // scaffoldBackgroundColor: Color(0xff2980b9),
             scaffoldBackgroundColor: const Color(0xff2a84d2),
           ),
           routes: <String, WidgetBuilder>{

@@ -107,6 +107,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff2d3d54),
       key: _scaffoldKey,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
@@ -119,17 +120,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Color(0xff2d3d54),
-                  // gradient: LinearGradient(
-                  //   begin: Alignment.topCenter,
-                  //   end: Alignment.bottomCenter,
-                  //   colors: [
-                  //     Color(0xFF73AEF5),
-                  //     Color(0xFF61A4F1),
-                  //     Color(0xFF478DE0),
-                  //     Color(0xFF398AE5),
-                  //   ],
-                  //   stops: [0.1, 0.4, 0.7, 0.9],
-                  // ),
                 ),
               ),
               Container(
