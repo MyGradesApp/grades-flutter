@@ -70,15 +70,17 @@ class CourseGradesFullDisplay extends StatelessWidget {
       tableRows.add(DataRow(cells: tableCells));
     }
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      physics: const AlwaysScrollableScrollPhysics(),
+    return SizedBox.expand(
       child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          columns: tableCols,
-          rows: tableRows,
-          columnSpacing: 5,
+        scrollDirection: Axis.vertical,
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            columns: tableCols,
+            rows: tableRows,
+            columnSpacing: 5,
+          ),
         ),
       ),
     );
