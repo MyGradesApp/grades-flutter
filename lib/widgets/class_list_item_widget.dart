@@ -53,6 +53,17 @@ class ClassListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var fmt_percent;
+    if (percent is int) {
+      fmt_percent = '$percent%';
+    } else {
+      if (percent == "Not Graded") {
+        fmt_percent = "N/A";
+      } else {
+        // Handle cases that aren't `Not Graded`
+        fmt_percent = percent;
+      }
+    }
     return Card(
       color: const Color(0xffffffff),
       elevation: 0,
@@ -70,8 +81,8 @@ class ClassListItemWidget extends StatelessWidget {
               child: _buildColumn(this.course,
                   this.teacher.replaceAll('  ', ' '), CrossAxisAlignment.start),
             ),
-            _buildColumn(percent is int ? '$percent%' : "N/A",
-                this.letterGrade ?? "", CrossAxisAlignment.end,
+            _buildColumn(
+                fmt_percent, this.letterGrade ?? "", CrossAxisAlignment.end,
                 chevron: true, grade: this.letterGrade),
           ]),
         ),
