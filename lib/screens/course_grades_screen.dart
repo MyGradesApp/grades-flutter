@@ -99,7 +99,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     );
                   }
                   if (_displayStyle == DisplayStyle.Full) {
-                    return CourseGradesFullDisplay(snapshot.data);
+                    return CourseGradesFullDisplay(cleanupData(snapshot.data));
                   } else {
                     return CourseGradesMinimalDisplay(snapshot.data);
                   }
@@ -115,4 +115,29 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
               }),
         ));
   }
+}
+
+List<Map<String, dynamic>> cleanupData(List<Map<String, dynamic>> data) {
+  Map<String, bool> values = {};
+
+  for (var record in data) {
+    for (var e in record.entries) {
+      if (e.value != null) {
+        values[e.key] = true;
+      }
+    }
+  }
+
+  List<Map<String, dynamic>> out = [];
+  for (var record in data) {
+    Map<String, dynamic> outRecord = {};
+    for (var e in record.entries) {
+      if (values[e.key] != null) {
+        outRecord[e.key] = e.value;
+      }
+    }
+    out.add(outRecord);
+  }
+
+  return out;
 }
