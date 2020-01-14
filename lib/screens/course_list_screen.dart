@@ -5,6 +5,7 @@ import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
+import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -26,7 +27,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
     }
   }
 
-  _fetchCourses() {
+  void _fetchCourses() {
     _courses = Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getCourses()
@@ -36,6 +37,11 @@ class _CourseListScreenState extends State<CourseListScreen> {
       });
       return courses;
     });
+  }
+
+  Future<List<Course>> _callback() {
+    _fetchCourses();
+    return _courses;
   }
 
   @override
@@ -87,10 +93,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
-              onRefresh: () {
-                _fetchCourses();
-                return _courses;
-              },
+              onRefresh: _callback,
               child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -110,16 +113,18 @@ class _CourseListScreenState extends State<CourseListScreen> {
           } else if (snapshot.hasError) {
             if (snapshot.error is SocketException ||
                 snapshot.error is HttpException) {
-              // TODO: Error message rewrite
-              return const Center(
-                  child: Text("There was an issue connecting to SIS"));
+              return RefreshableErrorMessage(
+                onRefresh: _callback,
+                text: "There was an issue connecting to SIS",
+              );
             }
 
             sentry.captureException(exception: snapshot.error);
 
-            return Center(
-                child: Text(
-                    "An error occured loading courses:\n${snapshot.error}"));
+            return RefreshableErrorMessage(
+              onRefresh: _callback,
+              text: "An error occured loading courses:\n\n${snapshot.error}",
+            );
           }
           return Center(
             child: LoaderWidget(),

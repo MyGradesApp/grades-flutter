@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/widgets/course_grades_full_display.dart';
 import 'package:grades/widgets/course_grades_minimal_display.dart';
 import 'package:grades/widgets/loader_widget.dart';
+import 'package:grades/widgets/refreshable_error_message.dart';
+import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 enum DisplayStyle { Full, Minimal }
@@ -31,6 +34,11 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
       _loaded = true;
       return grades;
     });
+  }
+
+  Future<List<Map<String, dynamic>>> _refresh() {
+    _fetchGrades(true);
+    return _grades;
   }
 
   @override
@@ -68,20 +76,27 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
           ],
         ),
         body: RefreshIndicator(
+          onRefresh: _refresh,
           child: FutureBuilder<List<Map<String, dynamic>>>(
               future: _grades,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data.isEmpty) {
-                    return const Center(
-                        child: Text(
-                      "There are no grades listed in this class",
-                      style: TextStyle(
+                    return RefreshableIconMessage(
+                      onRefresh: _refresh,
+                      icon: Icon(
+                        FontAwesomeIcons.inbox,
+                        size: 55,
                         color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 17.0,
                       ),
-                    ));
+                      child: Text(
+                        "There are no grades listed in this class",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17.0,
+                        ),
+                      ),
+                    );
                   }
                   if (_displayStyle == DisplayStyle.Full) {
                     return CourseGradesFullDisplay(snapshot.data);
@@ -89,17 +104,15 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     return CourseGradesMinimalDisplay(snapshot.data);
                   }
                 } else if (snapshot.hasError) {
-                  return Center(
-                      child: Text(
-                          "An error occured fetching grades:\n${snapshot.error}"));
+                  return RefreshableErrorMessage(
+                    onRefresh: _refresh,
+                    text:
+                        "An error occured fetching grades:\n\n${snapshot.error}",
+                  );
                 }
 
                 return Center(child: LoaderWidget());
               }),
-          onRefresh: () {
-            _fetchGrades(true);
-            return _grades;
-          },
         ));
   }
 }
