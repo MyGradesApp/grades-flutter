@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _loadStoredAuth();
   }
 
-  _loadStoredAuth({bool force = false}) async {
+  _loadStoredAuth({bool force = false, bool freshSession = false}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var hasAcceptedTerms = prefs.getBool("accepted_terms") ?? false;
 
@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
       var loader = await attemptLogin(
         email,
         password,
-        session,
+        freshSession ? null : session,
       );
       Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
 
@@ -65,7 +65,11 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     } on NoSuchMethodError catch (_) {
       // TODO: Pass login failure error message to login page
-      _loadStoredAuth(force: true);
+      if (!freshSession) {
+        _loadStoredAuth(freshSession: true);
+      } else {
+        _loadStoredAuth(force: true);
+      }
     } on InvalidAuthException catch (_) {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
