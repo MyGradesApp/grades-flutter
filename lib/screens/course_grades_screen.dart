@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grades/widgets/course_grades_full_display.dart';
 import 'package:grades/widgets/course_grades_minimal_display.dart';
 import 'package:grades/widgets/loader_widget.dart';
-import 'package:recase/recase.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 enum DisplayStyle { Full, Minimal }

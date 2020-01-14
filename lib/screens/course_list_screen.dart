@@ -6,7 +6,6 @@ import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:recase/recase.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sis_loader/sis_loader.dart';
 
