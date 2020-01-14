@@ -54,31 +54,26 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var info = snapshot.data;
-              // TODO: Fix issue with bottom clipping
               return RefreshIndicator(
                 onRefresh: _refresh,
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          children: [
-                            _buildCard('Cumulative GPA',
-                                info.cumulative_gpa.toString()),
-                            _buildCard('Cumulative Weighted GPA',
-                                info.cumulative_weighted_gpa.toString()),
-                            if (info.class_rank_numerator != null &&
-                                info.class_rank_denominator != null)
-                              _buildCard(
-                                'Class Rank',
-                                '${info.class_rank_numerator} / ${info.class_rank_denominator}',
-                              ),
-                          ],
-                        ),
-                      ),
+                child: SizedBox.expand(
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        _buildCard(
+                            'Cumulative GPA', info.cumulative_gpa.toString()),
+                        _buildCard('Cumulative Weighted GPA',
+                            info.cumulative_weighted_gpa.toString()),
+                        if (info.class_rank_numerator != null &&
+                            info.class_rank_denominator != null)
+                          _buildCard(
+                            'Class Rank',
+                            '${info.class_rank_numerator} / ${info.class_rank_denominator}',
+                          ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             } else if (snapshot.hasError) {
