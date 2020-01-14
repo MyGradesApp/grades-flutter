@@ -11,11 +11,15 @@ class CourseGradesFullDisplay extends StatelessWidget {
     final tableCols = _data[0]
         .map((k, v) {
           return MapEntry(
-              k,
-              DataColumn(
-                  label: Text(k,
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold))));
+            k,
+            DataColumn(
+              label: Text(
+                k,
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
         })
         .values
         .toList();
@@ -26,25 +30,38 @@ class CourseGradesFullDisplay extends StatelessWidget {
           .map((k, v) {
             if (v == null) {
               return MapEntry(
-                  k,
-                  const DataCell(Text("",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold))));
+                k,
+                const DataCell(
+                  Text(
+                    "",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
             }
             if (v is DateTime) {
               return MapEntry(
-                  k,
-                  DataCell(Text(DateFormat.yMMMd().format(v),
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold))));
+                k,
+                DataCell(
+                  Text(
+                    DateFormat.yMMMd().format(v),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
             } else {
               return MapEntry(
-                  k,
-                  DataCell(Text(
+                k,
+                DataCell(
+                  Text(
                     v.toString(),
                     style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
-                  )));
+                  ),
+                ),
+              );
             }
           })
           .values

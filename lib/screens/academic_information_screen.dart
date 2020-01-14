@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
+import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -22,6 +24,11 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
     _info = Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getUserProfile();
+  }
+
+  Future<Profile> _refresh() {
+    _fetchInfo();
+    return _info;
   }
 
   @override
@@ -49,10 +56,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
               var info = snapshot.data;
               // TODO: Fix issue with bottom clipping
               return RefreshIndicator(
-                onRefresh: () {
-                  _fetchInfo();
-                  return _info;
-                },
+                onRefresh: _refresh,
                 child: Column(
                   children: <Widget>[
                     Expanded(
@@ -66,8 +70,10 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                                 info.cumulative_weighted_gpa.toString()),
                             if (info.class_rank_numerator != null &&
                                 info.class_rank_denominator != null)
-                              _buildCard('Class Rank',
-                                  '${info.class_rank_numerator} / ${info.class_rank_denominator}'),
+                              _buildCard(
+                                'Class Rank',
+                                '${info.class_rank_numerator} / ${info.class_rank_denominator}',
+                              ),
                           ],
                         ),
                       ),
@@ -76,9 +82,13 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Center(
-                  child: Text(
-                      'An error occured fetching information:\n${snapshot.error}'));
+              sentry.captureException(exception: snapshot.error);
+
+              return RefreshableErrorMessage(
+                onRefresh: _refresh,
+                text:
+                    'An error occured fetching information:\n\n${snapshot.error}',
+              );
             }
 
             // return const Center(child: CircularProgressIndicator());

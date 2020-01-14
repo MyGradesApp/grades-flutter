@@ -6,7 +6,7 @@ class TermsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff2d3d54),
+      backgroundColor: const Color(0xff2d3d54),
       body: Center(
         child: Column(
           children: [
@@ -14,7 +14,7 @@ class TermsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 40),
-                  Text(
+                  const Text(
                     "Welcome to SwiftGrade",
                     style: TextStyle(
                       color: Colors.white,
@@ -28,11 +28,11 @@ class TermsScreen extends StatelessWidget {
                   // const Divider(
                   //   thickness: 5,
                   // ),
-                  Expanded(
+                  const Expanded(
                     flex: 1,
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(15.0),
-                      child: const Text(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
                         TOS_STRING,
                         style: TextStyle(
                           color: Colors.white,

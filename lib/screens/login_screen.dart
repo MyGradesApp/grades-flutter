@@ -223,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // TODO FIX close keyboard on sumbit press
       child: GestureDetector(
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 25.0),
