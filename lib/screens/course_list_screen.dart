@@ -100,7 +100,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                         onTap: () {
                           Navigator.pushNamed(context, '/course_grades',
                               arguments: course);
-                        },
+                        },  
                         // course: course.courseName.titleCase,
                         course: course.courseName,
                         letterGrade: course.gradeLetter,
