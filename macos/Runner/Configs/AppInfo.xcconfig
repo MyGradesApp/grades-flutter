@@ -8,7 +8,7 @@
 PRODUCT_NAME = grades
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.grades
+PRODUCT_BUNDLE_IDENTIFIER = com.goldin.grades
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2019 com.example. All rights reserved.
