@@ -5,5 +5,6 @@
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

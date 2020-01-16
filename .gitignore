@@ -37,6 +37,7 @@ lib/generated_plugin_registrant.dart
 .pub-cache/
 .pub/
 /build/
+/keys
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -46,6 +47,7 @@ lib/generated_plugin_registrant.dart
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+**/android/key
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -79,3 +81,4 @@ lib/generated_plugin_registrant.dart
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+android/key.properties
