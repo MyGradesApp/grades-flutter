@@ -73,10 +73,14 @@ class _CourseListScreenState extends State<CourseListScreen> {
                       "Sign Out",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/login').then((result) {
-                      Navigator.of(context).pop();
-                    }),
+                    onPressed: () async {
+                      // Pop the popup
+                      Navigator.pop(context);
+
+                      var loader = await Navigator.pushNamed(context, '/login');
+                      Provider.of<CurrentSession>(context, listen: false)
+                          .setSisLoader(loader);
+                    },
                     width: 120,
                   )
                 ],
