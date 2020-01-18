@@ -58,41 +58,14 @@ class _CourseListScreenState extends State<CourseListScreen> {
           leading: IconButton(
             tooltip: "Logout",
             icon: Icon(
-              // TODO: Find a better icon for "logout"
-              Icons.exit_to_app,
+              Icons.person,
             ),
-            onPressed: () {
-              Alert(
-                context: context,
-                // type: AlertType.error,
-                title: "Confirmation",
-                desc: "You will no longer automatically log in",
-                buttons: [
-                  DialogButton(
-                    child: Text(
-                      "Sign Out",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    onPressed: () async {
-                      // Pop the popup
-                      Navigator.pop(context);
-
-                      var loader = await Navigator.pushNamed(context, '/login');
-                      Provider.of<CurrentSession>(context, listen: false)
-                          .setSisLoader(loader);
-                    },
-                    width: 120,
-                  )
-                ],
-              ).show();
-
-              // Navigator.pop(context, true);
-            },
+            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.person),
-              onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+              icon: Icon(Icons.settings),
+              onPressed: () => Navigator.pushNamed(context, '/settings'),
             )
           ],
         ),
