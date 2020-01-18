@@ -1,4 +1,4 @@
-package com.example.grades
+package com.goldin.grades
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
