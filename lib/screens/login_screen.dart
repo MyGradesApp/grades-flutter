@@ -85,57 +85,62 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xff2d3d54),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SizedBox.expand(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40.0,
-              vertical: 120.0,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'SwiftGrade',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontSize: 36.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Your grades at a glance',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 45.0),
-                Column(
-                  children: <Widget>[
-                    _buildEmailTF(),
-                    const SizedBox(
-                      height: 30.0,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: const Color(0xff2d3d54),
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SizedBox.expand(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 40.0,
+                vertical: 120.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'SwiftGrade',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontSize: 36.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    _buildPasswordTF(),
-                    Visibility(
-                      visible: !_loggingIn,
-                      child: _buildLoginBtn(),
-                      replacement: Padding(
-                        padding: const EdgeInsets.only(top: 32.0),
-                        child: LoaderWidget(),
+                  ),
+                  Text(
+                    'Your grades at a glance',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 45.0),
+                  Column(
+                    children: <Widget>[
+                      _buildEmailTF(),
+                      const SizedBox(
+                        height: 30.0,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      _buildPasswordTF(),
+                      Visibility(
+                        visible: !_loggingIn,
+                        child: _buildLoginBtn(),
+                        replacement: Padding(
+                          padding: const EdgeInsets.only(top: 32.0),
+                          child: LoaderWidget(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
