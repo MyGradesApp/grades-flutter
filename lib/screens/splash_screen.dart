@@ -8,7 +8,9 @@ import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sis_loader/sis_loader.dart';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:simple_animations/simple_animations.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key key}) : super(key: key);
@@ -70,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         _loadStoredAuth(force: true);
       }
-    } on InvalidAuthException catch (_) {
+      // } on InvalidAuthException catch (_) {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
     } on HttpException catch (_) {
@@ -113,73 +115,152 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: const Color(0xff2d3d54),
       key: _scaffoldKey,
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Color(0xff2d3d54),
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+                child: Stack(
+              children: <Widget>[
+                onBottom(AnimatedWave(
+                  height: 180,
+                  speed: 1.0,
+                )),
+                onBottom(AnimatedWave(
+                  height: 120,
+                  speed: 0.9,
+                  offset: pi,
+                )),
+                onBottom(AnimatedWave(
+                  height: 220,
+                  speed: 1.2,
+                  offset: pi / 2,
+                )),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'SwiftGrade',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'OpenSans',
+                        fontSize: 36.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 25.0),
+                    Text(
+                      'Your grades at a glance',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'OpenSans',
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                    Visibility(
+                      visible: !_showError,
+                      child: LoaderWidget(),
+                      replacement: Padding(
+                        padding: const EdgeInsets.only(top: 55.0),
+                        child: Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 60,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'SwiftGrade',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 36.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 25.0),
-                      Text(
-                        'Your grades at a glance',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 50),
-                      Visibility(
-                        visible: !_showError,
-                        child: LoaderWidget(),
-                        replacement: Padding(
-                          padding: const EdgeInsets.only(top: 55.0),
-                          child: Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 60,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
+              ],
+            )),
+          ],
         ),
       ),
     );
   }
+
+  onBottom(Widget child) => Positioned.fill(
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: child,
+        ),
+      );
+
+// OLD LOGIN
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     backgroundColor: const Color(0xff2d3d54),
+  //     key: _scaffoldKey,
+  //     body: AnnotatedRegion<SystemUiOverlayStyle>(
+  //       value: SystemUiOverlayStyle.light,
+  //       child: GestureDetector(
+  //         onTap: () => FocusScope.of(context).unfocus(),
+  //         child: Stack(
+  //           children: <Widget>[
+  //             Container(
+  //               height: double.infinity,
+  //               width: double.infinity,
+  //               decoration: const BoxDecoration(
+  //                 color: Color(0xff2d3d54),
+  //               ),
+  //             ),
+  //             Container(
+  //               height: double.infinity,
+  //               width: double.infinity,
+  //               child: SingleChildScrollView(
+  //                 physics: const AlwaysScrollableScrollPhysics(),
+  //                 padding: const EdgeInsets.symmetric(
+  //                   horizontal: 40.0,
+  //                   vertical: 120.0,
+  //                 ),
+  //                 child: Column(
+  //                   mainAxisAlignment: MainAxisAlignment.center,
+  //                   children: <Widget>[
+  //                     Text(
+  //                       'SwiftGrade',
+  //                       style: TextStyle(
+  //                         color: Colors.white,
+  //                         fontFamily: 'OpenSans',
+  //                         fontSize: 36.0,
+  //                         fontWeight: FontWeight.bold,
+  //                       ),
+  //                     ),
+  //                     const SizedBox(height: 25.0),
+  //                     Text(
+  //                       'Your grades at a glance',
+  //                       style: TextStyle(
+  //                         color: Colors.white,
+  //                         fontFamily: 'OpenSans',
+  //                         fontSize: 25.0,
+  //                         fontWeight: FontWeight.bold,
+  //                       ),
+  //                     ),
+  //                     const SizedBox(height: 50),
+  //                     Visibility(
+  //                       visible: !_showError,
+  //                       child: LoaderWidget(),
+  //                       replacement: Padding(
+  //                         padding: const EdgeInsets.only(top: 55.0),
+  //                         child: Icon(
+  //                           Icons.error_outline,
+  //                           color: Colors.red,
+  //                           size: 60,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   SnackBar errorSnackbar(String message) {
     return SnackBar(
@@ -204,3 +285,94 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+// Creates cool login animation
+class AnimatedWave extends StatelessWidget {
+  final double height;
+  final double speed;
+  final double offset;
+
+  AnimatedWave({this.height, this.speed, this.offset = 0.0});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        height: height,
+        width: constraints.biggest.width,
+        child: ControlledAnimation(
+            playback: Playback.LOOP,
+            duration: Duration(milliseconds: (5000 / speed).round()),
+            tween: Tween(begin: 0.0, end: 2 * pi),
+            builder: (context, value) {
+              return CustomPaint(
+                foregroundPainter: CurvePainter(value + offset),
+              );
+            }),
+      );
+    });
+  }
+}
+
+// creates cool login animation
+class CurvePainter extends CustomPainter {
+  final double value;
+
+  CurvePainter(this.value);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final white = Paint()..color = Colors.white.withAlpha(60);
+    final path = Path();
+
+    final y1 = sin(value);
+    final y2 = sin(value + pi / 2);
+    final y3 = sin(value + pi);
+
+    final startPointY = size.height * (0.5 + 0.4 * y1);
+    final controlPointY = size.height * (0.5 + 0.4 * y2);
+    final endPointY = size.height * (0.5 + 0.4 * y3);
+
+    path.moveTo(size.width * 0, startPointY);
+    path.quadraticBezierTo(
+        size.width * 0.5, controlPointY, size.width, endPointY);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    canvas.drawPath(path, white);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+// IF WE WANT RAINBOW ANIMATION (NOT SURE YET)
+
+// class AnimatedBackground extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     final tween = MultiTrackTween([
+//       Track("color1").add(Duration(seconds: 3),
+//           ColorTween(begin: Color(0xffD38312), end: Colors.lightBlue.shade900)),
+//       Track("color2").add(Duration(seconds: 3),
+//           ColorTween(begin: Color(0xffA83279), end: Colors.blue.shade600))
+//     ]);
+
+//     return ControlledAnimation(
+//       playback: Playback.MIRROR,
+//       tween: tween,
+//       duration: tween.duration,
+//       builder: (context, animation) {
+//         return Container(
+//           decoration: BoxDecoration(
+//               gradient: LinearGradient(
+//                   begin: Alignment.topCenter,
+//                   end: Alignment.bottomCenter,
+//                   colors: [animation["color1"], animation["color2"]])),
+//         );
+//       },
+//     );
+//   }
+// }

@@ -45,7 +45,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildCard(String title, String nav) {
     return FlatButton(
       padding: const EdgeInsets.all(4),
-      onPressed: () => Navigator.pushNamed(context, '/' + nav + ''),
+      onPressed: () =>
+          Navigator.pushNamed(context, '/' + nav + '').then((result) {
+        Navigator.of(context).pop();
+      }),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

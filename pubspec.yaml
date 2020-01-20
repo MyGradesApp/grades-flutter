@@ -19,8 +19,10 @@ environment:
 dependencies:
   rflutter_alert:
     git: git://github.com/RatelHub/rflutter_alert.git
+
   flutter:
     sdk: flutter
+  simple_animations: ^1.3.4
 
   font_awesome_flutter: ^8.5.0
   intl: ^0.16.1
