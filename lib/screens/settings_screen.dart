@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         color: const Color(0xff216bac),
-        margin: const EdgeInsets.all(10),
+        // margin: const EdgeInsets.all(10),
         child: Padding(
             padding: const EdgeInsets.all(9.0),
             child: ListTile(

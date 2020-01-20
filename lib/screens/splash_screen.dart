@@ -144,7 +144,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'OpenSans',
-                        fontSize: 36.0,
+                        fontSize: 40.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

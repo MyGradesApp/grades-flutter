@@ -56,7 +56,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
           centerTitle: true,
           title: const Text('COURSES'),
           leading: IconButton(
-            tooltip: "Logout",
+            tooltip: "Profile",
             icon: Icon(
               Icons.person,
             ),
@@ -64,6 +64,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
           ),
           actions: <Widget>[
             IconButton(
+              tooltip: "Settings",
               icon: Icon(Icons.settings),
               onPressed: () => Navigator.pushNamed(context, '/settings'),
             )
