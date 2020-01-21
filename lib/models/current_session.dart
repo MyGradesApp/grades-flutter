@@ -1,13 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:sis_loader/sis_loader.dart';
+import 'package:flutter/widgets.dart';
+import 'package:grades/sis-cache/sis_loader.dart';
 
 class CurrentSession extends ChangeNotifier {
-  SISLoader _sisLoader;
+  CachedSISLoader _sisLoader;
+  GlobalKey _navKey;
 
-  SISLoader get sisLoader => _sisLoader;
+  CachedSISLoader get sisLoader => _sisLoader;
+  // A unique key to prevent previous sessions from being shown
+  GlobalKey get navKey => _navKey;
 
-  void setSisLoader(SISLoader loader) {
+  void setSisLoader(CachedSISLoader loader) {
     _sisLoader = loader;
+    _navKey = GlobalKey();
     notifyListeners();
   }
 }

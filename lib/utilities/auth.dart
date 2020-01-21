@@ -1,10 +1,11 @@
+import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-Future<SISLoader> attemptLogin(String email, String password,
+Future<CachedSISLoader> attemptLogin(String email, String password,
     [String session]) async {
   assert(email != null && email.isNotEmpty);
   assert(password != null && password.isNotEmpty);
-  var loader = SISLoader();
+  var loader = CachedSISLoader(SISLoader(), email);
 
   if (session != null) {
     loader.sessionCookies = session;
