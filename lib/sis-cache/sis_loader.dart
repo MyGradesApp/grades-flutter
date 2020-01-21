@@ -28,8 +28,8 @@ class CachedSISLoader {
     return _courses;
   }
 
-  Future<Profile> getUserProfile() {
-    if (_userProfile != null) {
+  Future<Profile> getUserProfile({bool force = false}) {
+    if (_userProfile != null && !force) {
       return _userProfile;
     }
     _userProfile = _loader.getUserProfile();

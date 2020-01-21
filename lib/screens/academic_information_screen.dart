@@ -15,7 +15,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   Future<Profile> _refresh() {
     return Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
-        .getUserProfile();
+        .getUserProfile(force: true);
   }
 
   @override
