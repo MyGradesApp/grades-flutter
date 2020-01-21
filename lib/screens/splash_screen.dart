@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         _showError = true;
       });
-      await sentry.captureException(
+      await reportException(
         exception: e,
         stackTrace: stackTrace,
       );

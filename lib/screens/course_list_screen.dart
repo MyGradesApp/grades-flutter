@@ -7,7 +7,6 @@ import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListScreen extends StatefulWidget {
@@ -101,7 +100,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 );
               }
 
-              sentry.captureException(exception: snapshot.error);
+              reportException(exception: snapshot.error);
 
               return RefreshableErrorMessage(
                 onRefresh: _callback,

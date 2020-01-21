@@ -77,7 +77,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
-              sentry.captureException(exception: snapshot.error);
+              reportException(exception: snapshot.error);
 
               return RefreshableErrorMessage(
                 onRefresh: _refresh,

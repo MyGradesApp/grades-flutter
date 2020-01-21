@@ -70,12 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
           _scaffoldKey.currentState, 'There was an issue connecting to SIS');
     } catch (e, stackTrace) {
       showErrorSnackbar(_scaffoldKey.currentState, 'An unknown error occurred');
-      await sentry.captureException(
+      await reportException(
         exception: e,
         stackTrace: stackTrace,
       );
-      print(e);
-      print(stackTrace);
     } finally {
       setState(() {
         _loggingIn = false;

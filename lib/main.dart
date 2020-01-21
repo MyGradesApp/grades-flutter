@@ -17,7 +17,7 @@ import 'models/current_session.dart';
 void main() async {
   FlutterError.onError = (details, {bool forceReport = false}) {
     try {
-      sentry.captureException(
+      reportException(
         exception: details.exception,
         stackTrace: details.stack,
       );
@@ -31,7 +31,7 @@ void main() async {
   runZoned(() => runApp(MyApp()),
       onError: (Object error, StackTrace stackTrace) {
     try {
-      sentry.captureException(
+      reportException(
         exception: error,
         stackTrace: stackTrace,
       );
