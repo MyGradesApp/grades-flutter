@@ -47,8 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         password == null ||
         password.isEmpty ||
         force) {
-      var loader = await Navigator.pushNamed(context, '/login');
-      Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
+      await Navigator.pushNamed(context, '/login');
 
       await _showCourses(prefs);
       return;
@@ -91,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         _showError = true;
       });
-      await sentry.captureException(
+      await reportException(
         exception: e,
         stackTrace: stackTrace,
       );

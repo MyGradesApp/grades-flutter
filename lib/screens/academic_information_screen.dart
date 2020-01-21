@@ -12,23 +12,10 @@ class AcademicInfoScreen extends StatefulWidget {
 }
 
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
-  Future<Profile> _info;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _fetchInfo();
-  }
-
-  void _fetchInfo() {
-    _info = Provider.of<CurrentSession>(context, listen: false)
+  Future<Profile> _refresh() {
+    return Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getUserProfile();
-  }
-
-  Future<Profile> _refresh() {
-    _fetchInfo();
-    return _info;
   }
 
   @override
@@ -50,7 +37,8 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         centerTitle: true,
       ),
       body: FutureBuilder<Profile>(
-          future: _info,
+          future:
+              Provider.of<CurrentSession>(context).sisLoader.getUserProfile(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var info = snapshot.data;
@@ -77,7 +65,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
-              sentry.captureException(exception: snapshot.error);
+              reportException(exception: snapshot.error);
 
               return RefreshableErrorMessage(
                 onRefresh: _refresh,

@@ -17,7 +17,7 @@ import 'models/current_session.dart';
 void main() async {
   FlutterError.onError = (details, {bool forceReport = false}) {
     try {
-      sentry.captureException(
+      reportException(
         exception: details.exception,
         stackTrace: details.stack,
       );
@@ -31,7 +31,7 @@ void main() async {
   runZoned(() => runApp(MyApp()),
       onError: (Object error, StackTrace stackTrace) {
     try {
-      sentry.captureException(
+      reportException(
         exception: error,
         stackTrace: stackTrace,
       );
@@ -49,8 +49,9 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return MultiProvider(
-        providers: [ChangeNotifierProvider(create: (_) => CurrentSession())],
-        child: MaterialApp(
+      providers: [ChangeNotifierProvider(create: (_) => CurrentSession())],
+      child: Builder(
+        builder: (context) => MaterialApp(
           title: 'Flutter Login UI',
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
@@ -64,11 +65,17 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
             '/login': (BuildContext context) => LoginScreen(),
             '/terms': (BuildContext context) => TermsScreen(),
             '/settings': (BuildContext context) => SettingsScreen(),
-            '/courses': (BuildContext context) => CourseListScreen(),
+            '/courses': (BuildContext context) {
+              // Use a key here to prevent overlap in sessions
+              return CourseListScreen(
+                  key: Provider.of<CurrentSession>(context).navKey);
+            },
             '/course_grades': (BuildContext context) => CourseGradesScreen(),
             '/academic_info': (BuildContext context) => AcademicInfoScreen(),
           },
-        ));
+        ),
+      ),
+    );
   }
 }
 

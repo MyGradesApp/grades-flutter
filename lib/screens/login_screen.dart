@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/auth.dart';
 import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -59,7 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setString('sis_password', password);
       await prefs.setString('sis_session', loader.sessionCookies);
 
-      Navigator.pop(context, loader);
+      Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
+      Navigator.pop(context);
     } on InvalidAuthException catch (e) {
       showErrorSnackbar(_scaffoldKey.currentState, e.message);
     } on SocketException catch (_) {
@@ -70,12 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
           _scaffoldKey.currentState, 'There was an issue connecting to SIS');
     } catch (e, stackTrace) {
       showErrorSnackbar(_scaffoldKey.currentState, 'An unknown error occurred');
-      await sentry.captureException(
+      await reportException(
         exception: e,
         stackTrace: stackTrace,
       );
-      print(e);
-      print(stackTrace);
     } finally {
       setState(() {
         _loggingIn = false;

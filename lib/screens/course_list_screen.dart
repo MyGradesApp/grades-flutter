@@ -11,37 +11,17 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListScreen extends StatefulWidget {
+  CourseListScreen({Key key}) : super(key: key);
+
   @override
   _CourseListScreenState createState() => _CourseListScreenState();
 }
 
 class _CourseListScreenState extends State<CourseListScreen> {
-  Future<List<Course>> _courses;
-  bool _complete = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_complete) {
-      _fetchCourses();
-    }
-  }
-
-  void _fetchCourses() {
-    _courses = Provider.of<CurrentSession>(context, listen: false)
-        .sisLoader
-        .getCourses()
-        .then((courses) {
-      setState(() {
-        _complete = true;
-      });
-      return courses;
-    });
-  }
-
   Future<List<Course>> _callback() {
-    _fetchCourses();
-    return _courses;
+    return Provider.of<CurrentSession>(context, listen: false)
+        .sisLoader
+        .getCourses(force: true);
   }
 
   @override
@@ -60,7 +40,29 @@ class _CourseListScreenState extends State<CourseListScreen> {
             icon: Icon(
               Icons.person,
             ),
-            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+            onPressed: () {
+              Alert(
+                context: context,
+                // type: AlertType.error,
+                title: "Confirmation",
+                desc: "You will no longer automatically log in",
+                buttons: [
+                  DialogButton(
+                    child: Text(
+                      "Sign Out",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () async {
+                      // Pop the popup
+                      Navigator.pop(context);
+
+                      await Navigator.pushNamed(context, '/login');
+                    },
+                    width: 120,
+                  )
+                ],
+              ).show();
+            },
           ),
           actions: <Widget>[
             IconButton(
@@ -71,7 +73,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
           ],
         ),
         body: FutureBuilder<List<Course>>(
-          future: _courses,
+          future: Provider.of<CurrentSession>(context).sisLoader.getCourses(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return RefreshIndicator(
@@ -101,7 +103,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 );
               }
 
-              sentry.captureException(exception: snapshot.error);
+              reportException(exception: snapshot.error);
 
               return RefreshableErrorMessage(
                 onRefresh: _callback,
