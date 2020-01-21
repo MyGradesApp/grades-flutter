@@ -7,7 +7,6 @@ import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListScreen extends StatefulWidget {
@@ -40,29 +39,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
             icon: Icon(
               Icons.person,
             ),
-            onPressed: () {
-              Alert(
-                context: context,
-                // type: AlertType.error,
-                title: "Confirmation",
-                desc: "You will no longer automatically log in",
-                buttons: [
-                  DialogButton(
-                    child: Text(
-                      "Sign Out",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    onPressed: () async {
-                      // Pop the popup
-                      Navigator.pop(context);
-
-                      await Navigator.pushNamed(context, '/login');
-                    },
-                    width: 120,
-                  )
-                ],
-              ).show();
-            },
+            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
           ),
           actions: <Widget>[
             IconButton(
