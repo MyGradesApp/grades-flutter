@@ -7,6 +7,7 @@ import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListScreen extends StatefulWidget {
@@ -35,17 +36,41 @@ class _CourseListScreenState extends State<CourseListScreen> {
           centerTitle: true,
           title: const Text('COURSES'),
           leading: IconButton(
-            tooltip: "Profile",
+            tooltip: "Logout",
             icon: Icon(
-              Icons.person,
+              // TODO: Find a better icon for "logout"
+              Icons.exit_to_app,
             ),
-            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+            onPressed: () {
+              Alert(
+                context: context,
+                // type: AlertType.error,
+                title: "Confirmation",
+                desc: "You will no longer automatically log in",
+                buttons: [
+                  DialogButton(
+                    child: Text(
+                      "Sign Out",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () async {
+                      // Pop the popup
+                      Navigator.pop(context);
+
+                      await Navigator.pushNamed(context, '/login');
+                    },
+                    width: 120,
+                  )
+                ],
+              ).show();
+
+              // Navigator.pop(context, true);
+            },
           ),
           actions: <Widget>[
             IconButton(
-              tooltip: "Settings",
-              icon: Icon(Icons.settings),
-              onPressed: () => Navigator.pushNamed(context, '/settings'),
+              icon: Icon(Icons.person),
+              onPressed: () => Navigator.pushNamed(context, '/academic_info'),
             )
           ],
         ),

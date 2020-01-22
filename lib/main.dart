@@ -6,7 +6,6 @@ import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/login_screen.dart';
-import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/utilities/sentry.dart';
@@ -64,7 +63,6 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
           routes: <String, WidgetBuilder>{
             '/login': (BuildContext context) => LoginScreen(),
             '/terms': (BuildContext context) => TermsScreen(),
-            '/settings': (BuildContext context) => SettingsScreen(),
             '/courses': (BuildContext context) {
               // Use a key here to prevent overlap in sessions
               return CourseListScreen(
