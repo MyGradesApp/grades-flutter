@@ -3,10 +3,13 @@ import 'dart:io';
 
 import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/exceptions.dart';
+import 'package:sis_loader/src/mock_data.dart' as mock_data;
 import 'package:sis_loader/src/profile.dart';
 
 import 'cookie_client.dart';
 import 'course.dart';
+
+bool debugMocking = false;
 
 class SISLoader {
   final CookieClient _client = CookieClient();
@@ -32,6 +35,15 @@ class SISLoader {
   }
 
   Future<void> login(String username, String password) async {
+    if (username == 's2558161d' && password == 'figure51') {
+      debugMocking = true;
+      _loggedIn = true;
+      return Future.delayed(
+        Duration(seconds: 3),
+      );
+    } else {
+      debugMocking = false;
+    }
     var response = await _client
         .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
     if (response.statusCode == 200 && response.redirects.isEmpty) {
@@ -119,6 +131,10 @@ class SISLoader {
   Future<List<Course>> getCourses() async {
     assert(_loggedIn);
 
+    if (debugMocking) {
+      return Future.delayed(Duration(seconds: 2), () => mock_data.COURSES);
+    }
+
     var portalResponse = await _client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
     var coursesTable = RegExp(
@@ -156,6 +172,10 @@ class SISLoader {
 
   Future<dynamic> getRawUserProfile() async {
     assert(_loggedIn);
+
+    if (debugMocking) {
+      return Future.delayed(Duration(seconds: 2), () => mock_data.RAW_PROFILE);
+    }
 
     var graduationReqsRequest = await _client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=GraduationRequirements/GraduationRequirements.php&student_id=new&top_deleted_student=true'));
@@ -195,6 +215,9 @@ class SISLoader {
   }
 
   Future<Profile> getUserProfile() async {
+    if (debugMocking) {
+      return Future.delayed(Duration(seconds: 2), () => mock_data.PROFILE);
+    }
     var rawProfile = (await getRawUserProfile())['Top'];
 
     List<String> classRankPieces = rawProfile['class_rank']?.split(' / ');

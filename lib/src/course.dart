@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
+import 'package:sis_loader/src/mock_data.dart' as mock_data;
 
+import '../sis_loader.dart' show debugMocking;
 import 'cookie_client.dart';
 
 final shortMonthDateFormat = DateFormat('MMM dd, yyyy hh:mm aa');
@@ -26,6 +28,13 @@ class Course {
       this.gradeLetter});
 
   Future<List<Map<String, dynamic>>> getGrades([force = false]) {
+    if (debugMocking) {
+      return Future.delayed(
+        Duration(seconds: 2),
+        () => mock_data.GRADES[courseName],
+      );
+    }
+
     if (_grades == null || force) {
       _grades = _fetchRawGrades();
       return _grades;
