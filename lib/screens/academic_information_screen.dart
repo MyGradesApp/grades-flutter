@@ -49,10 +49,10 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
                       children: [
-                        _buildCard(
-                            'Cumulative GPA', info.cumulative_gpa.toString()),
+                        _buildCard('Cumulative GPA',
+                            info.cumulative_gpa?.toString() ?? "Unavailable"),
                         _buildCard('Cumulative Weighted GPA',
-                            info.cumulative_weighted_gpa.toString()),
+                            info.cumulative_weighted_gpa?.toString()?? "Unavailable"),
                         if (info.class_rank_numerator != null &&
                             info.class_rank_denominator != null)
                           _buildCard(
