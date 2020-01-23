@@ -16,5 +16,9 @@ reportException({@foundation.required dynamic exception, dynamic stackTrace}) {
     );
   } else {
     print("Error not reported to sentry (debug mode)");
+    print(exception);
+    if (stackTrace != null) {
+      print(stackTrace);
+    }
   }
 }
