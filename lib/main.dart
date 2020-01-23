@@ -36,10 +36,8 @@ void main() async {
         exception: error,
         stackTrace: stackTrace,
       );
-      print('Error sent to sentry.io: $error');
     } catch (e) {
       print('Sending report to sentry.io failed: $e');
-      print('Original error: $error');
     }
   });
 }
