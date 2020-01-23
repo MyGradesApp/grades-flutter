@@ -220,6 +220,10 @@ class SISLoader {
     }
     var rawProfile = (await getRawUserProfile())['Top'];
 
+    if (rawProfile == null) {
+      return Profile();
+    }
+
     List<String> classRankPieces = rawProfile['class_rank']?.split(' / ');
     return Profile(
         cumulative_gpa: rawProfile['cumluative_gpa'] != null
