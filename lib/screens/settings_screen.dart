@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grades/screens/course_list_screen.dart';
-import 'package:grades/screens/login_screen.dart';
-import 'package:grades/screens/terms_settings_screen.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -48,10 +45,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildLogout() {
     return FlatButton(
       padding: const EdgeInsets.all(4),
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      ),
+      onPressed: () async {
+        await Navigator.pop(context);
+        await Navigator.pop(context, true);
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -76,10 +73,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildTerms() {
     return FlatButton(
       padding: const EdgeInsets.all(4),
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TermsSettingsScreen()),
-      ),
+      onPressed: () {
+        Navigator.pushNamed(context, '/terms');
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -104,10 +100,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildDark() {
     return FlatButton(
       padding: const EdgeInsets.all(4),
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CourseListScreen()),
-      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

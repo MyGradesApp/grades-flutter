@@ -8,9 +8,6 @@ import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:simple_animations/simple_animations.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key key}) : super(key: key);
@@ -105,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // so we need to show the login screen and clear the session values
     if (logoff is bool && logoff) {
       await prefs.remove('sis_session');
-      _loadStoredAuth();
+      _loadStoredAuth(force: true);
     }
   }
 
