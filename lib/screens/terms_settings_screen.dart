@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grades/utilities/tos_const.dart';
-import 'package:sis_loader/sis_loader.dart';
 
 class TermsSettingsScreen extends StatefulWidget {
   @override
@@ -8,11 +7,8 @@ class TermsSettingsScreen extends StatefulWidget {
 }
 
 class _TermsSettingsScreenState extends State<TermsSettingsScreen> {
-  Future<Profile> _info;
-
   @override
   Widget build(BuildContext context) {
-    child:
     return Scaffold(
       appBar: AppBar(
         title: const Text('Terms of Service'),
@@ -21,7 +17,9 @@ class _TermsSettingsScreenState extends State<TermsSettingsScreen> {
           icon: Icon(
             Icons.arrow_back_ios,
           ),
-          onPressed: () => Navigator.pushNamed(context, '/courses'),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
         ),
         elevation: 0.0,
         centerTitle: true,
