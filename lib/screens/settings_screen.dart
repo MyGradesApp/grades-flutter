@@ -35,7 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
-                  _buildDark(),
+                  // _buildDark(),
                   _buildTerms(),
                   _buildLogout(),
                 ],

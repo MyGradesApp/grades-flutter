@@ -18,7 +18,7 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '1.1'
 }
 
 apply plugin: 'com.android.application'
@@ -53,14 +53,14 @@ android {
     }
 
 
-//   signingConfigs {
-//        release {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-//            storePassword keystoreProperties['storePassword']
-//        }
-//    }
+  signingConfigs {
+       release {
+           keyAlias keystoreProperties['keyAlias']
+           keyPassword keystoreProperties['keyPassword']
+           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+           storePassword keystoreProperties['storePassword']
+       }
+   }
 
 
     buildTypes {
@@ -68,8 +68,8 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
                 // CHANGE BETWEEN THESE WHEN BUILDING FOR REAL
-                //  signingConfig signingConfigs.release
-                signingConfig signingConfigs.debug 
+                 signingConfig signingConfigs.release
+                // signingConfig signingConfigs.debug 
         }
     }
 }
