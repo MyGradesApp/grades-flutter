@@ -33,8 +33,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 children: [
                   _buildCard('Dark Mode', ''),
-                  _buildCard('Terms of Service', ''),
-                  _buildCard('Sign Out', 'login'),
+                  _buildCard('Terms of Service', 'terms_settings'),
+                  _buildLogout('Sign Out', 'login'),
                 ],
               ),
             ),
@@ -42,13 +42,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }));
   }
 
-  Widget _buildCard(String title, String nav) {
+  Widget _buildLogout(String title, String nav) {
     return FlatButton(
       padding: const EdgeInsets.all(4),
       onPressed: () =>
           Navigator.pushNamed(context, '/' + nav + '').then((result) {
         Navigator.of(context).pop();
       }),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        color: const Color(0xff216bac),
+        // margin: const EdgeInsets.all(10),
+        child: Padding(
+            padding: const EdgeInsets.all(9.0),
+            child: ListTile(
+              title: Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
+            )),
+      ),
+    );
+  }
+
+  Widget _buildCard(String title, String nav) {
+    return FlatButton(
+      padding: const EdgeInsets.all(4),
+      onPressed: () => Navigator.pushNamed(context, '/' + nav + ''),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

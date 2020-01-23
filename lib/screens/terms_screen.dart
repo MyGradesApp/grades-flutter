@@ -29,9 +29,6 @@ class TermsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    // const Divider(
-                    //   thickness: 5,
-                    // ),
                     const Expanded(
                       flex: 1,
                       child: SingleChildScrollView(
