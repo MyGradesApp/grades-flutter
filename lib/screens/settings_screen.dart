@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grades/screens/course_list_screen.dart';
+import 'package:grades/screens/login_screen.dart';
+import 'package:grades/screens/terms_settings_screen.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -32,9 +35,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
-                  _buildCard('Dark Mode', ''),
-                  _buildCard('Terms of Service', 'terms_settings'),
-                  _buildLogout('Sign Out', 'login'),
+                  _buildDark(),
+                  _buildTerms(),
+                  _buildLogout(),
                 ],
               ),
             ),
@@ -42,25 +45,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }));
   }
 
-  Widget _buildLogout(String title, String nav) {
+  Widget _buildLogout() {
     return FlatButton(
       padding: const EdgeInsets.all(4),
-      onPressed: () =>
-          Navigator.pushNamed(context, '/' + nav + '').then((result) {
-        Navigator.of(context).pop();
-      }),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      ),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         color: const Color(0xff216bac),
-        // margin: const EdgeInsets.all(10),
-        child: Padding(
-            padding: const EdgeInsets.all(9.0),
+        child: const Padding(
+            padding: EdgeInsets.all(9.0),
             child: ListTile(
               title: Text(
-                title,
-                style: const TextStyle(
+                'Sign Out',
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.white,
@@ -71,22 +73,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildCard(String title, String nav) {
+  Widget _buildTerms() {
     return FlatButton(
       padding: const EdgeInsets.all(4),
-      onPressed: () => Navigator.pushNamed(context, '/' + nav + ''),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TermsSettingsScreen()),
+      ),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         color: const Color(0xff216bac),
-        // margin: const EdgeInsets.all(10),
-        child: Padding(
-            padding: const EdgeInsets.all(9.0),
+        child: const Padding(
+            padding: EdgeInsets.all(9.0),
             child: ListTile(
               title: Text(
-                title,
-                style: const TextStyle(
+                'Terms of Service',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
+            )),
+      ),
+    );
+  }
+
+  Widget _buildDark() {
+    return FlatButton(
+      padding: const EdgeInsets.all(4),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CourseListScreen()),
+      ),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        color: const Color(0xff216bac),
+        child: const Padding(
+            padding: EdgeInsets.all(9.0),
+            child: ListTile(
+              title: Text(
+                'Dark Mode',
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.white,
