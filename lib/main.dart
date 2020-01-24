@@ -10,9 +10,10 @@ import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/screens/terms_settings_screen.dart';
+import 'package:grades/utilities/custom_theme.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
-
+import 'package:grades/utilities/themes.dart';
 import 'models/current_session.dart';
 
 void main() async {
@@ -29,7 +30,9 @@ void main() async {
       FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
     }
   };
-  runZoned(() => runApp(MyApp()),
+  runZoned(
+      () => runApp(
+          CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp())),
       onError: (Object error, StackTrace stackTrace) {
     try {
       reportException(
@@ -54,12 +57,13 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
           title: 'Flutter Login UI',
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
-          theme: ThemeData(
-            brightness: Brightness.light,
-            primaryColor: const Color(0xff2a84d2),
-            appBarTheme: const AppBarTheme(color: Color(0xff2a84d2)),
-            scaffoldBackgroundColor: const Color(0xff2a84d2),
-          ),
+          theme: CustomTheme.of(context),
+          // ThemeData(
+          //   brightness: Brightness.light,
+          //   primaryColor: Theme.of(context).primaryColor,
+          //   appBarTheme:  const AppBarTheme(color: Color(0xff2a84d2)),
+          //   scaffoldBackgroundColor: Theme.of(context).primaryColor,
+          // ),
           routes: <String, WidgetBuilder>{
             '/login': (BuildContext context) => LoginScreen(),
             '/terms': (BuildContext context) => TermsScreen(),

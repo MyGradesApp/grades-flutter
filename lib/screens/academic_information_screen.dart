@@ -21,6 +21,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: const Text('Academic Information'),
         leading: IconButton(
@@ -51,8 +52,10 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                       children: [
                         _buildCard('Cumulative GPA',
                             info.cumulative_gpa?.toString() ?? "Unavailable"),
-                        _buildCard('Cumulative Weighted GPA',
-                            info.cumulative_weighted_gpa?.toString()?? "Unavailable"),
+                        _buildCard(
+                            'Cumulative Weighted GPA',
+                            info.cumulative_weighted_gpa?.toString() ??
+                                "Unavailable"),
                         if (info.class_rank_numerator != null &&
                             info.class_rank_denominator != null)
                           _buildCard(
@@ -85,7 +88,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      color: const Color(0xff216bac),
+      color: Theme.of(context).accentColor,
       margin: const EdgeInsets.all(10),
       child: Padding(
           padding: const EdgeInsets.all(9.0),
