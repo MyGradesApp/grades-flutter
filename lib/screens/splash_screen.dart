@@ -8,6 +8,7 @@ import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key key}) : super(key: key);
@@ -68,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         _loadStoredAuth(force: true);
       }
-      // } on InvalidAuthException catch (_) {
+    } on InvalidAuthException catch (_) {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
     } on HttpException catch (_) {
