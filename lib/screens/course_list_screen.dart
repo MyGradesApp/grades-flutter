@@ -30,6 +30,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
         return false;
       },
       child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           elevation: 0.0,
           centerTitle: true,

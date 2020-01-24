@@ -46,6 +46,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     final Course course = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           elevation: 0.0,
           centerTitle: true,
