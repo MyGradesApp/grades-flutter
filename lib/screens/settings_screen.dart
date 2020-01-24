@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sis_loader/sis_loader.dart';
 import 'package:grades/utilities/custom_theme.dart';
 import 'package:grades/utilities/themes.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -18,88 +18,109 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-          title: const Text('Settings'),
-          leading: IconButton(
-            tooltip: 'Back',
-            icon: Icon(
-              Icons.arrow_back_ios,
-            ),
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(
+        title: const Text('Settings'),
+        leading: IconButton(
+          tooltip: 'Back',
+          icon: Icon(
+            Icons.arrow_back_ios,
           ),
-          elevation: 0.0,
-          centerTitle: true,
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
         ),
-        body: FutureBuilder<Profile>(builder: (context, snapshot) {
-          return SizedBox.expand(
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  _buildDark(),
-                  _buildTerms(),
-                  _buildLogout(),
-                ],
-              ),
-            ),
-          );
-        }));
-  }
-
-  Widget _buildLogout() {
-    return FlatButton(
-      padding: const EdgeInsets.all(4),
-      onPressed: () async {
-        await Navigator.pop(context);
-        await Navigator.pop(context, true);
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Theme.of(context).accentColor,
-        child: const Padding(
-            padding: EdgeInsets.all(9.0),
-            child: ListTile(
-              title: Text(
-                'Sign Out',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            )),
+        elevation: 0.0,
+        centerTitle: true,
       ),
+      body: FutureBuilder<Profile>(builder: (context, snapshot) {
+        return SizedBox.expand(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                _buildCard(
+                  child: Row(children: [
+                    const Expanded(
+                      child: Text(
+                        'App Theme',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      getModeIcon(),
+                      color: Colors.white,
+                    ),
+                  ]),
+                  onPressed: () {
+                    if (Theme.of(context).primaryColor ==
+                        const Color(0xff2a84d2)) {
+                      _changeTheme(context, MyThemeKeys.DARK);
+                    } else {
+                      _changeTheme(context, MyThemeKeys.LIGHT);
+                    }
+                  },
+                ),
+                _buildCard(
+                  child: const Text(
+                    "Terms of Service",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/terms_settings');
+                  },
+                ),
+                _buildCard(
+                  child: const Text(
+                    "Sign Out",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await Navigator.pop(context);
+                    await Navigator.pop(context, true);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 
-  Widget _buildTerms() {
-    return FlatButton(
+  Widget _buildCard({Widget child, void Function() onPressed}) {
+    return Padding(
       padding: const EdgeInsets.all(4),
-      onPressed: () {
-        Navigator.pushNamed(context, '/terms_settings');
-      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         color: Theme.of(context).accentColor,
-        child: const Padding(
-            padding: EdgeInsets.all(9.0),
-            child: ListTile(
-              title: Text(
-                'Terms of Service',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            )),
+        child: FlatButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          onPressed: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 26, bottom: 26),
+            child: SizedBox(
+              width: double.infinity,
+              child: child,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -110,42 +131,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       return Icons.brightness_2;
     }
-  }
-
-  Widget _buildDark() {
-    // TODO: MAKE THEME STICK AFTER APP IS CLOSED
-    return FlatButton(
-      padding: const EdgeInsets.all(4),
-      onPressed: () {
-        if (Theme.of(context).primaryColor == const Color(0xff2a84d2)) {
-          _changeTheme(context, MyThemeKeys.DARK);
-        } else {
-          _changeTheme(context, MyThemeKeys.LIGHT);
-        }
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Theme.of(context).accentColor,
-        child: Padding(
-            padding: const EdgeInsets.all(9.0),
-            child: ListTile(
-                title: const Text(
-                  'App Theme',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-                leading: IconButton(
-                  icon: Icon(
-                    getModeIcon(),
-                    color: Colors.white,
-                  ),
-                ))),
-      ),
-    );
   }
 }
