@@ -40,6 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _handleLoginPressed() async {
+    // removes keyboard on click
+    FocusScope.of(context).unfocus();
     var email = _emailController.text;
     var password = _passwordController.text;
 
@@ -94,7 +96,13 @@ class _LoginScreenState extends State<LoginScreen> {
         key: _scaffoldKey,
         backgroundColor: const Color(0xff2d3d54),
         body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
           child: SizedBox.expand(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
@@ -229,7 +237,11 @@ class _LoginScreenState extends State<LoginScreen> {
       // TODO FIX close keyboard on sumbit press
       child: GestureDetector(
         onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 25.0),
