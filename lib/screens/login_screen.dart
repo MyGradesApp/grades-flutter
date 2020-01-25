@@ -68,11 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
     } on InvalidAuthException catch (e) {
       showErrorSnackbar(_scaffoldKey.currentState, e.message);
     } on SocketException catch (_) {
-      showErrorSnackbar(
-          _scaffoldKey.currentState, 'There was an issue connecting to SIS');
+      showErrorSnackbar(_scaffoldKey.currentState, 'Issue connecting to SIS');
     } on HttpException catch (_) {
-      showErrorSnackbar(
-          _scaffoldKey.currentState, 'There was an issue connecting to SIS');
+      showErrorSnackbar(_scaffoldKey.currentState, 'Issue connecting to SIS');
     } catch (e, stackTrace) {
       showErrorSnackbar(_scaffoldKey.currentState, 'An unknown error occurred');
       await reportException(
@@ -180,12 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.person,
                 color: Colors.white,
               ),
-              // suffixIcon: CircleIconButton(onPressed: () {
-              //   this.setState(() {
-              //     _emailController.clear();
-              //   });
-              // }),
-              hintText: 'Username',
+              hintText: 'District Username',
               hintStyle: hintTextStyle,
             ),
           ),
@@ -217,12 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.lock,
                 color: Colors.white,
               ),
-              // suffixIcon: CircleIconButton(onPressed: () {
-              //   this.setState(() {
-              //     _passwordController.clear();
-              //   });
-              // }),
-              hintText: 'Password',
+              hintText: 'District Password',
               hintStyle: hintTextStyle,
             ),
           ),
