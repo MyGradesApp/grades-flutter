@@ -7,7 +7,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
 
   CourseGradesMinimalDisplay(this._data);
 
-  Widget _buildCard(Map<String, dynamic> grade) {
+  Widget _buildCard(
+      Map<String, dynamic> grade, Color textColor, Color cardColor) {
     var gradeString = grade["Grade"].toString();
     var percentIndex = gradeString.indexOf('%');
     var gradeLetter;
@@ -22,7 +23,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
       gradeSize = 100;
     }
     return Card(
-      color: const Color(0xFFFFFFFF),
+      color: cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -34,7 +35,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             Expanded(
               child: Text(
                 grade["Assignment"],
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: textColor),
               ),
             ),
             if (grade != null && gradeLetter != null)
@@ -43,8 +44,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             if (gradeLetter != null)
               Text(
                 gradeLetter,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
               ),
             Container(
               width: gradeSize,
@@ -52,8 +52,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
               child: Text(
                 gradeString,
                 textAlign: TextAlign.end,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
               ),
             )
           ],
@@ -68,7 +67,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _data.length,
         itemBuilder: (context, i) {
-          return _buildCard(_data[i]);
+          return _buildCard(_data[i], Theme.of(context).primaryColorLight,
+              Theme.of(context).cardColor);
         });
   }
 }
