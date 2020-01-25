@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/widgets/circle_progress.dart';
 import 'package:intl/intl.dart';
 
 class GradeItemDetailScreen extends StatelessWidget {
@@ -70,5 +71,49 @@ class GradeItemDetailScreen extends StatelessWidget {
     } else {
       return item;
     }
+  }
+}
+
+class _CircleProgressState extends State with SingleTickerProviderStateMixin {
+  AnimationController progressController;
+  Animation animation;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    progressController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1000));
+    animation = Tween(begin: 0, end: 80).animate(progressController)
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CustomPaint(
+        foregroundPainter: CircleProgress(
+            animation.value), // this will add custom painter after child
+        child: Container(
+          width: 200,
+          height: 200,
+          child: GestureDetector(
+              onTap: () {
+                if (animation.value == 80) {
+                  progressController.reverse();
+                } else {
+                  progressController.forward();
+                }
+              },
+              child: Center(
+                  child: Text(
+                "${animation.value.toInt()}%",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ))),
+        ),
+      ),
+    );
   }
 }
