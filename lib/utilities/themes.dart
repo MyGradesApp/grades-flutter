@@ -14,7 +14,7 @@ class MyThemes {
   static final ThemeData darkTheme = ThemeData(
     primaryColor: const Color(0xff195080),
     accentColor: const Color(0xff216bac),
-    cardColor: const Color(0xff2a84d2),
+    cardColor: const Color(0xff226baa),
     brightness: Brightness.dark,
     primaryColorLight: Colors.white,
   );
