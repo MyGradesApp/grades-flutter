@@ -7,8 +7,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
 
   CourseGradesMinimalDisplay(this._data);
 
-  Widget _buildCard(
-      Map<String, dynamic> grade, Color textColor, Color cardColor) {
+  Widget _buildCard(BuildContext context, Map<String, dynamic> grade,
+      Color textColor, Color cardColor) {
     var gradeString = grade["Grade"].toString();
     var percentIndex = gradeString.indexOf('%');
     var gradeLetter;
@@ -28,34 +28,41 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(17.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                grade["Assignment"],
-                style: TextStyle(color: textColor),
+      child: InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, '/grades_detail', arguments: grade);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(17.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  grade["Assignment"],
+                  style: TextStyle(color: textColor),
+                ),
               ),
-            ),
-            if (grade != null && gradeLetter != null)
-              ColoredGradeDot.grade(gradeLetter),
-            const SizedBox(width: 4),
-            if (gradeLetter != null)
-              Text(
-                gradeLetter,
-                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-              ),
-            Container(
-              width: gradeSize,
-              alignment: Alignment.centerRight,
-              child: Text(
-                gradeString,
-                textAlign: TextAlign.end,
-                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-              ),
-            )
-          ],
+              if (grade != null && gradeLetter != null)
+                ColoredGradeDot.grade(gradeLetter),
+              const SizedBox(width: 4),
+              if (gradeLetter != null)
+                Text(
+                  gradeLetter,
+                  style:
+                      TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                ),
+              Container(
+                width: gradeSize,
+                alignment: Alignment.centerRight,
+                child: Text(
+                  gradeString,
+                  textAlign: TextAlign.end,
+                  style:
+                      TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -67,8 +74,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _data.length,
         itemBuilder: (context, i) {
-          return _buildCard(_data[i], Theme.of(context).primaryColorLight,
-              Theme.of(context).cardColor);
+          return _buildCard(context, _data[i],
+              Theme.of(context).primaryColorLight, Theme.of(context).cardColor);
         });
   }
 }
