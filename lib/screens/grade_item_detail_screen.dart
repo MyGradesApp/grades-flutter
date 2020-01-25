@@ -19,6 +19,15 @@ class GradeItemDetailScreen extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         title: Text(assignmentName),
+        leading: IconButton(
+          tooltip: "Back",
+          icon: Icon(
+            Icons.arrow_back_ios,
+          ),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
       ),
       body: ListView.builder(
           itemCount: grade.length,
@@ -26,22 +35,26 @@ class GradeItemDetailScreen extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(1.0),
               child: Card(
-                color: Colors.white,
+                color: Theme.of(context).accentColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(14.0),
                   child: Row(
                     children: <Widget>[
                       SizedBox(
                         width: 100,
                         child: Text(
                           keys[i].toString(),
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
-                      Text(_formatItem(values[i])),
+                      Text(
+                        _formatItem(values[i]),
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
