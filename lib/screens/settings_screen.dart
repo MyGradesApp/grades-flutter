@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grades/utilities/custom_theme.dart';
-import 'package:grades/utilities/themes.dart';
+import 'package:grades/utilities/theme_controller.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -10,10 +9,6 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   Future<Profile> _info;
-
-  void _changeTheme(BuildContext buildContext, MyThemeKeys key) {
-    CustomTheme.instanceOf(buildContext).changeTheme(key);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +54,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onPressed: () {
                     if (Theme.of(context).primaryColor ==
                         const Color(0xff2a84d2)) {
-                      _changeTheme(context, MyThemeKeys.DARK);
+                      ThemeController.of(context).setTheme('dark');
                     } else {
-                      _changeTheme(context, MyThemeKeys.LIGHT);
+                      ThemeController.of(context).setTheme('light');
                     }
                   },
                 ),
