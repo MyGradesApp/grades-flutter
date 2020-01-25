@@ -10,8 +10,8 @@ class MyThemes {
   );
 
   static final ThemeData darkTheme = ThemeData(
-    primaryColor: const Color(0xff216bac),
-    accentColor: const Color(0xff2a84d2),
+    primaryColor: const Color(0xff195080),
+    accentColor: const Color(0xff216bac),
     brightness: Brightness.dark,
   );
 

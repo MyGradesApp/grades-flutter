@@ -50,6 +50,14 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      // statusBarColor: Colors.white, //top bar color
+      // statusBarIconBrightness: Brightness.dark, //top bar icons
+      systemNavigationBarColor: Colors.grey[250],
+      // Theme.of(context).primaryColor, //bottom bar color
+      systemNavigationBarIconBrightness: Brightness.dark, //bottom bar icons
+    ));
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => CurrentSession())],
       child: Builder(
@@ -58,12 +66,6 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
           theme: CustomTheme.of(context),
-          // ThemeData(
-          //   brightness: Brightness.light,
-          //   primaryColor: Theme.of(context).primaryColor,
-          //   appBarTheme:  const AppBarTheme(color: Color(0xff2a84d2)),
-          //   scaffoldBackgroundColor: Theme.of(context).primaryColor,
-          // ),
           routes: <String, WidgetBuilder>{
             '/login': (BuildContext context) => LoginScreen(),
             '/terms': (BuildContext context) => TermsScreen(),
