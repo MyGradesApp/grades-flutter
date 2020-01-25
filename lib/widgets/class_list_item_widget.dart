@@ -19,14 +19,14 @@ class ClassListItemWidget extends StatelessWidget {
   final dynamic percent;
   final void Function() onTap;
 
-  Widget _buildColumn(
-      String topText, String bottomText, CrossAxisAlignment alignment,
+  Widget _buildColumn(String topText, String bottomText,
+      CrossAxisAlignment alignment, Color textColor,
       {bool chevron = false, String grade}) {
     return Column(crossAxisAlignment: alignment, children: <Widget>[
       Text(
         topText,
         style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 19, color: Colors.black),
+            fontWeight: FontWeight.bold, fontSize: 19, color: textColor),
       ),
       Padding(
         child: Container(
@@ -36,7 +36,7 @@ class ClassListItemWidget extends StatelessWidget {
               const SizedBox(width: 3),
               Text(
                 bottomText,
-                style: TextStyle(fontSize: 15, color: Colors.black),
+                style: TextStyle(fontSize: 15, color: textColor),
               ),
               if (chevron)
                 Icon(
@@ -64,8 +64,9 @@ class ClassListItemWidget extends StatelessWidget {
         fmt_percent = percent;
       }
     }
+
     return Card(
-      color: const Color(0xffffffff),
+      color: Theme.of(context).cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -78,11 +79,14 @@ class ClassListItemWidget extends StatelessWidget {
               const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 15),
           child: Row(children: <Widget>[
             Expanded(
-              child: _buildColumn(this.course,
-                  this.teacher.replaceAll('  ', ' '), CrossAxisAlignment.start),
+              child: _buildColumn(
+                  this.course,
+                  this.teacher.replaceAll('  ', ' '),
+                  CrossAxisAlignment.start,
+                  Theme.of(context).primaryColorLight),
             ),
-            _buildColumn(
-                fmt_percent, this.letterGrade ?? "", CrossAxisAlignment.end,
+            _buildColumn(fmt_percent, this.letterGrade ?? "",
+                CrossAxisAlignment.end, Theme.of(context).primaryColorLight,
                 chevron: true, grade: this.letterGrade),
           ]),
         ),
