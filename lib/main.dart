@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
+import 'package:grades/screens/grade_item_detail_screen.dart';
 import 'package:grades/screens/login_screen.dart';
 import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
@@ -12,8 +13,9 @@ import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/screens/terms_settings_screen.dart';
 import 'package:grades/utilities/custom_theme.dart';
 import 'package:grades/utilities/sentry.dart';
-import 'package:provider/provider.dart';
 import 'package:grades/utilities/themes.dart';
+import 'package:provider/provider.dart';
+
 import 'models/current_session.dart';
 
 void main() async {
@@ -77,6 +79,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
                   key: Provider.of<CurrentSession>(context).navKey);
             },
             '/course_grades': (BuildContext context) => CourseGradesScreen(),
+            '/grades_detail': (BuildContext context) => GradeItemDetailScreen(),
             '/academic_info': (BuildContext context) => AcademicInfoScreen(),
           },
         ),
