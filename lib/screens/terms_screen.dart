@@ -10,7 +10,7 @@ class TermsScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xff2d3d54),
+        backgroundColor: const Color(0xff195080),
         body: Center(
           child: Column(
             children: [
