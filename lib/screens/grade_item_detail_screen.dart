@@ -18,7 +18,7 @@ class GradeItemDetailScreen extends StatelessWidget {
     }
     var pointsChartData = [
       CircularStackEntry([
-        CircularSegmentEntry(pointsUpper ?? 0, Color(0xff2ad5d5),
+        CircularSegmentEntry(pointsUpper ?? 0, const Color(0xff2ad5d5),
             rankKey: 'achieved'),
         CircularSegmentEntry(
             (pointsLower ?? 0) - (pointsUpper ?? 0), Colors.blueGrey,
@@ -71,11 +71,11 @@ class GradeItemDetailScreen extends StatelessWidget {
       {List<CircularStackEntry> pointsData}) {
     if (key == "Points" && (value as String).contains('/')) {
       return AnimatedCircularChart(
-        size: const Size(250.0, 250.0),
+        size: const Size(240.0, 240.0),
         holeLabel: value,
         // TODO: Adjust font family
         labelStyle: TextStyle(
-          fontSize: 32,
+          fontSize: 28,
           color: Colors.white,
         ),
         initialChartData: pointsData,
@@ -83,7 +83,7 @@ class GradeItemDetailScreen extends StatelessWidget {
       );
     }
     return Padding(
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.all(15.0),
       child: Row(
         children: <Widget>[
           SizedBox(

@@ -27,7 +27,6 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         leading: IconButton(
           tooltip: 'Back',
           icon: Icon(
-            // TODO: Find a better icon for "logout"
             Icons.arrow_back_ios,
           ),
           onPressed: () {
@@ -73,7 +72,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
               return RefreshableErrorMessage(
                 onRefresh: _refresh,
                 text:
-                    'An error occured fetching information:\n\n${snapshot.error}',
+                    'An error occured fetching information:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.',
               );
             }
 

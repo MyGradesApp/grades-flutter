@@ -85,7 +85,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
 
               return RefreshableErrorMessage(
                 onRefresh: _callback,
-                text: "An error occured loading courses:\n\n${snapshot.error}",
+                text:
+                    "An error occured loading courses:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
               );
             }
             return Center(

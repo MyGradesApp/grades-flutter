@@ -108,7 +108,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   return RefreshableErrorMessage(
                     onRefresh: _refresh,
                     text:
-                        "An error occured fetching grades:\n\n${snapshot.error}",
+                        "An error occured fetching grades:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
                   );
                 }
 
