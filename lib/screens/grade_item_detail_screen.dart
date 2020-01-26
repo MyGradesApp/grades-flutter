@@ -18,7 +18,7 @@ class GradeItemDetailScreen extends StatelessWidget {
     }
     var pointsChartData = [
       CircularStackEntry([
-        CircularSegmentEntry(pointsUpper ?? 0, Theme.of(context).primaryColor,
+        CircularSegmentEntry(pointsUpper ?? 0, Color(0xff2ad5d5),
             rankKey: 'achieved'),
         CircularSegmentEntry(
             (pointsLower ?? 0) - (pointsUpper ?? 0), Colors.blueGrey,
@@ -54,7 +54,7 @@ class GradeItemDetailScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(1.0),
             child: Card(
-              color: Colors.white,
+              color: Theme.of(context).accentColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -71,29 +71,30 @@ class GradeItemDetailScreen extends StatelessWidget {
       {List<CircularStackEntry> pointsData}) {
     if (key == "Points" && (value as String).contains('/')) {
       return AnimatedCircularChart(
-        size: const Size(300.0, 300.0),
+        size: const Size(250.0, 250.0),
         holeLabel: value,
         // TODO: Adjust font family
         labelStyle: TextStyle(
           fontSize: 32,
-          color: Colors.black,
+          color: Colors.white,
         ),
         initialChartData: pointsData,
         chartType: CircularChartType.Radial,
       );
     }
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(14.0),
       child: Row(
         children: <Widget>[
           SizedBox(
             width: 100,
             child: Text(
               key.toString(),
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
-          Text(_formatItem(value)),
+          Text(_formatItem(value), style: TextStyle(color: Colors.white)),
         ],
       ),
     );
