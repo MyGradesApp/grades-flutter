@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grades/widgets/circle_progress.dart';
+import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:intl/intl.dart';
 
 class GradeItemDetailScreen extends StatelessWidget {
@@ -7,6 +7,24 @@ class GradeItemDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, dynamic> grade =
         Map.from(ModalRoute.of(context).settings.arguments);
+
+    var pointsUpper, pointsLower;
+    if (grade.containsKey('Points')) {
+      var matches = RegExp(r"(\d+) / (\d+)")?.firstMatch(grade['Points']);
+
+      // TODO: Rework null propigation
+      pointsUpper = double.tryParse(matches?.group(1) ?? "0");
+      pointsLower = double.tryParse(matches?.group(2) ?? "0");
+    }
+    var pointsChartData = [
+      CircularStackEntry([
+        CircularSegmentEntry(pointsUpper ?? 0, Theme.of(context).primaryColor,
+            rankKey: 'achieved'),
+        CircularSegmentEntry(
+            (pointsLower ?? 0) - (pointsUpper ?? 0), Colors.blueGrey,
+            rankKey: 'missed'),
+      ]),
+    ];
 
     grade.removeWhere((key, value) => value == null);
     var assignmentName = grade.remove("Assignment");
@@ -31,37 +49,53 @@ class GradeItemDetailScreen extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-          itemCount: grade.length,
-          itemBuilder: (context, i) {
-            return Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Card(
-                color: Theme.of(context).accentColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 100,
-                        child: Text(
-                          keys[i].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                      ),
-                      Text(
-                        _formatItem(values[i]),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
+        itemCount: grade.length,
+        itemBuilder: (context, i) {
+          return Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child:
+                  _buildItem(keys[i], values[i], pointsData: pointsChartData),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildItem(String key, dynamic value,
+      {List<CircularStackEntry> pointsData}) {
+    if (key == "Points" && (value as String).contains('/')) {
+      return AnimatedCircularChart(
+        size: const Size(300.0, 300.0),
+        holeLabel: value,
+        // TODO: Adjust font family
+        labelStyle: TextStyle(
+          fontSize: 32,
+          color: Colors.black,
+        ),
+        initialChartData: pointsData,
+        chartType: CircularChartType.Radial,
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 100,
+            child: Text(
+              key.toString(),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Text(_formatItem(value)),
+        ],
+      ),
     );
   }
 
@@ -71,49 +105,5 @@ class GradeItemDetailScreen extends StatelessWidget {
     } else {
       return item;
     }
-  }
-}
-
-class _CircleProgressState extends State with SingleTickerProviderStateMixin {
-  AnimationController progressController;
-  Animation animation;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    progressController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1000));
-    animation = Tween(begin: 0, end: 80).animate(progressController)
-      ..addListener(() {
-        setState(() {});
-      });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: CustomPaint(
-        foregroundPainter: CircleProgress(
-            animation.value), // this will add custom painter after child
-        child: Container(
-          width: 200,
-          height: 200,
-          child: GestureDetector(
-              onTap: () {
-                if (animation.value == 80) {
-                  progressController.reverse();
-                } else {
-                  progressController.forward();
-                }
-              },
-              child: Center(
-                  child: Text(
-                "${animation.value.toInt()}%",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ))),
-        ),
-      ),
-    );
   }
 }
