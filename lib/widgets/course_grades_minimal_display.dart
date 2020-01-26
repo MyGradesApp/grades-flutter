@@ -22,6 +22,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
     } else {
       gradeSize = 100;
     }
+
     return Card(
       color: cardColor,
       shape: RoundedRectangleBorder(
@@ -30,7 +31,9 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/grades_detail', arguments: grade);
+          if (grade != null && gradeLetter != null) {
+            Navigator.pushNamed(context, '/grades_detail', arguments: grade);
+          }
         },
         child: Padding(
           padding: const EdgeInsets.all(17.0),
@@ -60,7 +63,13 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
                   style:
                       TextStyle(color: textColor, fontWeight: FontWeight.bold),
                 ),
-              )
+              ),
+              if (grade != null && gradeLetter != null)
+                Icon(
+                  Icons.chevron_right,
+                  color: Colors.black26,
+                  size: 18.0,
+                ),
             ],
           ),
         ),

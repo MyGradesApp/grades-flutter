@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'SwiftGrade',
                     style: TextStyle(
                       color: Colors.white,
@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Your grades at a glance',
                     style: TextStyle(
                       color: Colors.white,
@@ -222,7 +222,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildLoginBtn() {
     return Container(
-      // TODO FIX close keyboard on sumbit press
       child: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -243,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             color: const Color(0xff2a84d2),
             // background: linear-gradient(100deg, #4cc6b9, #07b5d0);
-            child: Text(
+            child: const Text(
               'LOGIN',
               style: TextStyle(
                 color: Colors.white,
@@ -265,7 +264,7 @@ final hintTextStyle = TextStyle(
   fontFamily: 'OpenSans',
 );
 
-final labelStyle = TextStyle(
+final labelStyle = const TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,
   fontFamily: 'OpenSans',

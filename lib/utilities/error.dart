@@ -6,7 +6,7 @@ showErrorSnackbar(ScaffoldState scaffoldState, String message) {
     content: Text(
       message,
       textAlign: TextAlign.center,
-      style: TextStyle(color: Colors.white, fontSize: 16),
+      style: const TextStyle(color: Colors.white, fontSize: 16),
     ),
     backgroundColor: Colors.red,
   ));

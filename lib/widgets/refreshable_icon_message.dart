@@ -27,7 +27,7 @@ class RefreshableIconMessage extends StatelessWidget {
               Text(
                 text,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 19,
                   color: Colors.white,
                 ),

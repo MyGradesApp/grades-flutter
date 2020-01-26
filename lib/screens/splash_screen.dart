@@ -73,14 +73,14 @@ class _SplashScreenState extends State<SplashScreen> {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
     } on HttpException catch (_) {
-      _scaffoldKey.currentState.showSnackBar(
-          errorSnackbar('Login failed due to connection issues.'));
+      _scaffoldKey.currentState
+          .showSnackBar(errorSnackbar('Login failed - poor connection'));
       setState(() {
         _showError = true;
       });
     } on SocketException catch (_) {
-      _scaffoldKey.currentState.showSnackBar(
-          errorSnackbar('Login failed due to connection issues.'));
+      _scaffoldKey.currentState
+          .showSnackBar(errorSnackbar('Login failed - poor connection'));
       setState(() {
         _showError = true;
       });
@@ -189,7 +189,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff2d3d54),
+      backgroundColor: const Color(0xff195080),
       key: _scaffoldKey,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
@@ -201,7 +201,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: double.infinity,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                  color: Color(0xff2d3d54),
+                  color: Color(0xff195080),
                 ),
               ),
               Container(
@@ -216,7 +216,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         'SwiftGrade',
                         style: TextStyle(
                           color: Colors.white,
@@ -226,7 +226,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         ),
                       ),
                       const SizedBox(height: 25.0),
-                      Text(
+                      const Text(
                         'Your grades at a glance',
                         style: TextStyle(
                           color: Colors.white,
@@ -265,7 +265,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // HACK: Persistent display
       duration: const Duration(days: 1),
       action: SnackBarAction(
-        label: "Try again",
+        label: "Refresh",
         textColor: Colors.white,
         onPressed: () {
           setState(() {
