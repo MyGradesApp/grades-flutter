@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grades/models/theme_controller.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
@@ -12,7 +13,6 @@ import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/screens/terms_settings_screen.dart';
 import 'package:grades/utilities/sentry.dart';
-import 'package:grades/utilities/theme_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +22,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // load the shared preferences from disk before the app is started
   final prefs = await SharedPreferences.getInstance();
-  final themeController = ThemeController(prefs);
 
   FlutterError.onError = (details, {bool forceReport = false}) {
     try {
@@ -37,7 +36,7 @@ void main() async {
       FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
     }
   };
-  runZoned(() => runApp(MyApp(themeController: themeController)),
+  runZoned(() => runApp(MyApp(prefs: prefs)),
       onError: (Object error, StackTrace stackTrace) {
     try {
       reportException(
@@ -52,8 +51,11 @@ void main() async {
 
 class MyApp extends StatelessWidget with PortraitModeMixin {
   // root of application.
-  final ThemeController themeController;
-  const MyApp({Key key, this.themeController}) : super(key: key);
+
+  final SharedPreferences prefs;
+
+  const MyApp({Key key, this.prefs}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -65,49 +67,42 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
       // Theme.of(context).primaryColor, //bottom bar color
       systemNavigationBarIconBrightness: Brightness.dark, //bottom bar icons
     ));
-    return AnimatedBuilder(
-        animation: themeController,
-        builder: (context, _) {
-          // wrap app in inherited widget to provide the ThemeController to all pages
-          return ThemeControllerProvider(
-            controller: themeController,
-            child: MultiProvider(
-              providers: [
-                ChangeNotifierProvider(create: (_) => CurrentSession())
-              ],
-              child: Builder(
-                builder: (context) => MaterialApp(
-                  title: 'Flutter Login UI',
-                  debugShowCheckedModeBanner: false,
-                  home: SplashScreen(),
-                  theme: _buildCurrentTheme(),
-                  routes: <String, WidgetBuilder>{
-                    '/login': (BuildContext context) => LoginScreen(),
-                    '/terms': (BuildContext context) => TermsScreen(),
-                    '/terms_settings': (BuildContext context) =>
-                        TermsSettingsScreen(),
-                    '/settings': (BuildContext context) => SettingsScreen(),
-                    '/courses': (BuildContext context) {
-                      // Use a key here to prevent overlap in sessions
-                      return CourseListScreen(
-                          key: Provider.of<CurrentSession>(context).navKey);
-                    },
-                    '/course_grades': (BuildContext context) =>
-                        CourseGradesScreen(),
-                    '/grades_detail': (BuildContext context) =>
-                        GradeItemDetailScreen(),
-                    '/academic_info': (BuildContext context) =>
-                        AcademicInfoScreen(),
-                  },
-                ),
-              ),
-            ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CurrentSession()),
+        ChangeNotifierProvider(create: (_) => ThemeController(prefs)),
+      ],
+      child: Consumer<ThemeController>(
+        builder: (BuildContext context, ThemeController theme, Widget child) {
+          return MaterialApp(
+            title: 'Flutter Login UI',
+            debugShowCheckedModeBanner: false,
+            home: SplashScreen(),
+            theme: _buildCurrentTheme(theme),
+            routes: <String, WidgetBuilder>{
+              '/login': (BuildContext context) => LoginScreen(),
+              '/terms': (BuildContext context) => TermsScreen(),
+              '/terms_settings': (BuildContext context) =>
+                  TermsSettingsScreen(),
+              '/settings': (BuildContext context) => SettingsScreen(),
+              '/courses': (BuildContext context) {
+                // Use a key here to prevent overlap in sessions
+                return CourseListScreen(
+                    key: Provider.of<CurrentSession>(context).navKey);
+              },
+              '/course_grades': (BuildContext context) => CourseGradesScreen(),
+              '/grades_detail': (BuildContext context) =>
+                  GradeItemDetailScreen(),
+              '/academic_info': (BuildContext context) => AcademicInfoScreen(),
+            },
           );
-        });
+        },
+      ),
+    );
   }
 
-  ThemeData _buildCurrentTheme() {
-    switch (themeController.currentTheme) {
+  ThemeData _buildCurrentTheme(ThemeController theme) {
+    switch (theme.currentTheme) {
       case "dark":
         return ThemeData(
           primaryColor: const Color(0xff195080),
