@@ -30,6 +30,9 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
       ),
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: InkWell(
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         onTap: () {
           if (grade != null && gradeLetter != null) {
             Navigator.pushNamed(context, '/grades_detail', arguments: grade);
