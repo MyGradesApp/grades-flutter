@@ -13,7 +13,6 @@ import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/screens/terms_settings_screen.dart';
 import 'package:grades/utilities/sentry.dart';
-import 'package:grades/utilities/theme_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
