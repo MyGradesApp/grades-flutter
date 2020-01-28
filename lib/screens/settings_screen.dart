@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grades/utilities/theme_controller.dart';
+import 'package:grades/models/theme_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -8,8 +9,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  Future<Profile> _info;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +53,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onPressed: () {
                     if (Theme.of(context).primaryColor ==
                         const Color(0xff2a84d2)) {
-                      ThemeController.of(context).setTheme('dark');
+                      Provider.of<ThemeController>(context, listen: false)
+                          .setTheme('dark');
                     } else {
-                      ThemeController.of(context).setTheme('light');
+                      Provider.of<ThemeController>(context, listen: false)
+                          .setTheme('light');
                     }
                   },
                 ),
