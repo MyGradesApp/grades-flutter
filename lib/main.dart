@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       // statusBarColor: Colors.white, //top bar color
-      // statusBarIconBrightness: Brightness.dark, //top bar icons
+      statusBarIconBrightness: Brightness.light, //top bar icons
       systemNavigationBarColor: Color(0xffebebeb),
       // Theme.of(context).primaryColor, //bottom bar color
       systemNavigationBarIconBrightness: Brightness.dark, //bottom bar icons
