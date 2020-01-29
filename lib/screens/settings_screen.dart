@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/theme_controller.dart';
+import 'package:grades/utilities/package_info.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -85,6 +87,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onPressed: () async {
                     await Navigator.pop(context);
                     await Navigator.pop(context, true);
+                  },
+                ),
+                const SizedBox(height: 20),
+                FutureBuilder<PackageInfo>(
+                  future: getPackageInfo(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<PackageInfo> snapshot) {
+                    if (snapshot.hasData) {
+                      var package = snapshot.data;
+                      return Text(
+                        "${package.version}+${package.buildNumber}",
+                        style: TextStyle(color: Colors.grey[500]),
+                      );
+                    }
+                    return Container();
                   },
                 )
               ],
