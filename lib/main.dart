@@ -24,29 +24,22 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
 
   FlutterError.onError = (details, {bool forceReport = false}) {
-    try {
-      reportException(
-        exception: details.exception,
-        stackTrace: details.stack,
-      );
-    } catch (e) {
-      print('Sending report to sentry.io failed: $e');
-    } finally {
-      // Also use Flutter's pretty error logging to the device's console.
-      FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
-    }
+    reportException(
+      exception: details.exception,
+      stackTrace: details.stack,
+    );
+    // Also use Flutter's pretty error logging to the device's console.
+    FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
   };
-  runZoned(() => runApp(MyApp(prefs: prefs)),
-      onError: (Object error, StackTrace stackTrace) {
-    try {
+  runZoned(
+    () => runApp(MyApp(prefs: prefs)),
+    onError: (Object error, StackTrace stackTrace) {
       reportException(
         exception: error,
         stackTrace: stackTrace,
       );
-    } catch (e) {
-      print('Sending report to sentry.io failed: $e');
-    }
-  });
+    },
+  );
 }
 
 class MyApp extends StatelessWidget with PortraitModeMixin {

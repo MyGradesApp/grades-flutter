@@ -10,10 +10,15 @@ reportException({@foundation.required dynamic exception, dynamic stackTrace}) {
     if (stackTrace != null) {
       print(stackTrace);
     }
-    _sentry.captureException(
-      exception: exception,
-      stackTrace: stackTrace,
-    );
+
+    try {
+      _sentry.captureException(
+        exception: exception,
+        stackTrace: stackTrace,
+      );
+    } catch (e) {
+      print('Sending report to sentry.io failed: $e');
+    }
   } else {
     print("Error not reported to sentry (debug mode)");
     print(exception);
