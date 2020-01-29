@@ -5,7 +5,23 @@ import '../sis_loader.dart' show debugMocking;
 import 'cookie_client.dart';
 
 final shortMonthDateFormat = DateFormat('MMM dd, yyyy hh:mm aa');
+final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
 final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
+final longMonthDayDateFormat = DateFormat('EEEE, MMM dd, yyyy hh:mm aa');
+
+DateTime _parseDateTimeCascade(String src) {
+  try {
+    return shortMonthDateFormat.parseLoose(src);
+  } catch (_) {}
+  try {
+    return longMonthDateFormat.parseLoose(src);
+  } catch (_) {}
+  try {
+    return shortMonthDayDateFormat.parseLoose(src);
+  } catch (_) {}
+
+  return longMonthDayDateFormat.parseLoose(src);
+}
 
 class Course {
   final CookieClient client;
@@ -65,17 +81,13 @@ class Course {
           if (content == '<span class="unreset"></span>') {
             content = null;
           }
-        } else if (rawField == 'assigned_date' || rawField == 'due_date') {
+        } else if (rawField == 'assigned_date' ||
+            rawField == 'due_date' ||
+            rawField == 'modified_date') {
           if ((content as String).isEmpty) {
             content = null;
           } else {
-            content = shortMonthDateFormat.parse(content);
-          }
-        } else if (rawField == 'modified_date') {
-          if ((content as String).isEmpty) {
-            content = null;
-          } else {
-            content = longMonthDateFormat.parseLoose(content);
+            content = _parseDateTimeCascade(content);
           }
         } else if (rawField == 'assignment_files') {
           if (content == '&nbsp;') {
