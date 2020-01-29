@@ -90,11 +90,11 @@ class GradeItemDetailScreen extends StatelessWidget {
             width: 100,
             child: Text(
               key.toString(),
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
-          Text(_formatItem(value), style: TextStyle(color: Colors.white)),
+          Text(_formatItem(value), style: const TextStyle(color: Colors.white)),
         ],
       ),
     );
