@@ -74,7 +74,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
               );
             } else if (snapshot.hasError) {
               if (snapshot.error is SocketException ||
-                  snapshot.error is HttpException) {
+                  snapshot.error is HttpException ||
+                  snapshot.error is HandshakeException) {
                 return RefreshableErrorMessage(
                   onRefresh: _callback,
                   text: "There was an issue connecting to SIS",
