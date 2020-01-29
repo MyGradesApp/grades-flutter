@@ -12,6 +12,7 @@ import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/screens/terms_settings_screen.dart';
+import 'package:grades/utilities/package_info.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +23,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // load the shared preferences from disk before the app is started
   final prefs = await SharedPreferences.getInstance();
+  final package_info = await getPackageInfo();
+  // Used for sentry error reporting and settings page version number
+  version = "${package_info.version}+${package_info.buildNumber}";
 
   FlutterError.onError = (details, {bool forceReport = false}) {
     reportException(
