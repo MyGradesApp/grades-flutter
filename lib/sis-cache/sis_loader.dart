@@ -20,7 +20,7 @@ class CachedSISLoader {
       _loader.login(username, password);
 
   // TODO: Pull caching out of sis-loader `Course`s
-  Future<List<Course>> getCourses({bool force = false}) {
+  Future<List<Course>> getCourses({bool force = false}) async {
     if (_courses != null && !force) {
       return _courses;
     }
@@ -28,7 +28,7 @@ class CachedSISLoader {
     return _courses;
   }
 
-  Future<Profile> getUserProfile({bool force = false}) {
+  Future<Profile> getUserProfile({bool force = false}) async {
     if (_userProfile != null && !force) {
       return _userProfile;
     }

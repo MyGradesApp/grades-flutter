@@ -21,6 +21,7 @@ dependencies:
   rflutter_alert:
     git: git://github.com/RatelHub/rflutter_alert.git
 
+  stack_trace: ^1.9.3
   flutter:
     sdk: flutter
   simple_animations: ^1.3.6

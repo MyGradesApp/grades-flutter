@@ -12,7 +12,7 @@ class AcademicInfoScreen extends StatefulWidget {
 }
 
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
-  Future<Profile> _refresh() {
+  Future<Profile> _refresh() async {
     return Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getUserProfile(force: true);

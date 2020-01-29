@@ -17,7 +17,7 @@ class CourseListScreen extends StatefulWidget {
 }
 
 class _CourseListScreenState extends State<CourseListScreen> {
-  Future<List<Course>> _callback() {
+  Future<List<Course>> _callback() async {
     return Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getCourses(force: true);
@@ -81,7 +81,9 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 );
               }
 
-              reportException(exception: snapshot.error);
+              reportException(
+                exception: snapshot.error,
+              );
 
               return RefreshableErrorMessage(
                 onRefresh: _callback,
