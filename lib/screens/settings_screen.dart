@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/theme_controller.dart';
-import 'package:grades/utilities/package_info.dart';
-import 'package:package_info/package_info.dart';
+import 'package:grades/utilities/sentry.dart' as sentry;
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -97,19 +96,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ),
-              FutureBuilder<PackageInfo>(
-                future: getPackageInfo(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<PackageInfo> snapshot) {
-                  if (snapshot.hasData) {
-                    var package = snapshot.data;
-                    return Text(
-                      "${package.version}+${package.buildNumber}",
-                      style: TextStyle(color: Colors.grey[500]),
-                    );
-                  }
-                  return Container();
-                },
+              Text(
+                sentry.version,
+                style: TextStyle(color: Colors.grey[500]),
               ),
               const SizedBox(height: 20)
             ],
