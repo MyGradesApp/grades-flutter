@@ -254,7 +254,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: c08428261aee803c3c791f60627331cf55718dd3
+      resolved-ref: f4099558b87749b15396343bb6a8f7f67573c5ef
       url: "https://github.com/Noskcaj19/dart-sis-loader.git"
     source: git
     version: "0.0.0"
