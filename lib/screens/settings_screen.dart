@@ -31,81 +31,88 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: FutureBuilder<Profile>(builder: (context, snapshot) {
         return SizedBox.expand(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                _buildCard(
-                  child: Row(children: [
-                    const Expanded(
-                      child: Text(
-                        'App Theme',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      _buildCard(
+                        child: Row(children: [
+                          const Expanded(
+                            child: Text(
+                              'App Theme',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            getModeIcon(),
+                            color: Colors.white,
+                          ),
+                        ]),
+                        onPressed: () {
+                          var themeController = Provider.of<ThemeController>(
+                              context,
+                              listen: false);
+                          if (themeController.currentTheme == 'light') {
+                            themeController.setTheme('dark');
+                          } else {
+                            themeController.setTheme('light');
+                          }
+                        },
                       ),
-                    ),
-                    Icon(
-                      getModeIcon(),
-                      color: Colors.white,
-                    ),
-                  ]),
-                  onPressed: () {
-                    var themeController =
-                        Provider.of<ThemeController>(context, listen: false);
-                    if (themeController.currentTheme == 'light') {
-                      themeController.setTheme('dark');
-                    } else {
-                      themeController.setTheme('light');
-                    }
-                  },
-                ),
-                _buildCard(
-                  child: const Text(
-                    "Terms of Service",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
+                      _buildCard(
+                        child: const Text(
+                          "Terms of Service",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/terms_settings');
+                        },
+                      ),
+                      _buildCard(
+                        child: const Text(
+                          "Sign Out",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () async {
+                          await Navigator.pop(context);
+                          await Navigator.pop(context, true);
+                        },
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/terms_settings');
-                  },
                 ),
-                _buildCard(
-                  child: const Text(
-                    "Sign Out",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onPressed: () async {
-                    await Navigator.pop(context);
-                    await Navigator.pop(context, true);
-                  },
-                ),
-                const SizedBox(height: 20),
-                FutureBuilder<PackageInfo>(
-                  future: getPackageInfo(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<PackageInfo> snapshot) {
-                    if (snapshot.hasData) {
-                      var package = snapshot.data;
-                      return Text(
-                        "${package.version}+${package.buildNumber}",
-                        style: TextStyle(color: Colors.grey[500]),
-                      );
-                    }
-                    return Container();
-                  },
-                )
-              ],
-            ),
+              ),
+              FutureBuilder<PackageInfo>(
+                future: getPackageInfo(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<PackageInfo> snapshot) {
+                  if (snapshot.hasData) {
+                    var package = snapshot.data;
+                    return Text(
+                      "${package.version}+${package.buildNumber}",
+                      style: TextStyle(color: Colors.grey[500]),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+              const SizedBox(height: 20)
+            ],
           ),
         );
       }),
