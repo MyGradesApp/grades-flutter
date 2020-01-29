@@ -12,6 +12,7 @@ import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/screens/terms_settings_screen.dart';
+import 'package:grades/utilities/package_info.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,31 +23,27 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // load the shared preferences from disk before the app is started
   final prefs = await SharedPreferences.getInstance();
+  final package_info = await getPackageInfo();
+  // Used for sentry error reporting and settings page version number
+  version = "${package_info.version}+${package_info.buildNumber}";
 
   FlutterError.onError = (details, {bool forceReport = false}) {
-    try {
-      reportException(
-        exception: details.exception,
-        stackTrace: details.stack,
-      );
-    } catch (e) {
-      print('Sending report to sentry.io failed: $e');
-    } finally {
-      // Also use Flutter's pretty error logging to the device's console.
-      FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
-    }
+    reportException(
+      exception: details.exception,
+      stackTrace: details.stack,
+    );
+    // Also use Flutter's pretty error logging to the device's console.
+    FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
   };
-  runZoned(() => runApp(MyApp(prefs: prefs)),
-      onError: (Object error, StackTrace stackTrace) {
-    try {
+  runZoned(
+    () => runApp(MyApp(prefs: prefs)),
+    onError: (Object error, StackTrace stackTrace) {
       reportException(
         exception: error,
         stackTrace: stackTrace,
       );
-    } catch (e) {
-      print('Sending report to sentry.io failed: $e');
-    }
-  });
+    },
+  );
 }
 
 class MyApp extends StatelessWidget with PortraitModeMixin {

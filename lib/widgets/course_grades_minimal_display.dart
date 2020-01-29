@@ -13,8 +13,12 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
     var percentIndex = gradeString.indexOf('%');
     var gradeLetter;
     if (percentIndex != -1) {
-      gradeLetter = letterGradeForPercent(
-          double.parse(gradeString.substring(0, percentIndex)));
+      var extractedGradePercent =
+          double.tryParse(gradeString.substring(0, percentIndex));
+
+      if (extractedGradePercent != null) {
+        gradeLetter = letterGradeForPercent(extractedGradePercent);
+      }
     }
     double gradeSize;
     if (grade != null && gradeLetter != null) {

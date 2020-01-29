@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/theme_controller.dart';
+import 'package:grades/utilities/sentry.dart' as sentry;
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -29,67 +30,78 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: FutureBuilder<Profile>(builder: (context, snapshot) {
         return SizedBox.expand(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                _buildCard(
-                  child: Row(children: [
-                    const Expanded(
-                      child: Text(
-                        'App Theme',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      _buildCard(
+                        child: Row(children: [
+                          const Expanded(
+                            child: Text(
+                              'App Theme',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            getModeIcon(),
+                            color: Colors.white,
+                          ),
+                        ]),
+                        onPressed: () {
+                          var themeController = Provider.of<ThemeController>(
+                              context,
+                              listen: false);
+                          if (themeController.currentTheme == 'light') {
+                            themeController.setTheme('dark');
+                          } else {
+                            themeController.setTheme('light');
+                          }
+                        },
                       ),
-                    ),
-                    Icon(
-                      getModeIcon(),
-                      color: Colors.white,
-                    ),
-                  ]),
-                  onPressed: () {
-                    if (Theme.of(context).primaryColor ==
-                        const Color(0xff2a84d2)) {
-                      Provider.of<ThemeController>(context, listen: false)
-                          .setTheme('dark');
-                    } else {
-                      Provider.of<ThemeController>(context, listen: false)
-                          .setTheme('light');
-                    }
-                  },
-                ),
-                _buildCard(
-                  child: const Text(
-                    "Terms of Service",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
+                      _buildCard(
+                        child: const Text(
+                          "Terms of Service",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/terms_settings');
+                        },
+                      ),
+                      _buildCard(
+                        child: const Text(
+                          "Sign Out",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () async {
+                          await Navigator.pop(context);
+                          await Navigator.pop(context, true);
+                        },
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/terms_settings');
-                  },
                 ),
-                _buildCard(
-                  child: const Text(
-                    "Sign Out",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onPressed: () async {
-                    await Navigator.pop(context);
-                    await Navigator.pop(context, true);
-                  },
-                )
-              ],
-            ),
+              ),
+              Text(
+                sentry.version,
+                style: TextStyle(color: Colors.grey[500]),
+              ),
+              const SizedBox(height: 20)
+            ],
           ),
         );
       }),

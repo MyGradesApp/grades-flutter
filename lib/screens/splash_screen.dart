@@ -84,6 +84,12 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         _showError = true;
       });
+    } on HandshakeException catch (_) {
+      _scaffoldKey.currentState
+          .showSnackBar(errorSnackbar('Login failed - poor connection'));
+      setState(() {
+        _showError = true;
+      });
     } catch (e, stackTrace) {
       setState(() {
         _showError = true;

@@ -36,7 +36,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     });
   }
 
-  Future<List<Map<String, dynamic>>> _refresh() {
+  Future<List<Map<String, dynamic>>> _refresh() async {
     _fetchGrades(true);
     return _grades;
   }
