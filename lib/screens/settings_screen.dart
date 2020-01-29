@@ -51,13 +51,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ]),
                   onPressed: () {
-                    if (Theme.of(context).primaryColor ==
-                        const Color(0xff2a84d2)) {
-                      Provider.of<ThemeController>(context, listen: false)
-                          .setTheme('dark');
+                    var themeController =
+                        Provider.of<ThemeController>(context, listen: false);
+                    if (themeController.currentTheme == 'light') {
+                      themeController.setTheme('dark');
                     } else {
-                      Provider.of<ThemeController>(context, listen: false)
-                          .setTheme('light');
+                      themeController.setTheme('light');
                     }
                   },
                 ),
