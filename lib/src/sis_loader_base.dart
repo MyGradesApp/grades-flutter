@@ -227,10 +227,10 @@ class SISLoader {
     List<String> classRankPieces = rawProfile['class_rank']?.split(' / ');
     return Profile(
         cumulative_gpa: rawProfile['cumluative_gpa'] != null
-            ? double.parse(rawProfile['cumluative_gpa'])
+            ? double.tryParse(rawProfile['cumluative_gpa'])
             : null,
         cumulative_weighted_gpa: rawProfile['cumulative_weighted_gpa'] != null
-            ? double.parse(rawProfile['cumulative_weighted_gpa'])
+            ? double.tryParse(rawProfile['cumulative_weighted_gpa'])
             : null,
         class_rank_numerator:
             classRankPieces != null ? int.parse(classRankPieces[0]) : null,
