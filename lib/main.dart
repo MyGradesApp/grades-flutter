@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
       child: Consumer<ThemeController>(
         builder: (BuildContext context, ThemeController theme, Widget child) {
           return MaterialApp(
-            title: 'Flutter Login UI',
+            title: 'SwiftGrade',
             debugShowCheckedModeBanner: false,
             home: SplashScreen(),
             theme: _buildCurrentTheme(theme),
