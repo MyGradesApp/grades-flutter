@@ -129,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 45.0),
                   Column(

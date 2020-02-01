@@ -1,3 +1,4 @@
+import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/sentry.dart' as sentry;
@@ -9,7 +10,21 @@ class SettingsScreen extends StatefulWidget {
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
+String appID = "";
+String output = "";
+
 class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  initState() {
+    super.initState();
+    AppReview.getAppID.then((onValue) {
+      setState(() {
+        appID = onValue;
+      });
+      print("App ID" + appID);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +78,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           } else {
                             themeController.setTheme('light');
                           }
+                        },
+                      ),
+                      _buildCard(
+                        child: const Text(
+                          "Leave a Review",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          AppReview.writeReview.then((onValue) {
+                            setState(() {
+                              output = onValue;
+                            });
+                            print(onValue);
+                          });
                         },
                       ),
                       _buildCard(
