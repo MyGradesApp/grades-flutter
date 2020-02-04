@@ -80,6 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
       showErrorSnackbar(_scaffoldKey.currentState, 'Issue connecting to SIS');
     } on HandshakeException catch (_) {
       showErrorSnackbar(_scaffoldKey.currentState, 'Issue connecting to SIS');
+    } on OSError catch (_) {
+      showErrorSnackbar(_scaffoldKey.currentState, 'Issue connecting to SIS');
     } catch (e, stackTrace) {
       showErrorSnackbar(_scaffoldKey.currentState, 'An unknown error occurred');
       await reportException(

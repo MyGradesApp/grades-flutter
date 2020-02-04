@@ -72,7 +72,8 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
             } else if (snapshot.hasError) {
               if (snapshot.error is SocketException ||
                   snapshot.error is HttpException ||
-                  snapshot.error is HandshakeException) {
+                  snapshot.error is HandshakeException ||
+                  snapshot.error is OSError) {
                 return RefreshableErrorMessage(
                   onRefresh: _refresh,
                   text: "There was an issue connecting to SIS",
