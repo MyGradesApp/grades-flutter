@@ -176,7 +176,7 @@ String _dateRangeHeaderForWeek(DateTime date) {
   var first = firstDayOfWeek(date);
   var last = lastDayOfWeek(date);
   if (first.month == last.month) {
-    return "${DateFormat.MMMMd().format(last)} - ${DateFormat.d().format(first)}";
+    return "${DateFormat.MMMMd().format(first)} - ${DateFormat.d().format(last)}";
   }
-  return "${DateFormat.MMMMd().format(last)} - ${DateFormat.MMMMd().format(first)}";
+  return "${DateFormat.MMMMd().format(first)} - ${DateFormat.MMMMd().format(last)}";
 }
