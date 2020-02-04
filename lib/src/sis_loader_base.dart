@@ -102,10 +102,15 @@ class SISLoader {
       throw InvalidAuthException(authError.group(1));
     }
 
-    var samlResponse = RegExp(
+    var samlResponseMatch = RegExp(
             r'<input name="SAMLResponse" type="hidden" id="SAMLResponse" value="(.*?)"')
-        .firstMatch(authResponse)
-        .group(1);
+        .firstMatch(authResponse);
+
+    if (samlResponseMatch == null) {
+      throw UnknownInvalidAuthException('No SAML reponse provided');
+    }
+
+    var samlResponse = samlResponseMatch.group(1);
 
     var enboardRequest = await _client.post(
         Uri.parse(

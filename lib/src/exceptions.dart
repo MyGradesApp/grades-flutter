@@ -8,3 +8,14 @@ class InvalidAuthException implements Exception {
     return 'InvalidAuthException: ${message}';
   }
 }
+
+class UnknownInvalidAuthException implements Exception {
+  final String message;
+
+  UnknownInvalidAuthException(this.message);
+
+  @override
+  String toString() {
+    return 'UnknownInvalidAuthException: ${message}';
+  }
+}
