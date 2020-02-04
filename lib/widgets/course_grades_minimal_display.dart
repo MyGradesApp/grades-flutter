@@ -72,11 +72,13 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
                 ),
               ),
               if (grade != null && gradeLetter != null)
-                Icon(
+                const Icon(
                   Icons.chevron_right,
                   color: Colors.black26,
                   size: 18.0,
                 ),
+              if (grade == null || gradeLetter == null)
+                const SizedBox(width: 18, height: 18),
             ],
           ),
         ),
