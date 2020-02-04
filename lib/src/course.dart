@@ -9,7 +9,7 @@ final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
 final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
 final longMonthDayDateFormat = DateFormat('EEEE, MMM dd, yyyy hh:mm aa');
 
-DateTime _parseDateTimeCascade(String src) {
+DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
   try {
     return shortMonthDateFormat.parseLoose(src);
   } catch (_) {}
@@ -19,8 +19,23 @@ DateTime _parseDateTimeCascade(String src) {
   try {
     return shortMonthDayDateFormat.parseLoose(src);
   } catch (_) {}
+  if (performRegexPass) {
+    try {
+      return longMonthDayDateFormat.parseLoose(src);
+    } catch (_) {}
+  } else {
+    return longMonthDayDateFormat.parseLoose(src);
+  }
+  if (performRegexPass) {
+    return _parseDateTimeCascade(
+      src.replaceAllMapped(RegExp(r'\b(\d{1,2})(?:st|nd|rd|th)\b'), (match) {
+        return '${match.group(1)}';
+      }),
+      false,
+    );
+  }
 
-  return longMonthDayDateFormat.parseLoose(src);
+  return null;
 }
 
 class Course {
