@@ -169,7 +169,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
 }
 
 int _gradeCmp(Map<String, dynamic> a, Map<String, dynamic> b) {
-  return (a["Category"] as String).compareTo(b["Category"]);
+  return (a["Category"] as String)?.compareTo(b["Category"]) ?? 0;
 }
 
 String _dateRangeHeaderForWeek(DateTime date) {

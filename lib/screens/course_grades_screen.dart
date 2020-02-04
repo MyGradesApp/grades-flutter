@@ -21,6 +21,7 @@ class CourseGradesScreen extends StatefulWidget {
 class _CourseGradesScreenState extends State<CourseGradesScreen> {
   Future<List<Map<String, dynamic>>> _grades;
   bool _loaded = false;
+  bool _hasCategories = false;
   DisplayStyle _displayStyle = DisplayStyle.Minimal;
   GroupingMode _groupingMode = GroupingMode.Category;
 
@@ -36,7 +37,12 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     final Course course = ModalRoute.of(context).settings.arguments as Course;
 
     _grades = course.getGrades(force).then((grades) {
-      _loaded = true;
+      setState(() {
+        _loaded = true;
+        if (grades.every((element) => element.containsKey("Category"))) {
+          _hasCategories = true;
+        }
+      });
       return grades;
     });
   }
@@ -122,7 +128,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   } else {
                     return CourseGradesMinimalDisplay(
                       snapshot.data,
-                      _groupingMode,
+                      _hasCategories ? _groupingMode : GroupingMode.Date,
                     );
                   }
                 } else if (snapshot.hasError) {
