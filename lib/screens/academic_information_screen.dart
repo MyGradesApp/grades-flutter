@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/sentry.dart';
@@ -68,6 +70,14 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
+              if (snapshot.error is SocketException ||
+                  snapshot.error is HttpException ||
+                  snapshot.error is HandshakeException) {
+                return RefreshableErrorMessage(
+                  onRefresh: _refresh,
+                  text: "There was an issue connecting to SIS",
+                );
+              }
               reportException(
                 exception: snapshot.error,
                 stackTrace: snapshot.stackTrace,
