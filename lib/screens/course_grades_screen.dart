@@ -85,19 +85,19 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   });
                 },
               ),
-            IconButton(
-              // TODO: Pick a better icon
-              icon: Icon(_displayStyle == DisplayStyle.Minimal
-                  ? Icons.unfold_more
-                  : Icons.unfold_less),
-              onPressed: () {
-                setState(() {
-                  _displayStyle = _displayStyle == DisplayStyle.Minimal
-                      ? DisplayStyle.Full
-                      : DisplayStyle.Minimal;
-                });
-              },
-            )
+            // IconButton(
+            //   // TODO: Pick a better icon
+            //   icon: Icon(_displayStyle == DisplayStyle.Minimal
+            //       ? Icons.unfold_more
+            //       : Icons.unfold_less),
+            //   onPressed: () {
+            //     setState(() {
+            //       _displayStyle = _displayStyle == DisplayStyle.Minimal
+            //           ? DisplayStyle.Full
+            //           : DisplayStyle.Minimal;
+            //     });
+            //   },
+            // )
           ],
         ),
         body: RefreshIndicator(
