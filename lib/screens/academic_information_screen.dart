@@ -84,6 +84,13 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 stackTrace: snapshot.stackTrace,
               );
 
+              if (snapshot.error is UnknownMissingCookieException) {
+                return RefreshableErrorMessage(
+                  onRefresh: _refresh,
+                  text: "Issue loading information",
+                );
+              }
+
               return RefreshableErrorMessage(
                 onRefresh: _refresh,
                 text:

@@ -90,7 +90,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
               );
 
               // TODO: Find the root cause of this
-              if (snapshot.error is NoSuchMethodError) {
+              if (snapshot.error is NoSuchMethodError ||
+                  snapshot.error is UnknownStructureException) {
                 return RefreshableErrorMessage(
                   onRefresh: _callback,
                   text: "There was an unknown error.\nYou may need to log out.",
