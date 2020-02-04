@@ -70,7 +70,9 @@ class GradeItemDetailScreen extends StatelessWidget {
 
   Widget _buildItem(String key, dynamic value,
       {List<CircularStackEntry> pointsData}) {
-    if (key == "Points" && value is String && value.contains('/')) {
+    if (key == "Points" &&
+        value is String &&
+        RegExp(r'\d+ / \d+').hasMatch(value)) {
       return AnimatedCircularChart(
         size: const Size(240.0, 240.0),
         holeLabel: value,

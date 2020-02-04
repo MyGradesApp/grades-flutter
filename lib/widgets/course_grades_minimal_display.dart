@@ -55,9 +55,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
         onTap: () {
-          if (grade != null && gradeLetter != null) {
-            Navigator.pushNamed(context, '/grades_detail', arguments: grade);
-          }
+          Navigator.pushNamed(context, '/grades_detail', arguments: grade);
         },
         child: Padding(
           padding: const EdgeInsets.all(17.0),
@@ -88,14 +86,11 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
                       TextStyle(color: textColor, fontWeight: FontWeight.bold),
                 ),
               ),
-              if (grade != null && gradeLetter != null)
-                const Icon(
-                  Icons.chevron_right,
-                  color: Colors.black26,
-                  size: 18.0,
-                ),
-              if (grade == null || gradeLetter == null)
-                const SizedBox(width: 18, height: 18),
+              const Icon(
+                Icons.chevron_right,
+                color: Colors.black26,
+                size: 18.0,
+              ),
             ],
           ),
         ),
