@@ -15,8 +15,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
             DataColumn(
               label: Text(
                 k,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           );
@@ -34,8 +33,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
                 const DataCell(
                   Text(
                     "",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               );
@@ -46,8 +44,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
                 DataCell(
                   Text(
                     DateFormat.yMMMd().format(v),
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               );
@@ -57,8 +54,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
                 DataCell(
                   Text(
                     v.toString(),
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               );
@@ -76,10 +72,12 @@ class CourseGradesFullDisplay extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: DataTable(
-            columns: tableCols,
-            rows: tableRows,
-            columnSpacing: 5,
+          child: Card(
+            child: DataTable(
+              columns: tableCols,
+              rows: tableRows,
+              columnSpacing: 5,
+            ),
           ),
         ),
       ),
