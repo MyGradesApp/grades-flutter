@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show objectRuntimeType;
 import 'package:flutter/widgets.dart'
     show
         StatefulWidget,
@@ -89,8 +88,7 @@ class StackedAsyncSnapshot<T> {
   bool get hasError => error != null;
 
   @override
-  String toString() =>
-      '${objectRuntimeType(this, 'AsyncSnapshot')}($connectionState, $data, $error)';
+  String toString() => '$runtimeType($connectionState, $data, $error)';
 
   @override
   bool operator ==(Object other) {
