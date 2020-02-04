@@ -18,26 +18,47 @@ dependencies:
   sis_loader:
     git: https://github.com/Noskcaj19/dart-sis-loader.git
 
-  app_review: ^1.0.1
   # Debug/Error reporting/System packages
+  # Flutter team package
   sentry: ^3.0.1
+  # Flutter team package
   package_info: ^0.4.0+13
+  app_review:
+    git:
+      url: https://github.com/Noskcaj19/app_review.git
+      ref: b1b2ebe
 
   # "Framework" utilities
-  provider: 4.0.1
+  provider:
+    git:
+      url: https://github.com/Noskcaj19/provider.git
+      ref: ddf8c26
+  # Flutter team package
   shared_preferences: ^0.5.6+1
 
   # General small unities
+  # Dart team package
   intl: ^0.16.1
 
   # Fonts and Icons
-  font_awesome_flutter: ^8.5.0
+  font_awesome_flutter:
+    git:
+      url: https://github.com/Noskcaj19/font_awesome_flutter.git
+      ref: 1be3254
 
   # General UI
-  flutter_spinkit: ^4.1.1+1
-  flutter_circular_chart: ^0.1.0
+  flutter_spinkit:
+    git:
+      url: https://github.com/Noskcaj19/flutter_spinkit.git
+      ref: 89fe2e5
+  flutter_circular_chart:
+    git:
+      url: https://github.com/Noskcaj19/flutter_circular_chart.git
+      ref: f9edf39
   rflutter_alert:
-    git: git://github.com/RatelHub/rflutter_alert.git
+    git:
+      url: https://github.com/Noskcaj19/rflutter_alert.git
+      ref: 2d099a8
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.4

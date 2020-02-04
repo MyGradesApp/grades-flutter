@@ -4,9 +4,11 @@ packages:
   app_review:
     dependency: "direct main"
     description:
-      name: app_review
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: b1b2ebe
+      resolved-ref: b1b2ebe27180cc243965beffeea55815a3414669
+      url: "https://github.com/Noskcaj19/app_review.git"
+    source: git
     version: "1.0.1"
   archive:
     dependency: transitive
@@ -79,9 +81,11 @@ packages:
   flutter_circular_chart:
     dependency: "direct main"
     description:
-      name: flutter_circular_chart
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: f9edf39
+      resolved-ref: f9edf394af850c752e20585c62dfc396a1779437
+      url: "https://github.com/Noskcaj19/flutter_circular_chart.git"
+    source: git
     version: "0.1.0"
   flutter_launcher_icons:
     dependency: "direct dev"
@@ -93,9 +97,11 @@ packages:
   flutter_spinkit:
     dependency: "direct main"
     description:
-      name: flutter_spinkit
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "89fe2e5"
+      resolved-ref: "89fe2e51c4e867144c567b04b801ca92694e15a9"
+      url: "https://github.com/Noskcaj19/flutter_spinkit.git"
+    source: git
     version: "4.1.1+1"
   flutter_test:
     dependency: "direct dev"
@@ -110,9 +116,11 @@ packages:
   font_awesome_flutter:
     dependency: "direct main"
     description:
-      name: font_awesome_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "1be3254"
+      resolved-ref: "1be3254a31e4f3cc2caf67216ca8355ef40dba95"
+      url: "https://github.com/Noskcaj19/font_awesome_flutter.git"
+    source: git
     version: "8.5.0"
   http:
     dependency: transitive
@@ -159,9 +167,11 @@ packages:
   nested:
     dependency: transitive
     description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "1e8b280"
+      resolved-ref: "1e8b280839744beb823feacce0df64a7e98be93a"
+      url: "https://github.com/Noskcaj19/nested.git"
+    source: git
     version: "0.0.4"
   package_info:
     dependency: "direct main"
@@ -201,10 +211,12 @@ packages:
   provider:
     dependency: "direct main"
     description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.1"
+      path: "."
+      ref: ddf8c26
+      resolved-ref: ddf8c2681ed4a412f376a6eed6fd05e442fd4a53
+      url: "https://github.com/Noskcaj19/provider.git"
+    source: git
+    version: "4.0.2"
   quiver:
     dependency: transitive
     description:
@@ -216,9 +228,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
+      ref: "2d099a8"
       resolved-ref: "2d099a8109ab9fb96f9d1aa72670fa5414118d9b"
-      url: "git://github.com/RatelHub/rflutter_alert.git"
+      url: "https://github.com/Noskcaj19/rflutter_alert.git"
     source: git
     version: "1.0.3"
   sentry:
