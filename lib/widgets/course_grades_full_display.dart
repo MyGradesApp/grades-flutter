@@ -33,7 +33,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
                 const DataCell(
                   Text(
                     "",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(),
                   ),
                 ),
               );
@@ -44,7 +44,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
                 DataCell(
                   Text(
                     DateFormat.yMMMd().format(v),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(),
                   ),
                 ),
               );
@@ -54,7 +54,7 @@ class CourseGradesFullDisplay extends StatelessWidget {
                 DataCell(
                   Text(
                     v.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(),
                   ),
                 ),
               );
