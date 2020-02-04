@@ -67,6 +67,13 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pop(context);
     } on InvalidAuthException catch (e) {
       showErrorSnackbar(_scaffoldKey.currentState, e.message);
+    } on UnknownInvalidAuthException catch (e, stackTrace) {
+      // TODO: Until we understand this, report it
+      reportException(
+        exception: e.message,
+        stackTrace: stackTrace,
+      );
+      showErrorSnackbar(_scaffoldKey.currentState, e.message);
     } on SocketException catch (_) {
       showErrorSnackbar(_scaffoldKey.currentState, 'Issue connecting to SIS');
     } on HttpException catch (_) {

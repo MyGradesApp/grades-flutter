@@ -88,6 +88,14 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 stackTrace: snapshot.stackTrace,
               );
 
+              // TODO: Find the root cause of this
+              if (snapshot.error is NoSuchMethodError) {
+                return RefreshableErrorMessage(
+                  onRefresh: _callback,
+                  text: "There was an unknown error.\nYou may need to log out.",
+                );
+              }
+
               return RefreshableErrorMessage(
                 onRefresh: _callback,
                 text:
