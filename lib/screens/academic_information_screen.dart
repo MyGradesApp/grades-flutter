@@ -76,7 +76,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                   snapshot.error is OSError) {
                 return RefreshableErrorMessage(
                   onRefresh: _refresh,
-                  text: "There was an issue connecting to SIS",
+                  text: "Issue connecting to SIS",
                 );
               }
               reportException(

@@ -74,25 +74,25 @@ class _SplashScreenState extends State<SplashScreen> {
       _loadStoredAuth(force: true);
     } on HttpException catch (_) {
       _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - poor connection'));
+          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
       setState(() {
         _showError = true;
       });
     } on SocketException catch (_) {
       _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - poor connection'));
+          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
       setState(() {
         _showError = true;
       });
     } on HandshakeException catch (_) {
       _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - poor connection'));
+          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
       setState(() {
         _showError = true;
       });
     } on OSError catch (_) {
       _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - poor connection'));
+          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
       setState(() {
         _showError = true;
       });

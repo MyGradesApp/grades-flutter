@@ -80,7 +80,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                   snapshot.error is OSError) {
                 return RefreshableErrorMessage(
                   onRefresh: _callback,
-                  text: "There was an issue connecting to SIS",
+                  text: "Issue connecting to SIS",
                 );
               }
 
