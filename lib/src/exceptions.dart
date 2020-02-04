@@ -19,3 +19,15 @@ class UnknownInvalidAuthException implements Exception {
     return 'UnknownInvalidAuthException: ${message}';
   }
 }
+
+class UnknownStructureException implements Exception {
+  final String message;
+  final int error;
+
+  UnknownStructureException(this.message, this.error);
+
+  @override
+  String toString() {
+    return 'UnknownStructureException: ${message} with error code ${error}';
+  }
+}

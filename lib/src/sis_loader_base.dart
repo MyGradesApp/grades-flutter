@@ -142,10 +142,14 @@ class SISLoader {
 
     var portalResponse = await _client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
-    var coursesTable = RegExp(
+    var coursesTableMatch = RegExp(
             r'''<\/tr><td style='display:none'>Z<\/td><TD valign=middle><img src="modules\/Grades\/Grades\.png" border=0><\/td><td>([\s\S]*?)<\/table>''')
-        .firstMatch(await portalResponse.bodyAsString())
-        .group(1);
+        .firstMatch(await portalResponse.bodyAsString());
+    if (coursesTableMatch == null) {
+      throw UnknownStructureException(
+          'Unexpected response structure', portalResponse.statusCode);
+    }
+    var coursesTable = coursesTableMatch.group(1);
 
     var coursesMatches = RegExp(
             r"a href='(.*?)'><b>(.*?)<\/b><\/a><\/td><td nowrap>(.*?)<\/td><td>(.*?)<\/td><td><td><\/td><td nowrap>\s*<a class='grade' href='.*?'>(.*?)<\/a>")
