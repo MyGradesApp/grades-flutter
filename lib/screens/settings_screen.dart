@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/sentry.dart' as sentry;
 import 'package:provider/provider.dart';
-import 'package:sis_loader/sis_loader.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -29,96 +28,94 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0.0,
         centerTitle: true,
       ),
-      body: FutureBuilder<Profile>(builder: (context, snapshot) {
-        return SizedBox.expand(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      _buildCard(
-                        child: Row(children: [
-                          const Expanded(
-                            child: Text(
-                              'App Theme',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.white,
-                              ),
+      body: SizedBox.expand(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    _buildCard(
+                      child: Row(children: [
+                        const Expanded(
+                          child: Text(
+                            'App Theme',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
-                          Icon(
-                            getModeIcon(),
-                            color: Colors.white,
-                          ),
-                        ]),
-                        onPressed: () {
-                          var themeController = Provider.of<ThemeController>(
-                              context,
-                              listen: false);
-                          if (themeController.currentTheme == 'light') {
-                            themeController.setTheme('dark');
-                          } else {
-                            themeController.setTheme('light');
-                          }
-                        },
-                      ),
-                      _buildCard(
-                        child: const Text(
-                          "Leave a Review",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
                         ),
-                        onPressed: () async {
-                          await AppReview.writeReview;
-                        },
-                      ),
-                      _buildCard(
-                        child: const Text(
-                          "Terms of Service",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
+                        Icon(
+                          getModeIcon(),
+                          color: Colors.white,
                         ),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/terms_settings');
-                        },
-                      ),
-                      _buildCard(
-                        child: const Text(
-                          "Sign Out",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
+                      ]),
+                      onPressed: () {
+                        var themeController = Provider.of<ThemeController>(
+                            context,
+                            listen: false);
+                        if (themeController.currentTheme == 'light') {
+                          themeController.setTheme('dark');
+                        } else {
+                          themeController.setTheme('light');
+                        }
+                      },
+                    ),
+                    _buildCard(
+                      child: const Text(
+                        "Leave a Review",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
                         ),
-                        onPressed: () async {
-                          await Navigator.pop(context);
-                          await Navigator.pop(context, true);
-                        },
                       ),
-                    ],
-                  ),
+                      onPressed: () async {
+                        await AppReview.writeReview;
+                      },
+                    ),
+                    _buildCard(
+                      child: const Text(
+                        "Terms of Service",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/terms_settings');
+                      },
+                    ),
+                    _buildCard(
+                      child: const Text(
+                        "Sign Out",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {
+                        await Navigator.pop(context);
+                        await Navigator.pop(context, true);
+                      },
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                sentry.version,
-                style: TextStyle(color: Colors.grey[500]),
-              ),
-              const SizedBox(height: 20)
-            ],
-          ),
-        );
-      }),
+            ),
+            Text(
+              sentry.version,
+              style: TextStyle(color: Colors.grey[500]),
+            ),
+            const SizedBox(height: 20)
+          ],
+        ),
+      ),
     );
   }
 

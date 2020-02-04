@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/sentry.dart';
+import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
@@ -50,7 +51,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
             )
           ],
         ),
-        body: FutureBuilder<List<Course>>(
+        body: StackedFutureBuilder<List<Course>>(
           future: Provider.of<CurrentSession>(context).sisLoader.getCourses(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -84,6 +85,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
 
               reportException(
                 exception: snapshot.error,
+                stackTrace: snapshot.stackTrace,
               );
 
               return RefreshableErrorMessage(

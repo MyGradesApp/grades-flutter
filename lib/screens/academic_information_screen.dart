@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/sentry.dart';
+import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         elevation: 0.0,
         centerTitle: true,
       ),
-      body: FutureBuilder<Profile>(
+      body: StackedFutureBuilder<Profile>(
           future:
               Provider.of<CurrentSession>(context).sisLoader.getUserProfile(),
           builder: (context, snapshot) {
@@ -67,7 +68,10 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
-              reportException(exception: snapshot.error);
+              reportException(
+                exception: snapshot.error,
+                stackTrace: snapshot.stackTrace,
+              );
 
               return RefreshableErrorMessage(
                 onRefresh: _refresh,

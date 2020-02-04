@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:grades/utilities/sentry.dart';
+import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/course_grades_full_display.dart';
 import 'package:grades/widgets/course_grades_minimal_display.dart';
 import 'package:grades/widgets/loader_widget.dart';
@@ -78,7 +80,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
-          child: FutureBuilder<List<Map<String, dynamic>>>(
+          child: StackedFutureBuilder<List<Map<String, dynamic>>>(
               future: _grades,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -105,6 +107,11 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     return CourseGradesMinimalDisplay(snapshot.data);
                   }
                 } else if (snapshot.hasError) {
+                  reportException(
+                    exception: snapshot.error,
+                    stackTrace: snapshot.stackTrace,
+                  );
+
                   return RefreshableErrorMessage(
                     onRefresh: _refresh,
                     text:
