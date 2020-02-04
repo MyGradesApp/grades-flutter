@@ -55,9 +55,8 @@ class CookieClient {
       var oldCode = response.statusCode;
       response = await get(Uri.parse(newLocation)).catchError((error) async {
         // TODO: Fix this for real
-        if (newLocation == 'Modules.php?modname=misc/Portal.php') {
-          newLocation =
-              'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php';
+        if ((newLocation as String).startsWith('Modules.php?')) {
+          newLocation = 'https://sis.palmbeachschools.org/focus/' + newLocation;
           response = await get(Uri.parse(newLocation));
         } else {
           throw error;
