@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/utilities/sentry.dart';
@@ -107,6 +109,14 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     return CourseGradesMinimalDisplay(snapshot.data);
                   }
                 } else if (snapshot.hasError) {
+                  if (snapshot.error is SocketException ||
+                      snapshot.error is HttpException ||
+                      snapshot.error is HandshakeException) {
+                    return RefreshableErrorMessage(
+                      onRefresh: _refresh,
+                      text: "There was an issue connecting to SIS",
+                    );
+                  }
                   reportException(
                     exception: snapshot.error,
                     stackTrace: snapshot.stackTrace,
