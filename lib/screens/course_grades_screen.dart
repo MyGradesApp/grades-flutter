@@ -72,7 +72,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
             },
           ),
           actions: [
-            if (_displayStyle == DisplayStyle.Minimal)
+            if (_displayStyle == DisplayStyle.Minimal && _hasCategories)
               IconButton(
                 icon: Icon(_groupingMode == GroupingMode.Category
                     ? Icons.today
