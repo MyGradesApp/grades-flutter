@@ -10,21 +10,7 @@ class SettingsScreen extends StatefulWidget {
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-String appID = "";
-String output = "";
-
 class _SettingsScreenState extends State<SettingsScreen> {
-  @override
-  initState() {
-    super.initState();
-    AppReview.getAppID.then((onValue) {
-      setState(() {
-        appID = onValue;
-      });
-      print("App ID" + appID);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,13 +75,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: Colors.white,
                           ),
                         ),
-                        onPressed: () {
-                          AppReview.writeReview.then((onValue) {
-                            setState(() {
-                              output = onValue;
-                            });
-                            print(onValue);
-                          });
+                        onPressed: () async {
+                          await AppReview.writeReview;
                         },
                       ),
                       _buildCard(
