@@ -189,8 +189,13 @@ class SISLoader {
     var graduationReqsRequest = await _client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=GraduationRequirements/GraduationRequirements.php&student_id=new&top_deleted_student=true'));
 
-    var bearerTokenCookie = graduationReqsRequest.headers['set-cookie']
-        .firstWhere((c) => c.startsWith('Module::'));
+    var bearerTokenCookie;
+    try {
+      bearerTokenCookie = graduationReqsRequest.headers['set-cookie']
+          .firstWhere((c) => c.startsWith('Module::'));
+    } on StateError {
+      throw UnknownMissingCookieException('No module cookie present');
+    }
     assert(bearerTokenCookie != null);
 
     var startIndex = bearerTokenCookie.indexOf('=') + 1;

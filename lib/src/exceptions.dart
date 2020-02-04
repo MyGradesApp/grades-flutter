@@ -31,3 +31,14 @@ class UnknownStructureException implements Exception {
     return 'UnknownStructureException: ${message} with error code ${error}';
   }
 }
+
+class UnknownMissingCookieException implements Exception {
+  final String message;
+
+  UnknownMissingCookieException(this.message);
+
+  @override
+  String toString() {
+    return 'UnknownMissingCookieException: ${message}';
+  }
+}
