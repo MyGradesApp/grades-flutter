@@ -16,6 +16,7 @@ class ClassListItemWidget extends StatelessWidget {
   final String course;
   final String teacher;
   final String letterGrade;
+  // String | int
   final dynamic percent;
   final void Function() onTap;
 
@@ -53,7 +54,7 @@ class ClassListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fmt_percent;
+    String fmt_percent;
     if (percent is int) {
       fmt_percent = '$percent%';
     } else {
@@ -61,7 +62,7 @@ class ClassListItemWidget extends StatelessWidget {
         fmt_percent = "N/A";
       } else {
         // Handle cases that aren't `Not Graded`
-        fmt_percent = percent;
+        fmt_percent = percent as String;
       }
     }
 

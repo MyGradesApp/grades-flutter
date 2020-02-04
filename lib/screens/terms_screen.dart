@@ -69,7 +69,7 @@ class TermsScreen extends StatelessWidget {
     );
   }
 
-  _acceptAndReturn(BuildContext context) async {
+  void _acceptAndReturn(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("accepted_terms", true);
     Navigator.pop(context);

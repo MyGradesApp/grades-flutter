@@ -32,7 +32,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   }
 
   void _fetchGrades([bool force = false]) {
-    final Course course = ModalRoute.of(context).settings.arguments;
+    final Course course = ModalRoute.of(context).settings.arguments as Course;
 
     _grades = course.getGrades(force).then((grades) {
       _loaded = true;
@@ -47,7 +47,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Course course = ModalRoute.of(context).settings.arguments;
+    final Course course = ModalRoute.of(context).settings.arguments as Course;
 
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
@@ -94,7 +94,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                         size: 55,
                         color: Colors.white,
                       ),
-                      child: Text(
+                      child: const Text(
                         "There are no grades listed in this class",
                         style: TextStyle(
                           color: Colors.white,

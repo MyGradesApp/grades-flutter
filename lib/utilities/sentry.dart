@@ -5,7 +5,7 @@ final SentryClient _sentry = SentryClient(
     dsn: 'https://241147e2e5d342c0be1379508e165cb1@sentry.io/1869892');
 String version = "";
 
-reportException(
+Future<SentryResponse> reportException(
     {@foundation.required dynamic exception,
     @foundation.required dynamic stackTrace}) {
   if (!foundation.kDebugMode) {
@@ -31,4 +31,6 @@ reportException(
       print(stackTrace);
     }
   }
+
+  return null;
 }

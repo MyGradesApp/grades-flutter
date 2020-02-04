@@ -11,7 +11,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
       Color textColor, Color cardColor) {
     var gradeString = grade["Grade"].toString();
     var percentIndex = gradeString.indexOf('%');
-    var gradeLetter;
+    String gradeLetter;
     if (percentIndex != -1) {
       var extractedGradePercent =
           double.tryParse(gradeString.substring(0, percentIndex));
@@ -48,7 +48,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  grade["Assignment"],
+                  grade["Assignment"] as String,
                   style: TextStyle(color: textColor),
                 ),
               ),

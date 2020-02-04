@@ -5,12 +5,13 @@ import 'package:intl/intl.dart';
 class GradeItemDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> grade =
-        Map.from(ModalRoute.of(context).settings.arguments);
+    Map<String, dynamic> grade = Map.from(
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
 
-    var pointsUpper, pointsLower;
+    double pointsUpper, pointsLower;
     if (grade.containsKey('Points')) {
-      var matches = RegExp(r"(\d+) / (\d+)")?.firstMatch(grade['Points']);
+      var matches =
+          RegExp(r"(\d+) / (\d+)")?.firstMatch(grade['Points'] as String);
 
       // TODO: Rework null propigation
       pointsUpper = double.tryParse(matches?.group(1) ?? "0");
@@ -27,7 +28,7 @@ class GradeItemDetailScreen extends StatelessWidget {
     ];
 
     grade.removeWhere((key, value) => value == null);
-    var assignmentName = grade.remove("Assignment");
+    var assignmentName = grade.remove("Assignment") as String;
 
     var keys = grade.keys.toList();
     var values = grade.values.toList();
@@ -69,12 +70,12 @@ class GradeItemDetailScreen extends StatelessWidget {
 
   Widget _buildItem(String key, dynamic value,
       {List<CircularStackEntry> pointsData}) {
-    if (key == "Points" && (value as String).contains('/')) {
+    if (key == "Points" && value is String && value.contains('/')) {
       return AnimatedCircularChart(
         size: const Size(240.0, 240.0),
         holeLabel: value,
         // TODO: Adjust font family
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontSize: 28,
           color: Colors.white,
         ),
@@ -104,7 +105,7 @@ class GradeItemDetailScreen extends StatelessWidget {
     if (item is DateTime) {
       return DateFormat.yMMMMd().format(item);
     } else {
-      return item;
+      return item as String;
     }
   }
 }

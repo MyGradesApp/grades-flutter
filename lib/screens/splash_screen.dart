@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _loadStoredAuth();
   }
 
-  _loadStoredAuth({bool force = false, bool freshSession = false}) async {
+  void _loadStoredAuth({bool force = false, bool freshSession = false}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var hasAcceptedTerms = prefs.getBool("accepted_terms") ?? false;
 

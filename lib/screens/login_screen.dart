@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordController.value.copyWith(text: password);
   }
 
-  _handleLoginPressed() async {
+  void _handleLoginPressed() async {
     // removes keyboard on click
     FocusScope.of(context).unfocus();
     var email = _emailController.text;
@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
       showErrorSnackbar(_scaffoldKey.currentState, e.message);
     } on UnknownInvalidAuthException catch (e, stackTrace) {
       // TODO: Until we understand this, report it
-      reportException(
+      await reportException(
         exception: e.message,
         stackTrace: stackTrace,
       );
