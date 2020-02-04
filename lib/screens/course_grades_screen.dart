@@ -22,6 +22,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   Future<List<Map<String, dynamic>>> _grades;
   bool _loaded = false;
   DisplayStyle _displayStyle = DisplayStyle.Minimal;
+  GroupingMode _groupingMode = GroupingMode.Category;
 
   @override
   void didChangeDependencies() {
@@ -65,6 +66,19 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
             },
           ),
           actions: [
+            if (_displayStyle == DisplayStyle.Minimal)
+              IconButton(
+                icon: Icon(_groupingMode == GroupingMode.Category
+                    ? Icons.today
+                    : Icons.format_list_bulleted),
+                onPressed: () {
+                  setState(() {
+                    _groupingMode = _groupingMode == GroupingMode.Category
+                        ? GroupingMode.Date
+                        : GroupingMode.Category;
+                  });
+                },
+              ),
             IconButton(
               // TODO: Pick a better icon
               icon: Icon(_displayStyle == DisplayStyle.Minimal
@@ -106,7 +120,10 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   if (_displayStyle == DisplayStyle.Full) {
                     return CourseGradesFullDisplay(cleanupData(snapshot.data));
                   } else {
-                    return CourseGradesMinimalDisplay(snapshot.data);
+                    return CourseGradesMinimalDisplay(
+                      snapshot.data,
+                      _groupingMode,
+                    );
                   }
                 } else if (snapshot.hasError) {
                   if (snapshot.error is SocketException ||

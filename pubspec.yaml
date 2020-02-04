@@ -39,6 +39,8 @@ dependencies:
   # General small unities
   # Dart team package
   intl: ^0.16.1
+  # Dart team package
+  collection: ^1.14.11
 
   # Fonts and Icons
   font_awesome_flutter:
