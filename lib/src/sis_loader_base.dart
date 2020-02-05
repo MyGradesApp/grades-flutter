@@ -250,8 +250,8 @@ class SISLoader {
             ? double.tryParse(rawProfile['cumulative_weighted_gpa'])
             : null,
         class_rank_numerator:
-            classRankPieces != null ? int.parse(classRankPieces[0]) : null,
+            (classRankPieces != null && classRankPieces[0].trim().isNotEmpty) ? int.tryParse(classRankPieces[0]) : null,
         class_rank_denominator:
-            classRankPieces != null ? int.parse(classRankPieces[1]) : null);
+            (classRankPieces != null && classRankPieces[1].trim().isNotEmpty) ? int.tryParse(classRankPieces[1]) : null);
   }
 }
