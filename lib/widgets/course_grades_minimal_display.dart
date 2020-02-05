@@ -119,11 +119,11 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             oldCategory = _data[i - 1]["Category"];
             oldDate = _data[i - 1]["Assigned"];
           }
-
           if (_groupingMode == GroupingMode.Category) {
+            var cat = ('${category[0].toUpperCase()}${category.substring(1)}');
             if (oldCategory != category) {
               return _buildHeaderedItem(
-                text: category,
+                text: cat,
                 child: card,
               );
             }

@@ -13,7 +13,6 @@ dependencies:
   # Core flutter
   flutter:
     sdk: flutter
-
   # 1st party packages
   sis_loader:
     git: https://github.com/Noskcaj19/dart-sis-loader.git
