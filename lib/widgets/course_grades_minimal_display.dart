@@ -120,10 +120,9 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             oldDate = _data[i - 1]["Assigned"];
           }
           if (_groupingMode == GroupingMode.Category) {
-            var cat = ('${category[0].toUpperCase()}${category.substring(1)}');
             if (oldCategory != category) {
               return _buildHeaderedItem(
-                text: cat,
+                text: _titlecase(category),
                 child: card,
               );
             }
@@ -174,4 +173,9 @@ String _dateRangeHeaderForWeek(DateTime date) {
     return "${DateFormat.MMMMd().format(first)} - ${DateFormat.d().format(last)}";
   }
   return "${DateFormat.MMMMd().format(first)} - ${DateFormat.MMMMd().format(last)}";
+}
+
+String _titlecase(String src) {
+  return src.replaceAllMapped(RegExp(r'\b([a-z])([a-z]*?)\b'),
+      (match) => match.group(1).toUpperCase() + match.group(2));
 }
