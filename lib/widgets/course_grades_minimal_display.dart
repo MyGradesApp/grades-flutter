@@ -9,18 +9,19 @@ enum GroupingMode { Date, Category }
 
 class CourseGradesMinimalDisplay extends StatelessWidget {
   final List<Map<String, dynamic>> _data;
+  final Map<String, String> _weights;
   final GroupingMode _groupingMode;
 
-  CourseGradesMinimalDisplay._(this._data, this._groupingMode);
+  CourseGradesMinimalDisplay._(this._data, this._weights, this._groupingMode);
 
-  factory CourseGradesMinimalDisplay(
-      List<Map<String, dynamic>> data, GroupingMode groupingMode) {
+  factory CourseGradesMinimalDisplay(List<Map<String, dynamic>> data,
+      Map<String, String> weights, GroupingMode groupingMode) {
     if (groupingMode == GroupingMode.Category) {
       var copy = List.of(data);
       mergeSort(copy, compare: _gradeCmp);
-      return CourseGradesMinimalDisplay._(copy, groupingMode);
+      return CourseGradesMinimalDisplay._(copy, weights, groupingMode);
     } else {
-      return CourseGradesMinimalDisplay._(data, groupingMode);
+      return CourseGradesMinimalDisplay._(data, weights, groupingMode);
     }
   }
 
@@ -123,6 +124,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             if (oldCategory != category) {
               return _buildHeaderedItem(
                 text: _titlecase(category),
+                subText: _weights != null ? _weights[category] : null,
                 child: card,
               );
             }
@@ -139,20 +141,37 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
         });
   }
 
-  Widget _buildHeaderedItem({Widget child, String text}) {
+  Widget _buildHeaderedItem({Widget child, String text, String subText}) {
     return Column(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 11.0, top: 10.0),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              text,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                if (subText != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 11.0),
+                    child: Text(
+                      '${subText}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),

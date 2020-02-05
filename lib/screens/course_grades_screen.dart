@@ -19,7 +19,7 @@ class CourseGradesScreen extends StatefulWidget {
 }
 
 class _CourseGradesScreenState extends State<CourseGradesScreen> {
-  Future<List<Map<String, dynamic>>> _grades;
+  Future<FetchedCourseData> _data;
   bool _loaded = false;
   bool _hasCategories = false;
   DisplayStyle _displayStyle = DisplayStyle.Minimal;
@@ -29,27 +29,27 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_loaded) {
-      _fetchGrades();
+      _data = _fetchData();
     }
   }
 
-  void _fetchGrades([bool force = false]) {
+  Future<FetchedCourseData> _fetchData([bool force = false]) async {
     final Course course = ModalRoute.of(context).settings.arguments as Course;
 
-    _grades = course.getGrades(force).then((grades) {
-      setState(() {
-        _loaded = true;
-        if (grades.every((element) => element.containsKey("Category"))) {
-          _hasCategories = true;
-        }
-      });
-      return grades;
+    var grades = await course.getGrades(force);
+    setState(() {
+      _loaded = true;
+      if (grades.every((element) => element.containsKey("Category"))) {
+        _hasCategories = true;
+      }
     });
+
+    return FetchedCourseData(grades, await course.getCategoryWeights(force));
   }
 
-  Future<List<Map<String, dynamic>>> _refresh() async {
-    _fetchGrades(true);
-    return _grades;
+  Future<FetchedCourseData> _refresh() async {
+    _data = _fetchData(true);
+    return _data;
   }
 
   @override
@@ -102,11 +102,11 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
-          child: StackedFutureBuilder<List<Map<String, dynamic>>>(
-              future: _grades,
+          child: StackedFutureBuilder<FetchedCourseData>(
+              future: _data,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data.isEmpty) {
+                  if (snapshot.data.grades.isEmpty) {
                     return RefreshableIconMessage(
                       onRefresh: _refresh,
                       icon: Icon(
@@ -124,10 +124,12 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     );
                   }
                   if (_displayStyle == DisplayStyle.Full) {
-                    return CourseGradesFullDisplay(cleanupData(snapshot.data));
+                    return CourseGradesFullDisplay(
+                        cleanupData(snapshot.data.grades));
                   } else {
                     return CourseGradesMinimalDisplay(
-                      snapshot.data,
+                      snapshot.data.grades,
+                      snapshot.data.categoryWeights,
                       _hasCategories ? _groupingMode : GroupingMode.Date,
                     );
                   }
@@ -182,4 +184,11 @@ List<Map<String, dynamic>> cleanupData(List<Map<String, dynamic>> data) {
   }
 
   return out;
+}
+
+class FetchedCourseData {
+  final List<Map<String, dynamic>> grades;
+  final Map<String, String> categoryWeights;
+
+  FetchedCourseData(this.grades, this.categoryWeights);
 }
