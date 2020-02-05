@@ -250,8 +250,24 @@ class SISLoader {
             ? double.tryParse(rawProfile['cumulative_weighted_gpa'])
             : null,
         class_rank_numerator:
-            (classRankPieces != null && classRankPieces[0].trim().isNotEmpty) ? int.tryParse(classRankPieces[0]) : null,
+            (classRankPieces != null && classRankPieces[0].trim().isNotEmpty)
+                ? int.tryParse(classRankPieces[0])
+                : null,
         class_rank_denominator:
-            (classRankPieces != null && classRankPieces[1].trim().isNotEmpty) ? int.tryParse(classRankPieces[1]) : null);
+            (classRankPieces != null && classRankPieces[1].trim().isNotEmpty)
+                ? int.tryParse(classRankPieces[1])
+                : null);
+  }
+
+  Future<int> absences() async {
+    var absencesRequest = await _client.get(Uri.parse(
+        'https://sis.palmbeachschools.org/focus/Modules.php?force_package=SIS&modname=Attendance/StudentSummary.php'));
+
+    var absencesBody = await absencesRequest.bodyAsString();
+
+    var absent_periods = RegExp(r'<b>Absent:</b> (\d+) periods \(')
+        .firstMatch(absencesBody)
+        .group(1);
+    return int.tryParse(absent_periods);
   }
 }
