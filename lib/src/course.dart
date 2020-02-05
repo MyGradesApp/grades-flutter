@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 
@@ -47,7 +49,9 @@ class Course {
   final dynamic gradePercent;
   final String gradeLetter;
 
+  Future<String> _gradePageFuture;
   Future<List<Map<String, dynamic>>> _grades;
+  Future<Map<String, String>> _categoryWeights;
 
   Course(
       {this.client,
@@ -57,6 +61,17 @@ class Course {
       this.teacherName,
       this.gradePercent,
       this.gradeLetter});
+
+  Future<String> _gradePage({bool force = false}) async {
+    if (_gradePageFuture == null || force) {
+      _gradePageFuture = (await client.get(
+              Uri.parse('https://sis.palmbeachschools.org/focus/' + gradesUrl)))
+          .bodyAsString();
+      return _gradePageFuture;
+    } else {
+      return _gradePageFuture;
+    }
+  }
 
   Future<List<Map<String, dynamic>>> getGrades([force = false]) {
     if (debugMocking) {
@@ -74,9 +89,24 @@ class Course {
     }
   }
 
+  Future<Map<String, String>> getCategoryWeights([force = false]) {
+    if (debugMocking) {
+      return Future.delayed(
+        Duration(seconds: 2),
+        () => mock_data.CATEGORY_WEIGHTS[courseName],
+      );
+    }
+
+    if (_categoryWeights == null || force) {
+      _categoryWeights = _fetchCategoryWeights(force: force);
+      return _categoryWeights;
+    } else {
+      return _categoryWeights;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> _fetchRawGrades() async {
-    var gradePage = await client
-        .get(Uri.parse('https://sis.palmbeachschools.org/focus/' + gradesUrl));
+    var gradePage = await _gradePage(force: true);
 
     Map<String, dynamic> extractRowFields(
         String row, Map<String, String> headers) {
@@ -115,11 +145,9 @@ class Course {
       return fields;
     }
 
-    var b = await gradePage.bodyAsString();
-
     var headerMatches = RegExp(
             '<TD class="LO_header" data-assoc="(.*?)"><A HREF=\'.*?\'>(.*?)<')
-        .allMatches(b);
+        .allMatches(gradePage);
 
     // ignore: omit_local_variable_types
     Map<String, String> headers = {};
@@ -128,11 +156,54 @@ class Course {
       headers[match.group(1).toLowerCase()] = match.group(2);
     }
 
-    var gradesMatches = RegExp('<TR id="LOy_row.+?"(.*?)<\/TR>').allMatches(b);
+    var gradesMatches =
+        RegExp('<TR id="LOy_row.+?"(.*?)<\/TR>').allMatches(gradePage);
 
     return gradesMatches
         .map((m) => extractRowFields(m.group(1), headers))
         .toList();
+  }
+
+  Future<Map<String, String>> _fetchCategoryWeights(
+      {bool force = false}) async {
+    var gradePage = await _gradePage(force: force);
+
+    var weightsTableMatch = RegExp(
+            r'<TABLE width=100% border=0 cellpadding=0 cellspacing=0 class="DarkGradientBG'
+            r' BottomButton"><TR><TD class="DarkGradientBG BottomButton" align=left>'
+            r'<font color=#000000><B><TABLE border=0 cellpadding=4 cellspacing=0>(.*?)<\/TABLE><\/B>')
+        .firstMatch(gradePage);
+    if (weightsTableMatch == null) {
+      return null;
+    }
+    var weightsTable = weightsTableMatch.group(1);
+
+    var tableRowsMatches = RegExp(r'<TR>(.*?)<\/TR>').allMatches(weightsTable);
+
+    var tableRows = tableRowsMatches
+        .map((m) => RegExp(
+                r'<(?:TD|TH)(?: .*?)?>(?:<[bB]>)?(.*?)(?:<\/[bB]>)?<\/(?:TD|TH)>')
+            .allMatches(m.group(1))
+            .map((m) => m.group(1).replaceAll('&nbsp;', ''))
+            .toList())
+        .toList();
+
+    // Ensure the data matches the known format
+    if (!(tableRows.length > 2 &&
+        tableRows[0][0] == '' &&
+        tableRows[1][0] == 'Percent of Grade')) {
+      return null;
+    }
+
+    // ignore: omit_local_variable_types
+    Map<String, String> out = {};
+    for (var i = 1; i < min(tableRows[0].length, tableRows[1].length); i++) {
+      if (tableRows[0][i].trim().isEmpty && tableRows[1][i].trim().isEmpty) {
+        continue;
+      }
+      out[tableRows[0][i]] = tableRows[1][i];
+    }
+    return out;
   }
 
   @override

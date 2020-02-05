@@ -143,3 +143,11 @@ final Map<String, List<Map<String, dynamic>>> GRADES = {
   'US Gov': [],
   'English Lang Honors': [],
 };
+
+final Map<String, Map<String, String>> CATEGORY_WEIGHTS = {
+  'US History': {'Quizzes': '25%', 'Homework/Classwork': '10%'},
+  'AP Bio': {'Daily Work': '5%'},
+  'Astronomy Honors': {},
+  'US Gov': {},
+  'English Lang Honors': {},
+};
