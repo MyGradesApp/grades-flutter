@@ -46,7 +46,10 @@ class SISLoader {
     }
     var response = await _client
         .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
-    if (response.statusCode == 200 && response.redirects.isEmpty) {
+    if (response.statusCode == 200 &&
+        (response.redirects.isEmpty ||
+            response.redirects.first.location.toString() ==
+                'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php')) {
       _loggedIn = true;
       return;
     }
