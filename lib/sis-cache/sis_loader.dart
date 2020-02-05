@@ -9,6 +9,7 @@ class CachedSISLoader {
   // Cache
   Future<List<Course>> _courses;
   Future<Profile> _userProfile;
+  Future<Absences> _absences;
 
   // Wrapping
 
@@ -34,5 +35,13 @@ class CachedSISLoader {
     }
     _userProfile = _loader.getUserProfile();
     return _userProfile;
+  }
+
+  Future<Absences> getAbsences({bool force = false}) async {
+    if (_absences != null && !force) {
+      return _absences;
+    }
+    _absences = _loader.getAbsences();
+    return _absences;
   }
 }
