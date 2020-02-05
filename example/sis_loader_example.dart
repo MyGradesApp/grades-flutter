@@ -14,6 +14,7 @@ Future<void> main() async {
   await loader.login(username, password);
 
   print((await loader.getUserProfile()).cumulative_gpa);
+  print(await loader.getAbsences());
 
   var courses = await loader.getCourses();
 

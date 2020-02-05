@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:sis_loader/sis_loader.dart';
+import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/exceptions.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 import 'package:sis_loader/src/profile.dart';
@@ -259,15 +260,29 @@ class SISLoader {
                 : null);
   }
 
-  Future<int> absences() async {
+  Future<Absences> getAbsences() async {
+    if (debugMocking) {
+      return Future.delayed(Duration(seconds: 2), () => mock_data.ABSENCES);
+    }
+
     var absencesRequest = await _client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?force_package=SIS&modname=Attendance/StudentSummary.php'));
 
     var absencesBody = await absencesRequest.bodyAsString();
 
-    var absent_periods = RegExp(r'<b>Absent:</b> (\d+) periods \(')
-        .firstMatch(absencesBody)
-        .group(1);
-    return int.tryParse(absent_periods);
+    var absencesMatch =
+        RegExp(r'<b>Absent:</b> (\d+) periods \(during (\d+) days\)')
+            .firstMatch(absencesBody);
+    if (absencesMatch == null) {
+      return null;
+    }
+
+    var absentPeriods = absencesMatch.group(1);
+    var absentDays = absencesMatch.group(2);
+
+    return Absences(
+      periods: int.tryParse(absentPeriods),
+      days: int.tryParse(absentDays),
+    );
   }
 }
