@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grades/persistence/grade_persistence.dart';
+import 'package:grades/models/grade_persistence.dart';
 import 'package:grades/widgets/colored_grade_dot.dart';
 import 'package:grades/widgets/new_grade_course_indicator.dart';
 
