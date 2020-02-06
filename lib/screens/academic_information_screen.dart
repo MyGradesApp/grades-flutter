@@ -22,12 +22,12 @@ class AcademicInfoScreen extends StatefulWidget {
 }
 
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
-  Future<_Info> _refresh() async {
+  Future<_Info> _refresh([bool force = true]) async {
     var sisLoader =
         Provider.of<CurrentSession>(context, listen: false).sisLoader;
 
-    var profile = await sisLoader.getUserProfile(force: true);
-    var absences = await sisLoader.getAbsences(force: true);
+    var profile = await sisLoader.getUserProfile(force: force);
+    var absences = await sisLoader.getAbsences(force: force);
 
     return _Info(profile, absences);
   }
@@ -51,7 +51,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         centerTitle: true,
       ),
       body: StackedFutureBuilder<_Info>(
-          future: _refresh(),
+          future: _refresh(false),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var profile = snapshot.data.profile;
