@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.16.1
   # Dart team package
   collection: ^1.14.11
+  pedantic: ^1.8.0
 
   # Fonts and Icons
   font_awesome_flutter:

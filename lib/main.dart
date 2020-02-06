@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/theme_controller.dart';
+import 'package:grades/persistence/grade_persistence.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
       providers: [
         ChangeNotifierProvider(create: (_) => CurrentSession()),
         ChangeNotifierProvider(create: (_) => ThemeController(prefs)),
+        ChangeNotifierProvider(create: (_) => GradePersistence(prefs)),
       ],
       child: Consumer<ThemeController>(
         builder: (BuildContext context, ThemeController theme, Widget child) {

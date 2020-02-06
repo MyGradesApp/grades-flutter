@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/persistence/grade_persistence.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -18,6 +21,33 @@ class CourseListScreen extends StatefulWidget {
 }
 
 class _CourseListScreenState extends State<CourseListScreen> {
+  Map<String, String> _currentGrades = {};
+  Future<List<Course>> _courses;
+
+  Future<List<Course>> _init() {
+    if (_courses == null) {
+      _courses = _setup();
+    }
+    return _courses;
+  }
+
+  Future<List<Course>> _setup() async {
+    var courses = await Provider.of<CurrentSession>(context, listen: false)
+        .sisLoader
+        .getCourses();
+
+    unawaited(
+      Future.wait(courses.map((course) async {
+        var grades = await course.getGrades();
+        setState(() {
+          _currentGrades[course.courseName] =
+              jsonEncode(grades, toEncodable: (v) => v.toString());
+        });
+      })),
+    );
+    return courses;
+  }
+
   Future<List<Course>> _callback() async {
     return Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
@@ -26,6 +56,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final gradePersistence = Provider.of<GradePersistence>(context);
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -52,26 +84,31 @@ class _CourseListScreenState extends State<CourseListScreen> {
           ],
         ),
         body: StackedFutureBuilder<List<Course>>(
-          future: Provider.of<CurrentSession>(context).sisLoader.getCourses(),
+          future: _init(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return RefreshIndicator(
                 onRefresh: _callback,
                 child: ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var course = snapshot.data[index];
-                      return ClassListItemWidget(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/course_grades',
-                                arguments: course);
-                          },
-                          // course: course.courseName.titleCase,
-                          course: course.courseName,
-                          letterGrade: course.gradeLetter,
-                          teacher: course.teacherName,
-                          percent: course.gradePercent);
-                    }),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var course = snapshot.data[index];
+                    return ClassListItemWidget(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/course_grades',
+                            arguments: course);
+                      },
+                      course: course.courseName,
+                      letterGrade: course.gradeLetter,
+                      teacher: course.teacherName,
+                      percent: course.gradePercent,
+                      status: _currentGrades.containsKey(course.courseName)
+                          ? gradePersistence.getDiff(course.courseName,
+                              _currentGrades[course.courseName])
+                          : null,
+                    );
+                  },
+                ),
               );
             } else if (snapshot.hasError) {
               if (snapshot.error is SocketException ||

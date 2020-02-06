@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:grades/persistence/grade_persistence.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/course_grades_full_display.dart';
@@ -9,6 +10,7 @@ import 'package:grades/widgets/course_grades_minimal_display.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
+import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 enum DisplayStyle { Full, Minimal }
@@ -42,6 +44,8 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
       if (grades.every((element) => element.containsKey("Category"))) {
         _hasCategories = true;
       }
+      Provider.of<GradePersistence>(context, listen: false)
+          .insert(course.courseName, grades);
     });
 
     return FetchedCourseData(grades, await course.getCategoryWeights(force));
