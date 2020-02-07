@@ -121,6 +121,7 @@ class SISLoader {
             'https://connected.palmbeachschools.org/simplesaml/module.php/saml/sp/saml2-acs.php/enboardsso-sp'),
         {'SAMLResponse': samlResponse});
 
+    // _reauth
     var samlResponse2 =
         RegExp(r'<input type="hidden" name="SAMLResponse" value="(.*?)"')
             .firstMatch(await enboardRequest.bodyAsString())
@@ -137,6 +138,22 @@ class SISLoader {
     _loggedIn = true;
   }
 
+  Future<void> _reauth(String data) async {
+    var samlResponse2 =
+        RegExp(r'<input type="hidden" name="SAMLResponse" value="(.*?)"')
+            .firstMatch(data)
+            .group(1);
+
+    await _client.post(
+        Uri.parse(
+            'https://sis.palmbeachschools.org/focus/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'),
+        {
+          'SAMLResponse': samlResponse2,
+          'RelayState': 'https://sis.palmbeachschools.org/focus/'
+        });
+    return;
+  }
+
   Future<List<Course>> getCourses() async {
     assert(_loggedIn);
 
@@ -146,12 +163,17 @@ class SISLoader {
 
     var portalResponse = await _client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
+    var portalResponseBody = await portalResponse.bodyAsString();
+    // TODO: Add checks to fix session expiration issues everywhere
+    if (RegExp(r'<input type="hidden" name="SAMLResponse" value="(.*?)"')
+        .hasMatch(portalResponseBody)) {
+      await _reauth(portalResponseBody);
+    }
     var coursesTableMatch = RegExp(
             r'''<\/tr><td style='display:none'>Z<\/td><TD valign=middle><img src="modules\/Grades\/Grades\.png" border=0><\/td><td>([\s\S]*?)<\/table>''')
-        .firstMatch(await portalResponse.bodyAsString());
+        .firstMatch(portalResponseBody);
     if (coursesTableMatch == null) {
-      throw UnknownStructureException(
-          'Unexpected response structure', portalResponse.statusCode);
+      throw UnknownReauthenticationException();
     }
     var coursesTable = coursesTableMatch.group(1);
 

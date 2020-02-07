@@ -42,3 +42,10 @@ class UnknownMissingCookieException implements Exception {
     return 'UnknownMissingCookieException: ${message}';
   }
 }
+
+class UnknownReauthenticationException implements Exception {
+  @override
+  String toString() {
+    return 'UnknownReauthenticationException: Failed to reauthenticate after being logged out';
+  }
+}
