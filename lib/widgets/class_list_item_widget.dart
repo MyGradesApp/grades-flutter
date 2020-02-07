@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grades/models/grade_persistence.dart';
 import 'package:grades/widgets/colored_grade_dot.dart';
-import 'package:grades/widgets/new_grade_course_indicator.dart';
 
 class ClassListItemWidget extends StatelessWidget {
   ClassListItemWidget(
@@ -9,7 +7,6 @@ class ClassListItemWidget extends StatelessWidget {
       @required this.teacher,
       @required this.letterGrade,
       @required this.percent,
-      this.status,
       this.onTap})
       : assert(percent is int || percent is String),
         assert(course != null),
@@ -21,12 +18,11 @@ class ClassListItemWidget extends StatelessWidget {
   final String letterGrade;
   // String | int
   final dynamic percent;
-  final GradeStatus status;
   final void Function() onTap;
 
   Widget _buildColumn(String topText, String bottomText,
       CrossAxisAlignment alignment, Color textColor,
-      {bool chevron = false, String grade, GradeStatus status}) {
+      {bool chevron = false, String grade}) {
     return Column(crossAxisAlignment: alignment, children: <Widget>[
       Row(
         children: <Widget>[
@@ -35,11 +31,6 @@ class ClassListItemWidget extends StatelessWidget {
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 19, color: textColor),
           ),
-          if (status != null && status == GradeStatus.New)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: NewGradeCourseIndicator(),
-            ),
         ],
       ),
       Padding(
@@ -95,11 +86,11 @@ class ClassListItemWidget extends StatelessWidget {
           child: Row(children: <Widget>[
             Expanded(
               child: _buildColumn(
-                  this.course,
-                  this.teacher.replaceAll('  ', ' '),
-                  CrossAxisAlignment.start,
-                  Theme.of(context).primaryColorLight,
-                  status: status),
+                this.course,
+                this.teacher.replaceAll('  ', ' '),
+                CrossAxisAlignment.start,
+                Theme.of(context).primaryColorLight,
+              ),
             ),
             _buildColumn(fmt_percent, this.letterGrade ?? "",
                 CrossAxisAlignment.end, Theme.of(context).primaryColorLight,
