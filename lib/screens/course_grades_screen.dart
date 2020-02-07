@@ -114,6 +114,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   snapshot.data.grades,
                   snapshot.data.categoryWeights,
                   _hasCategories ? _groupingMode : GroupingMode.Date,
+                  course.courseName,
                 );
               } else if (snapshot.hasError) {
                 if (snapshot.error is SocketException ||
