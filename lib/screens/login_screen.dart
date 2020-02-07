@@ -6,9 +6,9 @@ import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/auth.dart';
 import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
+import 'package:grades/utilities/wrapped_secure_storage.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,9 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _loadSavedCreds() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var email = prefs.getString('sis_email');
-    var password = prefs.getString('sis_password');
+    WrappedSecureStorage secure = const WrappedSecureStorage();
+    var email = await secure.read(key: 'sis_email');
+    var password = await secure.read(key: 'sis_password');
     _emailController.value = _emailController.value.copyWith(text: email);
     _passwordController.value =
         _passwordController.value.copyWith(text: password);
@@ -58,10 +58,10 @@ class _LoginScreenState extends State<LoginScreen> {
         _loggingIn = false;
       });
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('sis_email', email);
-      await prefs.setString('sis_password', password);
-      await prefs.setString('sis_session', loader.sessionCookies);
+      WrappedSecureStorage secure = const WrappedSecureStorage();
+      await secure.write(key: 'sis_email', value: email);
+      await secure.write(key: 'sis_password', value: password);
+      await secure.write(key: 'sis_session', value: loader.sessionCookies);
 
       Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
       Navigator.pop(context);
