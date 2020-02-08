@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/utilities/auth.dart';
 import 'package:grades/utilities/sentry.dart';
+import 'package:grades/utilities/wrapped_secure_storage.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,9 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
       await Navigator.pushNamed(context, '/terms');
     }
 
-    var email = prefs.getString('sis_email');
-    var password = prefs.getString('sis_password');
-    var session = prefs.getString('sis_session');
+    var secure = const WrappedSecureStorage();
+    var email = await secure.read(key: 'sis_email');
+    var password = await secure.read(key: 'sis_password');
+    var session = await secure.read(key: 'sis_session');
 
     // First time login flow
     if (email == null ||
@@ -117,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // We return true from courses if the logout button is pressed,
     // so we need to show the login screen and clear the session values
     if (logoff is bool && logoff) {
-      await prefs.remove('sis_session');
+      await const WrappedSecureStorage().delete(key: 'sis_session');
       _loadStoredAuth(force: true);
     }
   }

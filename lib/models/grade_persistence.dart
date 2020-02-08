@@ -10,12 +10,16 @@ enum GradeStatus {
 }
 
 class GradePersistence extends ChangeNotifier {
+  Map<String, String> _originalData = {};
   Map<String, String> _data = {};
   SharedPreferences _prefs;
 
+  Map<String, String> get originalData => _originalData;
+
   GradePersistence(SharedPreferences prefs) {
     _prefs = prefs;
-    _data = _load();
+    _originalData = _load();
+    _data = Map.from(_originalData);
     notifyListeners();
   }
 
@@ -25,7 +29,7 @@ class GradePersistence extends ChangeNotifier {
     notifyListeners();
   }
 
-  GradeStatus getDiff(String key, dynamic data) {
+  GradeStatus getChanged(String key, dynamic data) {
     var d;
     if (data is String) {
       d = data;
@@ -36,6 +40,18 @@ class GradePersistence extends ChangeNotifier {
       return GradeStatus.New;
     }
     return GradeStatus.NoChange;
+  }
+
+  List<Map<String, String>> getData(String key) {
+    return (List<dynamic>.from(jsonDecode(_data[key] ?? '[]')))
+        .map((v) => Map<String, String>.from(v))
+        .toList();
+  }
+
+  List<Map<String, String>> getOriginalData(String key) {
+    return (List<dynamic>.from(jsonDecode(_originalData[key] ?? '[]')))
+        .map((v) => Map<String, String>.from(v))
+        .toList();
   }
 
   void _save() {

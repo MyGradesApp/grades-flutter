@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
-import 'package:grades/models/grade_persistence.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
@@ -56,8 +55,6 @@ class _CourseListScreenState extends State<CourseListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final gradePersistence = Provider.of<GradePersistence>(context);
-
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -102,10 +99,6 @@ class _CourseListScreenState extends State<CourseListScreen> {
                       letterGrade: course.gradeLetter,
                       teacher: course.teacherName,
                       percent: course.gradePercent,
-                      status: _currentGrades.containsKey(course.courseName)
-                          ? gradePersistence.getDiff(course.courseName,
-                              _currentGrades[course.courseName])
-                          : null,
                     );
                   },
                 ),

@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:grades/models/grade_persistence.dart';
 import 'package:grades/utilities/date.dart';
 import 'package:grades/utilities/grades.dart';
 import 'package:grades/widgets/colored_grade_dot.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 enum GroupingMode { Date, Category }
 
@@ -11,22 +13,30 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
   final List<Map<String, dynamic>> _data;
   final Map<String, String> _weights;
   final GroupingMode _groupingMode;
+  final String _courseName;
 
-  CourseGradesMinimalDisplay._(this._data, this._weights, this._groupingMode);
+  CourseGradesMinimalDisplay._(
+      this._data, this._weights, this._groupingMode, this._courseName);
 
-  factory CourseGradesMinimalDisplay(List<Map<String, dynamic>> data,
-      Map<String, String> weights, GroupingMode groupingMode) {
+  factory CourseGradesMinimalDisplay(
+    List<Map<String, dynamic>> data,
+    Map<String, String> weights,
+    GroupingMode groupingMode,
+    String courseName,
+  ) {
     if (groupingMode == GroupingMode.Category) {
       var copy = List.of(data);
       mergeSort(copy, compare: _gradeCmp);
-      return CourseGradesMinimalDisplay._(copy, weights, groupingMode);
+      return CourseGradesMinimalDisplay._(
+          copy, weights, groupingMode, courseName);
     } else {
-      return CourseGradesMinimalDisplay._(data, weights, groupingMode);
+      return CourseGradesMinimalDisplay._(
+          data, weights, groupingMode, courseName);
     }
   }
 
   Widget _buildCard(BuildContext context, Map<String, dynamic> grade,
-      Color textColor, Color cardColor) {
+      Color textColor, Color cardColor, bool showIndicator) {
     var gradeString = grade["Grade"].toString();
     var percentIndex = gradeString.indexOf('%');
     String gradeLetter;
@@ -63,9 +73,23 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: Text(
-                  grade["Assignment"] as String,
-                  style: TextStyle(color: textColor),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      grade["Assignment"] as String,
+                      style: TextStyle(color: textColor),
+                    ),
+                    const SizedBox(width: 6),
+                    if (showIndicator)
+                      Container(
+                        height: 6,
+                        width: 6,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.indigoAccent,
+                        ),
+                      ),
+                  ],
                 ),
               ),
               if (grade != null && gradeLetter != null)
@@ -101,15 +125,22 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var oldGrades = Provider.of<GradePersistence>(context, listen: false)
+        .getOriginalData(_courseName);
+
     return ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _data.length,
         itemBuilder: (context, i) {
+          var isNewGrade = !oldGrades.any(
+              (element) => element["Assignment"] == _data[i]["Assignment"]);
+
           var card = _buildCard(
             context,
             _data[i],
             Theme.of(context).primaryColorLight,
             Theme.of(context).cardColor,
+            isNewGrade,
           );
 
           var category = _data[i]["Category"];

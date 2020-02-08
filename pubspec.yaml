@@ -35,6 +35,11 @@ dependencies:
   # Flutter team package
   shared_preferences: ^0.5.6+1
 
+  flutter_secure_storage:
+    git:
+      url: https://github.com/Noskcaj19/flutter_secure_storage
+      ref: "73823e0"
+
   # General small unities
   # Dart team package
   intl: ^0.16.1
