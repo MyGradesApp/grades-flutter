@@ -21,38 +21,37 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  Map<String, String> _currentGrades = {};
-  Future<List<Course>> _courses;
+  Map<String, String> _newgrades = {};
 
-  Future<List<Course>> _init() {
-    if (_courses == null) {
-      _courses = _setup();
-    }
-    return _courses;
-  }
+  // Future<List<Course>> _init() {
+  //   if (_newgrades == null) {
+  //     _newgrades = _setup();
+  //   }
+  //   return _newgrades;
+  // }
 
-  Future<List<Course>> _setup() async {
-    var courses = await Provider.of<CurrentSession>(context, listen: false)
-        .sisLoader
-        .getCourses();
+  // Future<List<Course>> _setup() async {
+  //   var courses = await Provider.of<CurrentSession>(context, listen: false)
+  //       .sisLoader
+  //       .getCourses();
 
-    unawaited(
-      Future.wait(courses.map((course) async {
-        var grades = await course.getGrades();
-        setState(() {
-          _currentGrades[course.courseName] =
-              jsonEncode(grades, toEncodable: (v) => v.toString());
-        });
-      })),
-    );
-    return courses;
-  }
+  //   unawaited(
+  //     Future.wait(courses.map((course) async {
+  //       var grades = await course.getGrades();
+  //       setState(() {
+  //         _currentGrades[course.courseName] =
+  //             jsonEncode(grades, toEncodable: (v) => v.toString());
+  //       });
+  //     })),
+  //   );
+  //   return courses;
+  // }
 
-  Future<List<Course>> _callback() async {
-    return Provider.of<CurrentSession>(context, listen: false)
-        .sisLoader
-        .getCourses(force: true);
-  }
+  // Future<List<Course>> _callback() async {
+  //   return Provider.of<CurrentSession>(context, listen: false)
+  //       .sisLoader
+  //       .getCourses(force: true);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,57 +64,38 @@ class _FeedScreenState extends State<FeedScreen> {
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-          elevation: 0.0,
-          centerTitle: true,
-          title: const Text('Recent'),
-          // leading: IconButton(
-          //   tooltip: "Profile",
-          //   icon: Icon(
-          //     Icons.person,
-          //   ),
-          //   onPressed: () => Navigator.pushNamed(context, '/academic_info'),
-          // ),
-          // actions: <Widget>[
-          //   IconButton(
-          //     tooltip: "Settings",
-          //     icon: Icon(Icons.settings),
-          //     onPressed: () => Navigator.pushNamed(context, '/settings'),
-          //   )
-          // ],
-        ),
+            elevation: 0.0,
+            centerTitle: true,
+            title: const Text('Recent'),
+            leading: IconButton(
+              tooltip: "Profile",
+              icon: Icon(
+                Icons.person,
+              ),
+              onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+            )),
         body: StackedFutureBuilder<List<Course>>(
-          future: _init(),
+          // future: _init(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-            } else if (snapshot.hasError) {
-              if (snapshot.error is SocketException ||
-                  snapshot.error is HttpException ||
-                  snapshot.error is HandshakeException ||
-                  snapshot.error is OSError) {
-                return RefreshableErrorMessage(
-                  onRefresh: _callback,
-                  text: "Issue connecting to SIS",
-                );
-              }
-
-              reportException(
-                exception: snapshot.error,
-                stackTrace: snapshot.stackTrace,
-              );
-
-              // TODO: Find the root cause of this
-              if (snapshot.error is NoSuchMethodError ||
-                  snapshot.error is UnknownStructureException) {
-                return RefreshableErrorMessage(
-                  onRefresh: _callback,
-                  text: "There was an unknown error.\nYou may need to log out.",
-                );
-              }
-
-              return RefreshableErrorMessage(
-                onRefresh: _callback,
-                text:
-                    "An error occured loading courses:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
+              return RefreshIndicator(
+                // onRefresh: _callback,
+                child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var course = snapshot.data[index];
+                    return ClassListItemWidget(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/course_grades',
+                            arguments: course);
+                      },
+                      course: course.courseName,
+                      letterGrade: course.gradeLetter,
+                      teacher: course.teacherName,
+                      percent: course.gradePercent,
+                    );
+                  },
+                ),
               );
             }
             return Center(
