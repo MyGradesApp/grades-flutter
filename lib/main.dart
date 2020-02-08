@@ -8,7 +8,9 @@ import 'package:grades/models/grade_persistence.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
+import 'package:grades/screens/feed_screen.dart';
 import 'package:grades/screens/grade_item_detail_screen.dart';
+import 'package:grades/screens/home_screen.dart';
 import 'package:grades/screens/login_screen.dart';
 import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
@@ -91,6 +93,8 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
                     key: Provider.of<CurrentSession>(context).navKey);
               },
               '/course_grades': (BuildContext context) => CourseGradesScreen(),
+              '/feed': (BuildContext context) => FeedScreen(),
+              '/home': (BuildContext context) => HomeScreen(),
               '/grades_detail': (BuildContext context) =>
                   GradeItemDetailScreen(),
               '/academic_info': (BuildContext context) => AcademicInfoScreen(),

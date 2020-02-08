@@ -12,7 +12,6 @@ class CachedSISLoader {
   Future<Absences> _absences;
 
   // Wrapping
-
   String get sessionCookies => _loader.sessionCookies;
 
   set sessionCookies(String cookies) => _loader.sessionCookies = cookies;
