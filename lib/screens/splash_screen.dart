@@ -113,6 +113,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future _showCourses(SharedPreferences prefs) async {
     // send to page controller instead of just courses
+    //  removes back button
+    // var logoff = await Navigator.pushReplacementNamed(context, '/home');
+
     var logoff = await Navigator.pushNamed(context, '/home');
 
     // var logoff = await Navigator.pushNamed(context, '/courses');

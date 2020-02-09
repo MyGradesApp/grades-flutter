@@ -33,14 +33,8 @@ class _FeedScreenState extends State<FeedScreen> {
       appBar: AppBar(
           elevation: 0.0,
           centerTitle: true,
-          title: const Text('Recent'),
-          leading: IconButton(
-            tooltip: "Profile",
-            icon: Icon(
-              Icons.person,
-            ),
-            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
-          )),
+          automaticallyImplyLeading: false,
+          title: const Text('RECENT')),
       body: StackedFutureBuilder<List<Course>>(builder: (context, snapshot) {
         return SizedBox.expand();
       }),

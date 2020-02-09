@@ -6,9 +6,9 @@ This app exists because it fills a need - there is currently no "grades" app in 
 
 [SwiftGrade Website](https://getswiftgrade.com/)
 
- 
-### Sample dummy user authentication 
-````
+### Sample dummy user authentication
+
+```
 Username: s2558161d
 Password: figure51
-''''
+```
