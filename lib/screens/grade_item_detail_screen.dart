@@ -11,7 +11,7 @@ class GradeItemDetailScreen extends StatelessWidget {
     double pointsUpper, pointsLower;
     if (grade.containsKey('Points')) {
       var matches =
-          RegExp(r"(\d+) / (\d+)")?.firstMatch(grade['Points'] as String);
+          RegExp(r"([\d.]+) / ([\d.]+)")?.firstMatch(grade['Points'] as String);
 
       // TODO: Rework null propigation
       pointsUpper = double.tryParse(matches?.group(1) ?? "0");
