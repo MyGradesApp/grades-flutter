@@ -16,7 +16,7 @@ class DotsIndicator extends AnimatedWidget {
   final PageController controller;
   final int itemCount;
   final ValueChanged<int> onPageSelected;
-  final Color color = Colors.grey[300];
+  final Color color = const Color.fromRGBO(158, 158, 158, 0.5);
   static const double _kDotSize = 8.0;
   static const double _kMaxZoom = 2.0;
   static const double _kDotSpacing = 25.0;
