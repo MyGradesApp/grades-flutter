@@ -1,6 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
+import 'package:grades/widgets/course_grades_display.dart';
+import 'package:grades/widgets/loader_widget.dart';
+import 'package:grades/widgets/refreshable_error_message.dart';
+import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -12,125 +21,142 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  Map<String, String> _newgrades = {};
+  Future<Map<String, List<Map<String, dynamic>>>> _refresh(
+      {bool force = false}) async {
+    var courses = await Provider.of<CurrentSession>(context, listen: false)
+        .sisLoader
+        .getCourses(force: force);
+
+    Map<String, List<Map<String, dynamic>>> out = {};
+    await Future.wait(courses.map((course) async {
+      var grades = await course.getGrades(force);
+      out[course.courseName] = grades;
+    }));
+
+    return out;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final gradePersistence = Provider.of<GradePersistence>(context);
-    return StackedFutureBuilder<List<Course>>(builder: (context, snapshot) {
-      return SizedBox.expand();
-    });
+    return StackedFutureBuilder<Map<String, List<Map<String, dynamic>>>>(
+        future: _refresh(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final courses = snapshot.data;
 
-    //   return WillPopScope(
-    //     onWillPop: () async {
-    //       return false;
-    //     },
-    //     child: Scaffold(
-    //       backgroundColor: Theme.of(context).primaryColor,
-    //       appBar: AppBar(
-    //           elevation: 0.0,
-    //           centerTitle: true,
-    //           title: const Text('Recent'),
-    //           leading: IconButton(
-    //             tooltip: "Profile",
-    //             icon: Icon(
-    //               Icons.person,
-    //             ),
-    //             onPressed: () => Navigator.pushNamed(context, '/academic_info'),
-    //           )),
-    //       body: StackedFutureBuilder<List<Course>>(
-    //           builder: (context, snapshot) {
-    //         return SizedBox.expand(
-    //           child: SingleChildScrollView(
-    //             physics: const AlwaysScrollableScrollPhysics(),
-    //             child: Column(
-    //               children: [
-    //                 _buildCard("Unit 4 Test", Colors.white, Theme.of(context).accentColor),
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       }),
-    //     ),
-    //   );
-    // }
+            Map<String, List<Map<String, dynamic>>> out = {};
+            courses.forEach((courseName, grades) {
+              var oldGrades =
+                  Provider.of<GradePersistence>(context, listen: false)
+                      .getOriginalData(courseName);
 
-    // Widget _buildCard(BuildContext context, Map<String, dynamic> grade,
-    //     Color textColor, Color cardColor) {
-    //   var gradeString = grade["Grade"].toString();
-    //   var percentIndex = gradeString.indexOf('%');
-    //   String gradeLetter;
-    //   if (percentIndex != -1) {
-    //     var extractedGradePercent =
-    //         double.tryParse(gradeString.substring(0, percentIndex));
+              grades.forEach((grade) {
+                var isNewGrade = !oldGrades.any((oldGrade) =>
+                    oldGrade["Assignment"] == grade["Assignment"]);
+                if (isNewGrade) {
+                  if (out[courseName] == null) {
+                    out[courseName] = [];
+                  }
+                  out[courseName].add(grade);
+                }
+              });
+            });
 
-    //     if (extractedGradePercent != null) {
-    //       gradeLetter = letterGradeForPercent(extractedGradePercent);
-    //     }
-    //   }
-    //   double gradeSize;
-    //   if (grade != null && gradeLetter != null) {
-    //     gradeSize = 50;
-    //   } else {
-    //     gradeSize = 100;
-    //   }
+            if (out.isEmpty) {
+              return RefreshableIconMessage(
+                onRefresh: () => _refresh(force: true),
+                icon: Icon(
+                  FontAwesomeIcons.inbox,
+                  size: 55,
+                  color: Colors.white,
+                ),
+                child: const Text(
+                  "There are no new grades",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17.0,
+                  ),
+                ),
+              );
+            }
 
-    //   return  Card(
-    //     color: cardColor,
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.circular(10.0),
-    //     ),
-    //     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    //     child: InkWell(
-    //       customBorder: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(10.0),
-    //       ),
-    //       onTap: () {
-    //         Navigator.pushNamed(context, '/grades_detail', arguments: grade);
-    //       },
-    //       child: Padding(
-    //         padding: const EdgeInsets.all(17.0),
-    //         child: Row(
-    //           children: <Widget>[
-    //             Expanded(
-    //               child: Row(
-    //                 children: <Widget>[
-    //                   Text(
-    //                     grade["Assignment"] as String,
-    //                     style: TextStyle(color: textColor),
-    //                   ),
-    //                   const SizedBox(width: 6),
-    //                 ],
-    //               ),
-    //             ),
-    //             if (grade != null && gradeLetter != null)
-    //               ColoredGradeDot.grade(gradeLetter),
-    //             const SizedBox(width: 4),
-    //             if (gradeLetter != null)
-    //               Text(
-    //                 gradeLetter,
-    //                 style:
-    //                     TextStyle(color: textColor, fontWeight: FontWeight.bold),
-    //               ),
-    //             Container(
-    //               width: gradeSize,
-    //               alignment: Alignment.centerRight,
-    //               child: Text(
-    //                 gradeString,
-    //                 textAlign: TextAlign.end,
-    //                 style:
-    //                     TextStyle(color: textColor, fontWeight: FontWeight.bold),
-    //               ),
-    //             ),
-    //             const Icon(
-    //               Icons.chevron_right,
-    //               color: Colors.black26,
-    //               size: 18.0,
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   );
+            out.forEach((key, value) {
+              print(key);
+              value.forEach((e) => print('- ${e["Assignment"]}'));
+            });
+
+            List<Widget> listChildren = [];
+            out.forEach((courseName, grades) {
+              // Header
+              listChildren.add(
+                Padding(
+                  padding: const EdgeInsets.only(left: 11.0),
+                  child: Text(
+                    courseName,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
+
+              // Only show 4 most recent
+              const maxItems = 3;
+              int endIndex = min(maxItems, grades.length);
+              List<Map<String, dynamic>> clipped;
+              if (grades.length > maxItems) {
+                clipped = grades.sublist(endIndex);
+              }
+
+              listChildren.addAll(
+                grades.sublist(0, endIndex).map((grade) => buildGradeItemCard(
+                    context,
+                    grade,
+                    Theme.of(context).primaryColorLight,
+                    Theme.of(context).cardColor,
+                    false)),
+              );
+              if (clipped != null) {
+                listChildren.add(
+                  Padding(
+                    padding: const EdgeInsets.only(right: 11.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(child: Container()),
+                        Text(
+                          "and ${clipped.length} more",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              // Trailing padding for the next header
+              listChildren.add(const SizedBox(height: 3));
+            });
+
+            return ListView(children: listChildren);
+          }
+          if (snapshot.hasError) {
+            // This path is untested
+            reportException(
+              exception: snapshot.error,
+              stackTrace: snapshot.stackTrace,
+            );
+
+            return RefreshableErrorMessage(
+              onRefresh: () => _refresh(force: true),
+              text: "An error occured fetching new grades",
+            );
+          }
+          return LoaderWidget();
+        });
   }
 }

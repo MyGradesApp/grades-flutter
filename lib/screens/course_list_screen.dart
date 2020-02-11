@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ class CourseListScreen extends StatefulWidget {
 }
 
 class _CourseListScreenState extends State<CourseListScreen> {
-  Map<String, String> _currentGrades = {};
   Future<List<Course>> _courses;
 
   Future<List<Course>> _init() {
@@ -35,13 +33,11 @@ class _CourseListScreenState extends State<CourseListScreen> {
         .sisLoader
         .getCourses();
 
+    // TODO: Is this useful?
+    // Preload course grades
     unawaited(
       Future.wait(courses.map((course) async {
-        var grades = await course.getGrades();
-        setState(() {
-          _currentGrades[course.courseName] =
-              jsonEncode(grades, toEncodable: (v) => v.toString());
-        });
+        unawaited(course.getGrades());
       })),
     );
     return courses;
