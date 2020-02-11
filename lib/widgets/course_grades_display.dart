@@ -1,13 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/date.dart';
 import 'package:grades/utilities/grades.dart';
 import 'package:grades/widgets/colored_grade_dot.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-enum GroupingMode { Date, Category }
 
 class CourseGradesMinimalDisplay extends StatelessWidget {
   final List<Map<String, dynamic>> _data;

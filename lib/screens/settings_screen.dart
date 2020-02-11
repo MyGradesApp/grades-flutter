@@ -12,6 +12,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    var themeController = Provider.of<ThemeController>(context, listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -54,14 +55,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ]),
                       onPressed: () {
-                        var themeController = Provider.of<ThemeController>(
-                            context,
-                            listen: false);
                         if (themeController.currentTheme == 'light') {
                           themeController.setTheme('dark');
                         } else {
                           themeController.setTheme('light');
                         }
+                      },
+                    ),
+                    _buildCard(
+                      child: Row(
+                        children: <Widget>[
+                          const Expanded(
+                            child: Text(
+                              "Default Sort Style",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            themeController.defaultGroupMode ==
+                                    GroupingMode.Category
+                                ? Icons.today
+                                : Icons.format_list_bulleted,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                      onPressed: () async {
+                        themeController.setDefaultGroupingMode(
+                            themeController.defaultGroupMode ==
+                                    GroupingMode.Category
+                                ? GroupingMode.Date
+                                : GroupingMode.Category);
                       },
                     ),
                     _buildCard(

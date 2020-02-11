@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/course_grades_display.dart';
@@ -21,7 +22,6 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   Future<FetchedCourseData> _data;
   bool _loaded = false;
   bool _hasCategories = false;
-  GroupingMode _groupingMode = GroupingMode.Category;
 
   @override
   void didChangeDependencies() {
@@ -55,6 +55,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   @override
   Widget build(BuildContext context) {
     final Course course = ModalRoute.of(context).settings.arguments as Course;
+    var themeController = Provider.of<ThemeController>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -74,14 +75,13 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         actions: [
           if (_hasCategories)
             IconButton(
-              icon: Icon(_groupingMode == GroupingMode.Category
-                  ? Icons.today
-                  : Icons.format_list_bulleted),
+              icon: Icon(
+                  themeController.currentGroupMode == GroupingMode.Category
+                      ? Icons.today
+                      : Icons.format_list_bulleted),
               onPressed: () {
                 setState(() {
-                  _groupingMode = _groupingMode == GroupingMode.Category
-                      ? GroupingMode.Date
-                      : GroupingMode.Category;
+                  themeController.toggleGroupingMode();
                 });
               },
             ),
@@ -113,7 +113,9 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                 return CourseGradesMinimalDisplay(
                   snapshot.data.grades,
                   snapshot.data.categoryWeights,
-                  _hasCategories ? _groupingMode : GroupingMode.Date,
+                  _hasCategories
+                      ? themeController.currentGroupMode
+                      : GroupingMode.Date,
                   course.courseName,
                 );
               } else if (snapshot.hasError) {
