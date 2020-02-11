@@ -49,6 +49,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                           ),
                         ),
+                        Text(
+                          themeController.currentTheme == "light"
+                              ? "Light"
+                              : "Dark",
+                          style: const TextStyle(
+                            fontSize: 17,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 15),
                         Icon(
                           getModeIcon(),
                           color: Colors.white,
@@ -75,6 +85,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                           ),
+                          Text(
+                            themeController.defaultGroupMode ==
+                                    GroupingMode.Category
+                                ? "Category"
+                                : "Recency",
+                            style: const TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
                           Icon(
                             themeController.defaultGroupMode ==
                                     GroupingMode.Category
