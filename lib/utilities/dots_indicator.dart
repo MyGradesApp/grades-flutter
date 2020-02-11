@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 /// An indicator showing the currently selected page of a PageController
 class DotsIndicator extends AnimatedWidget {
   DotsIndicator({
@@ -40,6 +38,7 @@ class DotsIndicator extends AnimatedWidget {
             height: _kDotSize * zoom,
             child: InkWell(
               onTap: () => onPageSelected(index),
+              customBorder: const CircleBorder(),
             ),
           ),
         ),
