@@ -1,17 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
-import 'package:grades/utilities/grades.dart';
-import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
-import 'package:grades/widgets/class_list_item_widget.dart';
-import 'package:grades/widgets/colored_grade_dot.dart';
-import 'package:grades/widgets/loader_widget.dart';
-import 'package:grades/widgets/refreshable_error_message.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -28,17 +17,9 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     final gradePersistence = Provider.of<GradePersistence>(context);
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      appBar: AppBar(
-          elevation: 0.0,
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          title: const Text('RECENT')),
-      body: StackedFutureBuilder<List<Course>>(builder: (context, snapshot) {
-        return SizedBox.expand();
-      }),
-    );
+    return StackedFutureBuilder<List<Course>>(builder: (context, snapshot) {
+      return SizedBox.expand();
+    });
 
     //   return WillPopScope(
     //     onWillPop: () async {

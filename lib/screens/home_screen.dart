@@ -11,6 +11,9 @@ class HomeScreen extends StatefulWidget {
 PageController controller = PageController(initialPage: 1);
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Initial page state
+  String title = "Courses";
+  int previous = -1;
   List<Widget> pages = [
     FeedScreen(),
     CourseListScreen(),
@@ -22,37 +25,63 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: Stack(children: <Widget>[
-        PageView.builder(
+    return Stack(children: <Widget>[
+      Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: AppBar(
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text(title),
+          leading: IconButton(
+            tooltip: "Profile",
+            icon: Icon(
+              Icons.person,
+            ),
+            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+          ),
+          actions: <Widget>[
+            IconButton(
+              tooltip: "Settings",
+              icon: Icon(Icons.settings),
+              onPressed: () => Navigator.pushNamed(context, '/settings'),
+            )
+          ],
+        ),
+        body: PageView.builder(
           controller: controller,
           itemCount: pages.length,
+          onPageChanged: (page) {
+            setState(() {
+              if (page == 0) {
+                title = "Recent";
+              } else {
+                title = "Courses";
+              }
+            });
+          },
           itemBuilder: (context, position) => pages[position],
         ),
-        Positioned(
-          bottom: 0.0,
-          left: 0.0,
-          right: 0.0,
-          child: Container(
-            // color: Colors.grey[800].withOpacity(0.5),
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: DotsIndicator(
-                controller: controller,
-                itemCount: pages.length,
-                onPageSelected: (int page) {
-                  controller.animateToPage(
-                    page,
-                    duration: kDuration,
-                    curve: kCurve,
-                  );
-                },
-              ),
+      ),
+      Positioned.fill(
+        top: null,
+        child: Container(
+          // color: Colors.grey[800].withOpacity(0.5),
+          padding: const EdgeInsets.all(20.0),
+          child: Center(
+            child: DotsIndicator(
+              controller: controller,
+              itemCount: pages.length,
+              onPageSelected: (int page) {
+                controller.animateToPage(
+                  page,
+                  duration: kDuration,
+                  curve: kCurve,
+                );
+              },
             ),
           ),
         ),
-      ]),
-    );
+      ),
+    ]);
   }
 }
