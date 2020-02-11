@@ -3,18 +3,15 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum GradeStatus {
-//  Updated,
-  New,
-  NoChange,
-}
-
 class GradePersistence extends ChangeNotifier {
-  Map<String, String> _originalData = {};
-  Map<String, String> _data = {};
+  // TODO: Implement some types in sis-loader
+  // Grade = Map<String, String>
+  // Map<class name, list of grades>
+  Map<String, List<Map<String, String>>> _originalData = {};
+  Map<String, List<Map<String, String>>> _data = {};
   SharedPreferences _prefs;
 
-  Map<String, String> get originalData => _originalData;
+  Map<String, List<Map<String, String>>> get originalData => _originalData;
 
   GradePersistence(SharedPreferences prefs) {
     _prefs = prefs;
@@ -23,48 +20,41 @@ class GradePersistence extends ChangeNotifier {
     notifyListeners();
   }
 
-  void insert(String key, dynamic data) {
-    _data[key] = jsonEncode(data, toEncodable: (value) => value.toString());
+  void insert(String key, List<Map<String, dynamic>> data) {
+    List<Map<String, String>> stringyData = data
+        .map((e) => e.map((key, value) => MapEntry(key, value.toString())))
+        .toList();
+    _data[key] = stringyData;
     _save();
     notifyListeners();
   }
 
-  GradeStatus getChanged(String key, dynamic data) {
-    var d;
-    if (data is String) {
-      d = data;
-    } else {
-      d = jsonEncode(data, toEncodable: (v) => v.toString());
-    }
-    if (_data[key] != d) {
-      return GradeStatus.New;
-    }
-    return GradeStatus.NoChange;
-  }
-
   List<Map<String, String>> getData(String key) {
-    return (List<dynamic>.from(jsonDecode(_data[key] ?? '[]')))
-        .map((v) => Map<String, String>.from(v))
-        .toList();
+    return _data[key] ?? [];
   }
 
   List<Map<String, String>> getOriginalData(String key) {
-    return (List<dynamic>.from(jsonDecode(_originalData[key] ?? '[]')))
-        .map((v) => Map<String, String>.from(v))
-        .toList();
+    return _originalData[key] ?? [];
   }
 
   void _save() {
     _prefs.setString("persisted_grades", jsonEncode(_data));
   }
 
-  Map<String, String> _load() {
+  Map<String, List<Map<String, String>>> _load() {
     var gradesStr = _prefs.getString("persisted_grades");
     if (gradesStr == null || gradesStr.isEmpty) {
       gradesStr = "{}";
     }
+    var out = {};
+    Map<String, List<dynamic>>.from(jsonDecode(gradesStr))
+        .forEach((key, value) {
+      List<Map<String, String>> grades = [];
+      grades = value.map((e) => Map<String, String>.from(e)).toList();
+      out[key] = grades;
+    });
 
-    return Map<String, String>.from(jsonDecode(gradesStr));
+    return Map<String, List<Map<String, String>>>.from(out);
   }
 
   void clearSaved() {
