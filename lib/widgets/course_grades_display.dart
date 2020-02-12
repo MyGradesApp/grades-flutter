@@ -187,15 +187,15 @@ Widget buildGradeItemCard(BuildContext context, Map<String, dynamic> grade,
                     style: TextStyle(color: textColor),
                   ),
                   const SizedBox(width: 6),
-                  if (showIndicator)
-                    Container(
-                      height: 6,
-                      width: 6,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.indigoAccent,
-                      ),
-                    ),
+                  // if (showIndicator)
+                  //   Container(
+                  //     height: 6,
+                  //     width: 6,
+                  //     decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       color: Colors.indigoAccent,
+                  //     ),
+                  //   ),
                 ],
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/utilities/grades.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/course_grades_display.dart';
@@ -51,13 +52,18 @@ class _FeedScreenState extends State<FeedScreen> {
                       .getOriginalData(courseName);
 
               grades.forEach((grade) {
-                var isNewGrade = !oldGrades.any((oldGrade) =>
-                    oldGrade["Assignment"] == grade["Assignment"]);
-                if (isNewGrade) {
-                  if (out[courseName] == null) {
-                    out[courseName] = [];
+                // TODO: change to a more efficient way of removing "not graded"
+                var gradeString = grade["Grade"].toString();
+                var percentIndex = gradeString.indexOf('%');
+                if (percentIndex != -1) {
+                  var isNewGrade = !oldGrades.any((oldGrade) =>
+                      oldGrade["Assignment"] == grade["Assignment"]);
+                  if (isNewGrade) {
+                    if (out[courseName] == null) {
+                      out[courseName] = [];
+                    }
+                    out[courseName].add(grade);
                   }
-                  out[courseName].add(grade);
                 }
               });
             });
