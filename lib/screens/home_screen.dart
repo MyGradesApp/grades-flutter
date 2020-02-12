@@ -12,7 +12,7 @@ PageController controller = PageController(initialPage: 1);
 
 class _HomeScreenState extends State<HomeScreen> {
   // Initial page state
-  String title = "Courses";
+  String title = "COURSES";
   int previous = -1;
   List<Widget> pages = [
     FeedScreen(),
@@ -53,9 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onPageChanged: (page) {
             setState(() {
               if (page == 0) {
-                title = "Recent";
+                title = "RECENT";
               } else {
-                title = "Courses";
+                title = "COURSES";
               }
             });
           },

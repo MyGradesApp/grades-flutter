@@ -99,8 +99,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Icon(
                             themeController.defaultGroupMode ==
                                     GroupingMode.Category
-                                ? Icons.today
-                                : Icons.format_list_bulleted,
+                                ? Icons.format_list_bulleted
+                                : Icons.today,
                             color: Colors.white,
                           ),
                         ],
@@ -113,19 +113,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 : GroupingMode.Category);
                       },
                     ),
-                    _buildCard(
-                      child: const Text(
-                        "Leave a Review",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () async {
-                        await AppReview.writeReview;
-                      },
-                    ),
+                    // _buildCard(
+                    //   child: const Text(
+                    //     "Leave a Review",
+                    //     style: TextStyle(
+                    //       fontWeight: FontWeight.bold,
+                    //       fontSize: 18,
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    //   onPressed: () async {
+                    //     await AppReview.writeReview;
+                    //   },
+                    // ),
                     _buildCard(
                       child: const Text(
                         "Terms of Service",
