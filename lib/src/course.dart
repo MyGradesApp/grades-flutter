@@ -141,6 +141,15 @@ class Course {
         } else if (rawField == 'assignment_files') {
           if (content == '&nbsp;') {
             content = null;
+          } else {
+            var match = RegExp(
+                    r'<UL><LI style="margin:5px 0px;"><A class="previewIframe" href="javascript:void(0)" data-href="(.*?)">(.*?)<\/A><\/LI><\/UL>')
+                .firstMatch(content);
+            if (match != null) {
+              content = match.group(2);
+            } else {
+              content = (content as String).replaceAll(RegExp(r'<[^>]*>'), '');
+            }
           }
         }
         fields[field] = content;
