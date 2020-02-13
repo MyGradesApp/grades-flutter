@@ -4,15 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
-import 'package:grades/utilities/grades.dart';
-import 'package:grades/utilities/sentry.dart';
-import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/course_grades_display.dart';
-import 'package:grades/widgets/loader_widget.dart';
-import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:provider/provider.dart';
-import 'package:sis_loader/sis_loader.dart';
+import 'package:sis_loader/src/course.dart';
 
 class FeedScreen extends StatefulWidget {
   FeedScreen({Key key}) : super(key: key);
@@ -21,148 +16,149 @@ class FeedScreen extends StatefulWidget {
   _FeedScreenState createState() => _FeedScreenState();
 }
 
+// TODO: Error handling
 class _FeedScreenState extends State<FeedScreen> {
-  Future<Map<String, List<Map<String, dynamic>>>> _refresh(
-      {bool force = false}) async {
-    var courses = await Provider.of<CurrentSession>(context, listen: false)
+  Map<String, List<Map<String, dynamic>>> _courseGrades = {};
+  List<Course> _courses;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _refresh();
+  }
+
+  Future<void> _refresh({bool force = false}) async {
+    _courses = await Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getCourses(force: force);
 
-    Map<String, List<Map<String, dynamic>>> out = {};
-    await Future.wait(courses.map((course) async {
+    _courses.map((course) async {
       var grades = await course.getGrades(force);
-      out[course.courseName] = grades;
-    }));
+      setState(() {
+        _courseGrades[course.courseName] = grades;
+      });
+    }).toList(); // .toList forces evaluation
 
-    return out;
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return StackedFutureBuilder<Map<String, List<Map<String, dynamic>>>>(
-        future: _refresh(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final courses = snapshot.data;
+    var courses = _courseGrades;
 
-            Map<String, List<Map<String, dynamic>>> out = {};
-            courses.forEach((courseName, grades) {
-              var oldGrades =
-                  Provider.of<GradePersistence>(context, listen: false)
-                      .getOriginalData(courseName);
+    Map<String, List<Map<String, dynamic>>> out = {};
 
-              grades.forEach((grade) {
-                // TODO: change to a more efficient way of removing "not graded"
-                var gradeString = grade["Grade"].toString();
-                var percentIndex = gradeString.indexOf('%');
-                if (percentIndex != -1) {
-                  var isNewGrade = !oldGrades.any((oldGrade) =>
-                      oldGrade["Assignment"] == grade["Assignment"]);
-                  if (isNewGrade) {
-                    if (out[courseName] == null) {
-                      out[courseName] = [];
-                    }
-                    out[courseName].add(grade);
-                  }
-                }
-              });
-            });
+    courses.forEach((courseName, grades) {
+      var oldGrades = Provider.of<GradePersistence>(
+        context,
+      ).getData(courseName);
 
-            if (out.isEmpty) {
-              return RefreshableIconMessage(
-                onRefresh: () => _refresh(force: true),
-                icon: Icon(
-                  FontAwesomeIcons.inbox,
-                  size: 55,
-                  color: Colors.white,
-                ),
-                child: const Text(
-                  "There are no new grades",
+      grades.forEach((grade) {
+        // TODO: change to a more efficient way of removing "not graded"
+        var gradeString = grade["Grade"].toString();
+        var percentIndex = gradeString.indexOf('%');
+        if (percentIndex != -1) {
+          var isNewGrade = !oldGrades
+              .any((oldGrade) => oldGrade["Assignment"] == grade["Assignment"]);
+          if (isNewGrade) {
+            if (out[courseName] == null) {
+              out[courseName] = [];
+            }
+            out[courseName].add(grade);
+          }
+        }
+      });
+    });
+
+    if (out.isEmpty) {
+      return RefreshableIconMessage(
+        onRefresh: () => _refresh(force: true),
+        icon: Icon(
+          FontAwesomeIcons.inbox,
+          size: 55,
+          color: Colors.white,
+        ),
+        child: const Text(
+          "There are no new grades",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 17.0,
+          ),
+        ),
+      );
+    }
+
+    List<Widget> listChildren = [];
+    // Iterate over _courses to keep the original order
+    _courses
+        .where((course) => out.containsKey(course.courseName))
+        .forEach((course) {
+      var courseName = course.courseName;
+      var grades = out[courseName] ?? [];
+      // Header
+      listChildren.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 11.0),
+          child: Text(
+            courseName,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+
+      // Only show 4 most recent
+      const maxItems = 4;
+      int endIndex = min(maxItems, grades.length);
+      List<Map<String, dynamic>> clipped;
+      if (grades.length > maxItems) {
+        clipped = grades.sublist(endIndex);
+      }
+
+      listChildren.addAll(
+        grades.sublist(0, endIndex).map((grade) => buildGradeItemCard(
+            context,
+            grade,
+            Theme.of(context).primaryColorLight,
+            Theme.of(context).cardColor,
+            false)),
+      );
+      // Show indicator if we clipped some grades
+      if (clipped != null) {
+        listChildren.add(
+          Padding(
+            padding: const EdgeInsets.only(right: 11.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: Container()),
+                Text(
+                  "and ${clipped.length} more",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              );
-            }
+              ],
+            ),
+          ),
+        );
+      }
 
-            out.forEach((key, value) {
-              print(key);
-              value.forEach((e) => print('- ${e["Assignment"]}'));
-            });
+      // Trailing padding for the next header
+      listChildren.add(const SizedBox(height: 3));
+    });
 
-            List<Widget> listChildren = [];
-            out.forEach((courseName, grades) {
-              // Header
-              listChildren.add(
-                Padding(
-                  padding: const EdgeInsets.only(left: 11.0),
-                  child: Text(
-                    courseName,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              );
-
-              // Only show 4 most recent
-              const maxItems = 3;
-              int endIndex = min(maxItems, grades.length);
-              List<Map<String, dynamic>> clipped;
-              if (grades.length > maxItems) {
-                clipped = grades.sublist(endIndex);
-              }
-
-              listChildren.addAll(
-                grades.sublist(0, endIndex).map((grade) => buildGradeItemCard(
-                    context,
-                    grade,
-                    Theme.of(context).primaryColorLight,
-                    Theme.of(context).cardColor,
-                    false)),
-              );
-              if (clipped != null) {
-                listChildren.add(
-                  Padding(
-                    padding: const EdgeInsets.only(right: 11.0),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(child: Container()),
-                        Text(
-                          "and ${clipped.length} more",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-
-              // Trailing padding for the next header
-              listChildren.add(const SizedBox(height: 3));
-            });
-
-            return ListView(children: listChildren);
-          }
-          if (snapshot.hasError) {
-            // This path is untested
-            reportException(
-              exception: snapshot.error,
-              stackTrace: snapshot.stackTrace,
-            );
-
-            return RefreshableErrorMessage(
-              onRefresh: () => _refresh(force: true),
-              text: "An error occured fetching new grades",
-            );
-          }
-          return LoaderWidget();
-        });
+    return RefreshIndicator(
+      onRefresh: () {
+        return _refresh(force: true);
+      },
+      child: ListView(
+        children: listChildren,
+        shrinkWrap: true,
+      ),
+    );
   }
 }
