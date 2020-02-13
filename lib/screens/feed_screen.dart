@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
@@ -20,6 +21,8 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   Map<String, List<Map<String, dynamic>>> _courseGrades = {};
   List<Course> _courses;
+  bool _isLoading = true;
+  int _numLoaded = 0;
 
   @override
   void didChangeDependencies() {
@@ -28,14 +31,25 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Future<void> _refresh({bool force = false}) async {
+    setState(() {
+      _isLoading = true;
+    });
+    _numLoaded = 0;
     _courses = await Provider.of<CurrentSession>(context, listen: false)
         .sisLoader
         .getCourses(force: force);
+    var totalToLoad = _courses.length;
 
     _courses.map((course) async {
       var grades = await course.getGrades(force);
       setState(() {
         _courseGrades[course.courseName] = grades;
+        _numLoaded += 1;
+        if (_numLoaded == totalToLoad) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     }).toList(); // .toList forces evaluation
 
@@ -70,7 +84,7 @@ class _FeedScreenState extends State<FeedScreen> {
       });
     });
 
-    if (out.isEmpty) {
+    if (out.isEmpty && !_isLoading) {
       return RefreshableIconMessage(
         onRefresh: () => _refresh(force: true),
         icon: Icon(
@@ -86,6 +100,8 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
         ),
       );
+    } else if (out.isEmpty && _isLoading) {
+      return _buildLoader();
     }
 
     List<Widget> listChildren = [];
@@ -151,6 +167,10 @@ class _FeedScreenState extends State<FeedScreen> {
       listChildren.add(const SizedBox(height: 3));
     });
 
+    if (_isLoading) {
+      listChildren.add(_buildLoader());
+    }
+
     return RefreshIndicator(
       onRefresh: () {
         return _refresh(force: true);
@@ -159,6 +179,18 @@ class _FeedScreenState extends State<FeedScreen> {
         children: listChildren,
         shrinkWrap: true,
       ),
+    );
+  }
+
+  Widget _buildLoader() {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 12),
+        SpinKitThreeBounce(
+          color: Colors.white,
+          size: 30,
+        )
+      ],
     );
   }
 }
