@@ -74,7 +74,18 @@ class _FeedScreenState extends State<FeedScreen> {
         if (grade["Grade"] != "Not Graded") {
           var isNewGrade = !oldGrades
               .any((oldGrade) => oldGrade["Assignment"] == grade["Assignment"]);
-          if (isNewGrade) {
+
+          var gradeIsRecent;
+          if (grade["Date Last Modified"] != null &&
+              grade["Date Last Modified"] is DateTime) {
+            var gradeDate = grade["Date Last Modified"] as DateTime;
+            gradeIsRecent = gradeDate
+                .isAfter(DateTime.now().subtract(const Duration(days: 1)));
+          } else {
+            gradeIsRecent = false;
+          }
+
+          if (isNewGrade || gradeIsRecent) {
             if (out[courseName] == null) {
               out[courseName] = [];
             }
@@ -105,6 +116,7 @@ class _FeedScreenState extends State<FeedScreen> {
     }
 
     List<Widget> listChildren = [];
+
     // Iterate over _courses to keep the original order
     _courses
         .where((course) => out.containsKey(course.courseName))
