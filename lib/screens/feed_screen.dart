@@ -42,6 +42,9 @@ class _FeedScreenState extends State<FeedScreen> {
 
     _courses.map((course) async {
       var grades = await course.getGrades(force);
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _courseGrades[course.courseName] = grades;
         _numLoaded += 1;
