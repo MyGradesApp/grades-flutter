@@ -71,10 +71,7 @@ class _FeedScreenState extends State<FeedScreen> {
       ).getData(courseName);
 
       grades.forEach((grade) {
-        // TODO: change to a more efficient way of removing "not graded"
-        var gradeString = grade["Grade"].toString();
-        var percentIndex = gradeString.indexOf('%');
-        if (percentIndex != -1) {
+        if (grade["Grade"] != "Not Graded") {
           var isNewGrade = !oldGrades
               .any((oldGrade) => oldGrade["Assignment"] == grade["Assignment"]);
           if (isNewGrade) {
