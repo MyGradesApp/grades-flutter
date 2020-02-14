@@ -22,10 +22,6 @@ dependencies:
   sentry: ^3.0.1
   # Flutter team package
   package_info: ^0.4.0+13
-  app_review:
-    git:
-      url: https://github.com/Noskcaj19/app_review.git
-      ref: b1b2ebe
 
   # "Framework" utilities
   provider:

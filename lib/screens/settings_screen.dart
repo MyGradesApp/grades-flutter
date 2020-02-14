@@ -1,4 +1,3 @@
-import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/sentry.dart' as sentry;
