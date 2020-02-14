@@ -37,7 +37,10 @@ class _CourseListScreenState extends State<CourseListScreen> {
     // Preload course grades
     unawaited(
       Future.wait(courses.map((course) async {
-        unawaited(course.getGrades());
+        try {
+          unawaited(course.getGrades());
+          // Ignore network failures
+        } on SocketException catch (_) {} on HttpException catch (_) {} on HandshakeException catch (_) {} on OSError catch (_) {}
       })),
     );
     return courses;
