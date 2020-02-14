@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/feed_screen.dart';
 import 'package:grades/utilities/dots_indicator.dart';
+import 'package:grades/utilities/updated_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -22,6 +24,20 @@ class _HomeScreenState extends State<HomeScreen> {
   var kDuration = const Duration(milliseconds: 300);
 
   var kCurve = Curves.ease;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      var hasShownUpdateScreen = prefs.getBool("hasShownUpdateScreen2");
+      if (hasShownUpdateScreen == null || !hasShownUpdateScreen) {
+        prefs.setBool("hasShownUpdateScreen2", true);
+        Future.microtask(() {
+          showUpdatedDialog(context);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
