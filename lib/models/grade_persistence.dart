@@ -38,11 +38,11 @@ class GradePersistence extends ChangeNotifier {
   }
 
   void _save() {
-    _prefs.setString("persisted_grades", jsonEncode(_data));
+    _prefs.setString("persisted_grades_v2", jsonEncode(_data));
   }
 
   Map<String, List<Map<String, String>>> _load() {
-    var gradesStr = _prefs.getString("persisted_grades");
+    var gradesStr = _prefs.getString("persisted_grades_v2");
     if (gradesStr == null || gradesStr.isEmpty) {
       gradesStr = "{}";
     }
@@ -59,7 +59,7 @@ class GradePersistence extends ChangeNotifier {
 
   void clearSaved() {
     _data = {};
-    _prefs.remove("persisted_grades");
+    _prefs.remove("persisted_grades_v2");
     notifyListeners();
   }
 }
