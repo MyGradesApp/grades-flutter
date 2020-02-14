@@ -22,6 +22,14 @@ GroupingMode groupingModeFromString(String src) {
   }
 }
 
+GroupingMode getToggledGroupingMode(GroupingMode mode) {
+  if (mode == GroupingMode.Category) {
+    return GroupingMode.Date;
+  } else {
+    return GroupingMode.Category;
+  }
+}
+
 /// provides the currently selected theme, saves changed theme preferences to disk
 class ThemeController extends ChangeNotifier {
   static const themePrefKey = 'theme';
@@ -38,19 +46,15 @@ class ThemeController extends ChangeNotifier {
       defaultGroupMode = GroupingMode.Category;
     }
     _defaultGroupMode = defaultGroupMode;
-    _currentGroupMode = defaultGroupMode;
   }
 
   final SharedPreferences _prefs;
   String _currentTheme;
   GroupingMode _defaultGroupMode;
-  GroupingMode _currentGroupMode;
 
   String get currentTheme => _currentTheme;
 
   GroupingMode get defaultGroupMode => _defaultGroupMode;
-
-  GroupingMode get currentGroupMode => _currentGroupMode;
 
   void setTheme(String theme) {
     _currentTheme = theme;
@@ -62,27 +66,9 @@ class ThemeController extends ChangeNotifier {
 
   void setDefaultGroupingMode(GroupingMode mode) {
     _defaultGroupMode = mode;
-    // Update the current value as well
-    _currentGroupMode = mode;
 
     notifyListeners();
 
     _prefs.setString(defaultGroupKey, groupingModeToString(mode));
-  }
-
-  void setCurrentGroupingMode(GroupingMode mode) {
-    _currentGroupMode = mode;
-
-    notifyListeners();
-  }
-
-  void toggleGroupingMode() {
-    if (_currentGroupMode == GroupingMode.Category) {
-      _currentGroupMode = GroupingMode.Date;
-    } else {
-      _currentGroupMode = GroupingMode.Category;
-    }
-
-    notifyListeners();
   }
 }

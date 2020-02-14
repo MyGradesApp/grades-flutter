@@ -22,6 +22,14 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   Future<FetchedCourseData> _data;
   bool _loaded = false;
   bool _hasCategories = false;
+  GroupingMode _currentGroupingMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentGroupingMode =
+        Provider.of<ThemeController>(context, listen: false).defaultGroupMode;
+  }
 
   @override
   void didChangeDependencies() {
@@ -55,7 +63,6 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   @override
   Widget build(BuildContext context) {
     final Course course = ModalRoute.of(context).settings.arguments as Course;
-    var themeController = Provider.of<ThemeController>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -75,13 +82,13 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         actions: [
           if (_hasCategories)
             IconButton(
-              icon: Icon(
-                  themeController.currentGroupMode == GroupingMode.Category
-                      ? Icons.today
-                      : Icons.format_list_bulleted),
+              icon: Icon(_currentGroupingMode == GroupingMode.Category
+                  ? Icons.today
+                  : Icons.format_list_bulleted),
               onPressed: () {
                 setState(() {
-                  themeController.toggleGroupingMode();
+                  _currentGroupingMode =
+                      getToggledGroupingMode(_currentGroupingMode);
                 });
               },
             ),
@@ -113,9 +120,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                 return CourseGradesMinimalDisplay(
                   snapshot.data.grades,
                   snapshot.data.categoryWeights,
-                  _hasCategories
-                      ? themeController.currentGroupMode
-                      : GroupingMode.Date,
+                  _hasCategories ? _currentGroupingMode : GroupingMode.Date,
                   course.courseName,
                 );
               } else if (snapshot.hasError) {
