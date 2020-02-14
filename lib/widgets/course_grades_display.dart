@@ -108,7 +108,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 11.0),
                     child: Text(
                       '${subText}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
                       ),

@@ -129,7 +129,7 @@ class _FeedScreenState extends State<FeedScreen> {
           padding: const EdgeInsets.only(left: 11.0),
           child: Text(
             courseName,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 17,
               fontWeight: FontWeight.bold,
@@ -164,7 +164,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 Expanded(child: Container()),
                 Text(
                   "and ${clipped.length} more",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -198,7 +198,7 @@ class _FeedScreenState extends State<FeedScreen> {
     return Column(
       children: <Widget>[
         const SizedBox(height: 12),
-        SpinKitThreeBounce(
+        const SpinKitThreeBounce(
           color: Colors.white,
           size: 30,
         )
