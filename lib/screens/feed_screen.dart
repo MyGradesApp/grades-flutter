@@ -104,7 +104,7 @@ class _FeedScreenState extends State<FeedScreen> {
           color: Colors.white,
         ),
         child: const Text(
-          "There are no new grades",
+          "No new grades available",
           style: TextStyle(
             color: Colors.white,
             fontSize: 17.0,
