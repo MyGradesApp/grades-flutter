@@ -198,7 +198,7 @@ class _FeedScreenState extends State<FeedScreen> {
     return Column(
       children: <Widget>[
         const SizedBox(height: 12),
-        const SpinKitThreeBounce(
+        SpinKitThreeBounce(
           color: Colors.white,
           size: 30,
         )
