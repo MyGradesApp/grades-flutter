@@ -10,15 +10,15 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-PageController controller = PageController(initialPage: 1);
+PageController controller = PageController(initialPage: 0);
 
 class _HomeScreenState extends State<HomeScreen> {
   // Initial page state
   String title = "COURSES";
   int previous = -1;
   List<Widget> pages = [
-    FeedScreen(),
     CourseListScreen(),
+    FeedScreen(),
   ];
 
   var kDuration = const Duration(milliseconds: 300);
@@ -63,12 +63,71 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
+        drawer: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Theme.of(context)
+                .accentColor, //This will change the drawer background to blue.
+            //other styles
+          ),
+          child: Drawer(
+            child: ListView(
+              children: <Widget>[
+                //
+                UserAccountsDrawerHeader(
+                  accountName: Text("Seth Goldin"),
+                  accountEmail: Text("s27097328@stu.palmbeachschools.org"),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: Theme.of(context).accentColor,
+                    // Theme.of(context).platform == TargetPlatform.iOS
+                    //     ? Colors.blue
+                    //     : Colors.white,
+                    child: Text(
+                      "S",
+                      style: TextStyle(fontSize: 40.0, color: Colors.white),
+                    ),
+                  ),
+                ),
+
+                ListTile(
+                    leading: Icon(Icons.assignment, color: Colors.white),
+                    title: Text(
+                      "Grades",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                ListTile(
+                    leading: Icon(Icons.person, color: Colors.white),
+                    title: Text(
+                      "Academic Information",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                ListTile(
+                    leading: Icon(Icons.settings, color: Colors.white),
+                    title: Text(
+                      "Settings",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+        ),
         body: PageView.builder(
           controller: controller,
           itemCount: pages.length,
           onPageChanged: (page) {
             setState(() {
-              if (page == 0) {
+              if (page == 1) {
                 title = "RECENT";
               } else {
                 title = "COURSES";
