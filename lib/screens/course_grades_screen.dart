@@ -34,7 +34,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_loaded) {
+    if (!_loaded && mounted) {
       _data = _fetchData();
     }
   }
