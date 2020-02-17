@@ -272,14 +272,16 @@ class SISLoader {
         cumulative_weighted_gpa: rawProfile['cumulative_weighted_gpa'] != null
             ? double.tryParse(rawProfile['cumulative_weighted_gpa'])
             : null,
-        class_rank_numerator:
-            (classRankPieces != null && classRankPieces[0].trim().isNotEmpty)
-                ? int.tryParse(classRankPieces[0])
-                : null,
-        class_rank_denominator:
-            (classRankPieces != null && classRankPieces[1].trim().isNotEmpty)
-                ? int.tryParse(classRankPieces[1])
-                : null);
+        class_rank_numerator: (classRankPieces != null &&
+                classRankPieces.isNotEmpty &&
+                classRankPieces[0].trim().isNotEmpty)
+            ? int.tryParse(classRankPieces[0])
+            : null,
+        class_rank_denominator: (classRankPieces != null &&
+                classRankPieces.isNotEmpty &&
+                classRankPieces[1].trim().isNotEmpty)
+            ? int.tryParse(classRankPieces[1])
+            : null);
   }
 
   Future<Absences> getAbsences() async {
