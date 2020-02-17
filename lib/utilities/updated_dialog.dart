@@ -42,7 +42,7 @@ void showUpdatedDialog(BuildContext context) {
                           ),
                           _buildNewItem(
                             "Recent Grades",
-                            "Swipe left from the home screen to see new and upcoming assignements",
+                            "Swipe left from the home screen to see new and upcoming assignments",
                           ),
                           _buildNewItem(
                             "Improved Sorting",
