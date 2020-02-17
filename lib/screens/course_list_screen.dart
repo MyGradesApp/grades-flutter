@@ -38,7 +38,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
     unawaited(
       Future.wait(courses.map((course) async {
         try {
-          unawaited(course.getGrades());
+          await course.getGrades();
           // Ignore network failures
         } on SocketException catch (_) {} on HttpException catch (_) {} on HandshakeException catch (_) {} on OSError catch (_) {}
       })),

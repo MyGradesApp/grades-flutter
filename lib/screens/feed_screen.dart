@@ -7,6 +7,7 @@ import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
 import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/src/course.dart';
 
@@ -40,7 +41,7 @@ class _FeedScreenState extends State<FeedScreen> {
         .getCourses(force: force);
     var totalToLoad = _courses.length;
 
-    _courses.map((course) async {
+    unawaited(Future.wait(_courses.map((course) async {
       var grades = await course.getGrades(force);
       if (!mounted) {
         return;
@@ -54,7 +55,7 @@ class _FeedScreenState extends State<FeedScreen> {
           });
         }
       });
-    }).toList(); // .toList forces evaluation
+    })));
 
     return null;
   }
