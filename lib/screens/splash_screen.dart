@@ -112,17 +112,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future _showCourses(SharedPreferences prefs) async {
-    // send to page controller instead of just courses
-    //  removes back button
-    // var logoff = await Navigator.pushReplacementNamed(context, '/home');
-
     var logoff = await Navigator.pushNamed(context, '/home');
 
-    // var logoff = await Navigator.pushNamed(context, '/courses');
     // We return true from courses if the logout button is pressed,
     // so we need to show the login screen and clear the session values
     if (logoff is bool && logoff) {
       await const WrappedSecureStorage().delete(key: 'sis_session');
+      await const WrappedSecureStorage().delete(key: 'sis_password');
       _loadStoredAuth(force: true);
     }
   }
