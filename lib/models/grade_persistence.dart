@@ -47,10 +47,9 @@ class GradePersistence extends ChangeNotifier {
       gradesStr = "{}";
     }
     var out = {};
-    Map<String, List<dynamic>>.from(jsonDecode(gradesStr))
-        .forEach((key, value) {
+    (jsonDecode(gradesStr) as Map<String, List<dynamic>>).forEach((key, value) {
       List<Map<String, String>> grades = [];
-      grades = value.map((e) => Map<String, String>.from(e)).toList();
+      grades = value.map((e) => (e as Map<String, String>)).toList();
       out[key] = grades;
     });
 

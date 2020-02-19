@@ -76,7 +76,7 @@ class _FeedScreenState extends State<FeedScreen> {
           var isNewGrade = !oldGrades
               .any((oldGrade) => oldGrade["Assignment"] == grade["Assignment"]);
 
-          var gradeIsRecent;
+          bool gradeIsRecent;
           if (grade["Date Last Modified"] != null &&
               grade["Date Last Modified"] is DateTime) {
             var gradeDate = grade["Date Last Modified"] as DateTime;

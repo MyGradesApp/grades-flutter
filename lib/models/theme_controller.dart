@@ -39,7 +39,7 @@ class ThemeController extends ChangeNotifier {
     // load theme from preferences on initialization
     _currentTheme = _prefs.getString(themePrefKey) ?? 'light';
     var defaultGroupModeStr = _prefs.getString(defaultGroupKey) ?? 'category';
-    var defaultGroupMode;
+    GroupingMode defaultGroupMode;
     try {
       defaultGroupMode = groupingModeFromString(defaultGroupModeStr);
     } catch (_) {

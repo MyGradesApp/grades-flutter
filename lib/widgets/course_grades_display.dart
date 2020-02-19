@@ -55,13 +55,13 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             isNewGrade,
           );
 
-          var category = _data[i]["Category"];
-          DateTime date = _data[i]["Assigned"];
+          String category = _data[i]["Category"] as String;
+          DateTime date = _data[i]["Assigned"] as DateTime;
           var oldCategory;
           DateTime oldDate;
           if (i > 0) {
             oldCategory = _data[i - 1]["Category"];
-            oldDate = _data[i - 1]["Assigned"];
+            oldDate = _data[i - 1]["Assigned"] as DateTime;
           }
           if (_groupingMode == GroupingMode.Category) {
             if (oldCategory != category) {
@@ -125,7 +125,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
 }
 
 int _gradeCmp(Map<String, dynamic> a, Map<String, dynamic> b) {
-  return (a["Category"] as String)?.compareTo(b["Category"]) ?? 0;
+  return (a["Category"] as String)?.compareTo(b["Category"] as String) ?? 0;
 }
 
 String _dateRangeHeaderForWeek(DateTime date) {
