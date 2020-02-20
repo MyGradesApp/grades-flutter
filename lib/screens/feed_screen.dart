@@ -37,10 +37,10 @@ class _FeedScreenState extends State<FeedScreen> {
     });
     _numLoaded = 0;
     _courses = await Provider.of<CurrentSession>(context, listen: false)
-        .sisLoader
-        .getCourses(force: force);
+        .courses(force: force);
     var totalToLoad = _courses.length;
 
+    // TODO: Switch to stream?
     unawaited(Future.wait(_courses.map((course) async {
       var grades = await course.getGrades(force);
       if (!mounted) {

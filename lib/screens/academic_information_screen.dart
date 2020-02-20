@@ -9,29 +9,7 @@ import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-class _Info {
-  final Profile profile;
-  final Absences absences;
-
-  _Info(this.profile, this.absences);
-}
-
-class AcademicInfoScreen extends StatefulWidget {
-  @override
-  _AcademicInfoScreenState createState() => _AcademicInfoScreenState();
-}
-
-class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
-  Future<_Info> _refresh([bool force = true]) async {
-    var sisLoader =
-        Provider.of<CurrentSession>(context, listen: false).sisLoader;
-
-    var profile = await sisLoader.getUserProfile(force: force);
-    var absences = await sisLoader.getAbsences(force: force);
-
-    return _Info(profile, absences);
-  }
-
+class AcademicInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,34 +28,41 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         elevation: 0.0,
         centerTitle: true,
       ),
-      body: StackedFutureBuilder<_Info>(
-          future: _refresh(false),
+      body: StackedFutureBuilder<AcademicInfo>(
+          future:
+              Provider.of<CurrentSession>(context).academicInfo(force: false),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var profile = snapshot.data.profile;
               var absences = snapshot.data.absences;
               return RefreshIndicator(
-                onRefresh: _refresh,
+                onRefresh: () =>
+                    Provider.of<CurrentSession>(context, listen: false)
+                        .academicInfo(),
                 child: SizedBox.expand(
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
                       children: [
                         _buildCard(
+                            context,
                             'Cumulative GPA',
                             profile.cumulative_gpa?.toString() ??
                                 "Unavailable"),
                         _buildCard(
+                            context,
                             'Cumulative Weighted GPA',
                             profile.cumulative_weighted_gpa?.toString() ??
                                 "Unavailable"),
                         if (profile.class_rank_numerator != null &&
                             profile.class_rank_denominator != null)
                           _buildCard(
+                            context,
                             'Class Rank',
                             '${profile.class_rank_numerator} / ${profile.class_rank_denominator}',
                           ),
                         _buildCard(
+                          context,
                           'Absences',
                           '${absences.days} days in ${absences.periods} periods',
                         ),
@@ -92,7 +77,9 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                   snapshot.error is HandshakeException ||
                   snapshot.error is OSError) {
                 return RefreshableErrorMessage(
-                  onRefresh: _refresh,
+                  onRefresh: () =>
+                      Provider.of<CurrentSession>(context, listen: false)
+                          .academicInfo(),
                   text: "Issue connecting to SIS",
                 );
               }
@@ -103,13 +90,17 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
 
               if (snapshot.error is UnknownMissingCookieException) {
                 return RefreshableErrorMessage(
-                  onRefresh: _refresh,
+                  onRefresh: () =>
+                      Provider.of<CurrentSession>(context, listen: false)
+                          .academicInfo(),
                   text: "Issue loading information",
                 );
               }
 
               return RefreshableErrorMessage(
-                onRefresh: _refresh,
+                onRefresh: () =>
+                    Provider.of<CurrentSession>(context, listen: false)
+                        .academicInfo(),
                 text:
                     'An error occured fetching information:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.',
               );
@@ -121,7 +112,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
     );
   }
 
-  Widget _buildCard(String title, String body) {
+  Widget _buildCard(BuildContext context, String title, String body) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/models/current_session.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
@@ -19,8 +19,6 @@ class CourseGradesScreen extends StatefulWidget {
 }
 
 class _CourseGradesScreenState extends State<CourseGradesScreen> {
-  Future<FetchedCourseData> _data;
-  bool _loaded = false;
   bool _hasCategories = false;
   GroupingMode _currentGroupingMode;
 
@@ -31,33 +29,10 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         Provider.of<ThemeController>(context, listen: false).defaultGroupMode;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_loaded && mounted) {
-      _data = _fetchData();
-    }
-  }
-
-  Future<FetchedCourseData> _fetchData([bool force = false]) async {
+  Future<FetchedCourseData> _getData({bool force = true}) {
     final Course course = ModalRoute.of(context).settings.arguments as Course;
-
-    var grades = await course.getGrades(force);
-    setState(() {
-      _loaded = true;
-      if (grades.every((element) => element.containsKey("Category"))) {
-        _hasCategories = true;
-      }
-      Provider.of<GradePersistence>(context, listen: false)
-          .insert(course.courseName, grades);
-    });
-
-    return FetchedCourseData(grades, await course.getCategoryWeights(force));
-  }
-
-  Future<FetchedCourseData> _refresh() async {
-    _data = _fetchData(true);
-    return _data;
+    return Provider.of<CurrentSession>(context, listen: false)
+        .fetchCourseData(context, course, force: force);
   }
 
   @override
@@ -95,14 +70,19 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: _refresh,
+        onRefresh: () => _getData(),
         child: StackedFutureBuilder<FetchedCourseData>(
-            future: _data,
+            future: _getData(force: false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                Future.microtask(
+                  () => setState(() {
+                    _hasCategories = snapshot.data.hasCategories;
+                  }),
+                );
                 if (snapshot.data.grades.isEmpty) {
                   return RefreshableIconMessage(
-                    onRefresh: _refresh,
+                    onRefresh: () => _getData(),
                     icon: Icon(
                       FontAwesomeIcons.inbox,
                       size: 55,
@@ -120,7 +100,9 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                 return CourseGradesMinimalDisplay(
                   snapshot.data.grades,
                   snapshot.data.categoryWeights,
-                  _hasCategories ? _currentGroupingMode : GroupingMode.Date,
+                  snapshot.data.hasCategories
+                      ? _currentGroupingMode
+                      : GroupingMode.Date,
                   course.courseName,
                 );
               } else if (snapshot.hasError) {
@@ -129,7 +111,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     snapshot.error is HandshakeException ||
                     snapshot.error is OSError) {
                   return RefreshableErrorMessage(
-                    onRefresh: _refresh,
+                    onRefresh: () => _getData(),
                     text: "Issue connecting to SIS",
                   );
                 }
@@ -139,7 +121,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                 );
 
                 return RefreshableErrorMessage(
-                  onRefresh: _refresh,
+                  onRefresh: () => _getData(),
                   text:
                       "An error occured fetching grades:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
                 );
@@ -150,11 +132,4 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
       ),
     );
   }
-}
-
-class FetchedCourseData {
-  final List<Map<String, dynamic>> grades;
-  final Map<String, String> categoryWeights;
-
-  FetchedCourseData(this.grades, this.categoryWeights);
 }

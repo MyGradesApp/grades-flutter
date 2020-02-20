@@ -7,50 +7,11 @@ import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-class CourseListScreen extends StatefulWidget {
-  CourseListScreen({Key key}) : super(key: key);
-
-  @override
-  _CourseListScreenState createState() => _CourseListScreenState();
-}
-
-class _CourseListScreenState extends State<CourseListScreen> {
-  Future<List<Course>> _courses;
-
-  Future<List<Course>> _init() {
-    if (_courses == null) {
-      _courses = _setup();
-    }
-    return _courses;
-  }
-
-  Future<List<Course>> _setup() async {
-    var courses = await Provider.of<CurrentSession>(context, listen: false)
-        .sisLoader
-        .getCourses();
-
-    // TODO: Is this useful?
-    // Preload course grades
-    unawaited(
-      Future.wait(courses.map((course) async {
-        try {
-          await course.getGrades();
-          // Ignore network failures
-        } on SocketException catch (_) {} on HttpException catch (_) {} on HandshakeException catch (_) {} on OSError catch (_) {}
-      })),
-    );
-    return courses;
-  }
-
-  Future<List<Course>> _callback() async {
-    return Provider.of<CurrentSession>(context, listen: false)
-        .sisLoader
-        .getCourses(force: true);
-  }
+class CourseListScreen extends StatelessWidget {
+  const CourseListScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +20,12 @@ class _CourseListScreenState extends State<CourseListScreen> {
         return false;
       },
       child: StackedFutureBuilder<List<Course>>(
-        future: _init(),
+        future: Provider.of<CurrentSession>(context).courses(force: false),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
-              onRefresh: _callback,
+              onRefresh: () =>
+                  Provider.of<CurrentSession>(context, listen: false).courses(),
               child: ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -87,7 +49,9 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 snapshot.error is HandshakeException ||
                 snapshot.error is OSError) {
               return RefreshableErrorMessage(
-                onRefresh: _callback,
+                onRefresh: () =>
+                    Provider.of<CurrentSession>(context, listen: false)
+                        .courses(),
                 text: "Issue connecting to SIS",
               );
             }
@@ -101,13 +65,16 @@ class _CourseListScreenState extends State<CourseListScreen> {
             if (snapshot.error is NoSuchMethodError ||
                 snapshot.error is UnknownStructureException) {
               return RefreshableErrorMessage(
-                onRefresh: _callback,
+                onRefresh: () =>
+                    Provider.of<CurrentSession>(context, listen: false)
+                        .courses(),
                 text: "There was an unknown error.\nYou may need to log out.",
               );
             }
 
             return RefreshableErrorMessage(
-              onRefresh: _callback,
+              onRefresh: () =>
+                  Provider.of<CurrentSession>(context, listen: false).courses(),
               text:
                   "An error occured loading courses:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
             );
