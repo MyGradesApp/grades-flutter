@@ -64,6 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       await _showCourses(prefs);
       return;
+      // TODO: Actually return a login fail message here
     } on NoSuchMethodError catch (_) {
       // TODO: Pass login failure error message to login page
       if (!freshSession) {
