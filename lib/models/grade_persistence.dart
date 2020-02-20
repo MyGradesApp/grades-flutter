@@ -46,14 +46,26 @@ class GradePersistence extends ChangeNotifier {
     if (gradesStr == null || gradesStr.isEmpty) {
       gradesStr = "{}";
     }
-    var out = {};
-    (jsonDecode(gradesStr) as Map<String, List<dynamic>>).forEach((key, value) {
+
+    Map<String, List<Map<String, String>>> out = {};
+
+    Map<String, dynamic> dynCourses = Map<String, dynamic>.from(
+        jsonDecode(gradesStr) as Map<String, dynamic>);
+    dynCourses.forEach((String course, dynamic gradesListDyn) {
       List<Map<String, String>> grades = [];
-      grades = value.map((e) => (e as Map<String, String>)).toList();
-      out[key] = grades;
+      List<dynamic> gradesList = List.from(gradesListDyn as List);
+
+      gradesList.forEach((dynamic grade) {
+        Map<String, dynamic> dynGrade = grade as Map<String, dynamic>;
+        grades.add(
+          dynGrade.map((key, value) => MapEntry(key, value.toString())),
+        );
+      });
+
+      out[course] = grades;
     });
 
-    return Map<String, List<Map<String, String>>>.from(out);
+    return out;
   }
 
   void clearSaved() {
