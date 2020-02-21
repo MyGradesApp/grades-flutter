@@ -32,12 +32,14 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Future<void> _refresh({bool force = false}) async {
+    _numLoaded = 0;
     setState(() {
       _isLoading = true;
     });
-    _numLoaded = 0;
     _courses = await Provider.of<CurrentSession>(context, listen: false)
         .courses(force: force);
+    // Update for _courses future
+    setState(() {});
     var totalToLoad = _courses.length;
 
     // TODO: Switch to stream?

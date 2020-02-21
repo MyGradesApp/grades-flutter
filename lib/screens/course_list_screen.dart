@@ -11,8 +11,19 @@ import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-class CourseListScreen extends StatelessWidget {
+class CourseListScreen extends StatefulWidget {
   const CourseListScreen({Key key}) : super(key: key);
+
+  @override
+  _CourseListScreenState createState() => _CourseListScreenState();
+}
+
+class _CourseListScreenState extends State<CourseListScreen> {
+  Future<List<CachedCourse>> _refresh(BuildContext context) {
+    // Trigger ui update
+    setState(() {});
+    return Provider.of<CurrentSession>(context, listen: false).courses();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +36,7 @@ class CourseListScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
-              onRefresh: () =>
-                  Provider.of<CurrentSession>(context, listen: false).courses(),
+              onRefresh: () => _refresh(context),
               child: ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -50,9 +60,7 @@ class CourseListScreen extends StatelessWidget {
                 snapshot.error is HandshakeException ||
                 snapshot.error is OSError) {
               return RefreshableErrorMessage(
-                onRefresh: () =>
-                    Provider.of<CurrentSession>(context, listen: false)
-                        .courses(),
+                onRefresh: () => _refresh(context),
                 text: "Issue connecting to SIS",
               );
             }
@@ -66,16 +74,13 @@ class CourseListScreen extends StatelessWidget {
             if (snapshot.error is NoSuchMethodError ||
                 snapshot.error is UnknownStructureException) {
               return RefreshableErrorMessage(
-                onRefresh: () =>
-                    Provider.of<CurrentSession>(context, listen: false)
-                        .courses(),
+                onRefresh: () => _refresh(context),
                 text: "There was an unknown error.\nYou may need to log out.",
               );
             }
 
             return RefreshableErrorMessage(
-              onRefresh: () =>
-                  Provider.of<CurrentSession>(context, listen: false).courses(),
+              onRefresh: () => _refresh(context),
               text:
                   "An error occured loading courses:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
             );

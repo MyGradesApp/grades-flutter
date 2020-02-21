@@ -35,6 +35,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   Future<FetchedCourseData> _getData({bool force = true}) {
     final CachedCourse course =
         ModalRoute.of(context).settings.arguments as CachedCourse;
+    setState(() {});
     return Provider.of<CurrentSession>(context, listen: false)
         .fetchCourseData(context, course, force: force);
   }
