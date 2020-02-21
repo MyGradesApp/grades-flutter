@@ -10,7 +10,6 @@ import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
-import 'package:sis_loader/src/course.dart';
 
 class FeedScreen extends StatefulWidget {
   FeedScreen({Key key}) : super(key: key);

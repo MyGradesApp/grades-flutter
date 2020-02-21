@@ -20,6 +20,9 @@ class CourseGradesScreen extends StatefulWidget {
 
 class _CourseGradesScreenState extends State<CourseGradesScreen> {
   bool _hasCategories = false;
+
+  // Track whether we have set the above variable ot prevent repeated updates
+  bool _hasSetCategories = false;
   GroupingMode _currentGroupingMode;
 
   @override
@@ -77,11 +80,14 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
             future: _getData(force: false),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                Future.microtask(
-                  () => setState(() {
-                    _hasCategories = snapshot.data.hasCategories;
-                  }),
-                );
+                if (!_hasSetCategories) {
+                  Future.microtask(
+                    () => setState(() {
+                      _hasCategories = snapshot.data.hasCategories;
+                      _hasSetCategories = true;
+                    }),
+                  );
+                }
                 if (snapshot.data.grades.isEmpty) {
                   return RefreshableIconMessage(
                     onRefresh: () => _getData(),
