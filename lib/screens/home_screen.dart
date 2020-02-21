@@ -51,17 +51,17 @@ class _HomeScreenState extends State<HomeScreen> {
           leading: IconButton(
             tooltip: "Profile",
             icon: Icon(
-              Icons.person,
+              Icons.menu,
             ),
             onPressed: () => Navigator.pushNamed(context, '/academic_info'),
           ),
-          actions: <Widget>[
-            IconButton(
-              tooltip: "Settings",
-              icon: Icon(Icons.settings),
-              onPressed: () => Navigator.pushNamed(context, '/settings'),
-            )
-          ],
+          // actions: <Widget>[
+          //   IconButton(
+          //     tooltip: "Settings",
+          //     icon: Icon(Icons.settings),
+          //     onPressed: () => Navigator.pushNamed(context, '/settings'),
+          //   )
+          // ],
         ),
         body: PageView.builder(
           controller: controller,
@@ -69,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onPageChanged: (page) {
             setState(() {
               if (page == 0) {
-                title = "RECENT";
+                title = "";
               } else {
-                title = "COURSES";
+                title = "";
               }
             });
           },

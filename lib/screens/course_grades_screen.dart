@@ -44,7 +44,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
       appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
-        title: Text("${course.courseName}"),
+        // title: Text("${course.courseName}"),
         leading: IconButton(
           tooltip: "Back",
           icon: Icon(
@@ -69,66 +69,99 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
             ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () => _getData(),
-        child: StackedFutureBuilder<FetchedCourseData>(
-            future: _getData(force: false),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                Future.microtask(
-                  () => setState(() {
-                    _hasCategories = snapshot.data.hasCategories;
+      body: SingleChildScrollView(
+        child: Column(
+          // : MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "${course.gradePercent}.7%",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'OpenSans',
+                fontSize: 36.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              "${course.courseName}",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'OpenSans',
+                fontSize: 20.0,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            RefreshIndicator(
+              onRefresh: () => _getData(force: true),
+              child: StackedFutureBuilder<FetchedCourseData>(
+                  future: _getData(force: false),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Future.microtask(
+                        () => setState(() {
+                          _hasCategories = snapshot.data.hasCategories;
+                        }),
+                      );
+                      if (snapshot.data.grades.isEmpty) {
+                        return RefreshableIconMessage(
+                          onRefresh: () => _getData(force: true),
+                          icon: Icon(
+                            FontAwesomeIcons.inbox,
+                            size: 55,
+                            color: Colors.white,
+                          ),
+                          child: const Text(
+                            "There are no grades listed in this class",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17.0,
+                            ),
+                          ),
+                        );
+                        //   ],
+                        // ));
+
+                      }
+                      return CourseGradesMinimalDisplay(
+                        snapshot.data.grades,
+                        snapshot.data.categoryWeights,
+                        snapshot.data.hasCategories
+                            ? _currentGroupingMode
+                            : GroupingMode.Date,
+                        course.courseName,
+                      );
+                    } else if (snapshot.hasError) {
+                      if (snapshot.error is SocketException ||
+                          snapshot.error is HttpException ||
+                          snapshot.error is HandshakeException ||
+                          snapshot.error is OSError) {
+                        return RefreshableErrorMessage(
+                          onRefresh: () => _getData(),
+                          text: "Issue connecting to SIS",
+                        );
+                      }
+                      reportException(
+                        exception: snapshot.error,
+                        stackTrace: snapshot.stackTrace,
+                      );
+
+                      return RefreshableErrorMessage(
+                        onRefresh: () => _getData(),
+                        text:
+                            "An error occured fetching grades:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
+                      );
+                    }
+
+                    return Center(child: LoaderWidget());
                   }),
-                );
-                if (snapshot.data.grades.isEmpty) {
-                  return RefreshableIconMessage(
-                    onRefresh: () => _getData(),
-                    icon: Icon(
-                      FontAwesomeIcons.inbox,
-                      size: 55,
-                      color: Colors.white,
-                    ),
-                    child: const Text(
-                      "There are no grades listed in this class",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17.0,
-                      ),
-                    ),
-                  );
-                }
-                return CourseGradesMinimalDisplay(
-                  snapshot.data.grades,
-                  snapshot.data.categoryWeights,
-                  snapshot.data.hasCategories
-                      ? _currentGroupingMode
-                      : GroupingMode.Date,
-                  course.courseName,
-                );
-              } else if (snapshot.hasError) {
-                if (snapshot.error is SocketException ||
-                    snapshot.error is HttpException ||
-                    snapshot.error is HandshakeException ||
-                    snapshot.error is OSError) {
-                  return RefreshableErrorMessage(
-                    onRefresh: () => _getData(),
-                    text: "Issue connecting to SIS",
-                  );
-                }
-                reportException(
-                  exception: snapshot.error,
-                  stackTrace: snapshot.stackTrace,
-                );
-
-                return RefreshableErrorMessage(
-                  onRefresh: () => _getData(),
-                  text:
-                      "An error occured fetching grades:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
-                );
-              }
-
-              return Center(child: LoaderWidget());
-            }),
+            ),
+          ],
+        ),
       ),
     );
   }

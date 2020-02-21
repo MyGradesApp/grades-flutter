@@ -41,7 +41,10 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
         .getOriginalData(_courseName);
 
     return ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
+        // scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        physics: const ScrollPhysics(),
+        // physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _data.length,
         itemBuilder: (context, i) {
           var isNewGrade = !oldGrades.any(

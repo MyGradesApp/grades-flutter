@@ -23,26 +23,59 @@ class CourseListScreen extends StatelessWidget {
         future: Provider.of<CurrentSession>(context).courses(force: false),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return RefreshIndicator(
-              onRefresh: () =>
-                  Provider.of<CurrentSession>(context, listen: false).courses(),
-              child: ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var course = snapshot.data[index];
-                  return ClassListItemWidget(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/course_grades',
-                          arguments: course);
+            return SingleChildScrollView(
+                child: Column(
+              // : MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Courses",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 36.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Seth Goldin",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 20.0,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                RefreshIndicator(
+                  onRefresh: () =>
+                      Provider.of<CurrentSession>(context, listen: false)
+                          .courses(force: true),
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var course = snapshot.data[index];
+                      return ClassListItemWidget(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/course_grades',
+                              arguments: course);
+                        },
+                        course: course.courseName,
+                        letterGrade: course.gradeLetter,
+                        teacher: course.teacherName,
+                        percent: course.gradePercent,
+                      );
                     },
-                    course: course.courseName,
-                    letterGrade: course.gradeLetter,
-                    teacher: course.teacherName,
-                    percent: course.gradePercent,
-                  );
-                },
-              ),
-            );
+                  ),
+                ),
+              ],
+            ));
           } else if (snapshot.hasError) {
             if (snapshot.error is SocketException ||
                 snapshot.error is HttpException ||
