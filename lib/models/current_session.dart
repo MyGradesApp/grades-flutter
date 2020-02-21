@@ -19,7 +19,7 @@ class CurrentSession extends ChangeNotifier {
   }
 
   // TODO: Extract this?
-  Future<List<Course>> courses({bool force = true}) {
+  Future<List<CachedCourse>> courses({bool force = true}) {
     return _sisLoader.getCourses(force: force);
   }
 
@@ -30,7 +30,8 @@ class CurrentSession extends ChangeNotifier {
     return AcademicInfo(profile, absences);
   }
 
-  Future<FetchedCourseData> fetchCourseData(BuildContext context, Course course,
+  Future<FetchedCourseData> fetchCourseData(
+      BuildContext context, CachedCourse course,
       {bool force = true}) async {
     var grades = await course.getGrades(force);
     var hasCategories = false;

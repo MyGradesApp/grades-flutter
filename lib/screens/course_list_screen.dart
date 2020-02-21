@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
@@ -19,7 +20,7 @@ class CourseListScreen extends StatelessWidget {
       onWillPop: () async {
         return false;
       },
-      child: StackedFutureBuilder<List<Course>>(
+      child: StackedFutureBuilder<List<CachedCourse>>(
         future: Provider.of<CurrentSession>(context).courses(force: false),
         builder: (context, snapshot) {
           if (snapshot.hasData) {

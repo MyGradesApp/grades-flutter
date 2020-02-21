@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
@@ -21,7 +22,7 @@ class FeedScreen extends StatefulWidget {
 // TODO: Error handling
 class _FeedScreenState extends State<FeedScreen> {
   Map<String, List<Map<String, dynamic>>> _courseGrades = {};
-  List<Course> _courses;
+  List<CachedCourse> _courses;
   bool _isLoading = true;
   int _numLoaded = 0;
 

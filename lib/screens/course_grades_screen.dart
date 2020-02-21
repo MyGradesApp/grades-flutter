@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/theme_controller.dart';
+import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/course_grades_display.dart';
@@ -11,7 +12,6 @@ import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:provider/provider.dart';
-import 'package:sis_loader/sis_loader.dart';
 
 class CourseGradesScreen extends StatefulWidget {
   @override
@@ -30,14 +30,16 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   }
 
   Future<FetchedCourseData> _getData({bool force = true}) {
-    final Course course = ModalRoute.of(context).settings.arguments as Course;
+    final CachedCourse course =
+        ModalRoute.of(context).settings.arguments as CachedCourse;
     return Provider.of<CurrentSession>(context, listen: false)
         .fetchCourseData(context, course, force: force);
   }
 
   @override
   Widget build(BuildContext context) {
-    final Course course = ModalRoute.of(context).settings.arguments as Course;
+    final CachedCourse course =
+        ModalRoute.of(context).settings.arguments as CachedCourse;
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,

@@ -7,7 +7,7 @@ class CachedSISLoader {
   CachedSISLoader(this._loader, this.username);
 
   // Cache
-  Future<List<Course>> _courses;
+  Future<List<CachedCourse>> _courses;
   Future<Profile> _userProfile;
   Future<Absences> _absences;
 
@@ -20,11 +20,12 @@ class CachedSISLoader {
       _loader.login(username, password);
 
   // TODO: Pull caching out of sis-loader `Course`s
-  Future<List<Course>> getCourses({bool force = false}) async {
+  Future<List<CachedCourse>> getCourses({bool force = false}) async {
     if (_courses != null && !force) {
       return _courses;
     }
-    _courses = _loader.getCourses();
+    _courses = _loader.getCourses().then((courses) =>
+        courses.map((course) => CachedCourse.fromCourse(course)).toList());
     return _courses;
   }
 
@@ -42,5 +43,58 @@ class CachedSISLoader {
     }
     _absences = _loader.getAbsences();
     return _absences;
+  }
+}
+
+// This is a wrapped SISLoader Course type that will soon cache data and implements json serialization
+class CachedCourse {
+  CookieClient client;
+  String gradesUrl;
+  String courseName;
+  String periodString;
+  String teacherName;
+  dynamic gradePercent;
+  String gradeLetter;
+  Course _rawCourse;
+
+  CachedCourse.fromCourse(Course course) {
+    _rawCourse = course;
+    client = course.client;
+    gradesUrl = course.gradesUrl;
+    courseName = course.courseName;
+    periodString = course.periodString;
+    teacherName = course.teacherName;
+    gradePercent = course.gradePercent;
+    gradeLetter = course.gradeLetter;
+  }
+
+  CachedCourse.fromJson(Map<String, dynamic> json) {
+    client = json["client"] as CookieClient;
+    gradesUrl = json["gradeUrl"] as String;
+    courseName = json["courseName"] as String;
+    periodString = json["periodString"] as String;
+    teacherName = json["teacherName"] as String;
+    gradePercent = json["gradePercent"];
+    gradeLetter = json["gradeLetter"] as String;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data["client"] = this.client;
+    data["gradeUrl"] = this.gradesUrl;
+    data["courseName"] = this.courseName;
+    data["periodString"] = this.periodString;
+    data["teacherName"] = this.teacherName;
+    data["gradePercent"] = this.periodString;
+    data["gradeLetter"] = this.gradeLetter;
+    return data;
+  }
+
+  Future<List<Map<String, dynamic>>> getGrades([force = false]) {
+    return _rawCourse.getGrades(force);
+  }
+
+  Future<Map<String, String>> getCategoryWeights([force = false]) {
+    return _rawCourse.getCategoryWeights(force);
   }
 }
