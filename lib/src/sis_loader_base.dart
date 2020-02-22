@@ -29,10 +29,10 @@ class SISLoader {
   set sessionCookies(String cookies) {
     var newCookiesRaw = json.decode(cookies, reviver: (key, value) {
       if (key == null) return value;
-      return Cookie.fromSetCookieValue(value);
+      return Cookie.fromSetCookieValue(value as String);
     });
 
-    _client.cookies.addAll(Map<String, Cookie>.from(newCookiesRaw));
+    _client.cookies.addAll(Map<String, Cookie>.from(newCookiesRaw as Map));
   }
 
   Future<void> login(String username, String password) async {
@@ -205,7 +205,7 @@ class SISLoader {
     return courses;
   }
 
-  Future<dynamic> getRawUserProfile() async {
+  Future<Map<String, dynamic>> getRawUserProfile() async {
     assert(_loggedIn);
 
     if (debugMocking) {
@@ -215,7 +215,7 @@ class SISLoader {
     var graduationReqsRequest = await _client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=GraduationRequirements/GraduationRequirements.php&student_id=new&top_deleted_student=true'));
 
-    var bearerTokenCookie;
+    String bearerTokenCookie;
     try {
       bearerTokenCookie = graduationReqsRequest.headers['set-cookie']
           .firstWhere((c) => c.startsWith('Module::'));
@@ -251,35 +251,38 @@ class SISLoader {
           'content-type': 'multipart/form-data; boundary=FormBoundary',
         });
 
-    return json.decode(await dataRequest.bodyAsString())[0]['result'];
+    return json.decode(await dataRequest.bodyAsString())[0]['result']
+        as Map<String, dynamic>;
   }
 
   Future<Profile> getUserProfile() async {
     if (debugMocking) {
       return Future.delayed(Duration(seconds: 2), () => mock_data.PROFILE);
     }
-    var rawProfile = (await getRawUserProfile())['Top'];
+    var rawProfile = (await getRawUserProfile())['Top'] as Map<String, dynamic>;
 
     if (rawProfile == null) {
       return Profile();
     }
 
-    List<String> classRankPieces = rawProfile['class_rank']?.split(' / ');
+    var classRankPieces = (rawProfile['class_rank'] as String)?.split(' / ');
     return Profile(
         cumulative_gpa: rawProfile['cumluative_gpa'] != null
-            ? double.tryParse(rawProfile['cumluative_gpa'])
+            ? double.tryParse(rawProfile['cumluative_gpa'] as String)
             : null,
         cumulative_weighted_gpa: rawProfile['cumulative_weighted_gpa'] != null
-            ? double.tryParse(rawProfile['cumulative_weighted_gpa'])
+            ? double.tryParse(rawProfile['cumulative_weighted_gpa'] as String)
             : null,
-        class_rank_numerator:
-            (classRankPieces != null && classRankPieces[0].trim().isNotEmpty)
-                ? int.tryParse(classRankPieces[0])
-                : null,
-        class_rank_denominator:
-            (classRankPieces != null && classRankPieces[1].trim().isNotEmpty)
-                ? int.tryParse(classRankPieces[1])
-                : null);
+        class_rank_numerator: (classRankPieces != null &&
+                classRankPieces.isNotEmpty &&
+                classRankPieces[0].trim().isNotEmpty)
+            ? int.tryParse(classRankPieces[0])
+            : null,
+        class_rank_denominator: (classRankPieces != null &&
+                classRankPieces.isNotEmpty &&
+                classRankPieces[1].trim().isNotEmpty)
+            ? int.tryParse(classRankPieces[1])
+            : null);
   }
 
   Future<Absences> getAbsences() async {

@@ -1,48 +1,10 @@
 import 'dart:math';
 
-import 'package:intl/intl.dart';
+import 'package:sis_loader/src/grade.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 
 import '../sis_loader.dart' show debugMocking;
 import 'cookie_client.dart';
-
-final shortMonthDateFormat = DateFormat('MMM dd, yyyy hh:mm aa');
-final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
-final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
-final longMonthDayDateFormat = DateFormat('EEEE, MMM dd, yyyy hh:mm aa');
-final shortDayTerseDateTimeFormat = DateFormat('EEE, MM/dd/yy hh:mm aa');
-
-DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
-  try {
-    return shortMonthDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return longMonthDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return shortMonthDayDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return shortDayTerseDateTimeFormat.parseLoose(src);
-  } catch (_) {}
-  if (performRegexPass) {
-    try {
-      return longMonthDayDateFormat.parseLoose(src);
-    } catch (_) {}
-  } else {
-    return longMonthDayDateFormat.parseLoose(src);
-  }
-  if (performRegexPass) {
-    return _parseDateTimeCascade(
-      src.replaceAllMapped(RegExp(r'\b(\d{1,2})(?:st|nd|rd|th)\b'), (match) {
-        return '${match.group(1)}';
-      }),
-      false,
-    );
-  }
-
-  return null;
-}
 
 class Course {
   final CookieClient client;
@@ -54,7 +16,7 @@ class Course {
   final String gradeLetter;
 
   Future<String> _gradePageFuture;
-  Future<List<Map<String, dynamic>>> _grades;
+  Future<List<Grade>> _grades;
   Future<Map<String, String>> _categoryWeights;
 
   Course(
@@ -77,7 +39,7 @@ class Course {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getGrades([force = false]) {
+  Future<List<Grade>> getGrades([bool force = false]) {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
@@ -86,14 +48,14 @@ class Course {
     }
 
     if (_grades == null || force) {
-      _grades = _fetchRawGrades();
+      _grades = _fetchGrades();
       return _grades;
     } else {
       return _grades;
     }
   }
 
-  Future<Map<String, String>> getCategoryWeights([force = false]) {
+  Future<Map<String, String>> getCategoryWeights([bool force = false]) {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
@@ -109,22 +71,22 @@ class Course {
     }
   }
 
-  Future<List<Map<String, dynamic>>> _fetchRawGrades() async {
+  Future<List<Grade>> _fetchGrades() async {
     var gradePage = await _gradePage(force: true);
 
-    Map<String, dynamic> extractRowFields(
+    Map<String, String> extractRowFields(
         String row, Map<String, String> headers) {
       var fieldsMatches = RegExp(
               r'<TD class="LO_field" style="white-space:normal !important;" data-col="(.*?)">(?:<DIV.*?>)?(.*?)(?:<\/DIV>)?<\/TD>')
           .allMatches(row);
 
       // ignore: omit_local_variable_types
-      Map<String, dynamic> fields = {};
+      Map<String, String> fields = {};
 
       for (var match in fieldsMatches) {
         var rawField = match.group(1).toLowerCase();
         var field = headers[rawField];
-        dynamic content = match.group(2);
+        var content = match.group(2);
 
         if (rawField == 'comment') {
           if (content == '<span class="unreset"></span>') {
@@ -133,14 +95,21 @@ class Course {
         } else if (rawField == 'assigned_date' ||
             rawField == 'due_date' ||
             rawField == 'modified_date') {
-          if ((content as String).isEmpty) {
+          if (content.isEmpty) {
             content = null;
-          } else {
-            content = _parseDateTimeCascade(content);
           }
         } else if (rawField == 'assignment_files') {
           if (content == '&nbsp;') {
             content = null;
+          } else {
+            var match = RegExp(
+                    r'<UL><LI style="margin:5px 0px;"><A class="previewIframe" href="javascript:void(0)" data-href="(.*?)">(.*?)<\/A><\/LI><\/UL>')
+                .firstMatch(content);
+            if (match != null) {
+              content = match.group(2);
+            } else {
+              content = content.replaceAll(RegExp(r'<[^>]*>'), '');
+            }
           }
         }
         fields[field] = content;
@@ -164,7 +133,7 @@ class Course {
         RegExp('<TR id="LOy_row.+?"(.*?)<\/TR>').allMatches(gradePage);
 
     return gradesMatches
-        .map((m) => extractRowFields(m.group(1), headers))
+        .map((m) => Grade(extractRowFields(m.group(1), headers)))
         .toList();
   }
 

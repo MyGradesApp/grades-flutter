@@ -34,11 +34,5 @@ Future<void> main() async {
 //    }
   }
 
-  print(jsonEncode(o, toEncodable: (value) {
-    if (value is DateTime) {
-      return value.toString();
-    } else {
-      return value;
-    }
-  }));
+  print(jsonEncode(o));
 }
