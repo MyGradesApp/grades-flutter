@@ -307,4 +307,21 @@ class SISLoader {
       days: int.tryParse(absentDays),
     );
   }
+
+  getName() async {
+    if (debugMocking) {
+      return Future.delayed(Duration(seconds: 2), () => "John Doe");
+    }
+
+    var nameRequest = await _client.get(Uri.parse(
+        'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
+
+    var nameBody = await nameRequest.bodyAsString();
+    var nameMatch = RegExp(r'Welcome, ').firstMatch(nameBody);
+    if (nameMatch == null) {
+      return null;
+    }
+    var name = nameMatch.group(1);
+    return name;
+  }
 }
