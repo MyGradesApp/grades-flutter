@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:intl/intl.dart';
+import 'package:sis_loader/src/grade.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 
 import '../sis_loader.dart' show debugMocking;
@@ -54,7 +55,7 @@ class Course {
   final String gradeLetter;
 
   Future<String> _gradePageFuture;
-  Future<List<Map<String, dynamic>>> _grades;
+  Future<List<Grade>> _grades;
   Future<Map<String, String>> _categoryWeights;
 
   Course(
@@ -77,7 +78,7 @@ class Course {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getGrades([force = false]) {
+  Future<List<Grade>> getGrades([force = false]) {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
@@ -86,7 +87,7 @@ class Course {
     }
 
     if (_grades == null || force) {
-      _grades = _fetchRawGrades();
+      _grades = _fetchGrades();
       return _grades;
     } else {
       return _grades;
@@ -109,7 +110,7 @@ class Course {
     }
   }
 
-  Future<List<Map<String, dynamic>>> _fetchRawGrades() async {
+  Future<List<Grade>> _fetchGrades() async {
     var gradePage = await _gradePage(force: true);
 
     Map<String, dynamic> extractRowFields(
@@ -119,7 +120,7 @@ class Course {
           .allMatches(row);
 
       // ignore: omit_local_variable_types
-      Map<String, dynamic> fields = {};
+      Map<String, String> fields = {};
 
       for (var match in fieldsMatches) {
         var rawField = match.group(1).toLowerCase();
@@ -135,8 +136,6 @@ class Course {
             rawField == 'modified_date') {
           if ((content as String).isEmpty) {
             content = null;
-          } else {
-            content = _parseDateTimeCascade(content);
           }
         } else if (rawField == 'assignment_files') {
           if (content == '&nbsp;') {
@@ -173,7 +172,7 @@ class Course {
         RegExp('<TR id="LOy_row.+?"(.*?)<\/TR>').allMatches(gradePage);
 
     return gradesMatches
-        .map((m) => extractRowFields(m.group(1), headers))
+        .map((m) => Grade(extractRowFields(m.group(1), headers)))
         .toList();
   }
 
