@@ -5,6 +5,7 @@ import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/exceptions.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
+import 'package:sis_loader/src/name.dart';
 import 'package:sis_loader/src/profile.dart';
 
 import 'cookie_client.dart';
@@ -311,9 +312,9 @@ class SISLoader {
     );
   }
 
-  getName() async {
+  Future<Name> getName() async {
     if (debugMocking) {
-      return Future.delayed(Duration(seconds: 2), () => "John Doe");
+      return Future.delayed(Duration(seconds: 2), () => mock_data.NAME);
     }
 
     var nameRequest = await _client.get(Uri.parse(
@@ -324,7 +325,7 @@ class SISLoader {
     if (nameMatch == null) {
       return null;
     }
-    var name = nameMatch.group(1);
-    return name;
+    var user = nameMatch.group(1);
+    return Name(username: user);
   }
 }
