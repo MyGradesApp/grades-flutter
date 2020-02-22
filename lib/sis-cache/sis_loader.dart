@@ -90,11 +90,11 @@ class CachedCourse {
     return data;
   }
 
-  Future<List<Map<String, dynamic>>> getGrades([force = false]) {
+  Future<List<Grade>> getGrades([bool force = false]) {
     return _rawCourse.getGrades(force);
   }
 
-  Future<Map<String, String>> getCategoryWeights([force = false]) {
+  Future<Map<String, String>> getCategoryWeights([bool force = false]) {
     return _rawCourse.getCategoryWeights(force);
   }
 }

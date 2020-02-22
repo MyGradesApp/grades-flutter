@@ -10,6 +10,7 @@ import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class FeedScreen extends StatefulWidget {
   FeedScreen({Key key}) : super(key: key);
@@ -20,7 +21,7 @@ class FeedScreen extends StatefulWidget {
 
 // TODO: Error handling
 class _FeedScreenState extends State<FeedScreen> {
-  Map<String, List<Map<String, dynamic>>> _courseGrades = {};
+  Map<String, List<Grade>> _courseGrades = {};
   List<CachedCourse> _courses;
   bool _isLoading = true;
   int _numLoaded = 0;
@@ -66,7 +67,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     var courses = _courseGrades;
 
-    Map<String, List<Map<String, dynamic>>> out = {};
+    Map<String, List<Grade>> out = {};
 
     courses.forEach((courseName, grades) {
       var oldGrades = Provider.of<GradePersistence>(
@@ -74,14 +75,14 @@ class _FeedScreenState extends State<FeedScreen> {
       ).getData(courseName);
 
       grades.forEach((grade) {
-        if (grade["Grade"] != "Not Graded") {
-          var isNewGrade = !oldGrades
-              .any((oldGrade) => oldGrade["Assignment"] == grade["Assignment"]);
+        if (grade.grade != "Not Graded") {
+          var isNewGrade =
+              !oldGrades.any((oldGrade) => oldGrade.name == grade.name);
 
           bool gradeIsRecent;
-          if (grade["Date Last Modified"] != null &&
-              grade["Date Last Modified"] is DateTime) {
-            var gradeDate = grade["Date Last Modified"] as DateTime;
+          if (grade.dateLastModified != null &&
+              grade.dateLastModified is DateTime) {
+            var gradeDate = grade.dateLastModified;
             gradeIsRecent = gradeDate
                 .isAfter(DateTime.now().subtract(const Duration(days: 1)));
           } else {
@@ -144,7 +145,7 @@ class _FeedScreenState extends State<FeedScreen> {
       // Only show 4 most recent
       const maxItems = 4;
       int endIndex = min(maxItems, grades.length);
-      List<Map<String, dynamic>> clipped;
+      List<Grade> clipped;
       if (grades.length > maxItems) {
         clipped = grades.sublist(endIndex);
       }

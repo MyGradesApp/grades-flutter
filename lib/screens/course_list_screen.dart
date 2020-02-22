@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListScreen extends StatefulWidget {
-  const CourseListScreen({Key key}) : super(key: key);
+  CourseListScreen({Key key}) : super(key: key);
 
   @override
   _CourseListScreenState createState() => _CourseListScreenState();

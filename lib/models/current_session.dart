@@ -35,7 +35,7 @@ class CurrentSession extends ChangeNotifier {
       {bool force = true}) async {
     var grades = await course.getGrades(force);
     var hasCategories = false;
-    if (grades.every((element) => element.containsKey("Category"))) {
+    if (grades.every((element) => element.raw.containsKey("Category"))) {
       hasCategories = true;
     }
     Provider.of<GradePersistence>(context, listen: false)
@@ -57,7 +57,7 @@ class AcademicInfo {
 }
 
 class FetchedCourseData {
-  final List<Map<String, dynamic>> grades;
+  final List<Grade> grades;
   final Map<String, String> categoryWeights;
   final bool hasCategories;
 
