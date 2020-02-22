@@ -286,7 +286,7 @@ class SISLoader {
             : null);
   }
 
-   Future<Name> getName() async {
+  Future<Name> getName() async {
     if (debugMocking) {
       return Future.delayed(Duration(seconds: 2), () => mock_data.NAME);
     }
@@ -309,7 +309,7 @@ class SISLoader {
     }
 
     var absencesRequest = await _client.get(Uri.parse(
-        'https://sis.palmbeachschools.org/focus/Modules.php?force_package=SIS&modname=Attendance/StudentSummary.php'))
+        'https://sis.palmbeachschools.org/focus/Modules.php?force_package=SIS&modname=Attendance/StudentSummary.php'));
     var absencesBody = await absencesRequest.bodyAsString();
     var absencesMatch =
         RegExp(r'<b>Absent:</b> (\d+) periods \(during (\d+) days\)')
@@ -324,5 +324,4 @@ class SISLoader {
       days: int.tryParse(absentDays),
     );
   }
-
 }
