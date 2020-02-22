@@ -73,8 +73,9 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
               );
             }
           } else {
-            if ((oldDate != null ? isoWeekNumber(oldDate) : null) !=
-                isoWeekNumber(date)) {
+            if (date != null &&
+                (oldDate != null ? isoWeekNumber(oldDate) : null) !=
+                    isoWeekNumber(date)) {
               return _buildHeaderedItem(
                 text: _dateRangeHeaderForWeek(date),
                 child: card,
