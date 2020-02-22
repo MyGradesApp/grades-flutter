@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class GradeItemDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> grade = Map.from(
-        ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
+    Grade grade = ModalRoute.of(context).settings.arguments as Grade;
 
     double pointsUpper, pointsLower;
-    if (grade.containsKey('Points')) {
-      var matches =
-          RegExp(r"([\d.]+) / ([\d.]+)")?.firstMatch(grade['Points'] as String);
+    if (grade.raw.containsKey('Points')) {
+      var matches = RegExp(r"([\d.]+) / ([\d.]+)")?.firstMatch(grade.points);
 
       // TODO: Rework null propigation
       pointsUpper = double.tryParse(matches?.group(1) ?? "0");
@@ -27,11 +26,12 @@ class GradeItemDetailScreen extends StatelessWidget {
       ]),
     ];
 
-    grade.removeWhere((key, value) => value == null);
-    var assignmentName = grade.remove("Assignment") as String;
+    Map<String, String> rawData = Map.from(grade.raw);
+    rawData.removeWhere((key, value) => value == null);
+    var assignmentName = rawData.remove("Assignment");
 
-    var keys = grade.keys.toList();
-    var values = grade.values.toList();
+    var keys = rawData.keys.toList();
+    var values = rawData.values.toList();
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -50,7 +50,7 @@ class GradeItemDetailScreen extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-        itemCount: grade.length,
+        itemCount: rawData.length,
         itemBuilder: (context, i) {
           return Padding(
             padding: const EdgeInsets.all(1.0),

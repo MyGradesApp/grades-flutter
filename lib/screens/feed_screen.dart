@@ -5,11 +5,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
-import 'package:sis_loader/src/course.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class FeedScreen extends StatefulWidget {
   FeedScreen({Key key}) : super(key: key);
@@ -19,25 +20,28 @@ class FeedScreen extends StatefulWidget {
 }
 
 // TODO: Error handling
-class _FeedScreenState extends State<FeedScreen> {
-  Map<String, List<Map<String, dynamic>>> _courseGrades = {};
-  List<Course> _courses;
+class _FeedScreenState extends State<FeedScreen>
+    with AutomaticKeepAliveClientMixin<FeedScreen> {
+  Map<String, List<Grade>> _courseGrades = {};
+  List<CachedCourse> _courses;
   bool _isLoading = true;
   int _numLoaded = 0;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     _refresh();
   }
 
   Future<void> _refresh({bool force = false}) async {
+    _numLoaded = 0;
     setState(() {
       _isLoading = true;
     });
-    _numLoaded = 0;
     _courses = await Provider.of<CurrentSession>(context, listen: false)
         .courses(force: force);
+    // Update for _courses future
+    setState(() {});
     var totalToLoad = _courses.length;
 
     // TODO: Switch to stream?
@@ -62,9 +66,11 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     var courses = _courseGrades;
 
-    Map<String, List<Map<String, dynamic>>> out = {};
+    Map<String, List<Grade>> out = {};
 
     courses.forEach((courseName, grades) {
       var oldGrades = Provider.of<GradePersistence>(
@@ -72,14 +78,14 @@ class _FeedScreenState extends State<FeedScreen> {
       ).getData(courseName);
 
       grades.forEach((grade) {
-        if (grade["Grade"] != "Not Graded") {
-          var isNewGrade = !oldGrades
-              .any((oldGrade) => oldGrade["Assignment"] == grade["Assignment"]);
+        if (grade.grade != "Not Graded") {
+          var isNewGrade =
+              !oldGrades.any((oldGrade) => oldGrade.name == grade.name);
 
           bool gradeIsRecent;
-          if (grade["Date Last Modified"] != null &&
-              grade["Date Last Modified"] is DateTime) {
-            var gradeDate = grade["Date Last Modified"] as DateTime;
+          if (grade.dateLastModified != null &&
+              grade.dateLastModified is DateTime) {
+            var gradeDate = grade.dateLastModified;
             gradeIsRecent = gradeDate
                 .isAfter(DateTime.now().subtract(const Duration(days: 1)));
           } else {
@@ -142,7 +148,7 @@ class _FeedScreenState extends State<FeedScreen> {
       // Only show 4 most recent
       const maxItems = 4;
       int endIndex = min(maxItems, grades.length);
-      List<Map<String, dynamic>> clipped;
+      List<Grade> clipped;
       if (grades.length > maxItems) {
         clipped = grades.sublist(endIndex);
       }
@@ -206,4 +212,7 @@ class _FeedScreenState extends State<FeedScreen> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

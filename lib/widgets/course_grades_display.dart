@@ -6,11 +6,12 @@ import 'package:grades/utilities/date.dart';
 import 'package:grades/utilities/grades.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 import 'colored_grade_dot.dart';
 
 class CourseGradesMinimalDisplay extends StatelessWidget {
-  final List<Map<String, dynamic>> _data;
+  final List<Grade> _data;
   final Map<String, String> _weights;
   final GroupingMode _groupingMode;
   final String _courseName;
@@ -19,7 +20,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
       this._data, this._weights, this._groupingMode, this._courseName);
 
   factory CourseGradesMinimalDisplay(
-    List<Map<String, dynamic>> data,
+    List<Grade> data,
     Map<String, String> weights,
     GroupingMode groupingMode,
     String courseName,
@@ -47,8 +48,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
         // physics: const AlwaysScrollableScrollPhysics(),
         itemCount: _data.length,
         itemBuilder: (context, i) {
-          var isNewGrade = !oldGrades.any(
-              (element) => element["Assignment"] == _data[i]["Assignment"]);
+          var isNewGrade =
+              !oldGrades.any((element) => element.name == _data[i].name);
 
           var card = buildGradeItemCard(
             context,
@@ -58,13 +59,13 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             isNewGrade,
           );
 
-          String category = _data[i]["Category"] as String;
-          DateTime date = _data[i]["Assigned"] as DateTime;
+          String category = _data[i].category;
+          DateTime date = _data[i].assignedDate;
           var oldCategory;
           DateTime oldDate;
           if (i > 0) {
-            oldCategory = _data[i - 1]["Category"];
-            oldDate = _data[i - 1]["Assigned"] as DateTime;
+            oldCategory = _data[i - 1].category;
+            oldDate = _data[i - 1].assignedDate;
           }
           if (_groupingMode == GroupingMode.Category) {
             if (oldCategory != category) {
@@ -75,8 +76,9 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
               );
             }
           } else {
-            if ((oldDate != null ? isoWeekNumber(oldDate) : null) !=
-                isoWeekNumber(date)) {
+            if (date != null &&
+                (oldDate != null ? isoWeekNumber(oldDate) : null) !=
+                    isoWeekNumber(date)) {
               return _buildHeaderedItem(
                 text: _dateRangeHeaderForWeek(date),
                 child: card,
@@ -127,8 +129,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
   }
 }
 
-int _gradeCmp(Map<String, dynamic> a, Map<String, dynamic> b) {
-  return (a["Category"] as String)?.compareTo(b["Category"] as String) ?? 0;
+int _gradeCmp(Grade a, Grade b) {
+  return a.category?.compareTo(b.category) ?? 0;
 }
 
 String _dateRangeHeaderForWeek(DateTime date) {
@@ -145,9 +147,9 @@ String _titlecase(String src) {
       (match) => match.group(1).toUpperCase() + match.group(2));
 }
 
-Widget buildGradeItemCard(BuildContext context, Map<String, dynamic> grade,
-    Color textColor, Color cardColor, bool showIndicator) {
-  var gradeString = grade["Grade"].toString();
+Widget buildGradeItemCard(BuildContext context, Grade grade, Color textColor,
+    Color cardColor, bool showIndicator) {
+  var gradeString = grade.grade;
   var percentIndex = gradeString.indexOf('%');
   String gradeLetter;
   if (percentIndex != -1) {
@@ -186,7 +188,7 @@ Widget buildGradeItemCard(BuildContext context, Map<String, dynamic> grade,
               child: Row(
                 children: <Widget>[
                   Text(
-                    grade["Assignment"] as String,
+                    grade.name,
                     style: TextStyle(color: textColor),
                   ),
                   const SizedBox(width: 6),

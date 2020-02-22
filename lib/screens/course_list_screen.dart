@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
@@ -10,8 +11,19 @@ import 'package:grades/widgets/refreshable_error_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-class CourseListScreen extends StatelessWidget {
-  const CourseListScreen({Key key}) : super(key: key);
+class CourseListScreen extends StatefulWidget {
+  CourseListScreen({Key key}) : super(key: key);
+
+  @override
+  _CourseListScreenState createState() => _CourseListScreenState();
+}
+
+class _CourseListScreenState extends State<CourseListScreen> {
+  Future<List<CachedCourse>> _refresh(BuildContext context) {
+    // Trigger ui update
+    setState(() {});
+    return Provider.of<CurrentSession>(context, listen: false).courses();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +31,7 @@ class CourseListScreen extends StatelessWidget {
       onWillPop: () async {
         return false;
       },
-      child: StackedFutureBuilder<List<Course>>(
+      child: StackedFutureBuilder<List<CachedCourse>>(
         future: Provider.of<CurrentSession>(context).courses(force: false),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -82,9 +94,7 @@ class CourseListScreen extends StatelessWidget {
                 snapshot.error is HandshakeException ||
                 snapshot.error is OSError) {
               return RefreshableErrorMessage(
-                onRefresh: () =>
-                    Provider.of<CurrentSession>(context, listen: false)
-                        .courses(),
+                onRefresh: () => _refresh(context),
                 text: "Issue connecting to SIS",
               );
             }
@@ -98,16 +108,13 @@ class CourseListScreen extends StatelessWidget {
             if (snapshot.error is NoSuchMethodError ||
                 snapshot.error is UnknownStructureException) {
               return RefreshableErrorMessage(
-                onRefresh: () =>
-                    Provider.of<CurrentSession>(context, listen: false)
-                        .courses(),
+                onRefresh: () => _refresh(context),
                 text: "There was an unknown error.\nYou may need to log out.",
               );
             }
 
             return RefreshableErrorMessage(
-              onRefresh: () =>
-                  Provider.of<CurrentSession>(context, listen: false).courses(),
+              onRefresh: () => _refresh(context),
               text:
                   "An error occured loading courses:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
             );

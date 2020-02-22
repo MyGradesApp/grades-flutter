@@ -19,7 +19,7 @@ class CurrentSession extends ChangeNotifier {
   }
 
   // TODO: Extract this?
-  Future<List<Course>> courses({bool force = true}) {
+  Future<List<CachedCourse>> courses({bool force = true}) {
     return _sisLoader.getCourses(force: force);
   }
 
@@ -30,11 +30,12 @@ class CurrentSession extends ChangeNotifier {
     return AcademicInfo(profile, absences);
   }
 
-  Future<FetchedCourseData> fetchCourseData(BuildContext context, Course course,
+  Future<FetchedCourseData> fetchCourseData(
+      BuildContext context, CachedCourse course,
       {bool force = true}) async {
     var grades = await course.getGrades(force);
     var hasCategories = false;
-    if (grades.every((element) => element.containsKey("Category"))) {
+    if (grades.every((element) => element.raw.containsKey("Category"))) {
       hasCategories = true;
     }
     Provider.of<GradePersistence>(context, listen: false)
@@ -56,7 +57,7 @@ class AcademicInfo {
 }
 
 class FetchedCourseData {
-  final List<Map<String, dynamic>> grades;
+  final List<Grade> grades;
   final Map<String, String> categoryWeights;
   final bool hasCategories;
 
