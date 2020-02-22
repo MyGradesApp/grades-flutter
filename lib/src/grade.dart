@@ -19,13 +19,9 @@ DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
   try {
     return shortDayTerseDateTimeFormat.parseLoose(src);
   } catch (_) {}
-  if (performRegexPass) {
-    try {
-      return longMonthDayDateFormat.parseLoose(src);
-    } catch (_) {}
-  } else {
+  try {
     return longMonthDayDateFormat.parseLoose(src);
-  }
+  } catch (_) {}
   if (performRegexPass) {
     return _parseDateTimeCascade(
       src.replaceAllMapped(RegExp(r'\b(\d{1,2})(?:st|nd|rd|th)\b'), (match) {
