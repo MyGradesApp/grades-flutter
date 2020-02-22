@@ -286,33 +286,7 @@ class SISLoader {
             : null);
   }
 
-  Future<Absences> getAbsences() async {
-    if (debugMocking) {
-      return Future.delayed(Duration(seconds: 2), () => mock_data.ABSENCES);
-    }
-
-    var absencesRequest = await _client.get(Uri.parse(
-        'https://sis.palmbeachschools.org/focus/Modules.php?force_package=SIS&modname=Attendance/StudentSummary.php'));
-
-    var absencesBody = await absencesRequest.bodyAsString();
-
-    var absencesMatch =
-        RegExp(r'<b>Absent:</b> (\d+) periods \(during (\d+) days\)')
-            .firstMatch(absencesBody);
-    if (absencesMatch == null) {
-      return null;
-    }
-
-    var absentPeriods = absencesMatch.group(1);
-    var absentDays = absencesMatch.group(2);
-
-    return Absences(
-      periods: int.tryParse(absentPeriods),
-      days: int.tryParse(absentDays),
-    );
-  }
-
-  Future<Name> getName() async {
+   Future<Name> getName() async {
     if (debugMocking) {
       return Future.delayed(Duration(seconds: 2), () => mock_data.NAME);
     }
@@ -328,4 +302,27 @@ class SISLoader {
     var user = nameMatch.group(1);
     return Name(username: user);
   }
+
+  Future<Absences> getAbsences() async {
+    if (debugMocking) {
+      return Future.delayed(Duration(seconds: 2), () => mock_data.ABSENCES);
+    }
+
+    var absencesRequest = await _client.get(Uri.parse(
+        'https://sis.palmbeachschools.org/focus/Modules.php?force_package=SIS&modname=Attendance/StudentSummary.php'))
+    var absencesBody = await absencesRequest.bodyAsString();
+    var absencesMatch =
+        RegExp(r'<b>Absent:</b> (\d+) periods \(during (\d+) days\)')
+            .firstMatch(absencesBody);
+    if (absencesMatch == null) {
+      return null;
+    }
+    var absentPeriods = absencesMatch.group(1);
+    var absentDays = absencesMatch.group(2);
+    return Absences(
+      periods: int.tryParse(absentPeriods),
+      days: int.tryParse(absentDays),
+    );
+  }
+
 }
