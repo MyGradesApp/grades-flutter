@@ -1,49 +1,10 @@
 import 'dart:math';
 
-import 'package:intl/intl.dart';
 import 'package:sis_loader/src/grade.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 
 import '../sis_loader.dart' show debugMocking;
 import 'cookie_client.dart';
-
-final shortMonthDateFormat = DateFormat('MMM dd, yyyy hh:mm aa');
-final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
-final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
-final longMonthDayDateFormat = DateFormat('EEEE, MMM dd, yyyy hh:mm aa');
-final shortDayTerseDateTimeFormat = DateFormat('EEE, MM/dd/yy hh:mm aa');
-
-DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
-  try {
-    return shortMonthDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return longMonthDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return shortMonthDayDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return shortDayTerseDateTimeFormat.parseLoose(src);
-  } catch (_) {}
-  if (performRegexPass) {
-    try {
-      return longMonthDayDateFormat.parseLoose(src);
-    } catch (_) {}
-  } else {
-    return longMonthDayDateFormat.parseLoose(src);
-  }
-  if (performRegexPass) {
-    return _parseDateTimeCascade(
-      src.replaceAllMapped(RegExp(r'\b(\d{1,2})(?:st|nd|rd|th)\b'), (match) {
-        return '${match.group(1)}';
-      }),
-      false,
-    );
-  }
-
-  return null;
-}
 
 class Course {
   final CookieClient client;
