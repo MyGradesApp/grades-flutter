@@ -20,15 +20,16 @@ class FeedScreen extends StatefulWidget {
 }
 
 // TODO: Error handling
-class _FeedScreenState extends State<FeedScreen> {
+class _FeedScreenState extends State<FeedScreen>
+    with AutomaticKeepAliveClientMixin<FeedScreen> {
   Map<String, List<Grade>> _courseGrades = {};
   List<CachedCourse> _courses;
   bool _isLoading = true;
   int _numLoaded = 0;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     _refresh();
   }
 
@@ -65,6 +66,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     var courses = _courseGrades;
 
     Map<String, List<Grade>> out = {};
@@ -209,4 +212,7 @@ class _FeedScreenState extends State<FeedScreen> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
