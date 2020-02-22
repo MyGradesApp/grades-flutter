@@ -49,7 +49,7 @@ final COURSES = [
   ),
 ];
 
-final RAW_PROFILE = '{}';
+final Map<String, dynamic> RAW_PROFILE = {};
 
 final PROFILE = Profile(
   cumulative_gpa: 3.9,

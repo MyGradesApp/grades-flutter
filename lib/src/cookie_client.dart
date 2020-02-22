@@ -27,7 +27,7 @@ class CookieClient {
   final Map<String, Cookie> cookies = {};
 
   Future<HttpClientResponse> get(Uri url) async {
-    var location;
+    List<String> location;
     var response = await _client.getUrl(url).then((HttpClientRequest request) {
       // We need to handle redirects ourselves
       request.followRedirects = false;
@@ -49,13 +49,13 @@ class CookieClient {
     if ((response.statusCode == 302 || response.statusCode == 303) &&
         location != null) {
       var newLocation = location[0];
-      if ((newLocation as String).startsWith('/')) {
+      if (newLocation.startsWith('/')) {
         newLocation = url.scheme + '://' + url.host + newLocation;
       }
       var oldCode = response.statusCode;
       response = await get(Uri.parse(newLocation)).catchError((error) async {
         // TODO: Fix this for real
-        if ((newLocation as String).startsWith('Modules.php?')) {
+        if (newLocation.startsWith('Modules.php?')) {
           newLocation = 'https://sis.palmbeachschools.org/focus/' + newLocation;
           response = await get(Uri.parse(newLocation));
         } else {
@@ -72,7 +72,7 @@ class CookieClient {
 
   Future<HttpClientResponse> post(Uri url, Object data,
       {Map<String, Object> headers}) async {
-    var location;
+    List<String> location;
     var response = await _client.postUrl(url).then((HttpClientRequest request) {
       // We need to handle redirects ourselves
       request.followRedirects = false;
@@ -86,7 +86,7 @@ class CookieClient {
       } else {
         request.headers
             .add('content-type', 'application/x-www-form-urlencoded');
-        request.write(Uri(queryParameters: data).query);
+        request.write(Uri(queryParameters: data as Map<String, String>).query);
       }
       return request.close();
     }).then((HttpClientResponse response) {

@@ -78,7 +78,7 @@ class Course {
     }
   }
 
-  Future<List<Grade>> getGrades([force = false]) {
+  Future<List<Grade>> getGrades([bool force = false]) {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
@@ -94,7 +94,7 @@ class Course {
     }
   }
 
-  Future<Map<String, String>> getCategoryWeights([force = false]) {
+  Future<Map<String, String>> getCategoryWeights([bool force = false]) {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
@@ -113,7 +113,7 @@ class Course {
   Future<List<Grade>> _fetchGrades() async {
     var gradePage = await _gradePage(force: true);
 
-    Map<String, dynamic> extractRowFields(
+    Map<String, String> extractRowFields(
         String row, Map<String, String> headers) {
       var fieldsMatches = RegExp(
               r'<TD class="LO_field" style="white-space:normal !important;" data-col="(.*?)">(?:<DIV.*?>)?(.*?)(?:<\/DIV>)?<\/TD>')
@@ -125,7 +125,7 @@ class Course {
       for (var match in fieldsMatches) {
         var rawField = match.group(1).toLowerCase();
         var field = headers[rawField];
-        dynamic content = match.group(2);
+        var content = match.group(2);
 
         if (rawField == 'comment') {
           if (content == '<span class="unreset"></span>') {
@@ -134,7 +134,7 @@ class Course {
         } else if (rawField == 'assigned_date' ||
             rawField == 'due_date' ||
             rawField == 'modified_date') {
-          if ((content as String).isEmpty) {
+          if (content.isEmpty) {
             content = null;
           }
         } else if (rawField == 'assignment_files') {
@@ -147,7 +147,7 @@ class Course {
             if (match != null) {
               content = match.group(2);
             } else {
-              content = (content as String).replaceAll(RegExp(r'<[^>]*>'), '');
+              content = content.replaceAll(RegExp(r'<[^>]*>'), '');
             }
           }
         }
