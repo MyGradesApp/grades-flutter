@@ -5,6 +5,6 @@ class Name {
 
   @override
   String toString() {
-    return '{name: ${username}}';
+    return '{username: ${username}}';
   }
 }
