@@ -295,7 +295,7 @@ class SISLoader {
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
 
     var nameBody = await nameRequest.bodyAsString();
-    var nameMatch = RegExp(r'Welcome, (.+)<\/').firstMatch(nameBody);
+    var nameMatch = RegExp(r'Welcome, (.+?)<\/').firstMatch(nameBody);
     if (nameMatch == null) {
       return null;
     }
