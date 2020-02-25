@@ -5,6 +5,7 @@ import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable_error_message.dart';
+import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -108,6 +109,17 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
               );
             }
 
+            if (Provider.of<CurrentSession>(context).isOffline) {
+              return RefreshableIconMessage(
+                onRefresh: () => _refresh(context),
+                icon: Icon(
+                  Icons.signal_cellular_connected_no_internet_4_bar,
+                  color: Colors.white,
+                  size: 55,
+                ),
+                text: 'Academic Information is not available offline',
+              );
+            }
             // return const Center(child: CircularProgressIndicator());
             return Center(child: LoaderWidget());
           }),

@@ -1,3 +1,4 @@
+import 'package:grades/models/data_persistence.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CachedSISLoader {
@@ -90,11 +91,20 @@ class CachedCourse {
     return data;
   }
 
-  Future<List<Grade>> getGrades([bool force = false]) {
-    return _rawCourse.getGrades(force);
+  Future<List<Grade>> getGrades([bool force = false]) async {
+    if (_rawCourse == null) {
+      return Future.value(GLOBAL_DATA_PERSISTENCE.getGrades(courseName));
+    }
+    return await _rawCourse.getGrades(force);
   }
 
-  Future<Map<String, String>> getCategoryWeights([bool force = false]) {
-    return _rawCourse.getCategoryWeights(force);
+  Future<Map<String, String>> getCategoryWeights([bool force = false]) async {
+    // If we are offline
+    if (_rawCourse == null) {
+      return Future.value(GLOBAL_DATA_PERSISTENCE.weights);
+    }
+    var weights = await _rawCourse.getCategoryWeights(force);
+    GLOBAL_DATA_PERSISTENCE.setWeights(weights);
+    return weights;
   }
 }
