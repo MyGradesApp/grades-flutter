@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/models/data_persistence.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/date.dart';
 import 'package:grades/utilities/grades.dart';
@@ -38,8 +38,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var oldGrades = Provider.of<GradePersistence>(context, listen: false)
-        .getOriginalData(_courseName);
+    var oldGrades = Provider.of<DataPersistence>(context, listen: false)
+        .getOriginalGrades(_courseName);
 
     return ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -98,7 +98,7 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
                 Expanded(
                   child: Text(
                     text,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:grades/models/data_persistence.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CachedSISLoader {
@@ -69,7 +70,6 @@ class CachedCourse {
   }
 
   CachedCourse.fromJson(Map<String, dynamic> json) {
-    client = json["client"] as CookieClient;
     gradesUrl = json["gradeUrl"] as String;
     courseName = json["courseName"] as String;
     periodString = json["periodString"] as String;
@@ -80,21 +80,29 @@ class CachedCourse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data["client"] = this.client;
     data["gradeUrl"] = this.gradesUrl;
     data["courseName"] = this.courseName;
     data["periodString"] = this.periodString;
     data["teacherName"] = this.teacherName;
-    data["gradePercent"] = this.periodString;
+    data["gradePercent"] = this.gradePercent;
     data["gradeLetter"] = this.gradeLetter;
     return data;
   }
 
-  Future<List<Grade>> getGrades([bool force = false]) {
-    return _rawCourse.getGrades(force);
+  Future<List<Grade>> getGrades([bool force = false]) async {
+    if (_rawCourse == null) {
+      return Future.value(GLOBAL_DATA_PERSISTENCE.getGrades(courseName));
+    }
+    return await _rawCourse.getGrades(force);
   }
 
-  Future<Map<String, String>> getCategoryWeights([bool force = false]) {
-    return _rawCourse.getCategoryWeights(force);
+  Future<Map<String, String>> getCategoryWeights([bool force = false]) async {
+    // If we are offline
+    if (_rawCourse == null) {
+      return Future.value(GLOBAL_DATA_PERSISTENCE.weights);
+    }
+    var weights = await _rawCourse.getCategoryWeights(force);
+    GLOBAL_DATA_PERSISTENCE.setWeights(weights);
+    return weights;
   }
 }

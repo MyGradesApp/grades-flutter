@@ -37,7 +37,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         ModalRoute.of(context).settings.arguments as CachedCourse;
     setState(() {});
     return Provider.of<CurrentSession>(context, listen: false)
-        .fetchCourseData(context, course, force: force);
+        .courseData(context, course, force: force);
   }
 
   @override

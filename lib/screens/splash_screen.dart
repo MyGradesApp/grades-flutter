@@ -61,6 +61,8 @@ class _SplashScreenState extends State<SplashScreen> {
         freshSession ? null : session,
       );
       Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(false);
 
       await _showCourses(prefs);
       return;
@@ -76,29 +78,38 @@ class _SplashScreenState extends State<SplashScreen> {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
     } on HttpException catch (_) {
-      _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
-      setState(() {
-        _showError = true;
-      });
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(true);
+
+//      _scaffoldKey.currentState
+//          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
+//      setState(() {
+//        _showError = true;
+//      });
     } on SocketException catch (_) {
-      _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
-      setState(() {
-        _showError = true;
-      });
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(true);
+//      _scaffoldKey.currentState
+//          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
+//      setState(() {
+//        _showError = true;
+//      });
     } on HandshakeException catch (_) {
-      _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
-      setState(() {
-        _showError = true;
-      });
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(true);
+//      _scaffoldKey.currentState
+//          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
+//      setState(() {
+//        _showError = true;
+//      });
     } on OSError catch (_) {
-      _scaffoldKey.currentState
-          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
-      setState(() {
-        _showError = true;
-      });
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(true);
+//      _scaffoldKey.currentState
+//          .showSnackBar(errorSnackbar('Login failed - Poor connection'));
+//      setState(() {
+//        _showError = true;
+//      });
     } catch (e, stackTrace) {
       setState(() {
         _showError = true;
@@ -109,6 +120,9 @@ class _SplashScreenState extends State<SplashScreen> {
       );
       print(e);
       print(stackTrace);
+    }
+    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+      await _showCourses(prefs);
     }
   }
 
