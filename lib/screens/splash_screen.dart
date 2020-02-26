@@ -49,6 +49,8 @@ class _SplashScreenState extends State<SplashScreen> {
         force) {
       await Navigator.pushNamed(context, '/login');
 
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(false);
       await _showCourses(prefs);
       return;
     }
