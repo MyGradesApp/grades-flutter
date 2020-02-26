@@ -92,6 +92,7 @@ class CachedCourse {
   }
 
   Future<List<Grade>> getGrades([bool force = false]) async {
+    // If we are offline
     if (_rawCourse == null) {
       return Future.value(GLOBAL_DATA_PERSISTENCE.getGrades(courseName));
     }
@@ -103,8 +104,6 @@ class CachedCourse {
     if (_rawCourse == null) {
       return Future.value(GLOBAL_DATA_PERSISTENCE.weights);
     }
-    var weights = await _rawCourse.getCategoryWeights(force);
-    GLOBAL_DATA_PERSISTENCE.setWeights(weights);
-    return weights;
+    return await _rawCourse.getCategoryWeights(force);
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
-import 'package:grades/models/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
@@ -57,14 +56,6 @@ class _CourseListScreenState extends State<CourseListScreen> {
                   ),
                 );
               }
-            }
-
-            if (!isOffline && mounted) {
-              Future.microtask(() {
-                // Update persisted courses
-                Provider.of<DataPersistence>(context, listen: false)
-                    .setCourses(snapshot.data);
-              });
             }
 
             return RefreshIndicator(

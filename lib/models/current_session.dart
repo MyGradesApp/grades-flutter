@@ -31,11 +31,13 @@ class CurrentSession extends ChangeNotifier {
   }
 
   // TODO: Extract this?
-  Future<List<CachedCourse>> courses({bool force = true}) {
+  Future<List<CachedCourse>> courses({bool force = true}) async {
     if (isOffline) {
       return Future.value(_gradePersistence.courses);
     }
-    return _sisLoader.getCourses(force: force);
+    var courses = await _sisLoader.getCourses(force: force);
+    _gradePersistence.setCourses(courses);
+    return courses;
   }
 
   Future<AcademicInfo> academicInfo({bool force = true}) async {
@@ -56,13 +58,16 @@ class CurrentSession extends ChangeNotifier {
     if (grades.every((element) => element.raw.containsKey('Category'))) {
       hasCategories = true;
     }
+    var weights = await course.getCategoryWeights(force);
+
     var persistence = Provider.of<DataPersistence>(context, listen: false);
     persistence.insertGrades(course.courseName, grades);
     persistence.markOldAsRead(course.courseName);
+    persistence.setWeights(weights);
 
     return FetchedCourseData(
       grades,
-      await course.getCategoryWeights(force),
+      weights,
       hasCategories,
     );
   }
