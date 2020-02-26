@@ -194,9 +194,12 @@ class _FeedScreenState extends State<FeedScreen>
       onRefresh: () {
         return _refresh(force: true);
       },
-      child: ListView(
-        children: listChildren,
-        shrinkWrap: true,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: ListView(
+          children: listChildren,
+          shrinkWrap: true,
+        ),
       ),
     );
   }
