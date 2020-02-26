@@ -59,7 +59,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
               }
             }
 
-            if (!isOffline) {
+            if (!isOffline && mounted) {
               Future.microtask(() {
                 // Update persisted courses
                 Provider.of<DataPersistence>(context, listen: false)
