@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/models/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -8,9 +8,16 @@ import 'package:sis_loader/sis_loader.dart';
 class CurrentSession extends ChangeNotifier {
   CachedSISLoader _sisLoader;
   GlobalKey _navKey;
+  bool _isOffline = false;
+  DataPersistence _gradePersistence;
 
   // A unique key to prevent previous sessions from being shown
   GlobalKey get navKey => _navKey;
+
+  CurrentSession({DataPersistence dataPersistence})
+      : _gradePersistence = dataPersistence;
+
+  bool get isOffline => _isOffline;
 
   void setSisLoader(CachedSISLoader loader) {
     _sisLoader = loader;
@@ -18,19 +25,30 @@ class CurrentSession extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setOfflineStatus(bool isOffline) {
+    _isOffline = isOffline;
+    notifyListeners();
+  }
+
   // TODO: Extract this?
   Future<List<CachedCourse>> courses({bool force = true}) {
+    if (isOffline) {
+      return Future.value(_gradePersistence.courses);
+    }
     return _sisLoader.getCourses(force: force);
   }
 
   Future<AcademicInfo> academicInfo({bool force = true}) async {
+    if (isOffline) {
+      return null;
+    }
     var profile = await _sisLoader.getUserProfile(force: force);
     var absences = await _sisLoader.getAbsences(force: force);
 
     return AcademicInfo(profile, absences);
   }
 
-  Future<FetchedCourseData> fetchCourseData(
+  Future<FetchedCourseData> courseData(
       BuildContext context, CachedCourse course,
       {bool force = true}) async {
     var grades = await course.getGrades(force);
@@ -38,8 +56,8 @@ class CurrentSession extends ChangeNotifier {
     if (grades.every((element) => element.raw.containsKey("Category"))) {
       hasCategories = true;
     }
-    Provider.of<GradePersistence>(context, listen: false)
-        .insert(course.courseName, grades);
+    Provider.of<DataPersistence>(context, listen: false)
+        .insertGrades(course.courseName, grades);
 
     return FetchedCourseData(
       grades,

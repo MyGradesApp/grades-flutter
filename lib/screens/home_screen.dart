@@ -10,8 +10,6 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-PageController controller = PageController(initialPage: 1);
-
 class _HomeScreenState extends State<HomeScreen> {
   // Initial page state
   String title = "COURSES";
@@ -24,6 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   var kDuration = const Duration(milliseconds: 300);
 
   var kCurve = Curves.ease;
+
+  PageController controller = PageController(initialPage: 1);
 
   @override
   void initState() {

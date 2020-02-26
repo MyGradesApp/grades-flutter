@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
-import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/models/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
@@ -41,7 +41,11 @@ class _FeedScreenState extends State<FeedScreen>
     _courses = await Provider.of<CurrentSession>(context, listen: false)
         .courses(force: force);
     // Update for _courses future
-    setState(() {});
+    setState(() {
+      if (_courses.isEmpty) {
+        _isLoading = false;
+      }
+    });
     var totalToLoad = _courses.length;
 
     // TODO: Switch to stream?
@@ -73,9 +77,9 @@ class _FeedScreenState extends State<FeedScreen>
     Map<String, List<Grade>> out = {};
 
     courses.forEach((courseName, grades) {
-      var oldGrades = Provider.of<GradePersistence>(
+      var oldGrades = Provider.of<DataPersistence>(
         context,
-      ).getData(courseName);
+      ).getGrades(courseName);
 
       grades.forEach((grade) {
         if (grade.grade != "Not Graded") {

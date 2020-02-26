@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
-import 'package:grades/models/grade_persistence.dart';
+import 'package:grades/models/data_persistence.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
@@ -89,7 +89,9 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
 
   final SharedPreferences prefs;
 
-  const MyApp({Key key, this.prefs}) : super(key: key);
+  final GlobalKey<NavigatorState> _navKey = GlobalKey();
+
+  MyApp({Key key, this.prefs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,37 +106,86 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
       statusBarBrightness: Brightness.dark,
       systemNavigationBarIconBrightness: Brightness.dark, //bottom bar icons
     ));
+    GLOBAL_DATA_PERSISTENCE = DataPersistence(prefs);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CurrentSession()),
+        ChangeNotifierProvider(
+            create: (_) =>
+                CurrentSession(dataPersistence: GLOBAL_DATA_PERSISTENCE)),
         ChangeNotifierProvider(create: (_) => ThemeController(prefs)),
-        ChangeNotifierProvider(create: (_) => GradePersistence(prefs)),
+        ChangeNotifierProvider(create: (_) => GLOBAL_DATA_PERSISTENCE),
       ],
       child: Consumer<ThemeController>(
         builder: (BuildContext context, ThemeController theme, Widget child) {
-          return MaterialApp(
-            title: 'SwiftGrade',
-            debugShowCheckedModeBanner: false,
-            home: SplashScreen(),
-            theme: _buildCurrentTheme(theme),
-            routes: <String, WidgetBuilder>{
-              '/login': (BuildContext context) => LoginScreen(),
-              '/terms': (BuildContext context) => TermsScreen(),
-              '/terms_settings': (BuildContext context) =>
-                  TermsSettingsScreen(),
-              '/settings': (BuildContext context) => SettingsScreen(),
-              '/courses': (BuildContext context) {
-                // Use a key here to prevent overlap in sessions
-                return CourseListScreen(
-                    key: Provider.of<CurrentSession>(context).navKey);
-              },
-              '/course_grades': (BuildContext context) => CourseGradesScreen(),
-              '/feed': (BuildContext context) => FeedScreen(),
-              '/home': (BuildContext context) => HomeScreen(),
-              '/grades_detail': (BuildContext context) =>
-                  GradeItemDetailScreen(),
-              '/academic_info': (BuildContext context) => AcademicInfoScreen(),
-            },
+          return Column(
+            children: <Widget>[
+              Expanded(
+                child: MaterialApp(
+                  navigatorKey: _navKey,
+                  title: 'SwiftGrade',
+                  debugShowCheckedModeBanner: false,
+                  home: SplashScreen(),
+                  theme: _buildCurrentTheme(theme),
+                  routes: <String, WidgetBuilder>{
+                    '/login': (BuildContext context) => LoginScreen(),
+                    '/terms': (BuildContext context) => TermsScreen(),
+                    '/terms_settings': (BuildContext context) =>
+                        TermsSettingsScreen(),
+                    '/settings': (BuildContext context) => SettingsScreen(),
+                    '/courses': (BuildContext context) {
+                      // Use a key here to prevent overlap in sessions
+                      return CourseListScreen(
+                          key: Provider.of<CurrentSession>(context).navKey);
+                    },
+                    '/course_grades': (BuildContext context) =>
+                        CourseGradesScreen(),
+                    '/feed': (BuildContext context) => FeedScreen(),
+                    '/home': (BuildContext context) => HomeScreen(),
+                    '/grades_detail': (BuildContext context) =>
+                        GradeItemDetailScreen(),
+                    '/academic_info': (BuildContext context) =>
+                        AcademicInfoScreen(),
+                  },
+                ),
+              ),
+              if (Provider.of<CurrentSession>(context).isOffline)
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Container(
+                    width: double.infinity,
+                    color: Colors.orange,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 0.0),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              "No Network Connection",
+                            ),
+                            const SizedBox(width: 40),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: FlatButton(
+                                color: Colors.orangeAccent,
+                                onPressed: () async {
+                                  await _navKey.currentState
+                                      .pushNamedAndRemoveUntil(
+                                          '/', (route) => false);
+                                },
+                                child: const Text(
+                                  "Refresh",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           );
         },
       ),
