@@ -80,7 +80,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
           // : MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "${course.gradePercent}.7%",
+              "${course.gradePercent}%",
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: 'OpenSans',

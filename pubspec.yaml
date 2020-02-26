@@ -12,11 +12,11 @@ environment:
 dependencies:
   # Core flutter
   flutter:
-    sdk: flutter
-  # 1st party packages
+    sdk:
+      flutter
+      # 1st party packages
   sis_loader:
     git: https://github.com/Noskcaj19/dart-sis-loader.git
-
   # Debug/Error reporting/System packages
   # Flutter team package
   sentry: ^3.0.1
@@ -30,6 +30,8 @@ dependencies:
       ref: ddf8c26
   # Flutter team package
   shared_preferences: ^0.5.6+1
+
+  url_launcher: ^5.4.2
 
   flutter_secure_storage:
     git:

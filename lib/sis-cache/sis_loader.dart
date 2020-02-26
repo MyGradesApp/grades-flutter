@@ -10,6 +10,7 @@ class CachedSISLoader {
   Future<List<CachedCourse>> _courses;
   Future<Profile> _userProfile;
   Future<Absences> _absences;
+  Future<Name> _name;
 
   // Wrapping
   String get sessionCookies => _loader.sessionCookies;
@@ -43,6 +44,14 @@ class CachedSISLoader {
     }
     _absences = _loader.getAbsences();
     return _absences;
+  }
+
+  Future<Name> getName({bool force = false}) async {
+    if (_name != null && !force) {
+      return _name;
+    }
+    _name = _loader.getName();
+    return _name;
   }
 }
 

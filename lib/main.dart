@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grades/models/current_session.dart';
@@ -20,6 +23,7 @@ import 'package:grades/utilities/package_info.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +32,38 @@ void main() async {
   final package_info = await getPackageInfo();
   // Used for sentry error reporting and settings page version number
   version = "${package_info.version}+${package_info.buildNumber}";
+
+  // var versionRequest = await HttpClient(
+  //     'http://itunes.apple.com/lookup?bundleId=com.goldinguy.grades');
+  // var parsedJson = json.decode(versionRequest);
+  // var appStoreVersion = parsedJson['version'];
+  // if (package_info.version != appStoreVersion) {
+  //   await showDialog<String>(
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       String title = "New Update Available!";
+  //       String message =
+  //           "Please update to the latest verson. It includes important bug fixes.";
+  //       String btnLabel = "Update Now";
+  //       String btnLabelCancel = "Later";
+  //       return CupertinoAlertDialog(
+  //         title: Text(title),
+  //         content: Text(message),
+  //         actions: <Widget>[
+  //           FlatButton(
+  //             child: Text(btnLabel),
+  //             onPressed: () => launch(
+  //                 'https://apps.apple.com/us/app/swiftgrade/id1495113299'),
+  //           ),
+  //           FlatButton(
+  //             child: Text(btnLabelCancel),
+  //             onPressed: () => Navigator.pop(context),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   FlutterError.onError = (details, {bool forceReport = false}) {
     reportException(
