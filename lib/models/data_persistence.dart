@@ -53,6 +53,11 @@ class DataPersistence extends ChangeNotifier {
     notifyListeners();
   }
 
+  void markOldAsRead(String key) {
+    _originalGrades[key] = _grades[key];
+    notifyListeners();
+  }
+
   List<Grade> getGrades(String key) {
     return _grades[key] ?? [];
   }

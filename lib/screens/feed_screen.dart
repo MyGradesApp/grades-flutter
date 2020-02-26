@@ -81,7 +81,7 @@ class _FeedScreenState extends State<FeedScreen>
     courses.forEach((courseName, grades) {
       var oldGrades = Provider.of<DataPersistence>(
         context,
-      ).getGrades(courseName);
+      ).getOriginalGrades(courseName);
 
       grades.forEach((grade) {
         if (grade.grade != 'Not Graded') {

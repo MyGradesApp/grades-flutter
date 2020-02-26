@@ -56,8 +56,9 @@ class CurrentSession extends ChangeNotifier {
     if (grades.every((element) => element.raw.containsKey('Category'))) {
       hasCategories = true;
     }
-    Provider.of<DataPersistence>(context, listen: false)
-        .insertGrades(course.courseName, grades);
+    var persistence = Provider.of<DataPersistence>(context, listen: false);
+    persistence.insertGrades(course.courseName, grades);
+    persistence.markOldAsRead(course.courseName);
 
     return FetchedCourseData(
       grades,
