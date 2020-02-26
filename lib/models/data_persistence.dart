@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
+import 'package:grades/utilities/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -72,21 +73,26 @@ class DataPersistence extends ChangeNotifier {
 
     Map<String, List<Grade>> out = {};
 
-    Map<String, dynamic> dynCourses = Map<String, dynamic>.from(
-        jsonDecode(gradesStr) as Map<String, dynamic>);
-    dynCourses.forEach((String course, dynamic gradesListDyn) {
-      List<Grade> grades = [];
-      List<dynamic> gradesList = List.from(gradesListDyn as List);
+    try {
+      Map<String, dynamic> dynCourses = Map<String, dynamic>.from(
+          jsonDecode(gradesStr) as Map<String, dynamic>);
+      dynCourses.forEach((String course, dynamic gradesListDyn) {
+        List<Grade> grades = [];
+        List<dynamic> gradesList = List.from(gradesListDyn as List);
 
-      gradesList.forEach((dynamic grade) {
-        Map<String, dynamic> dynGrade = grade as Map<String, dynamic>;
-        grades.add(
-          Grade(dynGrade.map((key, value) => MapEntry(key, value as String))),
-        );
+        gradesList.forEach((dynamic grade) {
+          Map<String, dynamic> dynGrade = grade as Map<String, dynamic>;
+          grades.add(
+            Grade(dynGrade.map((key, value) => MapEntry(key, value as String))),
+          );
+        });
+
+        out[course] = grades;
       });
-
-      out[course] = grades;
-    });
+    } catch (e, stackTrace) {
+      reportException(exception: e, stackTrace: stackTrace);
+      return {};
+    }
 
     return out;
   }
@@ -101,11 +107,16 @@ class DataPersistence extends ChangeNotifier {
       coursesString = "[]";
     }
 
-    var loadedCourses = (jsonDecode(coursesString) as List<dynamic>)
-        .map((course) => CachedCourse.fromJson(course as Map<String, dynamic>))
-        .toList();
-
-    return loadedCourses;
+    try {
+      var loadedCourses = (jsonDecode(coursesString) as List<dynamic>)
+          .map(
+              (course) => CachedCourse.fromJson(course as Map<String, dynamic>))
+          .toList();
+      return loadedCourses;
+    } catch (e, stackTrace) {
+      reportException(exception: e, stackTrace: stackTrace);
+      return [];
+    }
   }
 
   Map<String, String> _loadWeights() {
@@ -114,10 +125,15 @@ class DataPersistence extends ChangeNotifier {
       weightsString = "{}";
     }
 
-    var loadedWeights =
-        Map<String, String>.from(jsonDecode(weightsString) as Map);
+    try {
+      var loadedWeights =
+          Map<String, String>.from(jsonDecode(weightsString) as Map);
 
-    return loadedWeights;
+      return loadedWeights;
+    } catch (e, stackTrace) {
+      reportException(exception: e, stackTrace: stackTrace);
+      return {};
+    }
   }
 
   void _saveWeights() {
