@@ -36,8 +36,14 @@ enum PartialOrdering {
 }
 
 PartialOrdering _compareVersions(String current, String other) {
-  var cSplit = current.split('\.');
-  var oSplit = other.split('\.');
+  var cSplit = RegExp(r'(\d+)')
+      .allMatches(current)
+      .map((match) => match.group(1))
+      .toList();
+  var oSplit = RegExp(r'(\d+)')
+      .allMatches(other)
+      .map((match) => match.group(1))
+      .toList();
 
   if (cSplit.length != oSplit.length) {
     return PartialOrdering.Err;
