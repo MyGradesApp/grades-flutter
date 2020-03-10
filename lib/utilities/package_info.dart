@@ -7,10 +7,10 @@ import 'package:package_info/package_info.dart';
 Future<PackageInfo> getPackageInfo() async {
   if (Platform.isMacOS) {
     return PackageInfo(
-      appName: "SwiftGrade",
-      packageName: "com.goldinguy.swiftgrade",
-      buildNumber: "2",
-      version: "1.0.0",
+      appName: 'SwiftGrade',
+      packageName: 'com.goldinguy.swiftgrade',
+      buildNumber: '2',
+      version: '1.0.0',
     );
   } else {
     return await PackageInfo.fromPlatform();

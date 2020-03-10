@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // Initial page state
-  String title = "COURSES";
+  String title = 'COURSES';
   int previous = -1;
   List<Widget> pages = [
     FeedScreen(),
@@ -29,9 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
-      var hasShownUpdateScreen = prefs.getBool("hasShownUpdateScreen2");
+      var hasShownUpdateScreen = prefs.getBool('hasShownUpdateScreen2');
       if (hasShownUpdateScreen == null || !hasShownUpdateScreen) {
-        prefs.setBool("hasShownUpdateScreen2", true);
+        prefs.setBool('hasShownUpdateScreen2', true);
         Future.microtask(() {
           showUpdatedDialog(context);
         });
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           centerTitle: true,
           title: Text(title),
           leading: IconButton(
-            tooltip: "Profile",
+            tooltip: 'Profile',
             icon: Icon(
               Icons.person,
             ),
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: <Widget>[
             IconButton(
-              tooltip: "Settings",
+              tooltip: 'Settings',
               icon: Icon(Icons.settings),
               onPressed: () => Navigator.pushNamed(context, '/settings'),
             )
@@ -69,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onPageChanged: (page) {
             setState(() {
               if (page == 0) {
-                title = "RECENT";
+                title = 'RECENT';
               } else {
-                title = "COURSES";
+                title = 'COURSES';
               }
             });
           },

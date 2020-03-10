@@ -56,8 +56,8 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
             isNewGrade,
           );
 
-          String category = _data[i].category;
-          DateTime date = _data[i].assignedDate;
+          var category = _data[i].category;
+          var date = _data[i].assignedDate;
           var oldCategory;
           DateTime oldDate;
           if (i > 0) {
@@ -134,9 +134,9 @@ String _dateRangeHeaderForWeek(DateTime date) {
   var first = firstDayOfWeek(date);
   var last = lastDayOfWeek(date);
   if (first.month == last.month) {
-    return "${DateFormat.MMMMd().format(first)} - ${DateFormat.d().format(last)}";
+    return '${DateFormat.MMMMd().format(first)} - ${DateFormat.d().format(last)}';
   }
-  return "${DateFormat.MMMMd().format(first)} - ${DateFormat.MMMMd().format(last)}";
+  return '${DateFormat.MMMMd().format(first)} - ${DateFormat.MMMMd().format(last)}';
 }
 
 String _titlecase(String src) {

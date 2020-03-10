@@ -29,8 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _loadStoredAuth({bool force = false, bool freshSession = false}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var hasAcceptedTerms = prefs.getBool("accepted_terms") ?? false;
+    var prefs = await SharedPreferences.getInstance();
+    var hasAcceptedTerms = prefs.getBool('accepted_terms') ?? false;
 
     if (!hasAcceptedTerms) {
       await Navigator.pushNamed(context, '/terms');
@@ -282,7 +282,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // HACK: Persistent display
       duration: const Duration(days: 1),
       action: SnackBarAction(
-        label: "Refresh",
+        label: 'Refresh',
         textColor: Colors.white,
         onPressed: () {
           setState(() {

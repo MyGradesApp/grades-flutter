@@ -24,7 +24,7 @@ void showUpdatedDialog(BuildContext context) {
                             child: Column(
                               children: <Widget>[
                                 const Text(
-                                  "SwiftGrade",
+                                  'SwiftGrade',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 26,
@@ -41,16 +41,16 @@ void showUpdatedDialog(BuildContext context) {
                             ),
                           ),
                           _buildNewItem(
-                            "Recent Grades",
-                            "Swipe left from the home screen to see new and upcoming assignments",
+                            'Recent Grades',
+                            'Swipe left from the home screen to see new and upcoming assignments',
                           ),
                           _buildNewItem(
-                            "Improved Sorting",
-                            "Switch between sorting your class grades by category or by date",
+                            'Improved Sorting',
+                            'Switch between sorting your class grades by category or by date',
                           ),
-                          _buildNewItem("Absences",
-                              "View your absences on the Academic Information screen"),
-                          _buildNewItem("Updated Icon", ""),
+                          _buildNewItem('Absences',
+                              'View your absences on the Academic Information screen'),
+                          _buildNewItem('Updated Icon', ''),
                           const Divider(
                             color: Colors.white,
                             endIndent: 40,
@@ -60,7 +60,7 @@ void showUpdatedDialog(BuildContext context) {
                             padding:
                                 EdgeInsets.only(left: 32, right: 22, top: 10),
                             child: Text(
-                              "Thank you to everyone using SwiftGrade! We are so happy you are enjoying it. If you like SwiftGrade, share it with your friends",
+                              'Thank you to everyone using SwiftGrade! We are so happy you are enjoying it. If you like SwiftGrade, share it with your friends',
                               style: TextStyle(
                                 fontSize: 18,
                               ),
@@ -78,7 +78,7 @@ void showUpdatedDialog(BuildContext context) {
                       child: const Padding(
                         padding: EdgeInsets.all(15.0),
                         child: Text(
-                          "AWESOME",
+                          'AWESOME',
                           style: TextStyle(
                               fontSize: 16,
                               color: Colors.white,

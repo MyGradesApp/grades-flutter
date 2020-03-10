@@ -19,7 +19,7 @@ class TermsScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 40),
                     const Text(
-                      "Welcome to SwiftGrade",
+                      'Welcome to SwiftGrade',
                       style: TextStyle(
                         color: Colors.white,
                         letterSpacing: 1.0,
@@ -46,7 +46,7 @@ class TermsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               RaisedButton(
-                child: const Text("I accept the terms and conditions",
+                child: const Text('I accept the terms and conditions',
                     style: TextStyle(
                       color: Colors.white,
                       letterSpacing: 1.0,
@@ -70,8 +70,8 @@ class TermsScreen extends StatelessWidget {
   }
 
   void _acceptAndReturn(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("accepted_terms", true);
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('accepted_terms', true);
     Navigator.pop(context);
   }
 }

@@ -22,7 +22,7 @@ class FeedScreen extends StatefulWidget {
 // TODO: Error handling
 class _FeedScreenState extends State<FeedScreen>
     with AutomaticKeepAliveClientMixin<FeedScreen> {
-  Map<String, List<Grade>> _courseGrades = {};
+  final Map<String, List<Grade>> _courseGrades = {};
   List<CachedCourse> _courses;
   bool _isLoading = true;
   int _numLoaded = 0;
@@ -70,7 +70,7 @@ class _FeedScreenState extends State<FeedScreen>
 
     var courses = _courseGrades;
 
-    Map<String, List<Grade>> out = {};
+    var out = <String, List<Grade>>{};
 
     courses.forEach((courseName, grades) {
       var oldGrades = Provider.of<GradePersistence>(
@@ -78,7 +78,7 @@ class _FeedScreenState extends State<FeedScreen>
       ).getData(courseName);
 
       grades.forEach((grade) {
-        if (grade.grade != "Not Graded") {
+        if (grade.grade != 'Not Graded') {
           var isNewGrade =
               !oldGrades.any((oldGrade) => oldGrade.name == grade.name);
 
@@ -111,7 +111,7 @@ class _FeedScreenState extends State<FeedScreen>
           color: Colors.white,
         ),
         child: const Text(
-          "No new grades available",
+          'No new grades available',
           style: TextStyle(
             color: Colors.white,
             fontSize: 17.0,
@@ -122,7 +122,7 @@ class _FeedScreenState extends State<FeedScreen>
       return _buildLoader();
     }
 
-    List<Widget> listChildren = [];
+    var listChildren = <Widget>[];
 
     // Iterate over _courses to keep the original order
     _courses
@@ -147,7 +147,7 @@ class _FeedScreenState extends State<FeedScreen>
 
       // Only show 4 most recent
       const maxItems = 4;
-      int endIndex = min(maxItems, grades.length);
+      var endIndex = min(maxItems, grades.length);
       List<Grade> clipped;
       if (grades.length > maxItems) {
         clipped = grades.sublist(endIndex);
@@ -170,7 +170,7 @@ class _FeedScreenState extends State<FeedScreen>
               children: <Widget>[
                 Expanded(child: Container()),
                 Text(
-                  "and ${clipped.length} more",
+                  'and ${clipped.length} more',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

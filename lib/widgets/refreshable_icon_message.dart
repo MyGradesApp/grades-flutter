@@ -8,7 +8,7 @@ class RefreshableIconMessage extends StatelessWidget {
   final Widget child;
 
   RefreshableIconMessage(
-      {@required this.onRefresh, this.child, this.icon, this.text})
+      {@required this.onRefresh, this.child, @required this.icon, this.text})
       : assert(onRefresh != null),
         assert(icon != null),
         assert(child != null || text != null);

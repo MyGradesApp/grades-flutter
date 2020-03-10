@@ -56,12 +56,12 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                             context,
                             'Cumulative GPA',
                             profile.cumulative_gpa?.toString() ??
-                                "Unavailable"),
+                                'Unavailable'),
                         _buildCard(
                             context,
                             'Cumulative Weighted GPA',
                             profile.cumulative_weighted_gpa?.toString() ??
-                                "Unavailable"),
+                                'Unavailable'),
                         if (profile.class_rank_numerator != null &&
                             profile.class_rank_denominator != null)
                           _buildCard(
@@ -86,7 +86,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                   snapshot.error is OSError) {
                 return RefreshableErrorMessage(
                   onRefresh: () => _refresh(context),
-                  text: "Issue connecting to SIS",
+                  text: 'Issue connecting to SIS',
                 );
               }
               reportException(
@@ -97,7 +97,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
               if (snapshot.error is UnknownMissingCookieException) {
                 return RefreshableErrorMessage(
                   onRefresh: () => _refresh(context),
-                  text: "Issue loading information",
+                  text: 'Issue loading information',
                 );
               }
 

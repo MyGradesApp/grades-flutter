@@ -10,7 +10,7 @@ class CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: this.onPressed,
+        onTap: onPressed,
         child: SizedBox(
             width: size,
             height: size,

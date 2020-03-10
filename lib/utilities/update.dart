@@ -6,15 +6,15 @@ import 'sentry.dart' as sentry;
 Future<bool> checkUpdateAvailable() async {
   var resp = await HttpClient()
       .getUrl(Uri.parse(
-          "http://itunes.apple.com/lookup?bundleId=com.goldinguy.grades"))
+          'http://itunes.apple.com/lookup?bundleId=com.goldinguy.grades'))
       .then((request) => request.close());
 
   var body = await utf8.decoder.bind(resp).toList();
   var dataStr = body.join();
 
-  var results = jsonDecode(dataStr)["results"];
+  var results = jsonDecode(dataStr)['results'];
   if (results != null && results is List && results.isNotEmpty) {
-    var version = results[0]["version"];
+    var version = results[0]['version'];
     if (version == null || version is! String) {
       return false;
     }
@@ -49,7 +49,7 @@ PartialOrdering _compareVersions(String current, String other) {
     return PartialOrdering.Err;
   }
   try {
-    for (int i = 0; i < cSplit.length; i += 1) {
+    for (var i = 0; i < cSplit.length; i += 1) {
       var parsedCurrentPart = int.parse(cSplit[i]);
       var parsedOtherPart = int.parse(oSplit[i]);
       if (parsedCurrentPart < parsedOtherPart) {

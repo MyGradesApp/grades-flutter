@@ -25,13 +25,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _loggingIn = false;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     _loadSavedCreds();
   }
 
   Future<void> _loadSavedCreds() async {
-    WrappedSecureStorage secure = const WrappedSecureStorage();
+    var secure = const WrappedSecureStorage();
     var email = await secure.read(key: 'sis_email');
     var password = await secure.read(key: 'sis_password');
     _emailController.value = _emailController.value.copyWith(text: email);
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _loggingIn = false;
       });
 
-      WrappedSecureStorage secure = const WrappedSecureStorage();
+      var secure = const WrappedSecureStorage();
       await secure.write(key: 'sis_email', value: email);
       await secure.write(key: 'sis_password', value: password);
       await secure.write(key: 'sis_session', value: loader.sessionCookies);
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: const Color(0xff2d3d54),
         body: GestureDetector(
           onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
+            var currentFocus = FocusScope.of(context);
 
             if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();
@@ -236,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       child: GestureDetector(
         onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+          var currentFocus = FocusScope.of(context);
 
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();

@@ -49,9 +49,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                         Text(
-                          themeController.currentTheme == "light"
-                              ? "Light"
-                              : "Dark",
+                          themeController.currentTheme == 'light'
+                              ? 'Light'
+                              : 'Dark',
                           style: const TextStyle(
                             fontSize: 17,
                             color: Colors.white,
@@ -76,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: <Widget>[
                           const Expanded(
                             child: Text(
-                              "Default Sort Style",
+                              'Default Sort Style',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -87,8 +87,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Text(
                             themeController.defaultGroupMode ==
                                     GroupingMode.Category
-                                ? "Category"
-                                : "Recency",
+                                ? 'Category'
+                                : 'Recency',
                             style: const TextStyle(
                               fontSize: 17,
                               color: Colors.white,
@@ -127,7 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // ),
                     _buildCard(
                       child: const Text(
-                        "Terms of Service",
+                        'Terms of Service',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -140,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     _buildCard(
                       child: const Text(
-                        "Sign Out",
+                        'Sign Out',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,

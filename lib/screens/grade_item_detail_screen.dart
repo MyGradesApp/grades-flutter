@@ -6,15 +6,15 @@ import 'package:sis_loader/sis_loader.dart';
 class GradeItemDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Grade grade = ModalRoute.of(context).settings.arguments as Grade;
+    var grade = ModalRoute.of(context).settings.arguments as Grade;
 
     double pointsUpper, pointsLower;
     if (grade.raw.containsKey('Points')) {
-      var matches = RegExp(r"([\d.]+) / ([\d.]+)")?.firstMatch(grade.points);
+      var matches = RegExp(r'([\d.]+) / ([\d.]+)')?.firstMatch(grade.points);
 
       // TODO: Rework null propigation
-      pointsUpper = double.tryParse(matches?.group(1) ?? "0");
-      pointsLower = double.tryParse(matches?.group(2) ?? "0");
+      pointsUpper = double.tryParse(matches?.group(1) ?? '0');
+      pointsLower = double.tryParse(matches?.group(2) ?? '0');
     }
     var pointsChartData = [
       CircularStackEntry([
@@ -26,9 +26,9 @@ class GradeItemDetailScreen extends StatelessWidget {
       ]),
     ];
 
-    Map<String, String> rawData = Map.from(grade.raw);
+    var rawData = Map<String, String>.from(grade.raw);
     rawData.removeWhere((key, value) => value == null);
-    var assignmentName = rawData.remove("Assignment");
+    var assignmentName = rawData.remove('Assignment');
 
     var keys = rawData.keys.toList();
     var values = rawData.values.toList();
@@ -40,7 +40,7 @@ class GradeItemDetailScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(assignmentName),
         leading: IconButton(
-          tooltip: "Back",
+          tooltip: 'Back',
           icon: Icon(
             Icons.arrow_back_ios,
           ),
@@ -70,7 +70,7 @@ class GradeItemDetailScreen extends StatelessWidget {
 
   Widget _buildItem(String key, dynamic value,
       {List<CircularStackEntry> pointsData}) {
-    if (key == "Points" &&
+    if (key == 'Points' &&
         value is String &&
         RegExp(r'\d+ / \d+').hasMatch(value)) {
       return AnimatedCircularChart(

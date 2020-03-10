@@ -61,7 +61,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 snapshot.error is OSError) {
               return RefreshableErrorMessage(
                 onRefresh: () => _refresh(context),
-                text: "Issue connecting to SIS",
+                text: 'Issue connecting to SIS',
               );
             }
 
@@ -75,14 +75,14 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 snapshot.error is UnknownStructureException) {
               return RefreshableErrorMessage(
                 onRefresh: () => _refresh(context),
-                text: "There was an unknown error.\nYou may need to log out.",
+                text: 'There was an unknown error.\nYou may need to log out.',
               );
             }
 
             return RefreshableErrorMessage(
               onRefresh: () => _refresh(context),
               text:
-                  "An error occured loading courses:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
+                  'An error occured loading courses:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.',
             );
           }
           return Center(

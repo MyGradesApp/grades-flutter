@@ -31,7 +31,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final package_info = await getPackageInfo();
   // Used for sentry error reporting and settings page version number
-  version = "${package_info.version}+${package_info.buildNumber}";
+  version = '${package_info.version}+${package_info.buildNumber}';
 
   if (await checkUpdateAvailable() == true) {
     await showVersionDialog();
@@ -60,10 +60,10 @@ Future<void> showVersionDialog() async {
   await showDialog<String>(
     barrierDismissible: false,
     builder: (BuildContext context) {
-      String title = "New Update Available";
-      String message = "Changes in SIS require immediate update";
-      String btnLabel = "Update Now!";
-      String btnLabelCancel = "Nah";
+      var title = 'New Update Available';
+      var message = 'Changes in SIS require immediate update';
+      var btnLabel = 'Update Now!';
+      var btnLabelCancel = 'Nah';
       return CupertinoAlertDialog(
         title: Text(title),
         content: Text(message),
@@ -142,7 +142,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
 
   ThemeData _buildCurrentTheme(ThemeController theme) {
     switch (theme.currentTheme) {
-      case "dark":
+      case 'dark':
         return ThemeData(
           primaryColor: const Color(0xff195080),
           accentColor: const Color(0xff216bac),
@@ -150,7 +150,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
           brightness: Brightness.dark,
           primaryColorLight: Colors.white,
         );
-      case "light":
+      case 'light':
       default:
         return ThemeData(
           primaryColor: const Color(0xff2a84d2),

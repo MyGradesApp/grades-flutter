@@ -20,13 +20,13 @@ class DotsIndicator extends AnimatedWidget {
   static const double _kDotSpacing = 25.0;
 
   Widget _buildDot(int index) {
-    double selectedness = Curves.easeOut.transform(
+    var selectedness = Curves.easeOut.transform(
       max(
         0.0,
         1.0 - ((controller.page ?? controller.initialPage) - index).abs(),
       ),
     );
-    double zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
+    var zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
     return Container(
       width: _kDotSpacing,
       child: Center(
@@ -46,6 +46,7 @@ class DotsIndicator extends AnimatedWidget {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

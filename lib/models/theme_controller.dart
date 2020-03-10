@@ -6,19 +6,19 @@ enum GroupingMode { Date, Category }
 // TODO: Change to extensions when they become viable
 String groupingModeToString(GroupingMode mode) {
   if (mode == GroupingMode.Date) {
-    return "date";
+    return 'date';
   } else {
-    return "category";
+    return 'category';
   }
 }
 
 GroupingMode groupingModeFromString(String src) {
-  if (src == "date") {
+  if (src == 'date') {
     return GroupingMode.Date;
-  } else if (src == "category") {
+  } else if (src == 'category') {
     return GroupingMode.Category;
   } else {
-    throw FormatException("Invalid value: ${src}");
+    throw FormatException('Invalid value: ${src}');
   }
 }
 

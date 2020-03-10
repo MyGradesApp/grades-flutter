@@ -1,9 +1,9 @@
 int isoWeekNumber(DateTime date) {
-  int daysToAdd = DateTime.thursday - date.weekday;
-  DateTime thursdayDate = daysToAdd > 0
+  var daysToAdd = DateTime.thursday - date.weekday;
+  var thursdayDate = daysToAdd > 0
       ? date.add(Duration(days: daysToAdd))
       : date.subtract(Duration(days: daysToAdd.abs()));
-  int dayOfYearThursday = dayOfYear(thursdayDate);
+  var dayOfYearThursday = dayOfYear(thursdayDate);
   return 1 + ((dayOfYearThursday - 1) / 7).floor();
 }
 

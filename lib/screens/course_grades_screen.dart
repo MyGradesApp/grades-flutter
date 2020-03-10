@@ -33,8 +33,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   }
 
   Future<FetchedCourseData> _getData({bool force = true}) {
-    final CachedCourse course =
-        ModalRoute.of(context).settings.arguments as CachedCourse;
+    final course = ModalRoute.of(context).settings.arguments as CachedCourse;
     setState(() {});
     return Provider.of<CurrentSession>(context, listen: false)
         .fetchCourseData(context, course, force: force);
@@ -42,17 +41,16 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final CachedCourse course =
-        ModalRoute.of(context).settings.arguments as CachedCourse;
+    final course = ModalRoute.of(context).settings.arguments as CachedCourse;
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
-        title: Text("${course.courseName}"),
+        title: Text('${course.courseName}'),
         leading: IconButton(
-          tooltip: "Back",
+          tooltip: 'Back',
           icon: Icon(
             Icons.arrow_back_ios,
           ),
@@ -98,7 +96,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                       color: Colors.white,
                     ),
                     child: const Text(
-                      "There are no grades listed in this class",
+                      'There are no grades listed in this class',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 17.0,
@@ -121,7 +119,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     snapshot.error is OSError) {
                   return RefreshableErrorMessage(
                     onRefresh: () => _getData(),
-                    text: "Issue connecting to SIS",
+                    text: 'Issue connecting to SIS',
                   );
                 }
                 reportException(
@@ -132,7 +130,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                 return RefreshableErrorMessage(
                   onRefresh: () => _getData(),
                   text:
-                      "An error occured fetching grades:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.",
+                      'An error occured fetching grades:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.',
                 );
               }
 

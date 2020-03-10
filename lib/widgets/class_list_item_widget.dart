@@ -62,8 +62,8 @@ class ClassListItemWidget extends StatelessWidget {
     if (percent is int) {
       fmt_percent = '$percent%';
     } else {
-      if (percent == "Not Graded") {
-        fmt_percent = "N/A";
+      if (percent == 'Not Graded') {
+        fmt_percent = 'N/A';
       } else {
         // Handle cases that aren't `Not Graded`
         fmt_percent = percent as String;
@@ -86,15 +86,15 @@ class ClassListItemWidget extends StatelessWidget {
           child: Row(children: <Widget>[
             Expanded(
               child: _buildColumn(
-                this.course,
-                this.teacher.replaceAll('  ', ' '),
+                course,
+                teacher.replaceAll('  ', ' '),
                 CrossAxisAlignment.start,
                 Theme.of(context).primaryColorLight,
               ),
             ),
-            _buildColumn(fmt_percent, this.letterGrade ?? "",
-                CrossAxisAlignment.end, Theme.of(context).primaryColorLight,
-                chevron: true, grade: this.letterGrade),
+            _buildColumn(fmt_percent, letterGrade ?? '', CrossAxisAlignment.end,
+                Theme.of(context).primaryColorLight,
+                chevron: true, grade: letterGrade),
           ]),
         ),
       ),

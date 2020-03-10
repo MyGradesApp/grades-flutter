@@ -201,7 +201,7 @@ class _StackedFutureBuilderState<T> extends State<StackedFutureBuilder<T>> {
 
   void _subscribe() {
     if (widget.future != null) {
-      final Object callbackIdentity = Object();
+      final callbackIdentity = Object();
       _activeCallbackIdentity = callbackIdentity;
       widget.future.then<void>((T data) {
         if (_activeCallbackIdentity == callbackIdentity) {

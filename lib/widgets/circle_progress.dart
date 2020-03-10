@@ -11,24 +11,24 @@ class CircleProgress extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     //this is base circle
-    Paint outerCircle = Paint()
+    var outerCircle = Paint()
       ..strokeWidth = 10
       ..color = Colors.black
       ..style = PaintingStyle.stroke;
 
-    Paint completeArc = Paint()
+    var completeArc = Paint()
       ..strokeWidth = 10
       ..color = Colors.redAccent
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    Offset center = Offset(size.width / 2, size.height / 2);
-    double radius = min(size.width / 2, size.height / 2) - 10;
+    var center = Offset(size.width / 2, size.height / 2);
+    var radius = min(size.width / 2, size.height / 2) - 10;
 
     canvas.drawCircle(
         center, radius, outerCircle); // this draws main outer circle
 
-    double angle = 2 * pi * (currentProgress / 100);
+    var angle = 2 * pi * (currentProgress / 100);
 
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2,
         angle, false, completeArc);

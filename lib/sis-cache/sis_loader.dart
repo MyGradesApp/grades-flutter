@@ -69,24 +69,24 @@ class CachedCourse {
   }
 
   CachedCourse.fromJson(Map<String, dynamic> json) {
-    client = json["client"] as CookieClient;
-    gradesUrl = json["gradeUrl"] as String;
-    courseName = json["courseName"] as String;
-    periodString = json["periodString"] as String;
-    teacherName = json["teacherName"] as String;
-    gradePercent = json["gradePercent"];
-    gradeLetter = json["gradeLetter"] as String;
+    client = json['client'] as CookieClient;
+    gradesUrl = json['gradeUrl'] as String;
+    courseName = json['courseName'] as String;
+    periodString = json['periodString'] as String;
+    teacherName = json['teacherName'] as String;
+    gradePercent = json['gradePercent'];
+    gradeLetter = json['gradeLetter'] as String;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data["client"] = this.client;
-    data["gradeUrl"] = this.gradesUrl;
-    data["courseName"] = this.courseName;
-    data["periodString"] = this.periodString;
-    data["teacherName"] = this.teacherName;
-    data["gradePercent"] = this.periodString;
-    data["gradeLetter"] = this.gradeLetter;
+    final data = <String, dynamic>{};
+    data['client'] = client;
+    data['gradeUrl'] = gradesUrl;
+    data['courseName'] = courseName;
+    data['periodString'] = periodString;
+    data['teacherName'] = teacherName;
+    data['gradePercent'] = periodString;
+    data['gradeLetter'] = gradeLetter;
     return data;
   }
 

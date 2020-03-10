@@ -36,15 +36,16 @@ class GradePersistence extends ChangeNotifier {
   }
 
   void _save() {
-    _prefs.setString("persisted_grades_v3", jsonEncode(_data));
+    _prefs.setString('persisted_grades_v3', jsonEncode(_data));
   }
 
   Map<String, List<Grade>> _load() {
-    var gradesStr = _prefs.getString("persisted_grades_v3");
+    var gradesStr = _prefs.getString('persisted_grades_v3');
     if (gradesStr == null || gradesStr.isEmpty) {
-      gradesStr = "{}";
+      gradesStr = '{}';
     }
 
+    // ignore_for_file: omit_local_variable_types
     Map<String, List<Grade>> out = {};
 
     Map<String, dynamic> dynCourses = Map<String, dynamic>.from(
@@ -69,7 +70,7 @@ class GradePersistence extends ChangeNotifier {
 
   void clearSaved() {
     _data = {};
-    _prefs.remove("persisted_grades_v3");
+    _prefs.remove('persisted_grades_v3');
     notifyListeners();
   }
 }
