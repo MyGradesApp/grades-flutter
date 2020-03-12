@@ -74,6 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
         stackTrace: stackTrace,
       );
       showErrorSnackbar(_scaffoldKey.currentState, e.message);
+    } on NoSuchMethodError catch (_) {
+      showErrorSnackbar(
+          _scaffoldKey.currentState, 'An error occurred signing in');
     } on SocketException catch (_) {
       showErrorSnackbar(_scaffoldKey.currentState, 'Issue connecting to SIS');
     } on HttpException catch (_) {
