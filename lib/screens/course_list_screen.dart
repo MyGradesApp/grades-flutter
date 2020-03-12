@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
+import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/class_list_item_widget.dart';
@@ -22,7 +23,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
   Future<List<CachedCourse>> _refresh(BuildContext context) {
     // Trigger ui update
     setState(() {});
-    return Provider.of<CurrentSession>(context, listen: false).courses();
+    return ignoreFutureHttpError(
+        () => Provider.of<CurrentSession>(context, listen: false).courses());
   }
 
   @override

@@ -10,10 +10,15 @@ Future<bool> launchAppstorePage() {
 }
 
 Future<bool> checkUpdateAvailable() async {
-  var resp = await HttpClient()
-      .getUrl(Uri.parse(
-          'http://itunes.apple.com/lookup?bundleId=com.goldinguy.grades'))
-      .then((request) => request.close());
+  HttpClientResponse resp;
+  try {
+    resp = await HttpClient()
+        .getUrl(Uri.parse(
+            'http://itunes.apple.com/lookup?bundleId=com.goldinguy.grades'))
+        .then((request) => request.close());
+  } catch (_) {
+    return false;
+  }
 
   var body = await utf8.decoder.bind(resp).toList();
   var dataStr = body.join();

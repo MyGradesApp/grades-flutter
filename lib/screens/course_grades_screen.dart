@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
+import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/course_grades_display.dart';
@@ -30,6 +31,11 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
     super.initState();
     _currentGroupingMode =
         Provider.of<ThemeController>(context, listen: false).defaultGroupMode;
+  }
+
+  // Handle exception for RefreshIndicator
+  Future<FetchedCourseData> _refresh() {
+    return ignoreFutureHttpError(() => _getData());
   }
 
   Future<FetchedCourseData> _getData({bool force = true}) {
@@ -74,7 +80,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => _getData(),
+        onRefresh: _refresh,
         child: StackedFutureBuilder<FetchedCourseData>(
             future: _getData(force: false),
             builder: (context, snapshot) {
@@ -89,7 +95,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                 }
                 if (snapshot.data.grades.isEmpty) {
                   return RefreshableIconMessage(
-                    onRefresh: () => _getData(),
+                    onRefresh: _refresh,
                     icon: Icon(
                       FontAwesomeIcons.inbox,
                       size: 55,
@@ -118,7 +124,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                     snapshot.error is HandshakeException ||
                     snapshot.error is OSError) {
                   return RefreshableErrorMessage(
-                    onRefresh: () => _getData(),
+                    onRefresh: _refresh,
                     text: 'Issue connecting to SIS',
                   );
                 }
@@ -128,7 +134,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                 );
 
                 return RefreshableErrorMessage(
-                  onRefresh: () => _getData(),
+                  onRefresh: _refresh,
                   text:
                       'An error occured fetching grades:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.',
                 );

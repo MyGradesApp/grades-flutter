@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/grade_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
+import 'package:grades/utilities/error.dart';
 import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
@@ -45,21 +46,22 @@ class _FeedScreenState extends State<FeedScreen>
     var totalToLoad = _courses.length;
 
     // TODO: Switch to stream?
-    unawaited(Future.wait(_courses.map((course) async {
-      var grades = await course.getGrades(force);
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _courseGrades[course.courseName] = grades;
-        _numLoaded += 1;
-        if (_numLoaded == totalToLoad) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      });
-    })));
+    unawaited(
+        ignoreFutureHttpError(() => Future.wait(_courses.map((course) async {
+              var grades = await course.getGrades(force);
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                _courseGrades[course.courseName] = grades;
+                _numLoaded += 1;
+                if (_numLoaded == totalToLoad) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                }
+              });
+            }))));
 
     return null;
   }
