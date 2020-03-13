@@ -82,7 +82,7 @@ class CachedCourse {
     data['courseName'] = courseName;
     data['periodString'] = periodString;
     data['teacherName'] = teacherName;
-    data['gradePercent'] = periodString;
+    data['gradePercent'] = gradePercent;
     data['gradeLetter'] = gradeLetter;
     return data;
   }
