@@ -49,7 +49,6 @@ class CachedSISLoader {
 
 // This is a wrapped SISLoader Course type that will soon cache data and implements json serialization
 class CachedCourse {
-  CookieClient client;
   String gradesUrl;
   String courseName;
   String periodString;
@@ -60,7 +59,6 @@ class CachedCourse {
 
   CachedCourse.fromCourse(Course course) {
     _rawCourse = course;
-    client = course.client;
     gradesUrl = course.gradesUrl;
     courseName = course.courseName;
     periodString = course.periodString;
@@ -70,7 +68,6 @@ class CachedCourse {
   }
 
   CachedCourse.fromJson(Map<String, dynamic> json) {
-    client = json['client'] as CookieClient;
     gradesUrl = json['gradeUrl'] as String;
     courseName = json['courseName'] as String;
     periodString = json['periodString'] as String;
@@ -81,7 +78,6 @@ class CachedCourse {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['client'] = client;
     data['gradeUrl'] = gradesUrl;
     data['courseName'] = courseName;
     data['periodString'] = periodString;
