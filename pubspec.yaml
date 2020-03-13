@@ -2,7 +2,7 @@ name: grades
 description: Made for students, by students. The unofficial grades app for the school district of Palm Beach County. View your grades at a glance.
 
 # ios
-version: 2.0.1+1
+version: 2.1.0+0
 # android
 # version: 2.0.0+0
 
