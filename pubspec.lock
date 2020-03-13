@@ -98,11 +98,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "89fe2e5"
-      resolved-ref: "89fe2e51c4e867144c567b04b801ca92694e15a9"
+      ref: "782c0b1"
+      resolved-ref: "782c0b1d5a0dcbba3439f36eea5fe3f102343a94"
       url: "https://github.com/Noskcaj19/flutter_spinkit.git"
     source: git
-    version: "4.1.1+1"
+    version: "4.1.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -117,11 +117,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "1be3254"
-      resolved-ref: "1be3254a31e4f3cc2caf67216ca8355ef40dba95"
+      ref: "16cba90"
+      resolved-ref: "16cba90391c3255986eba2bfc22adf71708888bb"
       url: "https://github.com/Noskcaj19/font_awesome_flutter.git"
     source: git
-    version: "8.5.0"
+    version: "8.7.0"
   http:
     dependency: transitive
     description:
@@ -179,7 +179,7 @@ packages:
       name: package_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0+14"
+    version: "0.4.0+16"
   path:
     dependency: transitive
     description:
@@ -212,11 +212,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: ddf8c26
-      resolved-ref: ddf8c2681ed4a412f376a6eed6fd05e442fd4a53
+      ref: "56b45be"
+      resolved-ref: "56b45be4b1475afabf56dc1f7ab8f950c00f70e1"
       url: "https://github.com/Noskcaj19/provider.git"
     source: git
-    version: "4.0.2"
+    version: "4.0.4"
   quiver:
     dependency: transitive
     description:
@@ -388,5 +388,5 @@ packages:
     source: hosted
     version: "2.2.0"
 sdks:
-  dart: ">=2.7.0 <3.0.0"
+  dart: ">=2.7.2 <3.0.0"
   flutter: ">=1.12.13+hotfix.4 <2.0.0"

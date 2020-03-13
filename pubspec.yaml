@@ -7,7 +7,7 @@ version: 2.1.0+0
 # version: 2.0.0+0
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.7.2 <3.0.0"
 
 dependencies:
   # Core flutter
@@ -21,15 +21,15 @@ dependencies:
   # Flutter team package
   sentry: ^3.0.1
   # Flutter team package
-  package_info: ^0.4.0+13
+  package_info: ^0.4.0+16
 
   # "Framework" utilities
   provider:
     git:
       url: https://github.com/Noskcaj19/provider.git
-      ref: ddf8c26
+      ref: 56b45be
   # Flutter team package
-  shared_preferences: ^0.5.6+1
+  shared_preferences: ^0.5.6+3
 
   url_launcher: ^5.4.2
 
@@ -43,19 +43,19 @@ dependencies:
   intl: ^0.16.1
   # Dart team package
   collection: ^1.14.11
-  pedantic: ^1.8.0
+  pedantic: ^1.9.0
 
   # Fonts and Icons
   font_awesome_flutter:
     git:
       url: https://github.com/Noskcaj19/font_awesome_flutter.git
-      ref: 1be3254
+      ref: 16cba90
 
   # General UI
   flutter_spinkit:
     git:
       url: https://github.com/Noskcaj19/flutter_spinkit.git
-      ref: 89fe2e5
+      ref: 782c0b1
   flutter_circular_chart:
     git:
       url: https://github.com/Noskcaj19/flutter_circular_chart.git
