@@ -67,26 +67,26 @@ class DataPersistence extends ChangeNotifier {
   }
 
   void _saveGrades() {
-    _prefs.setString("persisted_grades_v2", jsonEncode(_grades));
+    _prefs.setString('persisted_grades_v2', jsonEncode(_grades));
   }
 
   Map<String, List<Grade>> _loadGrades() {
-    var gradesStr = _prefs.getString("persisted_grades_v2");
+    var gradesStr = _prefs.getString('persisted_grades_v2');
     if (gradesStr == null || gradesStr.isEmpty) {
-      gradesStr = "{}";
+      gradesStr = '{}';
     }
 
-    Map<String, List<Grade>> out = {};
+    var out = <String, List<Grade>>{};
 
     try {
-      Map<String, dynamic> dynCourses = Map<String, dynamic>.from(
+      var dynCourses = Map<String, dynamic>.from(
           jsonDecode(gradesStr) as Map<String, dynamic>);
       dynCourses.forEach((String course, dynamic gradesListDyn) {
-        List<Grade> grades = [];
-        List<dynamic> gradesList = List.from(gradesListDyn as List);
+        var grades = <Grade>[];
+        var gradesList = List<dynamic>.from(gradesListDyn as List);
 
         gradesList.forEach((dynamic grade) {
-          Map<String, dynamic> dynGrade = grade as Map<String, dynamic>;
+          var dynGrade = grade as Map<String, dynamic>;
           grades.add(
             Grade(dynGrade.map((key, value) => MapEntry(key, value as String))),
           );
@@ -103,13 +103,13 @@ class DataPersistence extends ChangeNotifier {
   }
 
   void _saveCourses() {
-    _prefs.setString("persisted_courses_v2", jsonEncode(_courses));
+    _prefs.setString('persisted_courses_v2', jsonEncode(_courses));
   }
 
   List<CachedCourse> _loadCourses() {
-    var coursesString = _prefs.getString("persisted_courses_v2");
+    var coursesString = _prefs.getString('persisted_courses_v2');
     if (coursesString == null || coursesString.isEmpty) {
-      coursesString = "[]";
+      coursesString = '[]';
     }
 
     try {
@@ -125,9 +125,9 @@ class DataPersistence extends ChangeNotifier {
   }
 
   Map<String, String> _loadWeights() {
-    var weightsString = _prefs.getString("persisted_weights_v2");
+    var weightsString = _prefs.getString('persisted_weights_v2');
     if (weightsString == null || weightsString.isEmpty) {
-      weightsString = "{}";
+      weightsString = '{}';
     }
 
     try {
@@ -142,14 +142,14 @@ class DataPersistence extends ChangeNotifier {
   }
 
   void _saveWeights() {
-    _prefs.setString("persisted_weights_v2", jsonEncode(_weights));
+    _prefs.setString('persisted_weights_v2', jsonEncode(_weights));
   }
 
   void clearSaved() {
     _grades = {};
-    _prefs.remove("persisted_grades_v2");
-    _prefs.remove("persisted_courses_v2");
-    _prefs.remove("persisted_weights_v2");
+    _prefs.remove('persisted_grades_v2');
+    _prefs.remove('persisted_courses_v2');
+    _prefs.remove('persisted_weights_v2');
     notifyListeners();
   }
 }

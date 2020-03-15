@@ -48,7 +48,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                     color: Colors.white,
                   ),
                   child: const Text(
-                    "There are no classes available offline",
+                    'There are no classes available offline',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17.0,

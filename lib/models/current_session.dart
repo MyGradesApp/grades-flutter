@@ -9,7 +9,7 @@ class CurrentSession extends ChangeNotifier {
   CachedSISLoader _sisLoader;
   GlobalKey _navKey;
   bool _isOffline = false;
-  DataPersistence _gradePersistence;
+  final DataPersistence _gradePersistence;
 
   // A unique key to prevent previous sessions from being shown
   GlobalKey get navKey => _navKey;

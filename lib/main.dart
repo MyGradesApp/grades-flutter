@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             const Text(
-                              "No Network Connection",
+                              'No Network Connection',
                             ),
                             const SizedBox(width: 40),
                             Align(
@@ -138,7 +138,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
                                           '/', (route) => false);
                                 },
                                 child: const Text(
-                                  "Refresh",
+                                  'Refresh',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
