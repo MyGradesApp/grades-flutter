@@ -50,3 +50,10 @@ T catchHttpError<T>(T Function() f, {Function onHttpError}) {
     return null;
   }
 }
+
+bool isHttpError(Object error) {
+  return error is SocketException ||
+      error is HttpException ||
+      error is HandshakeException ||
+      error is OSError;
+}

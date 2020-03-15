@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/models/current_session.dart';
@@ -119,10 +117,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   course.courseName,
                 );
               } else if (snapshot.hasError) {
-                if (snapshot.error is SocketException ||
-                    snapshot.error is HttpException ||
-                    snapshot.error is HandshakeException ||
-                    snapshot.error is OSError) {
+                if (isHttpError(snapshot.error)) {
                   return RefreshableErrorMessage(
                     onRefresh: _refresh,
                     text: 'Issue connecting to SIS',

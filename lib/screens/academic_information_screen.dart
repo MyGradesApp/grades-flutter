@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:grades/models/current_session.dart';
+import 'package:grades/utilities/error.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/loader_widget.dart';
@@ -80,10 +79,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
-              if (snapshot.error is SocketException ||
-                  snapshot.error is HttpException ||
-                  snapshot.error is HandshakeException ||
-                  snapshot.error is OSError) {
+              if (isHttpError(snapshot.error)) {
                 return RefreshableErrorMessage(
                   onRefresh: () => _refresh(context),
                   text: 'Issue connecting to SIS',
