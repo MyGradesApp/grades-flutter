@@ -35,7 +35,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
 
   // Handle exception for RefreshIndicator
   Future<FetchedCourseData> _refresh() {
-    return ignoreFutureHttpError(() => _getData());
+    return catchFutureHttpError(() => _getData());
   }
 
   Future<FetchedCourseData> _getData({bool force = true}) {

@@ -47,7 +47,7 @@ class _FeedScreenState extends State<FeedScreen>
 
     // TODO: Switch to stream?
     unawaited(
-        ignoreFutureHttpError(() => Future.wait(_courses.map((course) async {
+        catchFutureHttpError(() => Future.wait(_courses.map((course) async {
               var grades = await course.getGrades(force);
               if (!mounted) {
                 return;

@@ -23,7 +23,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
   Future<List<CachedCourse>> _refresh(BuildContext context) {
     // Trigger ui update
     setState(() {});
-    return ignoreFutureHttpError(
+    return catchFutureHttpError(
         () => Provider.of<CurrentSession>(context, listen: false).courses());
   }
 

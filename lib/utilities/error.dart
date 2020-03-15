@@ -14,16 +14,39 @@ void showErrorSnackbar(ScaffoldState scaffoldState, String message) {
   ));
 }
 
-Future<T> ignoreFutureHttpError<T>(Future<T> Function() f) async {
+Future<T> catchFutureHttpError<T>(Future<T> Function() f,
+    {Function onHttpError}) async {
   try {
     return await f();
   } on HttpException catch (_) {
+    onHttpError();
     return null;
   } on SocketException catch (_) {
+    onHttpError();
     return null;
   } on HandshakeException catch (_) {
+    onHttpError();
     return null;
   } on OSError catch (_) {
+    onHttpError();
+    return null;
+  }
+}
+
+T catchHttpError<T>(T Function() f, {Function onHttpError}) {
+  try {
+    return f();
+  } on HttpException catch (_) {
+    onHttpError();
+    return null;
+  } on SocketException catch (_) {
+    onHttpError();
+    return null;
+  } on HandshakeException catch (_) {
+    onHttpError();
+    return null;
+  } on OSError catch (_) {
+    onHttpError();
     return null;
   }
 }
