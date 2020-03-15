@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:grades/models/current_session.dart';
 import 'package:grades/models/data_persistence.dart';
 import 'package:grades/models/theme_controller.dart';
@@ -17,8 +18,10 @@ import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/terms_screen.dart';
 import 'package:grades/screens/terms_settings_screen.dart';
+import 'package:grades/utilities/auth.dart';
 import 'package:grades/utilities/package_info.dart';
 import 'package:grades/utilities/sentry.dart';
+import 'package:grades/utilities/wrapped_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -113,42 +116,7 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
                 ),
               ),
               if (Provider.of<CurrentSession>(context).isOffline)
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Container(
-                    width: double.infinity,
-                    color: Colors.orange,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0.0),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            const Text(
-                              'No Network Connection',
-                            ),
-                            const SizedBox(width: 40),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: FlatButton(
-                                color: Colors.orangeAccent,
-                                onPressed: () async {
-                                  await _navKey.currentState
-                                      .pushNamedAndRemoveUntil(
-                                          '/', (route) => false);
-                                },
-                                child: const Text(
-                                  'Refresh',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                OfflineStatusBar(),
             ],
           );
         },
@@ -176,6 +144,90 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
           brightness: Brightness.light,
         );
     }
+  }
+}
+
+class OfflineStatusBar extends StatefulWidget {
+  OfflineStatusBar({Key key}) : super(key: key);
+
+  @override
+  _OfflineStatusBarState createState() => _OfflineStatusBarState();
+}
+
+class _OfflineStatusBarState extends State<OfflineStatusBar> {
+  bool _loggingIn = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Container(
+        width: double.infinity,
+        color: Colors.orange,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0.0),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'No Network Connection',
+                ),
+                const SizedBox(width: 40),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: FlatButton(
+                    color: Colors.orangeAccent,
+                    onPressed: () async {
+                      var secure = const WrappedSecureStorage();
+                      var email = await secure.read(key: 'sis_email');
+                      var password = await secure.read(key: 'sis_password');
+                      var session = await secure.read(key: 'sis_session');
+
+                      setState(() {
+                        _loggingIn = true;
+                      });
+
+                      try {
+                        var loader = await attemptLogin(
+                          email,
+                          password,
+                          session,
+                        );
+                        Provider.of<CurrentSession>(context, listen: false)
+                            .setSisLoader(loader);
+                        Provider.of<CurrentSession>(context, listen: false)
+                            .setOfflineStatus(false);
+                      } catch (_) {}
+                      setState(() {
+                        _loggingIn = false;
+                      });
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        const Text(
+                          'Refresh',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        if (_loggingIn)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: SpinKitRing(
+                              color: Colors.white,
+                              lineWidth: 3,
+                              size: 20.0,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
