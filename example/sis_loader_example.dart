@@ -34,5 +34,11 @@ Future<void> main() async {
 //    }
   }
 
+  var studentInfo = await loader.getStudentInfo();
+
+  var communityServiceInfo = studentInfo.firstWhere(
+      (v) => v['title'] == 'Total Number of Community Service Hours');
+  print(communityServiceInfo['value']);
+
   print(jsonEncode(o));
 }

@@ -286,6 +286,48 @@ class SISLoader {
             : null);
   }
 
+  Future<List<dynamic>> getStudentInfo() async {
+    assert(_loggedIn);
+
+    var studentInfoReq = await _client.get(Uri.parse(
+        'https://sis.palmbeachschools.org/focus/Modules.php?modname=Students/Student.php'));
+
+    String bearerTokenCookie;
+    try {
+      bearerTokenCookie = studentInfoReq.headers['set-cookie']
+          .firstWhere((c) => c.startsWith('Module::'));
+    } on StateError {
+      throw UnknownMissingCookieException('No module cookie present');
+    }
+    assert(bearerTokenCookie != null);
+
+    var startIndex = bearerTokenCookie.indexOf('=') + 1;
+    var endIndex = bearerTokenCookie.indexOf(';');
+    var bearerToken = bearerTokenCookie.substring(startIndex, endIndex);
+
+    var graduationReqsBody = await studentInfoReq.bodyAsString();
+
+    var requestToken = RegExp(r'request_token   = "(.*?)"')
+        .firstMatch(graduationReqsBody)
+        .group(1);
+
+    var studentId =
+        RegExp(r'student_id":(.*?),').firstMatch(graduationReqsBody).group(1);
+
+    var requestData =
+        '{"requests":[{"controller":"EditController","method":"cache:getFieldData","args":["10","SISStudent",$studentId],"session":null}],"cache":{}}';
+    var dataRequest = await _client.post(
+        Uri.parse(
+            'https://sis.palmbeachschools.org/focus/classes/FocusModule.class.php?modname=Students%2FStudent.php'),
+        '--FormBoundary\r\nContent-Disposition: form-data; name="__call__"\r\n\r\n$requestData\r\n--FormBoundary\r\nContent-Disposition: form-data; name="__token__"\r\n\r\n$requestToken\r\n--FormBoundary--',
+        headers: {
+          'authorization': 'Bearer ' + bearerToken,
+          'content-type': 'multipart/form-data; boundary=FormBoundary',
+        });
+
+    return json.decode(await dataRequest.bodyAsString())[0]['result'] as List;
+  }
+
   Future<Name> getName() async {
     if (debugMocking) {
       return Future.delayed(Duration(seconds: 2), () => mock_data.NAME);
