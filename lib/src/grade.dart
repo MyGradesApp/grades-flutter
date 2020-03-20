@@ -47,10 +47,21 @@ class Grade {
 
   String get points => raw['Points'];
 
-  DateTime get dateLastModified =>
-      _parseDateTimeCascade(raw['Date Last Modified']);
+  DateTime get dateLastModified {
+    if (raw['Date Last Modified'] != null) {
+      return _parseDateTimeCascade(raw['Date Last Modified']);
+    } else {
+      return null;
+    }
+  }
 
-  DateTime get assignedDate => _parseDateTimeCascade(raw['Assigned']);
+  DateTime get assignedDate {
+    if (raw['Assigned'] != null) {
+      return _parseDateTimeCascade(raw['Assigned']);
+    } else {
+      return null;
+    }
+  }
 
   Grade.fromJson(Map<String, dynamic> json) {
     raw = Map<String, String>.from(json);
