@@ -267,6 +267,15 @@ class SISLoader {
     }
 
     var classRankPieces = (rawProfile['class_rank'] as String)?.split(' / ');
+    int classRankNumerator;
+    int classRankDenominator;
+    if (classRankPieces != null && classRankPieces.length == 2) {
+      if (classRankPieces[0].trim().isNotEmpty &&
+          classRankPieces[1].trim().isNotEmpty) {
+        classRankNumerator = int.tryParse(classRankPieces[0]);
+        classRankDenominator = int.tryParse(classRankPieces[1]);
+      }
+    }
     return Profile(
         cumulative_gpa: rawProfile['cumluative_gpa'] != null
             ? double.tryParse(rawProfile['cumluative_gpa'] as String)
@@ -274,16 +283,8 @@ class SISLoader {
         cumulative_weighted_gpa: rawProfile['cumulative_weighted_gpa'] != null
             ? double.tryParse(rawProfile['cumulative_weighted_gpa'] as String)
             : null,
-        class_rank_numerator: (classRankPieces != null &&
-                classRankPieces.isNotEmpty &&
-                classRankPieces[0].trim().isNotEmpty)
-            ? int.tryParse(classRankPieces[0])
-            : null,
-        class_rank_denominator: (classRankPieces != null &&
-                classRankPieces.isNotEmpty &&
-                classRankPieces[1].trim().isNotEmpty)
-            ? int.tryParse(classRankPieces[1])
-            : null);
+        class_rank_numerator: classRankNumerator,
+        class_rank_denominator: classRankDenominator);
   }
 
   Future<List<dynamic>> getStudentInfo() async {
