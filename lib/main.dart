@@ -184,9 +184,11 @@ class _OfflineStatusBarState extends State<OfflineStatusBar> {
                       var password = await secure.read(key: 'sis_password');
                       var session = await secure.read(key: 'sis_session');
 
-                      setState(() {
-                        _loggingIn = true;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _loggingIn = true;
+                        });
+                      }
 
                       try {
                         var loader = await attemptLogin(
@@ -199,9 +201,11 @@ class _OfflineStatusBarState extends State<OfflineStatusBar> {
                         Provider.of<CurrentSession>(context, listen: false)
                             .setOfflineStatus(false);
                       } catch (_) {}
-                      setState(() {
-                        _loggingIn = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _loggingIn = false;
+                        });
+                      }
                     },
                     child: Row(
                       children: <Widget>[
