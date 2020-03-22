@@ -14,9 +14,14 @@ class AcademicInfoScreen extends StatefulWidget {
 }
 
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
-  Future<AcademicInfo> _refresh(BuildContext context) {
+  Future<AcademicInfo> _refresh() {
+    return catchFutureHttpError(_getData);
+  }
+
+  Future<AcademicInfo> _getData({bool force = true}) {
     setState(() {});
-    return Provider.of<CurrentSession>(context, listen: false).academicInfo();
+    return Provider.of<CurrentSession>(context, listen: false)
+        .academicInfo(force: force);
   }
 
   @override
@@ -38,14 +43,13 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         centerTitle: true,
       ),
       body: StackedFutureBuilder<AcademicInfo>(
-          future:
-              Provider.of<CurrentSession>(context).academicInfo(force: false),
+          future: _getData(force: false),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var profile = snapshot.data.profile;
               var absences = snapshot.data.absences;
               return RefreshIndicator(
-                onRefresh: () => _refresh(context),
+                onRefresh: _refresh,
                 child: SizedBox.expand(
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -81,7 +85,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
             } else if (snapshot.hasError) {
               if (isHttpError(snapshot.error)) {
                 return RefreshableErrorMessage(
-                  onRefresh: () => _refresh(context),
+                  onRefresh: _refresh,
                   text: 'Issue connecting to SIS',
                 );
               }
@@ -92,13 +96,13 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
 
               if (snapshot.error is UnknownMissingCookieException) {
                 return RefreshableErrorMessage(
-                  onRefresh: () => _refresh(context),
+                  onRefresh: _refresh,
                   text: 'Issue loading information',
                 );
               }
 
               return RefreshableErrorMessage(
-                onRefresh: () => _refresh(context),
+                onRefresh: _refresh,
                 text:
                     'An error occured fetching information:\n\n${snapshot.error}\n\nPull to refresh.\nIf the error persists, restart the app.',
               );
