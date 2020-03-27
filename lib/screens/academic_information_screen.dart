@@ -111,7 +111,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
 
             if (Provider.of<CurrentSession>(context).isOffline) {
               return RefreshableIconMessage(
-                onRefresh: () => _refresh(context),
+                onRefresh: _refresh,
                 icon: Icon(
                   Icons.signal_cellular_connected_no_internet_4_bar,
                   color: Colors.white,
