@@ -3,12 +3,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum GroupingMode { Date, Category }
 
-// TODO: Change to extensions when they become viable
-String groupingModeToString(GroupingMode mode) {
-  if (mode == GroupingMode.Date) {
-    return 'date';
-  } else {
-    return 'category';
+extension GroupingModeMethods on GroupingMode {
+  String asString() {
+    if (this == GroupingMode.Date) {
+      return 'date';
+    } else {
+      return 'category';
+    }
+  }
+
+  GroupingMode toggled() {
+    if (this == GroupingMode.Category) {
+      return GroupingMode.Date;
+    } else {
+      return GroupingMode.Category;
+    }
   }
 }
 
@@ -19,14 +28,6 @@ GroupingMode groupingModeFromString(String src) {
     return GroupingMode.Category;
   } else {
     throw FormatException('Invalid value: ${src}');
-  }
-}
-
-GroupingMode getToggledGroupingMode(GroupingMode mode) {
-  if (mode == GroupingMode.Category) {
-    return GroupingMode.Date;
-  } else {
-    return GroupingMode.Category;
   }
 }
 
@@ -69,6 +70,6 @@ class ThemeController extends ChangeNotifier {
 
     notifyListeners();
 
-    _prefs.setString(defaultGroupKey, groupingModeToString(mode));
+    _prefs.setString(defaultGroupKey, mode.asString());
   }
 }

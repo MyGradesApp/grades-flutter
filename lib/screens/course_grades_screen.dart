@@ -88,8 +88,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
                   : Icons.format_list_bulleted),
               onPressed: () {
                 setState(() {
-                  _currentGroupingMode =
-                      getToggledGroupingMode(_currentGroupingMode);
+                  _currentGroupingMode = _currentGroupingMode.toggled();
                 });
               },
             ),
