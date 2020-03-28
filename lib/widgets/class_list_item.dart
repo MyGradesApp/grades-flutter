@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:grades/widgets/colored_grade_dot.dart';
+import 'package:grades/widgets/indicator_dots/colored_grade_dot.dart';
 
-class ClassListItemWidget extends StatelessWidget {
-  ClassListItemWidget(
+class ClassListItem extends StatelessWidget {
+  ClassListItem(
       {@required this.course,
       @required this.teacher,
       @required this.letterGrade,
@@ -16,6 +16,7 @@ class ClassListItemWidget extends StatelessWidget {
   final String course;
   final String teacher;
   final String letterGrade;
+
   // String | int
   final dynamic percent;
   final void Function() onTap;
@@ -23,37 +24,40 @@ class ClassListItemWidget extends StatelessWidget {
   Widget _buildColumn(String topText, String bottomText,
       CrossAxisAlignment alignment, Color textColor,
       {bool chevron = false, String grade}) {
-    return Column(crossAxisAlignment: alignment, children: <Widget>[
-      Row(
-        children: <Widget>[
-          Text(
-            topText,
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 19, color: textColor),
-          ),
-        ],
-      ),
-      Padding(
-        child: Container(
-          child: Row(
-            children: <Widget>[
-              if (grade != null) ColoredGradeDot.grade(grade),
-              const SizedBox(width: 3),
-              Text(
-                bottomText,
-                style: TextStyle(fontSize: 15, color: textColor),
-              ),
-              if (chevron)
-                Icon(
-                  Icons.chevron_right,
-                  color: Colors.black26,
-                )
-            ],
-          ),
+    return Column(
+      crossAxisAlignment: alignment,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              topText,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 19, color: textColor),
+            ),
+          ],
         ),
-        padding: const EdgeInsets.only(top: 30),
-      ),
-    ]);
+        Padding(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                if (grade != null) ColoredGradeDot.grade(grade),
+                const SizedBox(width: 3),
+                Text(
+                  bottomText,
+                  style: TextStyle(fontSize: 15, color: textColor),
+                ),
+                if (chevron)
+                  Icon(
+                    Icons.chevron_right,
+                    color: Colors.black26,
+                  )
+              ],
+            ),
+          ),
+          padding: const EdgeInsets.only(top: 30),
+        ),
+      ],
+    );
   }
 
   @override

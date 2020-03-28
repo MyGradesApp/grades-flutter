@@ -1,25 +1,29 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:grades/models/data_persistence.dart';
-import 'package:grades/models/theme_controller.dart';
-import 'package:grades/utilities/date.dart';
-import 'package:grades/utilities/grades.dart';
+import 'package:grades/providers/data_persistence.dart';
+import 'package:grades/providers/theme_controller.dart';
+import 'package:grades/utilities/helpers/date.dart';
+import 'package:grades/utilities/helpers/grades.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-import 'colored_grade_dot.dart';
+import 'indicator_dots/colored_grade_dot.dart';
 
-class CourseGradesMinimalDisplay extends StatelessWidget {
+class CourseGradesDisplay extends StatelessWidget {
   final List<Grade> _data;
   final Map<String, String> _weights;
   final GroupingMode _groupingMode;
   final String _courseName;
 
-  CourseGradesMinimalDisplay._(
-      this._data, this._weights, this._groupingMode, this._courseName);
+  CourseGradesDisplay._(
+    this._data,
+    this._weights,
+    this._groupingMode,
+    this._courseName,
+  );
 
-  factory CourseGradesMinimalDisplay(
+  factory CourseGradesDisplay(
     List<Grade> data,
     Map<String, String> weights,
     GroupingMode groupingMode,
@@ -28,11 +32,9 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
     if (groupingMode == GroupingMode.Category) {
       var copy = List.of(data);
       mergeSort(copy, compare: _gradeCmp);
-      return CourseGradesMinimalDisplay._(
-          copy, weights, groupingMode, courseName);
+      return CourseGradesDisplay._(copy, weights, groupingMode, courseName);
     } else {
-      return CourseGradesMinimalDisplay._(
-          data, weights, groupingMode, courseName);
+      return CourseGradesDisplay._(data, weights, groupingMode, courseName);
     }
   }
 
@@ -42,48 +44,49 @@ class CourseGradesMinimalDisplay extends StatelessWidget {
         .getOriginalGrades(_courseName);
 
     return ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: _data.length,
-        itemBuilder: (context, i) {
-          var isNewGrade =
-              !oldGrades.any((element) => element.name == _data[i].name);
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: _data.length,
+      itemBuilder: (context, i) {
+        var isNewGrade =
+            !oldGrades.any((element) => element.name == _data[i].name);
 
-          var card = buildGradeItemCard(
-            context,
-            _data[i],
-            Theme.of(context).primaryColorLight,
-            Theme.of(context).cardColor,
-            isNewGrade,
-          );
+        var card = buildGradeItemCard(
+          context,
+          _data[i],
+          Theme.of(context).primaryColorLight,
+          Theme.of(context).cardColor,
+          isNewGrade,
+        );
 
-          var category = _data[i].category;
-          var date = _data[i].assignedDate;
-          var oldCategory;
-          DateTime oldDate;
-          if (i > 0) {
-            oldCategory = _data[i - 1].category;
-            oldDate = _data[i - 1].assignedDate;
+        var category = _data[i].category;
+        var date = _data[i].assignedDate;
+        var oldCategory;
+        DateTime oldDate;
+        if (i > 0) {
+          oldCategory = _data[i - 1].category;
+          oldDate = _data[i - 1].assignedDate;
+        }
+        if (_groupingMode == GroupingMode.Category) {
+          if (oldCategory != category) {
+            return _buildHeaderedItem(
+              text: _titlecase(category),
+              subText: _weights != null ? _weights[category] : null,
+              child: card,
+            );
           }
-          if (_groupingMode == GroupingMode.Category) {
-            if (oldCategory != category) {
-              return _buildHeaderedItem(
-                text: _titlecase(category),
-                subText: _weights != null ? _weights[category] : null,
-                child: card,
-              );
-            }
-          } else {
-            if (date != null &&
-                (oldDate != null ? isoWeekNumber(oldDate) : null) !=
-                    isoWeekNumber(date)) {
-              return _buildHeaderedItem(
-                text: _dateRangeHeaderForWeek(date),
-                child: card,
-              );
-            }
+        } else {
+          if (date != null &&
+              (oldDate != null ? isoWeekNumber(oldDate) : null) !=
+                  isoWeekNumber(date)) {
+            return _buildHeaderedItem(
+              text: _dateRangeHeaderForWeek(date),
+              child: card,
+            );
           }
-          return card;
-        });
+        }
+        return card;
+      },
+    );
   }
 
   Widget _buildHeaderedItem({Widget child, String text, String subText}) {
@@ -189,15 +192,6 @@ Widget buildGradeItemCard(BuildContext context, Grade grade, Color textColor,
                     style: TextStyle(color: textColor),
                   ),
                   const SizedBox(width: 6),
-                  // if (showIndicator)
-                  //   Container(
-                  //     height: 6,
-                  //     width: 6,
-                  //     decoration: BoxDecoration(
-                  //       shape: BoxShape.circle,
-                  //       color: Colors.indigoAccent,
-                  //     ),
-                  //   ),
                 ],
               ),
             ),

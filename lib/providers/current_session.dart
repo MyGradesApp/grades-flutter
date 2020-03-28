@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:grades/models/data_persistence.dart';
+import 'package:grades/providers/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';

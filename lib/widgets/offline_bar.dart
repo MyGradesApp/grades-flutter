@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grades/models/current_session.dart';
-import 'package:grades/utilities/auth.dart';
-import 'package:grades/utilities/wrapped_secure_storage.dart';
+import 'package:grades/providers/current_session.dart';
+import 'package:grades/utilities/helpers/auth.dart';
+import 'package:grades/utilities/patches/wrapped_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class OfflineStatusBar extends StatefulWidget {

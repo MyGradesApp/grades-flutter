@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:grades/models/current_session.dart';
-import 'package:grades/utilities/auth.dart';
-import 'package:grades/utilities/error.dart';
+import 'package:grades/providers/current_session.dart';
+import 'package:grades/utilities/helpers/auth.dart';
+import 'package:grades/utilities/helpers/error.dart';
+import 'package:grades/utilities/patches/wrapped_secure_storage.dart';
 import 'package:grades/utilities/sentry.dart';
-import 'package:grades/utilities/wrapped_secure_storage.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grades/models/current_session.dart';
-import 'package:grades/utilities/error.dart';
+import 'package:grades/providers/current_session.dart';
+import 'package:grades/utilities/helpers/error.dart';
+import 'package:grades/utilities/patches/stacked_future_builder.dart';
 import 'package:grades/utilities/sentry.dart';
-import 'package:grades/utilities/stacked_future_builder.dart';
 import 'package:grades/widgets/loader_widget.dart';
-import 'package:grades/widgets/refreshable_error_message.dart';
-import 'package:grades/widgets/refreshable_icon_message.dart';
+import 'package:grades/widgets/refreshable/refreshable_error_message.dart';
+import 'package:grades/widgets/refreshable/refreshable_icon_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -16,8 +16,10 @@ class AcademicInfoScreen extends StatefulWidget {
 
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   Future<AcademicInfo> _refresh() async {
-    var result = await catchFutureHttpError(_getData,
-        onHttpError: () => setState(() {}));
+    var result = await catchFutureHttpError(
+      _getData,
+      onHttpError: () => setState(() {}),
+    );
     setState(() {});
     return result;
   }
@@ -144,21 +146,22 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
       color: Theme.of(context).accentColor,
       margin: const EdgeInsets.all(10),
       child: Padding(
-          padding: const EdgeInsets.all(9.0),
-          child: ListTile(
-            title: Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.white,
-              ),
+        padding: const EdgeInsets.all(9.0),
+        child: ListTile(
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.white,
             ),
-            subtitle: Text(
-              body,
-              style: const TextStyle(fontSize: 18, color: Colors.white),
-            ),
-          )),
+          ),
+          subtitle: Text(
+            body,
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 }

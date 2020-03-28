@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grades/utilities/tos_const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TermsScreen extends StatelessWidget {
+class TermsQueryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

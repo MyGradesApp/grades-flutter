@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grades/models/theme_controller.dart';
+import 'package:grades/providers/theme_controller.dart';
+import 'package:grades/utilities/helpers/update.dart';
 import 'package:grades/utilities/sentry.dart' as sentry;
-import 'package:grades/utilities/update.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -151,19 +151,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 : GroupingMode.Category);
                       },
                     ),
-                    // _buildCard(
-                    //   child: const Text(
-                    //     "Leave a Review",
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.bold,
-                    //       fontSize: 18,
-                    //       color: Colors.white,
-                    //     ),
-                    //   ),
-                    //   onPressed: () async {
-                    //     await AppReview.writeReview;
-                    //   },
-                    // ),
                     _buildCard(
                       child: const Text(
                         'Terms of Service',

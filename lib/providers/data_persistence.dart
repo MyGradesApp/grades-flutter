@@ -11,7 +11,6 @@ import 'package:sis_loader/sis_loader.dart';
 DataPersistence GLOBAL_DATA_PERSISTENCE;
 
 class DataPersistence extends ChangeNotifier {
-  // Map<class name, list of grades>
   Map<String, List<Grade>> _originalGrades = {};
   Map<String, List<Grade>> _grades = {};
   Map<String, String> _weights = {};

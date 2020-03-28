@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grades/utilities/update.dart';
+import 'package:grades/utilities/helpers/update.dart';
 
 void showUpdatedDialog(BuildContext context) {
   showDialog(

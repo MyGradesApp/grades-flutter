@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grades/widgets/refreshable_icon_message.dart';
+import 'package:grades/widgets/refreshable/refreshable_icon_message.dart';
 
 class RefreshableErrorMessage extends StatelessWidget {
   final Future<void> Function() onRefresh;

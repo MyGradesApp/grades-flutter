@@ -1,5 +1,5 @@
 import 'package:grades/sis-cache/sis_loader.dart';
-import 'package:grades/utilities/wrapped_secure_storage.dart';
+import 'package:grades/utilities/patches/wrapped_secure_storage.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 Future<CachedSISLoader> attemptLogin(String email, String password,

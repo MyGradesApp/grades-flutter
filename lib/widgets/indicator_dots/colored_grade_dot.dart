@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ColoredGradeDot extends StatelessWidget {
   final Color _color;
 
-  ColoredGradeDot(this._color);
+  const ColoredGradeDot(this._color);
 
   factory ColoredGradeDot.grade(String letterGrade) {
     switch (letterGrade) {

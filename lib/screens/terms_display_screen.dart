@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grades/utilities/tos_const.dart';
 
-class TermsSettingsScreen extends StatefulWidget {
+class TermsDisplayScreen extends StatefulWidget {
   @override
-  _TermsSettingsScreenState createState() => _TermsSettingsScreenState();
+  _TermsDisplayScreenState createState() => _TermsDisplayScreenState();
 }
 
-class _TermsSettingsScreenState extends State<TermsSettingsScreen> {
+class _TermsDisplayScreenState extends State<TermsDisplayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

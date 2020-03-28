@@ -12,7 +12,7 @@ class GradeItemDetailScreen extends StatelessWidget {
     if (grade.raw.containsKey('Points')) {
       var matches = RegExp(r'([\d.]+) / ([\d.]+)')?.firstMatch(grade.points);
 
-      // TODO: Rework null propigation
+      // TODO: Rework null propagation
       pointsUpper = double.tryParse(matches?.group(1) ?? '0');
       pointsLower = double.tryParse(matches?.group(2) ?? '0');
     }
@@ -57,7 +57,8 @@ class GradeItemDetailScreen extends StatelessWidget {
             child: Card(
               color: Theme.of(context).accentColor,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10),
+              ),
               margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child:
                   _buildItem(keys[i], values[i], pointsData: pointsChartData),
@@ -94,10 +95,15 @@ class GradeItemDetailScreen extends StatelessWidget {
             child: Text(
               key.toString(),
               style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white),
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
-          Text(_formatItem(value), style: const TextStyle(color: Colors.white)),
+          Text(
+            _formatItem(value),
+            style: const TextStyle(color: Colors.white),
+          ),
         ],
       ),
     );

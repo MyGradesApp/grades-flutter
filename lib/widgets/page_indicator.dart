@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// An indicator showing the currently selected page of a PageController
-class DotsIndicator extends AnimatedWidget {
-  DotsIndicator({
+class PageIndicator extends AnimatedWidget {
+  PageIndicator({
     this.controller,
     this.itemCount,
     this.onPageSelected,

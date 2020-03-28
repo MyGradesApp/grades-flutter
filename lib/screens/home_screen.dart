@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/feed_screen.dart';
-import 'package:grades/utilities/dots_indicator.dart';
-import 'package:grades/utilities/update.dart';
+import 'package:grades/utilities/helpers/update.dart';
 import 'package:grades/utilities/updated_dialog.dart';
+import 'package:grades/widgets/page_indicator.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // color: Colors.grey[800].withOpacity(0.5),
           padding: const EdgeInsets.all(20.0),
           child: Center(
-            child: DotsIndicator(
+            child: PageIndicator(
               controller: controller,
               itemCount: pages.length,
               onPageSelected: (int page) {

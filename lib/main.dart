@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:grades/models/current_session.dart';
-import 'package:grades/models/data_persistence.dart';
-import 'package:grades/models/theme_controller.dart';
+import 'package:grades/providers/current_session.dart';
+import 'package:grades/providers/data_persistence.dart';
+import 'package:grades/providers/theme_controller.dart';
 import 'package:grades/screens/academic_information_screen.dart';
 import 'package:grades/screens/course_grades_screen.dart';
 import 'package:grades/screens/course_list_screen.dart';
@@ -15,9 +15,9 @@ import 'package:grades/screens/home_screen.dart';
 import 'package:grades/screens/login_screen.dart';
 import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
-import 'package:grades/screens/terms_screen.dart';
-import 'package:grades/screens/terms_settings_screen.dart';
-import 'package:grades/utilities/package_info.dart';
+import 'package:grades/screens/terms_display_screen.dart';
+import 'package:grades/screens/terms_query_screen.dart';
+import 'package:grades/utilities/helpers/package_info.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/offline_bar.dart';
 import 'package:provider/provider.dart';
@@ -93,9 +93,9 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
                   theme: _buildCurrentTheme(theme),
                   routes: <String, WidgetBuilder>{
                     '/login': (BuildContext context) => LoginScreen(),
-                    '/terms': (BuildContext context) => TermsScreen(),
+                    '/terms': (BuildContext context) => TermsQueryScreen(),
                     '/terms_settings': (BuildContext context) =>
-                        TermsSettingsScreen(),
+                        TermsDisplayScreen(),
                     '/settings': (BuildContext context) => SettingsScreen(),
                     '/courses': (BuildContext context) {
                       // Use a key here to prevent overlap in sessions

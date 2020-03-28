@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NewGradeCourseIndicator extends StatelessWidget {
+class NewGradeIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -68,8 +68,7 @@ class ThemeController extends ChangeNotifier {
   void setDefaultGroupingMode(GroupingMode mode) {
     _defaultGroupMode = mode;
 
-    notifyListeners();
-
     _prefs.setString(defaultGroupKey, mode.asString());
+    notifyListeners();
   }
 }

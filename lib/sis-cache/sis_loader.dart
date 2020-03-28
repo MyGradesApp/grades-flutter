@@ -1,4 +1,4 @@
-import 'package:grades/models/data_persistence.dart';
+import 'package:grades/providers/data_persistence.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 const Duration TIMEOUT = Duration(seconds: 21);
@@ -22,7 +22,7 @@ class CachedSISLoader {
   void login(String username, String password) =>
       _loader.login(username, password).timeout(TIMEOUT);
 
-  // TODO: Pull caching out of sis-loader `Course`s
+  // TODO: Change caching to use values instead of saving the future?
   Future<List<CachedCourse>> getCourses({bool force = false}) async {
     if (_courses != null && !force) {
       return _courses;

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:grades/models/current_session.dart';
+import 'package:grades/providers/current_session.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
-import 'package:grades/utilities/error.dart';
+import 'package:grades/utilities/helpers/error.dart';
+import 'package:grades/utilities/patches/stacked_future_builder.dart';
 import 'package:grades/utilities/sentry.dart';
-import 'package:grades/utilities/stacked_future_builder.dart';
-import 'package:grades/widgets/class_list_item_widget.dart';
+import 'package:grades/widgets/class_list_item.dart';
 import 'package:grades/widgets/loader_widget.dart';
-import 'package:grades/widgets/refreshable_error_message.dart';
-import 'package:grades/widgets/refreshable_icon_message.dart';
+import 'package:grades/widgets/refreshable/refreshable_error_message.dart';
+import 'package:grades/widgets/refreshable/refreshable_icon_message.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -70,7 +70,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var course = snapshot.data[index];
-                  return ClassListItemWidget(
+                  return ClassListItem(
                     onTap: () {
                       Navigator.pushNamed(context, '/course_grades',
                           arguments: course);
