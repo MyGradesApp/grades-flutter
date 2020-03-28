@@ -1,6 +1,8 @@
 import 'package:grades/models/data_persistence.dart';
 import 'package:sis_loader/sis_loader.dart';
 
+const Duration TIMEOUT = Duration(seconds: 21);
+
 class CachedSISLoader {
   final SISLoader _loader;
   final String username;
@@ -18,14 +20,14 @@ class CachedSISLoader {
   set sessionCookies(String cookies) => _loader.sessionCookies = cookies;
 
   void login(String username, String password) =>
-      _loader.login(username, password);
+      _loader.login(username, password).timeout(TIMEOUT);
 
   // TODO: Pull caching out of sis-loader `Course`s
   Future<List<CachedCourse>> getCourses({bool force = false}) async {
     if (_courses != null && !force) {
       return _courses;
     }
-    _courses = _loader.getCourses().then((courses) =>
+    _courses = _loader.getCourses().timeout(TIMEOUT).then((courses) =>
         courses.map((course) => CachedCourse.fromCourse(course)).toList());
     return _courses;
   }
@@ -34,7 +36,7 @@ class CachedSISLoader {
     if (_userProfile != null && !force) {
       return _userProfile;
     }
-    _userProfile = _loader.getUserProfile();
+    _userProfile = _loader.getUserProfile().timeout(TIMEOUT);
     return _userProfile;
   }
 
@@ -42,7 +44,7 @@ class CachedSISLoader {
     if (_absences != null && !force) {
       return _absences;
     }
-    _absences = _loader.getAbsences();
+    _absences = _loader.getAbsences().timeout(TIMEOUT);
     return _absences;
   }
 }
@@ -92,7 +94,7 @@ class CachedCourse {
     if (_rawCourse == null) {
       return Future.value(GLOBAL_DATA_PERSISTENCE.getGrades(courseName));
     }
-    return await _rawCourse.getGrades(force);
+    return await _rawCourse.getGrades(force).timeout(TIMEOUT);
   }
 
   Future<Map<String, String>> getCategoryWeights([bool force = false]) async {
@@ -100,6 +102,6 @@ class CachedCourse {
     if (_rawCourse == null) {
       return Future.value(GLOBAL_DATA_PERSISTENCE.weights);
     }
-    return await _rawCourse.getCategoryWeights(force);
+    return await _rawCourse.getCategoryWeights(force).timeout(TIMEOUT);
   }
 }

@@ -15,14 +15,24 @@ class AcademicInfoScreen extends StatefulWidget {
 }
 
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
-  Future<AcademicInfo> _refresh() {
-    return catchFutureHttpError(_getData);
+  Future<AcademicInfo> _refresh() async {
+    var result = await catchFutureHttpError(_getData,
+        onHttpError: () => setState(() {}));
+    setState(() {});
+    return result;
   }
 
-  Future<AcademicInfo> _getData({bool force = true}) {
-    setState(() {});
-    return Provider.of<CurrentSession>(context, listen: false)
-        .academicInfo(force: force);
+  Future<AcademicInfo> _getData({bool force = true}) async {
+    try {
+      var result = await Provider.of<CurrentSession>(context, listen: false)
+          .academicInfo(force: force);
+      return result;
+    } catch (_) {
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(true);
+      Provider.of<CurrentSession>(context, listen: false).setSisLoader(null);
+      rethrow;
+    }
   }
 
   @override

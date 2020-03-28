@@ -32,15 +32,33 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   }
 
   // Handle exception for RefreshIndicator
-  Future<FetchedCourseData> _refresh() {
-    return catchFutureHttpError(() => _getData());
+  Future<FetchedCourseData> _refresh() async {
+    var result = await catchFutureHttpError(
+      () => _getData(),
+      onHttpError: () {
+        Provider.of<CurrentSession>(context, listen: false)
+            .setOfflineStatus(true);
+        Provider.of<CurrentSession>(context, listen: false).setSisLoader(null);
+      },
+    );
+    setState(() {});
+    return result;
   }
 
   Future<FetchedCourseData> _getData({bool force = true}) {
+//    if (!force) {
+//      force = Provider.of<CurrentSession>(context, listen: false).isOffline;
+//    }
     final course = ModalRoute.of(context).settings.arguments as CachedCourse;
-    setState(() {});
-    return Provider.of<CurrentSession>(context, listen: false)
-        .courseData(context, course, force: force);
+    try {
+      return Provider.of<CurrentSession>(context, listen: false)
+          .courseData(context, course, force: force);
+    } catch (_) {
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(true);
+      Provider.of<CurrentSession>(context, listen: false).setSisLoader(null);
+      rethrow;
+    }
   }
 
   @override

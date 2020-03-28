@@ -31,10 +31,10 @@ class _FeedScreenState extends State<FeedScreen>
   @override
   void initState() {
     super.initState();
-    _refresh();
+    _refresh(force: false);
   }
 
-  Future<void> _refresh({bool force = false}) async {
+  Future<void> _refresh({bool force = true}) async {
     _numLoaded = 0;
     setState(() {
       _isLoading = true;
@@ -50,22 +50,29 @@ class _FeedScreenState extends State<FeedScreen>
     var totalToLoad = _courses.length;
 
     // TODO: Switch to stream?
-    unawaited(
-        catchFutureHttpError(() => Future.wait(_courses.map((course) async {
-              var grades = await course.getGrades(force);
-              if (!mounted) {
-                return;
-              }
-              setState(() {
-                _courseGrades[course.courseName] = grades;
-                _numLoaded += 1;
-                if (_numLoaded == totalToLoad) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                }
-              });
-            }))));
+    unawaited(catchFutureHttpError(
+      () => Future.wait(_courses.map((course) async {
+        var grades = await course.getGrades(force);
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _courseGrades[course.courseName] = grades;
+          _numLoaded += 1;
+          if (_numLoaded == totalToLoad) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
+        });
+      }), eagerError: true),
+      onHttpError: () {
+        _numLoaded += 1;
+        Provider.of<CurrentSession>(context, listen: false)
+            .setOfflineStatus(true);
+        Provider.of<CurrentSession>(context, listen: false).setSisLoader(null);
+      },
+    ));
 
     return null;
   }
@@ -73,6 +80,19 @@ class _FeedScreenState extends State<FeedScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    // TODO: Lift this restriction
+    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+      return RefreshableIconMessage(
+        onRefresh: _refresh,
+        icon: Icon(
+          Icons.signal_cellular_connected_no_internet_4_bar,
+          color: Colors.white,
+          size: 55,
+        ),
+        text: 'Recent Grades is not available offline',
+      );
+    }
 
     var courses = _courseGrades;
 
@@ -110,7 +130,7 @@ class _FeedScreenState extends State<FeedScreen>
 
     if (out.isEmpty && !_isLoading) {
       return RefreshableIconMessage(
-        onRefresh: () => _refresh(force: true),
+        onRefresh: _refresh,
         icon: Icon(
           FontAwesomeIcons.inbox,
           size: 55,
@@ -125,7 +145,10 @@ class _FeedScreenState extends State<FeedScreen>
         ),
       );
     } else if (out.isEmpty && _isLoading) {
-      return _buildLoader();
+      return RefreshIndicator(
+        onRefresh: _refresh,
+        child: _buildLoader(),
+      );
     }
 
     var listChildren = <Widget>[];

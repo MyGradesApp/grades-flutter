@@ -20,11 +20,17 @@ class CourseListScreen extends StatefulWidget {
 }
 
 class _CourseListScreenState extends State<CourseListScreen> {
-  Future<List<CachedCourse>> _refresh(BuildContext context) {
-    // Trigger ui update
+  Future<List<CachedCourse>> _refresh(BuildContext context) async {
+    var result = await catchFutureHttpError(
+      () => Provider.of<CurrentSession>(context, listen: false).courses(),
+      onHttpError: () {
+        Provider.of<CurrentSession>(context, listen: false)
+            .setOfflineStatus(true);
+        Provider.of<CurrentSession>(context, listen: false).setSisLoader(null);
+      },
+    );
     setState(() {});
-    return catchFutureHttpError(
-        () => Provider.of<CurrentSession>(context, listen: false).courses());
+    return result;
   }
 
   @override

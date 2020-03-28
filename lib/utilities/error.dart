@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -55,5 +56,6 @@ bool isHttpError(Object error) {
   return error is SocketException ||
       error is HttpException ||
       error is HandshakeException ||
-      error is OSError;
+      error is OSError ||
+      error is TimeoutException; // Not really, but this makes things easier
 }
