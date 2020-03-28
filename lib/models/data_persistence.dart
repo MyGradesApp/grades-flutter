@@ -72,7 +72,7 @@ class DataPersistence extends ChangeNotifier {
 
   Map<String, List<Grade>> _loadGrades() {
     var gradesStr = _prefs.getString('persisted_grades_v2');
-    if (gradesStr == null || gradesStr.isEmpty) {
+    if (gradesStr == null || gradesStr.isEmpty || gradesStr == 'null') {
       gradesStr = '{}';
     }
 
@@ -108,7 +108,9 @@ class DataPersistence extends ChangeNotifier {
 
   List<CachedCourse> _loadCourses() {
     var coursesString = _prefs.getString('persisted_courses_v2');
-    if (coursesString == null || coursesString.isEmpty) {
+    if (coursesString == null ||
+        coursesString.isEmpty ||
+        coursesString == 'null') {
       coursesString = '[]';
     }
 
@@ -126,7 +128,9 @@ class DataPersistence extends ChangeNotifier {
 
   Map<String, String> _loadWeights() {
     var weightsString = _prefs.getString('persisted_weights_v2');
-    if (weightsString == null || weightsString.isEmpty) {
+    if (weightsString == null ||
+        weightsString.isEmpty ||
+        weightsString == 'null') {
       weightsString = '{}';
     }
 
