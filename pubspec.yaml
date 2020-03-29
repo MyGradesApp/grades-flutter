@@ -12,7 +12,9 @@ dependencies:
     sdk: flutter
   # 1st party packages
   sis_loader:
-    git: https://github.com/Noskcaj19/dart-sis-loader.git
+    git:
+      url: https://github.com/Noskcaj19/dart-sis-loader.git
+      ref: "83bc799"
 
   # Debug/Error reporting/System packages
   # Flutter team package
