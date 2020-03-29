@@ -21,9 +21,6 @@ import 'package:grades/utilities/package_info.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'utilities/update.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,10 +29,6 @@ void main() async {
   final package_info = await getPackageInfo();
   // Used for sentry error reporting and settings page version number
   version = '${package_info.version}+${package_info.buildNumber}';
-
-  if (await checkUpdateAvailable() == true) {
-    await showVersionDialog();
-  }
 
   FlutterError.onError = (details, {bool forceReport = false}) {
     reportException(
@@ -56,33 +49,6 @@ void main() async {
   );
 }
 
-Future<void> showVersionDialog() async {
-  await showDialog<String>(
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      var title = 'New Update Available';
-      var message = 'Changes in SIS require immediate update';
-      var btnLabel = 'Update Now!';
-      var btnLabelCancel = 'Nah';
-      return CupertinoAlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(btnLabel),
-            onPressed: () => launch(
-                'https://apps.apple.com/us/app/swiftgrade/id1495113299?ign-mpt=uo%3D2'),
-          ),
-          FlatButton(
-            child: Text(btnLabelCancel),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      );
-    },
-  );
-}
-
 class MyApp extends StatelessWidget with PortraitModeMixin {
   // root of application.
 
@@ -92,7 +58,6 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

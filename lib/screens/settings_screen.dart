@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grades/models/theme_controller.dart';
 import 'package:grades/utilities/sentry.dart' as sentry;
+import 'package:grades/utilities/update.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -9,6 +10,18 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool updateAvailable = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkUpdateAvailable().then((available) {
+      setState(() {
+        updateAvailable = available;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeController = Provider.of<ThemeController>(context, listen: false);
@@ -36,6 +49,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    if (updateAvailable)
+                      _buildCard(
+                        accentColor: const Color.fromARGB(255, 211, 117, 116),
+                        child: Row(children: [
+                          const Expanded(
+                            child: Text(
+                              'Update Available',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            'Click to update now',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ]),
+                        onPressed: () {
+                          launchAppstorePage();
+                        },
+                      ),
                     _buildCard(
                       child: Row(children: [
                         const Expanded(
@@ -167,14 +206,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildCard({Widget child, void Function() onPressed}) {
+  Widget _buildCard(
+      {Widget child, void Function() onPressed, Color accentColor}) {
     return Padding(
       padding: const EdgeInsets.all(4),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        color: Theme.of(context).accentColor,
+        color: accentColor ?? Theme.of(context).accentColor,
         child: FlatButton(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),

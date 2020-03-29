@@ -1,7 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:url_launcher/url_launcher.dart';
+
 import 'sentry.dart' as sentry;
+
+Future<bool> launchAppstorePage() {
+  return launch('https://apps.apple.com/us/app/swiftgrade/id1495113299');
+}
 
 Future<bool> checkUpdateAvailable() async {
   var resp = await HttpClient()

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/feed_screen.dart';
 import 'package:grades/utilities/dots_indicator.dart';
+import 'package:grades/utilities/update.dart';
 import 'package:grades/utilities/updated_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
     CourseListScreen(),
   ];
 
+  bool updateAvailable = false;
+
   var kDuration = const Duration(milliseconds: 300);
 
   var kCurve = Curves.ease;
@@ -28,13 +31,39 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) {
+    Future.microtask(() async {
+      var prefs = await SharedPreferences.getInstance();
+      var hasShownSisBreakingScreen =
+          prefs.getBool('hasShownSisBreakingUpdateRequired');
+      var updateAvailableResult = await checkUpdateAvailable();
+      setState(() {
+        updateAvailable = updateAvailableResult;
+      });
+
       var hasShownUpdateScreen = prefs.getBool('hasShownUpdateScreen2');
       if (hasShownUpdateScreen == null || !hasShownUpdateScreen) {
-        prefs.setBool('hasShownUpdateScreen2', true);
-        Future.microtask(() {
-          showUpdatedDialog(context);
-        });
+        showUpdatedDialog(context);
+        await prefs.setBool('hasShownUpdateScreen2', true);
+      }
+
+      // After March 30, 2020
+      if (DateTime.now().isAfter(DateTime(2020, 3, 30))) {
+        if (hasShownSisBreakingScreen == null || !hasShownSisBreakingScreen) {
+          if (updateAvailable) {
+            showSisBrokeDialog(
+                context,
+                'SIS has made some changes and SwiftGrade needs to be updated to continue functioning',
+                'Get it now',
+                true);
+          } else {
+            showSisBrokeDialog(
+                context,
+                'SIS has made some changes and SwiftGrade needs to be updated to continue functioning.'
+                    '\nThere will be an update available shortly.',
+                'Alright',
+                false);
+          }
+        }
       }
     });
   }
@@ -56,10 +85,28 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () => Navigator.pushNamed(context, '/academic_info'),
           ),
           actions: <Widget>[
-            IconButton(
-              tooltip: 'Settings',
-              icon: Icon(Icons.settings),
-              onPressed: () => Navigator.pushNamed(context, '/settings'),
+            Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                IconButton(
+                  tooltip: 'Settings',
+                  icon: Icon(Icons.settings),
+                  onPressed: () => Navigator.pushNamed(context, '/settings'),
+                ),
+                if (updateAvailable)
+                  Positioned(
+                    left: 8,
+                    top: 9,
+                    child: Container(
+                      width: 7,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.orangeAccent,
+                      ),
+                    ),
+                  ),
+              ],
             )
           ],
         ),
