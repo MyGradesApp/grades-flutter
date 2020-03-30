@@ -63,6 +63,14 @@ class Grade {
     }
   }
 
+  DateTime get dueDate {
+    if (raw['Due'] != null) {
+      return _parseDateTimeCascade(raw['Due']);
+    } else {
+      return null;
+    }
+  }
+
   Grade.fromJson(Map<String, dynamic> json) {
     raw = Map<String, String>.from(json);
   }
