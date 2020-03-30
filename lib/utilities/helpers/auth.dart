@@ -1,8 +1,12 @@
+import 'package:flutter/widgets.dart';
+import 'package:grades/providers/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/patches/wrapped_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-Future<CachedSISLoader> attemptLogin(String email, String password,
+Future<CachedSISLoader> attemptLogin(
+    BuildContext context, String email, String password,
     [String session]) async {
   assert(email != null && email.isNotEmpty);
   assert(password != null && password.isNotEmpty);
@@ -17,6 +21,7 @@ Future<CachedSISLoader> attemptLogin(String email, String password,
     await const WrappedSecureStorage()
         .write(key: 'sis_session', value: loader.sessionCookies);
   }
+  Provider.of<DataPersistence>(context, listen: false).setClient(loader.client);
 
   return loader;
 }

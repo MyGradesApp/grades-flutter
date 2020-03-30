@@ -17,6 +17,8 @@ class CachedSISLoader {
   // Wrapping
   String get sessionCookies => _loader.sessionCookies;
 
+  CookieClient get client => _loader.client;
+
   set sessionCookies(String cookies) => _loader.sessionCookies = cookies;
 
   void login(String username, String password) =>
@@ -69,13 +71,22 @@ class CachedCourse {
     gradeLetter = course.gradeLetter;
   }
 
-  CachedCourse.fromJson(Map<String, dynamic> json) {
+  CachedCourse.fromJson(Map<String, dynamic> json, CookieClient client) {
     gradesUrl = json['gradeUrl'] as String;
     courseName = json['courseName'] as String;
     periodString = json['periodString'] as String;
     teacherName = json['teacherName'] as String;
     gradePercent = json['gradePercent'];
     gradeLetter = json['gradeLetter'] as String;
+    _rawCourse = Course(
+      client: client,
+      courseName: courseName,
+      gradeLetter: gradeLetter,
+      gradePercent: gradePercent,
+      gradesUrl: gradesUrl,
+      periodString: periodString,
+      teacherName: teacherName,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -89,17 +100,20 @@ class CachedCourse {
     return data;
   }
 
-  Future<List<Grade>> getGrades([bool force = false]) async {
+  Future<List<Grade>> getGrades(
+      {bool force = false, bool offlineOnly = false}) async {
     // If we are offline
-    if (_rawCourse == null) {
+    // TODO: Refactor all offline hacks (remove _rawCourse null check)
+    if (_rawCourse == null || offlineOnly) {
       return Future.value(GLOBAL_DATA_PERSISTENCE.getGrades(courseName));
     }
     return await _rawCourse.getGrades(force).timeout(TIMEOUT);
   }
 
-  Future<Map<String, String>> getCategoryWeights([bool force = false]) async {
+  Future<Map<String, String>> getCategoryWeights(
+      {bool force = false, bool offlineOnly = false}) async {
     // If we are offline
-    if (_rawCourse == null) {
+    if (_rawCourse == null || offlineOnly) {
       return Future.value(GLOBAL_DATA_PERSISTENCE.weights);
     }
     return await _rawCourse.getCategoryWeights(force).timeout(TIMEOUT);

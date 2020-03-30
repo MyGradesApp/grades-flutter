@@ -57,6 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Re-auth flow
     try {
       var loader = await attemptLogin(
+        context,
         email,
         password,
         freshSession ? null : session,

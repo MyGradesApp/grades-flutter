@@ -16,6 +16,7 @@ class DataPersistence extends ChangeNotifier {
   Map<String, String> _weights = {};
   List<CachedCourse> _courses = [];
   SharedPreferences _prefs;
+  CookieClient _client;
 
   DataPersistence(SharedPreferences prefs) {
     _prefs = prefs;
@@ -23,6 +24,13 @@ class DataPersistence extends ChangeNotifier {
     _grades = Map.from(_originalGrades);
     _weights = _loadWeights();
     _courses = _loadCourses();
+    notifyListeners();
+  }
+
+  CookieClient get client => _client;
+
+  void setClient(CookieClient client) {
+    _client = client;
     notifyListeners();
   }
 
@@ -115,8 +123,8 @@ class DataPersistence extends ChangeNotifier {
 
     try {
       var loadedCourses = (jsonDecode(coursesString) as List<dynamic>)
-          .map(
-              (course) => CachedCourse.fromJson(course as Map<String, dynamic>))
+          .map((course) =>
+              CachedCourse.fromJson(course as Map<String, dynamic>, _client))
           .toList();
       return loadedCourses;
     } catch (e, stackTrace) {

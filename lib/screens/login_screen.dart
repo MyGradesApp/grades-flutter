@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _loggingIn = true;
       });
-      var loader = await attemptLogin(email, password);
+      var loader = await attemptLogin(context, email, password);
       setState(() {
         _loggingIn = false;
       });

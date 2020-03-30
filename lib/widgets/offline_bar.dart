@@ -50,6 +50,7 @@ class _OfflineStatusBarState extends State<OfflineStatusBar> {
 
                       try {
                         var loader = await attemptLogin(
+                          context,
                           email,
                           password,
                           session,

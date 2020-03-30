@@ -52,13 +52,14 @@ class CurrentSession extends ChangeNotifier {
 
   Future<FetchedCourseData> courseData(
       BuildContext context, CachedCourse course,
-      {bool force = true}) async {
-    var grades = await course.getGrades(force);
+      {bool force = true, bool offlineOnly = false}) async {
+    var grades = await course.getGrades(force: force, offlineOnly: offlineOnly);
     var hasCategories = false;
     if (grades.every((element) => element.raw.containsKey('Category'))) {
       hasCategories = true;
     }
-    var weights = await course.getCategoryWeights(force);
+    var weights =
+        await course.getCategoryWeights(force: force, offlineOnly: offlineOnly);
 
     var persistence = Provider.of<DataPersistence>(context, listen: false);
     persistence.insertGrades(course.courseName, grades);
