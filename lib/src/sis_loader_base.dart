@@ -14,11 +14,11 @@ import 'course.dart';
 bool debugMocking = false;
 
 class SISLoader {
-  final CookieClient _client = CookieClient();
+  final CookieClient client = CookieClient();
   bool _loggedIn = false;
 
   String get sessionCookies {
-    return json.encode(_client.cookies, toEncodable: (value) {
+    return json.encode(client.cookies, toEncodable: (value) {
       if (value is Cookie) {
         return value.toString();
       } else {
@@ -33,7 +33,7 @@ class SISLoader {
       return Cookie.fromSetCookieValue(value as String);
     });
 
-    _client.cookies.addAll(Map<String, Cookie>.from(newCookiesRaw as Map));
+    client.cookies.addAll(Map<String, Cookie>.from(newCookiesRaw as Map));
   }
 
   Future<void> login(String username, String password) async {
@@ -46,7 +46,7 @@ class SISLoader {
     } else {
       debugMocking = false;
     }
-    var response = await _client
+    var response = await client
         .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
     if (response.statusCode == 200 &&
         (response.redirects.isEmpty ||
@@ -71,14 +71,14 @@ class SISLoader {
         'connected.palmbeachschools.org',
         'simplesaml/module.php/multiauth/selectsource.php/multiauth/selectsource.php?',
         {'AuthState': authState, startAuthSubmitName: startAuthSubmitValue});
-    var startAuth = await _client.get(startAuthUrl);
+    var startAuth = await client.get(startAuthUrl);
 
     var samlRequest =
         RegExp(r'<input type="hidden" name="SAMLRequest" value="(.*?)"')
             .firstMatch(await startAuth.bodyAsString())
             .group(1);
 
-    var samlRequestPost = await _client.post(
+    var samlRequestPost = await client.post(
         Uri.parse('https://www.mysdpbc.org/_saml/EN/post.aspx'),
         {'SAMLRequest': samlRequest});
 
@@ -89,7 +89,7 @@ class SISLoader {
     var samlRequestVerificationTokenUrl = samlRequestForm.group(2);
 
     var authRequest =
-        await _client.post(Uri.parse('https://www.mysdpbc.org/_authn/'), {
+        await client.post(Uri.parse('https://www.mysdpbc.org/_authn/'), {
       '__RequestVerificationToken': samlRequestVerificationToken,
       'RedirectUrl': samlRequestVerificationTokenUrl,
       'Username': username,
@@ -117,7 +117,7 @@ class SISLoader {
 
     var samlResponse = samlResponseMatch.group(1);
 
-    var enboardRequest = await _client.post(
+    var enboardRequest = await client.post(
         Uri.parse(
             'https://connected.palmbeachschools.org/simplesaml/module.php/saml/sp/saml2-acs.php/enboardsso-sp'),
         {'SAMLResponse': samlResponse});
@@ -128,7 +128,7 @@ class SISLoader {
             .firstMatch(await enboardRequest.bodyAsString())
             .group(1);
 
-    await _client.post(
+    await client.post(
         Uri.parse(
             'https://sis.palmbeachschools.org/focus/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'),
         {
@@ -145,7 +145,7 @@ class SISLoader {
             .firstMatch(data)
             .group(1);
 
-    await _client.post(
+    await client.post(
         Uri.parse(
             'https://sis.palmbeachschools.org/focus/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'),
         {
@@ -162,7 +162,7 @@ class SISLoader {
       return Future.delayed(Duration(seconds: 2), () => mock_data.COURSES);
     }
 
-    var portalResponse = await _client.get(Uri.parse(
+    var portalResponse = await client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
     var portalResponseBody = await portalResponse.bodyAsString();
     // TODO: Add checks to fix session expiration issues everywhere
@@ -200,7 +200,7 @@ class SISLoader {
           teacherName: match[4],
           gradePercent: percent ?? gradeParts[0],
           gradeLetter: gradeParts.length > 1 ? gradeParts[1] : null,
-          client: _client);
+          client: client);
     }).toList();
 
     return courses;
@@ -213,7 +213,7 @@ class SISLoader {
       return Future.delayed(Duration(seconds: 2), () => mock_data.RAW_PROFILE);
     }
 
-    var graduationReqsRequest = await _client.get(Uri.parse(
+    var graduationReqsRequest = await client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=GraduationRequirements/GraduationRequirements.php&student_id=new&top_deleted_student=true'));
 
     String bearerTokenCookie;
@@ -242,7 +242,7 @@ class SISLoader {
     var todaysDate = '${today.month}/${today.day}/${today.year}';
     var requestData =
         '{"requests":[{"controller":"GraduationRequirementsReportController","method":"getOneStudentReportData","args":[[[{"ID":1,"TITLE":"Main","TEMPLATE":"main_category","CLASS_NAME":"MainCategoryGraduationRequirementsReport","CREATED_BY_CLASS":null,"CREATED_BY_ID":null,"CREATED_AT":null,"UPDATED_BY_CLASS":null,"UPDATED_BY_ID":null,"UPDATED_AT":null}],$studentId,"COURSE_HISTORY","$todaysDate",""]],"session":null}],"cache":{}}';
-    var dataRequest = await _client.post(
+    var dataRequest = await client.post(
         Uri.parse(
             'https://sis.palmbeachschools.org/focus/classes/FocusModule.class.php?modname=GraduationRequirements%2FGraduationRequirements.php&student_id=new&top_deleted_student=true&type=SISStudent&id=' +
                 studentId),
@@ -290,7 +290,7 @@ class SISLoader {
   Future<List<dynamic>> getStudentInfo() async {
     assert(_loggedIn);
 
-    var studentInfoReq = await _client.get(Uri.parse(
+    var studentInfoReq = await client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=Students/Student.php'));
 
     String bearerTokenCookie;
@@ -317,7 +317,7 @@ class SISLoader {
 
     var requestData =
         '{"requests":[{"controller":"EditController","method":"cache:getFieldData","args":["10","SISStudent",$studentId],"session":null}],"cache":{}}';
-    var dataRequest = await _client.post(
+    var dataRequest = await client.post(
         Uri.parse(
             'https://sis.palmbeachschools.org/focus/classes/FocusModule.class.php?modname=Students%2FStudent.php'),
         '--FormBoundary\r\nContent-Disposition: form-data; name="__call__"\r\n\r\n$requestData\r\n--FormBoundary\r\nContent-Disposition: form-data; name="__token__"\r\n\r\n$requestToken\r\n--FormBoundary--',
@@ -334,7 +334,7 @@ class SISLoader {
       return Future.delayed(Duration(seconds: 2), () => mock_data.NAME);
     }
 
-    var nameRequest = await _client.get(Uri.parse(
+    var nameRequest = await client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
 
     var nameBody = await nameRequest.bodyAsString();
@@ -351,7 +351,7 @@ class SISLoader {
       return Future.delayed(Duration(seconds: 2), () => mock_data.ABSENCES);
     }
 
-    var absencesRequest = await _client.get(Uri.parse(
+    var absencesRequest = await client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?force_package=SIS&modname=Attendance/StudentSummary.php'));
     var absencesBody = await absencesRequest.bodyAsString();
     var absencesMatch =
