@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/feed_screen.dart';
 import 'package:grades/utilities/helpers/update.dart';
-import 'package:grades/utilities/updated_dialog.dart';
 import 'package:grades/widgets/page_indicator.dart';
-import 'package:pedantic/pedantic.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -33,40 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      var prefs = await SharedPreferences.getInstance();
       var updateAvailableResult = await checkUpdateAvailable();
       setState(() {
         updateAvailable = updateAvailableResult;
       });
-
-      var hasShownUpdateScreen = prefs.getBool('hasShownUpdateScreen2');
-      if (hasShownUpdateScreen == null || !hasShownUpdateScreen) {
-        showUpdatedDialog(context);
-        await prefs.setBool('hasShownUpdateScreen2', true);
-      }
-
-      var hasShownSisBreakingScreen =
-          prefs.getBool('hasShownSisBreakingUpdateRequired');
-      if (hasShownSisBreakingScreen == null || !hasShownSisBreakingScreen) {
-        // After March 30, 2020
-        if (DateTime.now().isAfter(DateTime(2020, 3, 30))) {
-          if (updateAvailable) {
-            showSisBrokeDialog(
-                context,
-                'SIS has made some changes and SwiftGrade needs to be updated to continue functioning',
-                'Get it now',
-                true);
-          } else {
-            showSisBrokeDialog(
-                context,
-                'SIS has made some changes and SwiftGrade needs to be updated to continue functioning.'
-                    '\nThere will be an update available shortly.',
-                'Alright',
-                false);
-          }
-          unawaited(prefs.setBool('hasShownSisBreakingUpdateRequired', true));
-        }
-      }
     });
   }
 
