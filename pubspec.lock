@@ -272,8 +272,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "83bc799"
-      resolved-ref: "83bc7999c6e40c0ef88041aa77b785d3444bbe2e"
+      ref: "1358aee"
+      resolved-ref: "1358aee355e84f5aa1411545b9a6b3aee2b13bac"
       url: "https://github.com/Noskcaj19/dart-sis-loader.git"
     source: git
     version: "0.0.0"

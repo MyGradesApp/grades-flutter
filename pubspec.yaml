@@ -14,7 +14,7 @@ dependencies:
   sis_loader:
     git:
       url: https://github.com/Noskcaj19/dart-sis-loader.git
-      ref: "83bc799"
+      ref: 1358aee
 
   # Debug/Error reporting/System packages
   # Flutter team package
