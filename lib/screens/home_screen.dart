@@ -4,6 +4,7 @@ import 'package:grades/screens/feed_screen.dart';
 import 'package:grades/utilities/dots_indicator.dart';
 import 'package:grades/utilities/update.dart';
 import 'package:grades/utilities/updated_dialog.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,8 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     Future.microtask(() async {
       var prefs = await SharedPreferences.getInstance();
-      var hasShownSisBreakingScreen =
-          prefs.getBool('hasShownSisBreakingUpdateRequired');
       var updateAvailableResult = await checkUpdateAvailable();
       setState(() {
         updateAvailable = updateAvailableResult;
@@ -46,9 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
         await prefs.setBool('hasShownUpdateScreen2', true);
       }
 
-      // After March 30, 2020
-      if (DateTime.now().isAfter(DateTime(2020, 3, 30))) {
-        if (hasShownSisBreakingScreen == null || !hasShownSisBreakingScreen) {
+      var hasShownSisBreakingScreen =
+          prefs.getBool('hasShownSisBreakingUpdateRequired');
+      if (hasShownSisBreakingScreen == null || !hasShownSisBreakingScreen) {
+        // After March 30, 2020
+        if (DateTime.now().isAfter(DateTime(2020, 3, 30))) {
           if (updateAvailable) {
             showSisBrokeDialog(
                 context,
@@ -63,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Alright',
                 false);
           }
+          unawaited(prefs.setBool('hasShownSisBreakingUpdateRequired', true));
         }
       }
     });
