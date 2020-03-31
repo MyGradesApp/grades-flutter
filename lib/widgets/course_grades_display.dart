@@ -185,14 +185,11 @@ Widget buildGradeItemCard(BuildContext context, Grade grade, Color textColor,
         child: Row(
           children: <Widget>[
             Expanded(
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    grade.name,
-                    style: TextStyle(color: textColor),
-                  ),
-                  const SizedBox(width: 6),
-                ],
+              child: Text(
+                grade.name,
+                style: TextStyle(color: textColor),
+                // TODO: Make it less aggressive about trimming
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             if (grade != null && gradeLetter != null)
