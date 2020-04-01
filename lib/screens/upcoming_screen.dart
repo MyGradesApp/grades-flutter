@@ -100,7 +100,7 @@ class _UpcomingScreenState extends State<UpcomingScreen>
     var out = <DateGrouping, List<Tuple2<String, Grade>>>{};
 
     courses.forEach((courseName, grades) {
-      grades
+      grades.where((item) => item.dueDate != null).toList()
         ..sort((grade, otherGrade) {
           return grade.dueDate.compareTo(otherGrade.dueDate);
         })
