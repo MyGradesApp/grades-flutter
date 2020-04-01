@@ -7,6 +7,7 @@ import 'package:grades/providers/current_session.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/helpers/date.dart';
 import 'package:grades/utilities/helpers/error.dart';
+import 'package:grades/utilities/refresh_offline_state.dart';
 import 'package:grades/widgets/refreshable/refreshable_icon_message.dart';
 import 'package:grades/widgets/upcoming_grade_item.dart';
 import 'package:pedantic/pedantic.dart';
@@ -36,6 +37,9 @@ class _UpcomingScreenState extends State<UpcomingScreen>
   }
 
   Future<void> _refresh({bool force = true}) async {
+    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+      attemptSwitchToOnline(context, (loggingIn) {});
+    }
     _numLoaded = 0;
     setState(() {
       _isLoading = true;

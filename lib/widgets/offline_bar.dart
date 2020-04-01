@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:grades/providers/current_session.dart';
-import 'package:grades/utilities/helpers/auth.dart';
-import 'package:grades/utilities/patches/wrapped_secure_storage.dart';
-import 'package:provider/provider.dart';
+import 'package:grades/utilities/refresh_offline_state.dart';
 
 class OfflineStatusBar extends StatefulWidget {
   OfflineStatusBar({Key key}) : super(key: key);
@@ -37,34 +34,13 @@ class _OfflineStatusBarState extends State<OfflineStatusBar> {
                   child: FlatButton(
                     color: Colors.orangeAccent,
                     onPressed: () async {
-                      var secure = const WrappedSecureStorage();
-                      var email = await secure.read(key: 'sis_email');
-                      var password = await secure.read(key: 'sis_password');
-                      var session = await secure.read(key: 'sis_session');
-
-                      if (mounted) {
-                        setState(() {
-                          _loggingIn = true;
-                        });
-                      }
-
-                      try {
-                        var loader = await attemptLogin(
-                          context,
-                          email,
-                          password,
-                          session,
-                        );
-                        Provider.of<CurrentSession>(context, listen: false)
-                            .setSisLoader(loader);
-                        Provider.of<CurrentSession>(context, listen: false)
-                            .setOfflineStatus(false);
-                      } catch (_) {}
-                      if (mounted) {
-                        setState(() {
-                          _loggingIn = false;
-                        });
-                      }
+                      attemptSwitchToOnline(context, (loggingIn) {
+                        if (mounted) {
+                          setState(() {
+                            _loggingIn = loggingIn;
+                          });
+                        }
+                      });
                     },
                     child: Row(
                       children: <Widget>[

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grades/providers/current_session.dart';
 import 'package:grades/utilities/helpers/error.dart';
 import 'package:grades/utilities/patches/stacked_future_builder.dart';
+import 'package:grades/utilities/refresh_offline_state.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/loader_widget.dart';
 import 'package:grades/widgets/refreshable/refreshable_error_message.dart';
@@ -16,6 +17,9 @@ class AcademicInfoScreen extends StatefulWidget {
 
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   Future<AcademicInfo> _refresh() async {
+    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+      attemptSwitchToOnline(context, (loggingIn) {});
+    }
     var result = await catchFutureHttpError(
       _getData,
       onHttpError: () => setState(() {}),
