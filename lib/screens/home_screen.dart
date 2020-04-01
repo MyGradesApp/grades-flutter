@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grades/screens/course_list_screen.dart';
 import 'package:grades/screens/feed_screen.dart';
+import 'package:grades/screens/upcoming_screen.dart';
 import 'package:grades/utilities/helpers/update.dart';
 import 'package:grades/widgets/page_indicator.dart';
 
@@ -16,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> pages = [
     FeedScreen(),
     CourseListScreen(),
+    UpcomingScreen(),
   ];
 
   bool updateAvailable = false;
@@ -86,6 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               if (page == 0) {
                 title = 'RECENT';
+              } else if (page == 2) {
+                title = 'UPCOMING';
               } else {
                 title = 'COURSES';
               }

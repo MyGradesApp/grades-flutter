@@ -147,6 +147,7 @@ String _titlecase(String src) {
       (match) => match.group(1).toUpperCase() + match.group(2));
 }
 
+// TODO: Extract this into a proper widget
 Widget buildGradeItemCard(BuildContext context, Grade grade, Color textColor,
     Color cardColor, bool showIndicator) {
   var gradeString = grade.grade;

@@ -47,7 +47,7 @@ class ClassListItem extends StatelessWidget {
                   style: TextStyle(fontSize: 15, color: textColor),
                 ),
                 if (chevron)
-                  Icon(
+                  const Icon(
                     Icons.chevron_right,
                     color: Colors.black26,
                   )
