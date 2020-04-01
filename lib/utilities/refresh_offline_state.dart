@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'helpers/auth.dart';
 
-attemptSwitchToOnline(
+void attemptSwitchToOnline(
     BuildContext context, Function(bool) loginStateCallback) async {
   var secure = const WrappedSecureStorage();
   var email = await secure.read(key: 'sis_email');
