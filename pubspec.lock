@@ -274,7 +274,7 @@ packages:
       path: "."
       ref: "1358aee"
       resolved-ref: "1358aee355e84f5aa1411545b9a6b3aee2b13bac"
-      url: "https://github.com/Noskcaj19/dart-sis-loader.git"
+      url: "git@github.com:Noskcaj19/dart-sis-loader.git"
     source: git
     version: "0.0.0"
   sky_engine:
