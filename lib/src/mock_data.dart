@@ -1,6 +1,5 @@
 import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/absences.dart';
-import 'package:sis_loader/src/name.dart';
 
 final COURSES = [
   Course(
@@ -155,4 +154,4 @@ final Map<String, Map<String, String>> CATEGORY_WEIGHTS = {
 };
 
 final Absences ABSENCES = Absences(days: 2, periods: 3);
-final Name NAME = Name(username: 'John Doe');
+final String NAME = 'John Doe';

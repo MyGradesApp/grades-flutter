@@ -6,7 +6,6 @@ import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/exceptions.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
-import 'package:sis_loader/src/name.dart';
 import 'package:sis_loader/src/profile.dart';
 
 import 'cookie_client.dart';
@@ -332,7 +331,7 @@ class SISLoader {
     return json.decode(await dataRequest.bodyAsString())[0]['result'] as List;
   }
 
-  Future<Name> getName() async {
+  Future<String> getName() async {
     if (debugMocking) {
       return Future.delayed(Duration(seconds: 2), () => mock_data.NAME);
     }
@@ -345,8 +344,7 @@ class SISLoader {
     if (nameMatch == null) {
       return null;
     }
-    var user = nameMatch.group(1);
-    return Name(username: user);
+    return nameMatch.group(1);
   }
 
   Future<Absences> getAbsences() async {
