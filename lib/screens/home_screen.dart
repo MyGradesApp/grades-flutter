@@ -41,83 +41,88 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-          elevation: 0.0,
-          centerTitle: true,
-          title: Text(title),
-          leading: IconButton(
-            tooltip: 'Profile',
-            icon: Icon(
-              Icons.person,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Stack(children: <Widget>[
+        Scaffold(
+          backgroundColor: Theme.of(context).primaryColor,
+          appBar: AppBar(
+            elevation: 0.0,
+            centerTitle: true,
+            title: Text(title),
+            leading: IconButton(
+              tooltip: 'Profile',
+              icon: Icon(
+                Icons.person,
+              ),
+              onPressed: () => Navigator.pushNamed(context, '/academic_info'),
             ),
-            onPressed: () => Navigator.pushNamed(context, '/academic_info'),
-          ),
-          actions: <Widget>[
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                IconButton(
-                  tooltip: 'Settings',
-                  icon: Icon(Icons.settings),
-                  onPressed: () => Navigator.pushNamed(context, '/settings'),
-                ),
-                if (updateAvailable)
-                  Positioned(
-                    left: 8,
-                    top: 9,
-                    child: Container(
-                      width: 7,
-                      height: 7,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.orangeAccent,
+            actions: <Widget>[
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  IconButton(
+                    tooltip: 'Settings',
+                    icon: Icon(Icons.settings),
+                    onPressed: () => Navigator.pushNamed(context, '/settings'),
+                  ),
+                  if (updateAvailable)
+                    Positioned(
+                      left: 8,
+                      top: 9,
+                      child: Container(
+                        width: 7,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.orangeAccent,
+                        ),
                       ),
                     ),
-                  ),
-              ],
-            )
-          ],
-        ),
-        body: PageView.builder(
-          controller: controller,
-          itemCount: pages.length,
-          onPageChanged: (page) {
-            setState(() {
-              if (page == 0) {
-                title = 'RECENT';
-              } else if (page == 2) {
-                title = 'UPCOMING';
-              } else {
-                title = 'COURSES';
-              }
-            });
-          },
-          itemBuilder: (context, position) => pages[position],
-        ),
-      ),
-      Positioned.fill(
-        top: null,
-        child: Container(
-          // color: Colors.grey[800].withOpacity(0.5),
-          padding: const EdgeInsets.all(20.0),
-          child: Center(
-            child: PageIndicator(
-              controller: controller,
-              itemCount: pages.length,
-              onPageSelected: (int page) {
-                controller.animateToPage(
-                  page,
-                  duration: kDuration,
-                  curve: kCurve,
-                );
-              },
-            ),
+                ],
+              )
+            ],
+          ),
+          body: PageView.builder(
+            controller: controller,
+            itemCount: pages.length,
+            onPageChanged: (page) {
+              setState(() {
+                if (page == 0) {
+                  title = 'RECENT';
+                } else if (page == 2) {
+                  title = 'UPCOMING';
+                } else {
+                  title = 'COURSES';
+                }
+              });
+            },
+            itemBuilder: (context, position) => pages[position],
           ),
         ),
-      )
-    ]);
+        Positioned.fill(
+          top: null,
+          child: Container(
+            // color: Colors.grey[800].withOpacity(0.5),
+            padding: const EdgeInsets.all(20.0),
+            child: Center(
+              child: PageIndicator(
+                controller: controller,
+                itemCount: pages.length,
+                onPageSelected: (int page) {
+                  controller.animateToPage(
+                    page,
+                    duration: kDuration,
+                    curve: kCurve,
+                  );
+                },
+              ),
+            ),
+          ),
+        )
+      ]),
+    );
   }
 }
