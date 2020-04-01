@@ -59,7 +59,8 @@ class UpcomingGradeItem extends StatelessWidget {
 
 Widget getColumn(Color textColor, Grade grade, String courseName) {
   var text = Text(smartCourseTitleCase(courseName));
-  if (timeUntilHumanizedForCard(grade.dueDate) != '') {
+  var daysLeft = daysUntil(grade.dueDate);
+  if (daysLeft > 0) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -68,7 +69,7 @@ Widget getColumn(Color textColor, Grade grade, String courseName) {
             Container(
               alignment: Alignment.centerRight,
               child: Text(
-                '${timeUntilHumanizedForCard(grade.dueDate)}',
+                '${humanizedDaysLeft(daysLeft)}',
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   color: textColor,

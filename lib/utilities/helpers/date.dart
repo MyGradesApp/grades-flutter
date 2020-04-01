@@ -44,10 +44,9 @@ String timeUntilHumanized(DateTime date) {
   }
 }
 
-String timeUntilHumanizedForCard(DateTime date) {
-  var days = daysUntil(date);
+String humanizedDaysLeft(int days) {
   if (days == 0) {
-    return '';
+    return 'Today';
   } else if (days == 1) {
     return 'In 1 day';
   } else {
