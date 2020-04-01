@@ -44,6 +44,11 @@ dependencies:
   collection: ^1.14.11
   pedantic: ^1.9.0
 
+  tuple:
+    git:
+      url: https://github.com/Noskcaj19/tuple
+      ref: d39ed10
+
   # Fonts and Icons
   font_awesome_flutter:
     git:

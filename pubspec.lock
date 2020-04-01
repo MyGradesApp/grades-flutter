@@ -324,6 +324,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.15"
+  tuple:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: d39ed10
+      resolved-ref: d39ed102dfe92b3b46d90e57395c80df333019e7
+      url: "https://github.com/Noskcaj19/tuple"
+    source: git
+    version: "1.0.3"
   typed_data:
     dependency: transitive
     description:
