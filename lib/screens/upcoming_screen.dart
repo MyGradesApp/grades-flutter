@@ -100,7 +100,7 @@ class _UpcomingScreenState extends State<UpcomingScreen>
           color: Colors.white,
           size: 55,
         ),
-        text: 'Recent Grades is not available offline',
+        text: 'Upcoming grades are not available offline',
       );
     }
 

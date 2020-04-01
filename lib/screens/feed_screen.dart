@@ -100,7 +100,7 @@ class _FeedScreenState extends State<FeedScreen>
           color: Colors.white,
           size: 55,
         ),
-        text: 'Recent Grades is not available offline',
+        text: 'Recent grades are not available offline',
       );
     }
 
