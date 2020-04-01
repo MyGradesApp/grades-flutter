@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
 import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/exceptions.dart';
@@ -14,8 +15,10 @@ import 'course.dart';
 bool debugMocking = false;
 
 class SISLoader {
-  final CookieClient client = CookieClient();
+  final CookieClient client;
   bool _loggedIn = false;
+
+  SISLoader({@required this.client});
 
   String get sessionCookies {
     return json.encode(client.cookies, toEncodable: (value) {

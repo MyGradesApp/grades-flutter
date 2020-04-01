@@ -7,7 +7,8 @@ Future<void> main() async {
 //  var password = Platform.environment['password'];
   var username = "s2558161d";
   var password = "figure51";
-  var loader = SISLoader();
+
+  var loader = SISLoader(client: CookieClient());
 
   await loader.login(username, password);
   // Repeated logins work
