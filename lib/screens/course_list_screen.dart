@@ -115,7 +115,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                         await Navigator.popUntil(
                             context, ModalRoute.withName('/'));
                       },
-                      child: Text('Log in'),
+                      child: Text('Reload'),
                     ),
                     // Padding to push the content up
                     const SizedBox(height: 75),
