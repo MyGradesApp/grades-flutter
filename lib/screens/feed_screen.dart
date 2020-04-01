@@ -37,7 +37,7 @@ class _FeedScreenState extends State<FeedScreen>
 
   Future<void> _refresh({bool force = true}) async {
     if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
-      attemptSwitchToOnline(context, (loggingIn) {});
+      attemptSwitchToOnline(context);
     }
     _numLoaded = 0;
     setState(() {

@@ -23,7 +23,7 @@ class CourseListScreen extends StatefulWidget {
 class _CourseListScreenState extends State<CourseListScreen> {
   Future<List<CachedCourse>> _refresh(BuildContext context) async {
     if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
-      attemptSwitchToOnline(context, (loggingIn) {});
+      attemptSwitchToOnline(context);
     }
     var result = await catchFutureHttpError(
       () => Provider.of<CurrentSession>(context, listen: false).courses(),

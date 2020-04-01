@@ -35,7 +35,7 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
   // Handle exception for RefreshIndicator
   Future<FetchedCourseData> _refresh() async {
     if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
-      attemptSwitchToOnline(context, (loggingIn) {});
+      attemptSwitchToOnline(context);
     }
     var result = await catchFutureHttpError(
       () => _getData(),

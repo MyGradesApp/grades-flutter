@@ -5,14 +5,14 @@ import 'package:provider/provider.dart';
 
 import 'helpers/auth.dart';
 
-void attemptSwitchToOnline(
-    BuildContext context, Function(bool) loginStateCallback) async {
+void attemptSwitchToOnline(BuildContext context) async {
   var secure = const WrappedSecureStorage();
   var email = await secure.read(key: 'sis_email');
   var password = await secure.read(key: 'sis_password');
   var session = await secure.read(key: 'sis_session');
 
-  loginStateCallback?.call(true);
+  var currentSession = Provider.of<CurrentSession>(context, listen: false);
+  currentSession.setAttemptingLogin(true);
 
   try {
     var loader = await attemptLogin(
@@ -21,9 +21,8 @@ void attemptSwitchToOnline(
       password,
       session,
     );
-    Provider.of<CurrentSession>(context, listen: false).setSisLoader(loader);
-    Provider.of<CurrentSession>(context, listen: false).setOfflineStatus(false);
-    loginStateCallback(false);
+    currentSession.setSisLoader(loader);
+    currentSession.setOfflineStatus(false);
   } catch (_) {}
-  loginStateCallback(false);
+  currentSession.setAttemptingLogin(false);
 }

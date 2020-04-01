@@ -18,7 +18,7 @@ class AcademicInfoScreen extends StatefulWidget {
 class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   Future<AcademicInfo> _refresh() async {
     if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
-      attemptSwitchToOnline(context, (loggingIn) {});
+      attemptSwitchToOnline(context);
     }
     var result = await catchFutureHttpError(
       _getData,
