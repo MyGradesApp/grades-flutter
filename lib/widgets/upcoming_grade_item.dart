@@ -43,29 +43,7 @@ class UpcomingGradeItem extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '${timeUntilHumanized(grade.dueDate)}',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  courseName,
-                ),
-              ],
-            ),
+            getColumn(textColor, grade, courseName),
             const Icon(
               Icons.chevron_right,
               color: Colors.black26,
@@ -77,3 +55,49 @@ class UpcomingGradeItem extends StatelessWidget {
     );
   }
 }
+
+Column getColumn(Color textColor, Grade grade, String courseName) {
+  if (timeUntilHumanizedForCard(grade.dueDate) != "") {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${timeUntilHumanizedForCard(grade.dueDate)}',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Text(courseName),
+      ],
+    );
+  } else {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        Text(courseName),
+      ],
+    );
+  }
+}
+
+// TODO: Finish titleCase for courseName
+// String titleCase(String text) {
+//   if (text == null) throw ArgumentError("string: $text");
+
+//   if (text.isEmpty) return text;
+
+//   return text
+//       .toLowerCase()
+//       .split(' ')
+//       .map((word) => word[0].toUpperCase() + word.substring(1))
+//       .join(' ');
+// }
