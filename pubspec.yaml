@@ -4,7 +4,7 @@ description: Made for students, by students. The unofficial grades app for the s
 version: 2.1.2+0
 
 environment:
-  sdk: ">=2.7.2 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   # Core flutter
