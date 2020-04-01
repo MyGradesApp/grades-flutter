@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/utilities/strings.dart';
 import 'package:grades/widgets/indicator_dots/colored_grade_dot.dart';
 
 class ClassListItem extends StatelessWidget {
@@ -90,7 +91,7 @@ class ClassListItem extends StatelessWidget {
           child: Row(children: <Widget>[
             Expanded(
               child: _buildColumn(
-                course,
+                smartCourseTitleCase(course),
                 teacher.replaceAll('  ', ' '),
                 CrossAxisAlignment.start,
                 Theme.of(context).primaryColorLight,
