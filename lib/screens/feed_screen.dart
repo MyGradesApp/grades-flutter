@@ -7,6 +7,7 @@ import 'package:grades/providers/current_session.dart';
 import 'package:grades/providers/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/helpers/error.dart';
+import 'package:grades/utilities/refresh_offline_state.dart';
 import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/refreshable/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
@@ -35,6 +36,9 @@ class _FeedScreenState extends State<FeedScreen>
   }
 
   Future<void> _refresh({bool force = true}) async {
+    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+      attemptSwitchToOnline(context);
+    }
     _numLoaded = 0;
     setState(() {
       _isLoading = true;

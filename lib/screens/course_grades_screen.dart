@@ -5,6 +5,7 @@ import 'package:grades/providers/theme_controller.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/helpers/error.dart';
 import 'package:grades/utilities/patches/stacked_future_builder.dart';
+import 'package:grades/utilities/refresh_offline_state.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/course_grades_display.dart';
 import 'package:grades/widgets/loader_widget.dart';
@@ -33,6 +34,9 @@ class _CourseGradesScreenState extends State<CourseGradesScreen> {
 
   // Handle exception for RefreshIndicator
   Future<FetchedCourseData> _refresh() async {
+    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+      attemptSwitchToOnline(context);
+    }
     var result = await catchFutureHttpError(
       () => _getData(),
       onHttpError: () {

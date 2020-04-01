@@ -9,6 +9,8 @@ class CurrentSession extends ChangeNotifier {
   CachedSISLoader _sisLoader;
   GlobalKey _navKey;
   bool _isOffline = false;
+  bool _isAttemptingLogin = false;
+
   final DataPersistence _gradePersistence;
 
   // A unique key to prevent previous sessions from being shown
@@ -18,6 +20,13 @@ class CurrentSession extends ChangeNotifier {
       : _gradePersistence = dataPersistence;
 
   bool get isOffline => _isOffline;
+
+  bool get isAttemptingLogin => _isAttemptingLogin;
+
+  void setAttemptingLogin(bool value) {
+    _isAttemptingLogin = value;
+    notifyListeners();
+  }
 
   void setSisLoader(CachedSISLoader loader) {
     _sisLoader = loader;

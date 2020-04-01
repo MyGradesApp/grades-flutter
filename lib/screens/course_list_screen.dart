@@ -4,6 +4,7 @@ import 'package:grades/providers/current_session.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/helpers/error.dart';
 import 'package:grades/utilities/patches/stacked_future_builder.dart';
+import 'package:grades/utilities/refresh_offline_state.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/class_list_item.dart';
 import 'package:grades/widgets/loader_widget.dart';
@@ -21,6 +22,9 @@ class CourseListScreen extends StatefulWidget {
 
 class _CourseListScreenState extends State<CourseListScreen> {
   Future<List<CachedCourse>> _refresh(BuildContext context) async {
+    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+      attemptSwitchToOnline(context);
+    }
     var result = await catchFutureHttpError(
       () => Provider.of<CurrentSession>(context, listen: false).courses(),
       onHttpError: () {
