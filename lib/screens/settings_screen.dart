@@ -22,6 +22,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  String _selectedItem = 'Quarter 4';
+
+// TODO: connect this list to actual backend
+  List<String> quarters = [
+    'Quarter 1',
+    'Quarter 2',
+    'Quarter 3',
+    'Quarter 4',
+  ];
+
+  void _onButtonPressed() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            color: const Color(0xFF737373),
+            height: (quarters.length) * 75.0,
+            child: Container(
+              child: _buildBottomNavigationMenu(),
+              decoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(10),
+                  topRight: const Radius.circular(10),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Column _buildBottomNavigationMenu() {
+    final children = <Widget>[];
+    var check = Icons.check_circle_outline;
+    ;
+    for (var i = 0; i < quarters.length; i++) {
+      if (quarters[i] == _selectedItem) {
+        check = Icons.check_circle;
+      } else {
+        check = Icons.check_circle_outline;
+      }
+      children.add(
+        ListTile(
+          leading: Icon(check),
+          title: Text(quarters[i]),
+          subtitle: Text('2019-2020'),
+          onTap: () => _selectItem(quarters[i]),
+        ),
+      );
+    }
+
+    return Column(children: children);
+  }
+
+  void _selectItem(String name) {
+    Navigator.pop(context);
+    setState(() {
+      _selectedItem = name;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeController = Provider.of<ThemeController>(context, listen: false);
@@ -149,6 +210,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     GroupingMode.Category
                                 ? GroupingMode.Date
                                 : GroupingMode.Category);
+                      },
+                    ),
+                    _buildCard(
+                      child: Row(children: [
+                        Expanded(
+                          child: Text(
+                            _selectedItem,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                      ]),
+                      onPressed: () {
+                        _onButtonPressed();
                       },
                     ),
                     _buildCard(
