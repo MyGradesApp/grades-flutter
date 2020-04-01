@@ -99,5 +99,6 @@ extension DateGroupingExt on DateGrouping {
       case DateGrouping.Future:
         return 'After 14 Days';
     }
+    return 'Unreachable';
   }
 }

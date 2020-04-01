@@ -57,7 +57,7 @@ class UpcomingGradeItem extends StatelessWidget {
 }
 
 Column getColumn(Color textColor, Grade grade, String courseName) {
-  if (timeUntilHumanizedForCard(grade.dueDate) != "") {
+  if (timeUntilHumanizedForCard(grade.dueDate) != '') {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
