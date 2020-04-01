@@ -18,7 +18,8 @@ class DataPersistence extends ChangeNotifier {
   SharedPreferences _prefs;
   CookieClient _client;
 
-  DataPersistence(SharedPreferences prefs) {
+  DataPersistence(SharedPreferences prefs, CookieClient client) {
+    _client = client;
     _prefs = prefs;
     _originalGrades = _loadGrades();
     _grades = Map.from(_originalGrades);

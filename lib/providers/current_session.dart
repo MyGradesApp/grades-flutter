@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CurrentSession extends ChangeNotifier {
+  CookieClient _client;
   CachedSISLoader _sisLoader;
   GlobalKey _navKey;
   bool _isOffline = false;
@@ -13,11 +14,20 @@ class CurrentSession extends ChangeNotifier {
 
   final DataPersistence _gradePersistence;
 
+  CurrentSession({
+    @required DataPersistence dataPersistence,
+    @required CookieClient client,
+  })  : _gradePersistence = dataPersistence,
+        _client = client;
+
   // A unique key to prevent previous sessions from being shown
   GlobalKey get navKey => _navKey;
 
-  CurrentSession({DataPersistence dataPersistence})
-      : _gradePersistence = dataPersistence;
+  CookieClient get client => _client;
+
+  void setClient(CookieClient client) {
+    _client = client;
+  }
 
   bool get isOffline => _isOffline;
 

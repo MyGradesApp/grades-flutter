@@ -10,7 +10,8 @@ Future<CachedSISLoader> attemptLogin(
     [String session]) async {
   assert(email != null && email.isNotEmpty);
   assert(password != null && password.isNotEmpty);
-  var loader = CachedSISLoader(SISLoader(), email);
+  var client = Provider.of<DataPersistence>(context, listen: false).client;
+  var loader = CachedSISLoader(SISLoader(client: client), email);
 
   if (session != null) {
     loader.sessionCookies = session;
@@ -21,7 +22,6 @@ Future<CachedSISLoader> attemptLogin(
     await const WrappedSecureStorage()
         .write(key: 'sis_session', value: loader.sessionCookies);
   }
-  Provider.of<DataPersistence>(context, listen: false).setClient(loader.client);
 
   return loader;
 }

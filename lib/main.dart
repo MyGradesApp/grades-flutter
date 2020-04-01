@@ -22,6 +22,7 @@ import 'package:grades/utilities/sentry.dart';
 import 'package:grades/widgets/offline_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,8 +52,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget with PortraitModeMixin {
-  // root of application.
-
   final SharedPreferences prefs;
 
   final GlobalKey<NavigatorState> _navKey = GlobalKey();
@@ -71,12 +70,16 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
       statusBarBrightness: Brightness.dark,
       systemNavigationBarIconBrightness: Brightness.dark, //bottom bar icons
     ));
-    GLOBAL_DATA_PERSISTENCE = DataPersistence(prefs);
+    var client = CookieClient();
+    GLOBAL_DATA_PERSISTENCE = DataPersistence(prefs, client);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (_) =>
-                CurrentSession(dataPersistence: GLOBAL_DATA_PERSISTENCE)),
+          create: (_) => CurrentSession(
+            dataPersistence: GLOBAL_DATA_PERSISTENCE,
+            client: client,
+          ),
+        ),
         ChangeNotifierProvider(create: (_) => ThemeController(prefs)),
         ChangeNotifierProvider(create: (_) => GLOBAL_DATA_PERSISTENCE),
       ],
