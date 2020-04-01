@@ -19,16 +19,19 @@ Future<T> catchFutureHttpError<T>(Future<T> Function() f,
     {void Function() onHttpError}) async {
   try {
     return await f();
-  } on HttpException catch (_) {
+  } on HttpException {
     onHttpError?.call();
     return null;
-  } on SocketException catch (_) {
+  } on SocketException {
     onHttpError?.call();
     return null;
-  } on HandshakeException catch (_) {
+  } on HandshakeException {
     onHttpError?.call();
     return null;
-  } on OSError catch (_) {
+  } on OSError {
+    onHttpError?.call();
+    return null;
+  } on TimeoutException {
     onHttpError?.call();
     return null;
   }
@@ -37,16 +40,19 @@ Future<T> catchFutureHttpError<T>(Future<T> Function() f,
 T catchHttpError<T>(T Function() f, {void Function() onHttpError}) {
   try {
     return f();
-  } on HttpException catch (_) {
+  } on HttpException {
     onHttpError?.call();
     return null;
-  } on SocketException catch (_) {
+  } on SocketException {
     onHttpError?.call();
     return null;
-  } on HandshakeException catch (_) {
+  } on HandshakeException {
     onHttpError?.call();
     return null;
-  } on OSError catch (_) {
+  } on OSError {
+    onHttpError?.call();
+    return null;
+  } on TimeoutException {
     onHttpError?.call();
     return null;
   }
