@@ -1,0 +1,24 @@
+language: dart
+dart:
+  - stable
+
+install:
+  # We don't want travis to run `pub get`
+  - echo
+
+before_script:
+  - cd ..
+  - git clone https://github.com/flutter/flutter.git
+  - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+  - flutter doctor
+
+
+script:
+  - cd $TRAVIS_BUILD_DIR
+  - flutter packages get
+  - flutter analyze --no-pub --no-current-package lib
+  - flutter test
+
+cache:
+  directories:
+    - $HOME/.pub-cache
