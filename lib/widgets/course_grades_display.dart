@@ -3,38 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:grades/providers/data_persistence.dart';
 import 'package:grades/providers/theme_controller.dart';
 import 'package:grades/utilities/helpers/date.dart';
-import 'package:grades/utilities/helpers/grades.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-import 'indicator_dots/colored_grade_dot.dart';
+import 'grade_item_card.dart';
 
 class CourseGradesDisplay extends StatelessWidget {
-  final List<Grade> _data;
+  final List<Grade> _grades;
   final Map<String, String> _weights;
   final GroupingMode _groupingMode;
   final String _courseName;
 
   CourseGradesDisplay._(
-    this._data,
+    this._grades,
     this._weights,
     this._groupingMode,
     this._courseName,
   );
 
   factory CourseGradesDisplay(
-    List<Grade> data,
+    List<Grade> grades,
     Map<String, String> weights,
     GroupingMode groupingMode,
     String courseName,
   ) {
     if (groupingMode == GroupingMode.Category) {
-      var copy = List.of(data);
+      var copy = List.of(grades);
       mergeSort(copy, compare: _gradeCmp);
       return CourseGradesDisplay._(copy, weights, groupingMode, courseName);
     } else {
-      return CourseGradesDisplay._(data, weights, groupingMode, courseName);
+      return CourseGradesDisplay._(grades, weights, groupingMode, courseName);
     }
   }
 
@@ -45,26 +44,25 @@ class CourseGradesDisplay extends StatelessWidget {
 
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
-      itemCount: _data.length,
+      itemCount: _grades.length,
       itemBuilder: (context, i) {
         var isNewGrade =
-            !oldGrades.any((element) => element.name == _data[i].name);
+            !oldGrades.any((element) => element.name == _grades[i].name);
 
-        var card = buildGradeItemCard(
-          context,
-          _data[i],
-          Theme.of(context).primaryColorLight,
-          Theme.of(context).cardColor,
-          isNewGrade,
+        var card = GradeItemCard(
+          grade: _grades[i],
+          textColor: Theme.of(context).primaryColorLight,
+          cardColor: Theme.of(context).cardColor,
+          showIndicator: isNewGrade,
         );
 
-        var category = _data[i].category;
-        var date = _data[i].assignedDate;
+        var category = _grades[i].category;
+        var date = _grades[i].assignedDate;
         var oldCategory;
         DateTime oldDate;
         if (i > 0) {
-          oldCategory = _data[i - 1].category;
-          oldDate = _data[i - 1].assignedDate;
+          oldCategory = _grades[i - 1].category;
+          oldDate = _grades[i - 1].assignedDate;
         }
         if (_groupingMode == GroupingMode.Category) {
           if (oldCategory != category) {
@@ -145,79 +143,4 @@ String _dateRangeHeaderForWeek(DateTime date) {
 String _titlecase(String src) {
   return src.replaceAllMapped(RegExp(r'\b([a-z])([a-z]*?)\b'),
       (match) => match.group(1).toUpperCase() + match.group(2));
-}
-
-// TODO: Extract this into a proper widget
-Widget buildGradeItemCard(BuildContext context, Grade grade, Color textColor,
-    Color cardColor, bool showIndicator) {
-  var gradeString = grade.grade;
-  var percentIndex = gradeString.indexOf('%');
-  String gradeLetter;
-  if (percentIndex != -1) {
-    var extractedGradePercent =
-        double.tryParse(gradeString.substring(0, percentIndex));
-
-    if (extractedGradePercent != null) {
-      gradeLetter = letterGradeForPercent(extractedGradePercent);
-    }
-  }
-  double gradeSize;
-  if (grade != null && gradeLetter != null) {
-    gradeSize = 50;
-  } else {
-    gradeSize = 100;
-  }
-
-  return Card(
-    color: cardColor,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    child: InkWell(
-      customBorder: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      onTap: () {
-        Navigator.pushNamed(context, '/grades_detail', arguments: grade);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(17.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                grade.name,
-                style: TextStyle(color: textColor),
-                // TODO: Make it less aggressive about trimming
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            if (grade != null && gradeLetter != null)
-              ColoredGradeDot.grade(gradeLetter),
-            const SizedBox(width: 4),
-            if (gradeLetter != null)
-              Text(
-                gradeLetter,
-                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-              ),
-            Container(
-              width: gradeSize,
-              alignment: Alignment.centerRight,
-              child: Text(
-                gradeString,
-                textAlign: TextAlign.end,
-                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right,
-              color: Colors.black26,
-              size: 18.0,
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
 }

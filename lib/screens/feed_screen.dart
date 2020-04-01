@@ -7,7 +7,7 @@ import 'package:grades/providers/current_session.dart';
 import 'package:grades/providers/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/helpers/error.dart';
-import 'package:grades/widgets/course_grades_display.dart';
+import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/refreshable/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:provider/provider.dart';
@@ -183,12 +183,11 @@ class _FeedScreenState extends State<FeedScreen>
       }
 
       listChildren.addAll(
-        grades.sublist(0, endIndex).map((grade) => buildGradeItemCard(
-            context,
-            grade,
-            Theme.of(context).primaryColorLight,
-            Theme.of(context).cardColor,
-            false)),
+        grades.sublist(0, endIndex).map((grade) => GradeItemCard(
+            grade: grade,
+            textColor: Theme.of(context).primaryColorLight,
+            cardColor: Theme.of(context).cardColor,
+            showIndicator: false)),
       );
       // Show indicator if we clipped some grades
       if (clipped != null) {
