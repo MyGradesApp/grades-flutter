@@ -13,7 +13,7 @@ dependencies:
   # 1st party packages
   sis_loader:
     git:
-      url: https://github.com/Noskcaj19/dart-sis-loader.git
+      url: git@github.com:Noskcaj19/dart-sis-loader.git
       ref: 1358aee
 
   # Debug/Error reporting/System packages
