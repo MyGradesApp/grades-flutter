@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -79,6 +80,9 @@ class _SplashScreenState extends State<SplashScreen> {
     } on InvalidAuthException catch (_) {
       // TODO: Pass login failure error message to login page
       _loadStoredAuth(force: true);
+    } on TimeoutException catch (_) {
+      Provider.of<CurrentSession>(context, listen: false)
+          .setOfflineStatus(true);
     } on HttpException catch (_) {
       Provider.of<CurrentSession>(context, listen: false)
           .setOfflineStatus(true);
