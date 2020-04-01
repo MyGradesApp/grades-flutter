@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // Initial page state
-  String title = 'COURSES';
+  String title = 'Courses';
   int previous = -1;
   List<Widget> pages = [
     FeedScreen(),
@@ -87,11 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onPageChanged: (page) {
             setState(() {
               if (page == 0) {
-                title = 'RECENT';
+                title = 'Recent';
               } else if (page == 2) {
-                title = 'UPCOMING';
+                title = 'Upcoming';
               } else {
-                title = 'COURSES';
+                title = 'Courses';
               }
             });
           },

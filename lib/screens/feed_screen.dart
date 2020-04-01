@@ -7,6 +7,7 @@ import 'package:grades/providers/current_session.dart';
 import 'package:grades/providers/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/helpers/error.dart';
+import 'package:grades/utilities/strings.dart';
 import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/refreshable/refreshable_icon_message.dart';
 import 'package:pedantic/pedantic.dart';
@@ -169,7 +170,7 @@ class _FeedScreenState extends State<FeedScreen>
         Padding(
           padding: const EdgeInsets.only(left: 11.0),
           child: Text(
-            courseName,
+            smartCourseTitleCase(courseName),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 17,
