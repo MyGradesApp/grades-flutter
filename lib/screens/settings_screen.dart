@@ -43,9 +43,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: _buildBottomNavigationMenu(),
               decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(10),
-                  topRight: const Radius.circular(10),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
                 ),
               ),
             ),
@@ -67,7 +67,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ListTile(
           leading: Icon(check),
           title: Text(quarters[i]),
-          subtitle: Text('2019-2020'),
+          subtitle: const Text('2019-2020'),
           onTap: () => _selectItem(quarters[i]),
         ),
       );
@@ -217,7 +217,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Expanded(
                           child: Text(
                             _selectedItem,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                               color: Colors.white,
