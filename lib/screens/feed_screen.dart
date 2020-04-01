@@ -68,6 +68,11 @@ class _FeedScreenState extends State<FeedScreen>
       }), eagerError: true),
       onHttpError: () {
         _numLoaded += 1;
+        if (_numLoaded == totalToLoad) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
         Provider.of<CurrentSession>(context, listen: false)
             .setOfflineStatus(true);
         Provider.of<CurrentSession>(context, listen: false).setSisLoader(null);
