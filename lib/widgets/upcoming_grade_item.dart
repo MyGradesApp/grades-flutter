@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/utilities/helpers/date.dart';
+import 'package:grades/utilities/strings.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class UpcomingGradeItem extends StatelessWidget {
@@ -56,7 +57,8 @@ class UpcomingGradeItem extends StatelessWidget {
   }
 }
 
-Column getColumn(Color textColor, Grade grade, String courseName) {
+Widget getColumn(Color textColor, Grade grade, String courseName) {
+  var text = Text(smartCourseTitleCase(courseName));
   if (timeUntilHumanizedForCard(grade.dueDate) != '') {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -76,28 +78,10 @@ Column getColumn(Color textColor, Grade grade, String courseName) {
             ),
           ],
         ),
-        Text(courseName),
+        text,
       ],
     );
   } else {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Text(courseName),
-      ],
-    );
+    return text;
   }
 }
-
-// TODO: Finish titleCase for courseName
-// String titleCase(String text) {
-//   if (text == null) throw ArgumentError("string: $text");
-
-//   if (text.isEmpty) return text;
-
-//   return text
-//       .toLowerCase()
-//       .split(' ')
-//       .map((word) => word[0].toUpperCase() + word.substring(1))
-//       .join(' ');
-// }
