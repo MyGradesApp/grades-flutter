@@ -39,6 +39,7 @@ class _FeedScreenState extends State<FeedScreen>
     setState(() {
       _isLoading = true;
     });
+    // TODO: Error handling here
     _courses = await Provider.of<CurrentSession>(context, listen: false)
         .courses(force: force);
     // Update for _courses future

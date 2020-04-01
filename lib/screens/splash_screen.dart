@@ -120,6 +120,8 @@ class _SplashScreenState extends State<SplashScreen> {
       await const WrappedSecureStorage().delete(key: 'sis_session');
       await const WrappedSecureStorage().delete(key: 'sis_password');
       _loadStoredAuth(force: true);
+    } else {
+      _loadStoredAuth();
     }
   }
 

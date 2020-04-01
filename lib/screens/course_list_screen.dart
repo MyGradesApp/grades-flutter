@@ -91,6 +91,39 @@ class _CourseListScreenState extends State<CourseListScreen> {
               );
             }
 
+            if (snapshot.error is UnknownReauthenticationException) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      size: 66,
+                    ),
+                    const SizedBox(height: 25),
+                    Text(
+                      'You have been logged out',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 19,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 25),
+                    RaisedButton(
+                      onPressed: () async {
+                        await Navigator.popUntil(
+                            context, ModalRoute.withName('/'));
+                      },
+                      child: Text('Log in'),
+                    ),
+                    // Padding to push the content up
+                    const SizedBox(height: 75),
+                  ],
+                ),
+              );
+            }
+
             reportException(
               exception: snapshot.error,
               stackTrace: snapshot.stackTrace,
