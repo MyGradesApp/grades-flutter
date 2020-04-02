@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
+import 'package:grades/utilities/patches/wrapped_secure_storage.dart';
 import 'package:grades/utilities/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -162,6 +163,9 @@ class DataPersistence extends ChangeNotifier {
     _prefs.remove('persisted_grades_v2');
     _prefs.remove('persisted_courses_v2');
     _prefs.remove('persisted_weights_v2');
+    WrappedSecureStorage().delete(key: 'sis_email');
+    WrappedSecureStorage().delete(key: 'sis_password');
+    WrappedSecureStorage().delete(key: 'sis_session');
     notifyListeners();
   }
 }

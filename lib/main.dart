@@ -85,40 +85,38 @@ class MyApp extends StatelessWidget with PortraitModeMixin {
       ],
       child: Consumer<ThemeController>(
         builder: (BuildContext context, ThemeController theme, Widget child) {
-          return Column(
-            children: <Widget>[
-              Expanded(
-                child: MaterialApp(
-                  navigatorKey: _navKey,
-                  title: 'SwiftGrade',
-                  debugShowCheckedModeBanner: false,
-                  home: SplashScreen(),
-                  theme: _buildCurrentTheme(theme),
-                  routes: <String, WidgetBuilder>{
-                    '/login': (BuildContext context) => LoginScreen(),
-                    '/terms': (BuildContext context) => TermsQueryScreen(),
-                    '/terms_settings': (BuildContext context) =>
-                        TermsDisplayScreen(),
-                    '/settings': (BuildContext context) => SettingsScreen(),
-                    '/courses': (BuildContext context) {
-                      // Use a key here to prevent overlap in sessions
-                      return CourseListScreen(
-                          key: Provider.of<CurrentSession>(context).navKey);
-                    },
-                    '/course_grades': (BuildContext context) =>
-                        CourseGradesScreen(),
-                    '/feed': (BuildContext context) => FeedScreen(),
-                    '/home': (BuildContext context) => HomeScreen(),
-                    '/grades_detail': (BuildContext context) =>
-                        GradeItemDetailScreen(),
-                    '/academic_info': (BuildContext context) =>
-                        AcademicInfoScreen(),
-                  },
-                ),
-              ),
-              if (Provider.of<CurrentSession>(context).isOffline)
-                OfflineStatusBar(),
-            ],
+          return MaterialApp(
+            navigatorKey: _navKey,
+            title: 'SwiftGrade',
+            debugShowCheckedModeBanner: false,
+            builder: (BuildContext context, Widget child) {
+              return Column(
+                children: <Widget>[
+                  Expanded(child: child),
+                  if (Provider.of<CurrentSession>(context).isOffline)
+                    OfflineStatusBar(),
+                ],
+              );
+            },
+            home: SplashScreen(),
+            theme: _buildCurrentTheme(theme),
+            routes: <String, WidgetBuilder>{
+              '/login': (BuildContext context) => LoginScreen(),
+              '/terms': (BuildContext context) => TermsQueryScreen(),
+              '/terms_settings': (BuildContext context) => TermsDisplayScreen(),
+              '/settings': (BuildContext context) => SettingsScreen(),
+              '/courses': (BuildContext context) {
+                // Use a key here to prevent overlap in sessions
+                return CourseListScreen(
+                    key: Provider.of<CurrentSession>(context).navKey);
+              },
+              '/course_grades': (BuildContext context) => CourseGradesScreen(),
+              '/feed': (BuildContext context) => FeedScreen(),
+              '/home': (BuildContext context) => HomeScreen(),
+              '/grades_detail': (BuildContext context) =>
+                  GradeItemDetailScreen(),
+              '/academic_info': (BuildContext context) => AcademicInfoScreen(),
+            },
           );
         },
       ),

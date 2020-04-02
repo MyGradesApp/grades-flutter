@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 class OfflineStatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.ltr,
+    return DefaultTextStyle(
+      style: TextStyle(),
       child: Container(
         width: double.infinity,
         color: Colors.orange,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0.0),
+        child: SafeArea(
+          top: false,
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
