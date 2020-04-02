@@ -5,7 +5,7 @@ import 'package:sis_loader/sis_loader.dart';
 
 import 'course_grades_view.dart';
 
-class CourseGrades extends StatelessWidget {
+class CourseGradesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final course = ModalRoute.of(context).settings.arguments as Course;

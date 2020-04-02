@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grades/repos/authentication_repository.dart';
 import 'package:grades/screens/course_grades/course_grades_screen.dart';
-import 'package:grades/screens/home_screen/home_screen.dart';
+import 'package:grades/screens/grade_info_screen.dart';
+import 'package:grades/screens/home_screen.dart';
 import 'package:grades/screens/login/login_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/simple_bloc_delegate.dart';
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/course_grades': (context) => CourseGrades(),
+        '/course_grades': (context) => CourseGradesScreen(),
+        '/grade_info': (context) => GradeInfoScreen(),
       },
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (BuildContext context, AuthenticationState state) {

@@ -20,7 +20,9 @@ class CourseGradesView extends StatelessWidget {
             itemBuilder: (context, i) {
               var grade = state.grades[i];
               return RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/grade_info', arguments: grade);
+                },
                 child: Row(
                   children: <Widget>[
                     Expanded(child: Text(grade.name)),
