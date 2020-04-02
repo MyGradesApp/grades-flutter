@@ -160,6 +160,9 @@ class _UpcomingScreenState extends State<UpcomingScreen>
     // Iterate over _courses to keep the original order
     DateGrouping.values.forEach((dateGrouping) {
       var grades = (out[dateGrouping] ?? []);
+      if (grades.isEmpty) {
+        return;
+      }
       // Header
       listChildren.add(
         Padding(
