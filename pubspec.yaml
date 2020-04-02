@@ -15,7 +15,7 @@ dependencies:
     path: ../dart-sis-loader
 #    git:
 #      url: git@github.com:Noskcaj19/dart-sis-loader.git
-#      ref: "9399266"
+#      ref: "d9c9cb19532"
 
   shared_preferences: ^0.5.6+3
   # General small unities

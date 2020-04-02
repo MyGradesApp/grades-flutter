@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grades/blocs/course_list/course_list_bloc.dart';
 
-class CourseListScreen extends StatelessWidget {
+class CourseListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseListBloc, CourseListState>(
@@ -41,7 +41,16 @@ class CourseListScreen extends StatelessWidget {
           );
         }
         if (state is CourseListError) {
-          return Text('An error occurred');
+          return RefreshIndicator(
+            onRefresh: () {
+              BlocProvider.of<CourseListBloc>(context).add(RefreshCourses());
+              return Future.value();
+            },
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Center(child: Text('An error occurred')),
+            ),
+          );
         }
         return Container();
       },

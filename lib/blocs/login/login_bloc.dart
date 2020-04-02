@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:grades/repos/authentication_repository.dart';
+import 'package:grades/repos/sis_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'login_event.dart';

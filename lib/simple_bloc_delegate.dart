@@ -11,6 +11,7 @@ class SimpleBlocDelegate extends BlocDelegate {
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
     super.onError(bloc, error, stacktrace);
     print('x: $error');
+    print(stacktrace);
   }
 
   @override
