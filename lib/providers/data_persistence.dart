@@ -160,9 +160,7 @@ class DataPersistence extends ChangeNotifier {
 
   void clearSaved() {
     _grades = {};
-    _prefs.remove('persisted_grades_v2');
-    _prefs.remove('persisted_courses_v2');
-    _prefs.remove('persisted_weights_v2');
+    _prefs.clear();
     WrappedSecureStorage().delete(key: 'sis_email');
     WrappedSecureStorage().delete(key: 'sis_password');
     WrappedSecureStorage().delete(key: 'sis_session');
