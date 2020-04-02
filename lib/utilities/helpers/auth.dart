@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:grades/providers/current_session.dart';
 import 'package:grades/providers/data_persistence.dart';
 import 'package:grades/sis-cache/sis_loader.dart';
 import 'package:grades/utilities/patches/wrapped_secure_storage.dart';
@@ -10,7 +11,9 @@ Future<CachedSISLoader> attemptLogin(
     [String session]) async {
   assert(email != null && email.isNotEmpty);
   assert(password != null && password.isNotEmpty);
-  var client = Provider.of<DataPersistence>(context, listen: false).client;
+  var client = CookieClient();
+  Provider.of<DataPersistence>(context, listen: false).setClient(client);
+  Provider.of<CurrentSession>(context, listen: false).setClient(client);
   var loader = CachedSISLoader(SISLoader(client: client), email);
 
   if (session != null) {
