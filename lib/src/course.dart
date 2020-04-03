@@ -1,12 +1,13 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:sis_loader/src/grade.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 
 import '../sis_loader.dart' show debugMocking;
 import 'cookie_client.dart';
 
-class Course {
+class Course extends Equatable {
   final CookieClient client;
   final String gradesUrl;
   final String courseName;
@@ -170,4 +171,15 @@ class Course {
       gradeLetter
     }.toString();
   }
+
+  @override
+  List<Object> get props => [
+        client,
+        gradesUrl,
+        courseName,
+        periodString,
+        teacherName,
+        gradePercent,
+        gradeLetter,
+      ];
 }

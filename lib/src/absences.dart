@@ -1,4 +1,6 @@
-class Absences {
+import 'package:equatable/equatable.dart';
+
+class Absences extends Equatable {
   final int periods;
   final int days;
 
@@ -8,4 +10,7 @@ class Absences {
   String toString() {
     return '{periods: ${periods}, days: ${days}}';
   }
+
+  @override
+  List<Object> get props => [periods, days];
 }

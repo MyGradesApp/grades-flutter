@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
 final shortMonthDateFormat = DateFormat('MMM dd, yyyy hh:mm aa');
@@ -34,7 +35,7 @@ DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
   return null;
 }
 
-class Grade {
+class Grade extends Equatable {
   Map<String, String> raw;
 
   Grade(this.raw);
@@ -83,4 +84,7 @@ class Grade {
   String toString() {
     return 'Grade${toJson()}';
   }
+
+  @override
+  List<Object> get props => [raw];
 }
