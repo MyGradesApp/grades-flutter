@@ -15,10 +15,6 @@ class Course {
   final dynamic gradePercent;
   final String gradeLetter;
 
-  Future<String> _gradePageFuture;
-  Future<List<Grade>> _grades;
-  Future<Map<String, String>> _categoryWeights;
-
   Course(
       {this.client,
       this.gradesUrl,
@@ -28,18 +24,13 @@ class Course {
       this.gradePercent,
       this.gradeLetter});
 
-  Future<String> _gradePage({bool force = false}) async {
-    if (_gradePageFuture == null || force) {
-      _gradePageFuture = (await client.get(
-              Uri.parse('https://sis.palmbeachschools.org/focus/' + gradesUrl)))
-          .bodyAsString();
-      return _gradePageFuture;
-    } else {
-      return _gradePageFuture;
-    }
+  Future<String> _gradePage() async {
+    return (await client.get(
+            Uri.parse('https://sis.palmbeachschools.org/focus/' + gradesUrl)))
+        .bodyAsString();
   }
 
-  Future<List<Grade>> getGrades([bool force = false]) {
+  Future<List<Grade>> getGrades() {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
@@ -47,15 +38,10 @@ class Course {
       );
     }
 
-    if (_grades == null || force) {
-      _grades = _fetchGrades();
-      return _grades;
-    } else {
-      return _grades;
-    }
+    return _fetchGrades();
   }
 
-  Future<Map<String, String>> getCategoryWeights([bool force = false]) {
+  Future<Map<String, String>> getCategoryWeights() {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
@@ -63,16 +49,11 @@ class Course {
       );
     }
 
-    if (_categoryWeights == null || force) {
-      _categoryWeights = _fetchCategoryWeights(force: force);
-      return _categoryWeights;
-    } else {
-      return _categoryWeights;
-    }
+    return _fetchCategoryWeights();
   }
 
   Future<List<Grade>> _fetchGrades() async {
-    var gradePage = await _gradePage(force: true);
+    var gradePage = await _gradePage();
 
     Map<String, String> extractRowFields(
         String row, Map<String, String> headers) {
@@ -137,9 +118,8 @@ class Course {
         .toList();
   }
 
-  Future<Map<String, String>> _fetchCategoryWeights(
-      {bool force = false}) async {
-    var gradePage = await _gradePage(force: force);
+  Future<Map<String, String>> _fetchCategoryWeights() async {
+    var gradePage = await _gradePage();
 
     var weightsTableMatch = RegExp(
             r'<TABLE width=100% border=0 cellpadding=0 cellspacing=0 class="DarkGradientBG'
