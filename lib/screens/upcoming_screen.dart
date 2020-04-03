@@ -29,6 +29,7 @@ class _UpcomingScreenState extends State<UpcomingScreen>
   List<CachedCourse> _courses;
   bool _isLoading = true;
   int _numLoaded = 0;
+  bool _wasOffline = false;
 
   @override
   void initState() {
@@ -44,8 +45,20 @@ class _UpcomingScreenState extends State<UpcomingScreen>
     setState(() {
       _isLoading = true;
     });
-    _courses = await Provider.of<CurrentSession>(context, listen: false)
-        .courses(force: force);
+    try {
+      _courses = await Provider.of<CurrentSession>(context, listen: false)
+          .courses(force: force);
+    } catch (e) {
+      print(e);
+      if (isHttpError(e)) {
+        setState(() {
+          _isLoading = false;
+        });
+        Provider.of<CurrentSession>(context, listen: false)
+            .setOfflineStatus(true);
+        Provider.of<CurrentSession>(context, listen: false).setSisLoader(null);
+      }
+    }
     // Update for _courses future
     setState(() {
       if (_courses.isEmpty) {
@@ -92,7 +105,8 @@ class _UpcomingScreenState extends State<UpcomingScreen>
     super.build(context);
 
     // TODO: Lift this restriction
-    if (Provider.of<CurrentSession>(context, listen: false).isOffline) {
+    if (Provider.of<CurrentSession>(context).isOffline) {
+      _wasOffline = true;
       return RefreshableIconMessage(
         onRefresh: _refresh,
         icon: Icon(
@@ -102,6 +116,9 @@ class _UpcomingScreenState extends State<UpcomingScreen>
         ),
         text: 'Upcoming grades are not available offline',
       );
+    } else if (_wasOffline) {
+      _wasOffline = false;
+      _refresh(force: true);
     }
 
     var courses = _courseGrades;
