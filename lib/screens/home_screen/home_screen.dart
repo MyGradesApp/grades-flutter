@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grades/blocs/course_list/course_list_bloc.dart';
-import 'package:grades/blocs/offline/offline_bloc.dart';
 import 'package:grades/blocs/upcoming/upcoming_bloc.dart';
 import 'package:grades/repos/sis_repository.dart';
 import 'package:grades/screens/home_screen/course_list_page.dart';
 import 'package:grades/screens/home_screen/upcoming_page.dart';
+import 'package:grades/widgets/offline_bar.dart';
+
+import '../../widgets/offline_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   final SISRepository _sisRepository;
@@ -24,20 +26,24 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController controller = PageController(initialPage: 1);
   List<Widget> pages;
 
+  List<BlocProvider<dynamic>> providers;
+
   _HomeScreenState({@required SISRepository sisRepository})
       : assert(sisRepository != null),
         _sisRepository = sisRepository {
-    pages = [
+    providers = [
       BlocProvider<UpcomingBloc>(
         create: (BuildContext context) =>
             UpcomingBloc(sisRepository: _sisRepository)..add(FetchData()),
-        child: UpcomingPage(),
       ),
       BlocProvider<CourseListBloc>(
         create: (BuildContext context) =>
             CourseListBloc(sisRepository: _sisRepository)..add(FetchCourses()),
-        child: CourseListPage(),
-      ),
+      )
+    ];
+    pages = [
+      UpcomingPage(),
+      CourseListPage(),
     ];
   }
 
@@ -64,17 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: PageView.builder(
-              controller: controller,
-              itemCount: pages.length,
-              itemBuilder: (context, position) => pages[position],
+            child: MultiBlocProvider(
+              providers: providers,
+              child: PageView.builder(
+                controller: controller,
+                itemCount: pages.length,
+                itemBuilder: (context, position) => pages[position],
+              ),
             ),
           ),
-          BlocBuilder<OfflineBloc, OfflineState>(
-            builder: (BuildContext context, OfflineState state) {
-              return Text('Offline: ${state.offline}');
-            },
-          ),
+          OfflineBar(),
         ],
       ),
     );
