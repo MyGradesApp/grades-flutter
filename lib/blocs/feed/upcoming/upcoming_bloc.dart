@@ -1,19 +1,21 @@
-// TODO: Implement "unread" grades
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grades/blocs/feed/feed.dart';
+import 'package:grades/blocs/feed/feed_event.dart';
 import 'package:grades/repos/sis_repository.dart';
+import 'package:grades/utilties/date.dart';
 import 'package:sis_loader/sis_loader.dart';
+import 'package:tuple/tuple.dart';
 
-part 'upcoming_event.dart';
 part 'upcoming_state.dart';
 
-class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
+class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
   final SISRepository _sisRepository;
 
-  StreamSubscription<UpcomingEvent> _courseFetchingSubscription;
+  StreamSubscription<FeedEvent> _courseFetchingSubscription;
 
   UpcomingBloc({@required SISRepository sisRepository})
       : assert(sisRepository != null),
@@ -24,45 +26,48 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
 
   @override
   Stream<UpcomingState> mapEventToState(
-    UpcomingEvent event,
+    FeedEvent event,
   ) async* {
     if (event is FetchData) {
-      yield* _mapFetchDataToState();
+      yield UpcomingLoading.empty();
+      yield* _fetchCourseData();
     } else if (event is RefreshData) {
       if (state is UpcomingLoaded) {
         // Preserve the currently loaded courses, we will update the underlying map
         // with new data
-        yield UpcomingLoading((state as UpcomingLoaded).courses);
-        var courses = await _sisRepository.getCourses();
-
-        await _courseFetchingSubscription?.cancel();
-        _courseFetchingSubscription =
-            _fetchCourseGrades(courses).listen((event) => add(event));
+        yield UpcomingLoading((state as UpcomingLoaded).groups);
+        yield* _fetchCourseData();
       } else {
         // We probably shouldn't be able to get a RefreshData if we are still loading
         throw Exception('Unexpected state');
       }
-    } else if (event is GradeLoaded) {
+    } else if (event is GradesLoaded) {
       yield* _mapGradeLoadedToState(event);
     } else if (event is DoneLoading) {
       yield* _mapDoneLoadingToState();
     }
   }
 
-  Stream<UpcomingState> _mapFetchDataToState() async* {
-    yield UpcomingLoading.empty();
+  Stream<UpcomingState> _fetchCourseData() async* {
     var courses = await _sisRepository.getCourses();
 
     await _courseFetchingSubscription?.cancel();
-    _courseFetchingSubscription =
-        _fetchCourseGrades(courses).listen((event) => add(event));
+    _courseFetchingSubscription = fetchCourseGrades(courses, isGradeUpcoming)
+        .listen((event) => add(event));
   }
 
-  Stream<UpcomingState> _mapGradeLoadedToState(GradeLoaded event) async* {
+  Stream<UpcomingState> _mapGradeLoadedToState(GradesLoaded event) async* {
     if (state is UpcomingLoading) {
-      var grades = Map.of((state as UpcomingLoading).partialCourses);
-      grades[event.course] = event.grades;
-      yield UpcomingLoading(grades);
+      var groups = Map.of((state as UpcomingLoading).partialGroups);
+
+      for (var grade in event.grades) {
+        if (grade.dueDate == null) {
+          return;
+        }
+        var group = DateGroupingExt.fromDate(grade.dueDate);
+        (groups[group] ??= <Grade>{})..add(grade);
+      }
+      yield UpcomingLoading(groups);
     } else {
       // We probably shouldn't be able to get a GradeLoaded if we are already
       // fully loaded
@@ -80,16 +85,6 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
     }
   }
 
-  Stream<UpcomingEvent> _fetchCourseGrades(List<Course> courses) async* {
-    for (var course in courses) {
-      var grades = await course.getGrades();
-      grades = grades.where(isGradeRecent).toList();
-
-      yield GradeLoaded(course: course, grades: grades);
-    }
-    yield DoneLoading();
-  }
-
   @override
   Future<void> close() {
     _courseFetchingSubscription?.cancel();
@@ -97,10 +92,17 @@ class UpcomingBloc extends Bloc<UpcomingEvent, UpcomingState> {
   }
 }
 
-bool isGradeRecent(Grade grade) {
-  if (grade.dateLastModified != null && grade.dateLastModified is DateTime) {
-    var gradeDate = grade.dateLastModified;
-    return gradeDate.isAfter(DateTime.now().subtract(const Duration(days: 1)));
+bool isGradeUpcoming(Grade grade) {
+  if (grade.dueDate != null && grade.dueDate is DateTime) {
+    // We assume any "upcoming" grade will be "Not Graded"
+    if (grade.grade != 'Not Graded') {
+      return false;
+    }
+    var gradeDueDate = grade.dueDate;
+    var n = DateTime.now();
+    var now =
+        DateTime(n.year, n.month, n.day).subtract(const Duration(seconds: 1));
+    return gradeDueDate.isAfter(now);
   } else {
     return false;
   }

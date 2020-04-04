@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grades/blocs/feed/feed_event.dart';
-import 'package:grades/blocs/feed/upcoming/upcoming_bloc.dart';
+import 'package:grades/blocs/feed/recent/recent_bloc.dart';
 import 'package:grades/screens/home_screen/widgets/grades_section.dart';
-import 'package:grades/utilties/date.dart';
 
-class UpcomingPage extends StatelessWidget {
+class RecentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UpcomingBloc, UpcomingState>(
+    return BlocBuilder<RecentBloc, RecentState>(
       builder: (context, state) {
-        if (state is UpcomingLoading) {
-          var groupsList = state.sortedGroups();
-
+        if (state is RecentLoading) {
+          var courses = state.partialCourses.entries.toList();
           return Column(
             children: <Widget>[
               ListView.builder(
                 shrinkWrap: true,
                 physics: AlwaysScrollableScrollPhysics(),
-                itemCount: groupsList.length,
+                itemCount: courses.length,
                 itemBuilder: (context, i) {
                   return CourseGrades(
-                    groupsList[i].item1.toHumanFormat(),
-                    groupsList[i].item2,
+                    courses[i].key.courseName,
+                    courses[i].value,
                   );
                 },
               ),
@@ -31,26 +29,27 @@ class UpcomingPage extends StatelessWidget {
           );
         }
 
-        if (state is UpcomingLoaded) {
-          var groupsList = state.sortedGroups();
+        if (state is RecentLoaded) {
+          var courses = state.courses.entries.toList();
           return RefreshIndicator(
             onRefresh: () {
-              BlocProvider.of<UpcomingBloc>(context).add(RefreshData());
+              BlocProvider.of<RecentBloc>(context).add(RefreshData());
               return Future.value();
             },
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
-              itemCount: groupsList.length,
+              itemCount: courses.length,
               itemBuilder: (context, i) {
                 return CourseGrades(
-                  groupsList[i].item1.toHumanFormat(),
-                  groupsList[i].item2,
+                  courses[i].key.courseName,
+                  courses[i].value,
                 );
               },
             ),
           );
         }
-        if (state is UpcomingError) {
+
+        if (state is RecentError) {
           return Text('An error occurred');
         }
         return Container(color: Colors.blue);

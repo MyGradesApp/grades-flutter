@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grades/blocs/course_list/course_list_bloc.dart';
-import 'package:grades/blocs/upcoming/upcoming_bloc.dart';
+import 'package:grades/blocs/feed/feed_event.dart';
+import 'package:grades/blocs/feed/recent/recent_bloc.dart';
+import 'package:grades/blocs/feed/upcoming/upcoming_bloc.dart';
 import 'package:grades/repos/sis_repository.dart';
 import 'package:grades/screens/home_screen/course_list_page.dart';
+import 'package:grades/screens/home_screen/recent_page.dart';
 import 'package:grades/screens/home_screen/upcoming_page.dart';
 import 'package:grades/widgets/offline_bar.dart';
 
@@ -32,18 +35,23 @@ class _HomeScreenState extends State<HomeScreen> {
       : assert(sisRepository != null),
         _sisRepository = sisRepository {
     providers = [
-      BlocProvider<UpcomingBloc>(
+      BlocProvider<RecentBloc>(
         create: (BuildContext context) =>
-            UpcomingBloc(sisRepository: _sisRepository)..add(FetchData()),
+            RecentBloc(sisRepository: _sisRepository)..add(FetchData()),
       ),
       BlocProvider<CourseListBloc>(
         create: (BuildContext context) =>
             CourseListBloc(sisRepository: _sisRepository)..add(FetchCourses()),
-      )
+      ),
+      BlocProvider<UpcomingBloc>(
+        create: (BuildContext context) =>
+            UpcomingBloc(sisRepository: _sisRepository)..add(FetchData()),
+      ),
     ];
     pages = [
-      UpcomingPage(),
+      RecentPage(),
       CourseListPage(),
+      UpcomingPage(),
     ];
   }
 

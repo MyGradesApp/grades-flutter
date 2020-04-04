@@ -38,6 +38,8 @@ class AuthenticationBloc
       }
     } else if (event is LoggedIn) {
       yield Authenticated();
+    } else if (event is LoggedOut) {
+      yield Unauthenticated();
     }
   }
 }
