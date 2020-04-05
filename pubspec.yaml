@@ -19,7 +19,7 @@ dependencies:
   # Dart team package
   intl: ^0.16.1
   # Dart team package
-  collection: ^1.14.12
+  collection: ^1.14.11
   pedantic: ^1.9.0
 
   tuple:
