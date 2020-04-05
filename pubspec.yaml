@@ -12,10 +12,7 @@ dependencies:
 
   # 1st party packages
   sis_loader:
-    path: ../dart-sis-loader
-#    git:
-#      url: git@github.com:Noskcaj19/dart-sis-loader.git
-#      ref: "d9c9cb19532"
+    path: vendored/sis-loader
 
   shared_preferences: ^0.5.6+3
   # General small unities

@@ -1,0 +1,3 @@
+[submodule "vendored/sis-loader"]
+	path = vendored/sis-loader
+	url = git@github.com:Noskcaj19/dart-sis-loader.git

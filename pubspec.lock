@@ -231,7 +231,7 @@ packages:
   sis_loader:
     dependency: "direct main"
     description:
-      path: "../dart-sis-loader"
+      path: "vendored/sis-loader"
       relative: true
     source: path
     version: "0.0.0"
