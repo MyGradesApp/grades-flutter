@@ -7,58 +7,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:grades/main.dart';
-import 'package:grades/screens/terms_query_screen.dart';
-import 'package:grades/utilities/helpers/package_info.dart';
-import 'package:grades/utilities/sentry.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'navigation_monitor.dart';
+import 'package:grades_reborn/main.dart';
 
-Future<void> main() async {
-  SharedPreferences prefs;
-  setUp(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    SharedPreferences.setMockInitialValues({});
-    prefs = await SharedPreferences.getInstance();
-    final package_info = await getPackageInfo();
-    // Used for sentry error reporting and settings page version number
-    version = '${package_info.version}+${package_info.buildNumber}';
-  });
-
-  setUpAll(() async {
-    await prefs?.clear();
-  });
-
-  testWidgets('Launch test', (WidgetTester tester) async {
+void main() {
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(prefs: prefs));
-    await tester.pumpAndSettle();
-    // We should end up on the terms and conditions screen on first launch
-    expect(find.text('Welcome to SwiftGrade'), findsOneWidget);
-    expect(find.text('I accept the terms and conditions'), findsOneWidget);
-  });
+    await tester.pumpWidget(MyApp());
 
-  testWidgets('Splash screen accepts terms', (WidgetTester tester) async {
-    var navMonitor = NavigationMonitor();
-    await tester.pumpWidget(MaterialApp(
-      home: TermsQueryScreen(),
-      navigatorObservers: [navMonitor],
-    ));
-    await tester.pumpAndSettle();
+    // Verify that our counter starts at 0.
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
 
-    expect(
-      prefs.getBool('accepted_terms'),
-      null,
-      reason: 'test should start with empty shared prefs',
-    );
+    // Tap the '+' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
 
-    await tester.tap(
-      find.widgetWithText(RaisedButton, 'I accept the terms and conditions'),
-    );
-
-    expect(prefs.getBool('accepted_terms'), true);
-    expect(navMonitor.popped, true,
-        reason: 'Splash screen should pop after accepting');
+    // Verify that our counter has incremented.
+    expect(find.text('0'), findsNothing);
+    expect(find.text('1'), findsOneWidget);
   });
 }
