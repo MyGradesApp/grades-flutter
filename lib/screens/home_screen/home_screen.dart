@@ -4,6 +4,8 @@ import 'package:grades/blocs/course_list/course_list_bloc.dart';
 import 'package:grades/blocs/feed/feed_event.dart';
 import 'package:grades/blocs/feed/recent/recent_bloc.dart';
 import 'package:grades/blocs/feed/upcoming/upcoming_bloc.dart';
+import 'package:grades/blocs/network_action_bloc/network_action_bloc.dart'
+    as network_event;
 import 'package:grades/repos/sis_repository.dart';
 import 'package:grades/screens/home_screen/course_list_page.dart';
 import 'package:grades/screens/home_screen/recent_page.dart';
@@ -41,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       BlocProvider<CourseListBloc>(
         create: (BuildContext context) =>
-            CourseListBloc(sisRepository: _sisRepository)..add(FetchCourses()),
+            CourseListBloc(sisRepository: sisRepository)
+              ..add(network_event.FetchNetworkData()),
       ),
       BlocProvider<UpcomingBloc>(
         create: (BuildContext context) =>

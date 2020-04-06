@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grades/blocs/course_grades/course_grades_bloc.dart';
+import 'package:grades/blocs/network_action_bloc/network_action_bloc.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 import 'course_grades_view.dart';
@@ -18,7 +19,7 @@ class CourseGradesScreen extends StatelessWidget {
           BlocProvider<CourseGradesBloc>(
             create: (context) => CourseGradesBloc(
               course: course,
-            )..add(FetchGrades()),
+            )..add(FetchNetworkData()),
             child: CourseGradesView(),
           ),
         ],
