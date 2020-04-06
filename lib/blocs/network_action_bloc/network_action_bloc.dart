@@ -27,8 +27,12 @@ abstract class NetworkActionBloc<D>
         yield NetworkError();
       }
     } else if (event is RefreshNetworkData) {
-      var data = await fetch();
-      yield NetworkLoaded<D>(data);
+      try {
+        var data = await fetch();
+        yield NetworkLoaded<D>(data);
+      } catch (_) {
+        yield NetworkError();
+      }
     }
   }
 }
