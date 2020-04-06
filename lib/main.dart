@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grades/blocs/academic_info/academic_info_bloc.dart';
+import 'package:grades/blocs/network_action_bloc/network_action_bloc.dart';
 import 'package:grades/blocs/offline/offline_bloc.dart';
 import 'package:grades/repos/sis_repository.dart';
 import 'package:grades/screens/academic_info_screen.dart';
@@ -53,7 +55,12 @@ class App extends StatelessWidget {
         '/course_grades': (context) => CourseGradesScreen(),
         '/grade_info': (context) => GradeInfoScreen(),
         '/settings': (context) => SettingsScreen(),
-        '/academic_info': (context) => AcademicInfoScreen(),
+        '/academic_info': (context) => BlocProvider(
+              create: (context) =>
+                  AcademicInfoBloc(sisRepository: _sisRepository)
+                    ..add(FetchNetworkData()),
+              child: AcademicInfoScreen(),
+            ),
       },
       home: AppRoot(sisRepository: _sisRepository),
     );

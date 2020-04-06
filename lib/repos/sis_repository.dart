@@ -37,6 +37,13 @@ class SISRepository {
     );
   }
 
+  Future<AcademicInfo> getAcademicInfo() async {
+    return AcademicInfo(
+      await sisLoader.getUserProfile(),
+      await sisLoader.getAbsences(),
+    );
+  }
+
   Future<T> _offlineWrapper<T>(Future<T> it,
       {@required T Function() whenOffline}) async {
     assert(whenOffline != null);
@@ -77,4 +84,11 @@ class SISRepository {
       rethrow;
     }
   }
+}
+
+class AcademicInfo {
+  final Profile profile;
+  final Absences absences;
+
+  const AcademicInfo(this.profile, this.absences);
 }
