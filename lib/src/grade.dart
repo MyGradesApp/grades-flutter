@@ -36,7 +36,7 @@ DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
 }
 
 class Grade extends Equatable {
-  Map<String, String> raw;
+  final Map<String, String> raw;
 
   Grade(this.raw);
 
@@ -72,8 +72,8 @@ class Grade extends Equatable {
     }
   }
 
-  Grade.fromJson(Map<String, dynamic> json) {
-    raw = Map<String, String>.from(json);
+  factory Grade.fromJson(Map<String, dynamic> json) {
+    return Grade(Map<String, String>.from(json));
   }
 
   Map<String, dynamic> toJson() {
