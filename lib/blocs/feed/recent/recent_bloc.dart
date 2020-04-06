@@ -35,9 +35,6 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
         // with new data
         yield RecentLoading((state as RecentLoaded).courses);
         yield* _fetchCourseData();
-      } else {
-        // We probably shouldn't be able to get a RefreshData if we are still loading
-        throw Exception('Unexpected state');
       }
     } else if (event is GradesLoaded) {
       yield* _mapGradeLoadedToState(event);

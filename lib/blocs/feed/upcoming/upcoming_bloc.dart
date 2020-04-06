@@ -37,9 +37,6 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
         // with new data
         yield UpcomingLoading((state as UpcomingLoaded).groups);
         yield* _fetchCourseData();
-      } else {
-        // We probably shouldn't be able to get a RefreshData if we are still loading
-        throw Exception('Unexpected state');
       }
     } else if (event is GradesLoaded) {
       yield* _mapGradeLoadedToState(event);

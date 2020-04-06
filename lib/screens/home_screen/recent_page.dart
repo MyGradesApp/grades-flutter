@@ -13,7 +13,7 @@ class RecentPage extends StatefulWidget {
 
 class _RecentPageState extends State<RecentPage> {
   Completer<void> _refreshCompleter = Completer<void>();
-  bool hasLoaded = false;
+  bool firstLoad = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +25,7 @@ class _RecentPageState extends State<RecentPage> {
       child: BlocConsumer<RecentBloc, RecentState>(
         listener: (context, state) {
           if (state is RecentLoaded || state is RecentError) {
+            firstLoad = false;
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
@@ -45,19 +46,12 @@ class _RecentPageState extends State<RecentPage> {
                     );
                   },
                 ),
-                if (!hasLoaded) Center(child: CircularProgressIndicator()),
+                if (firstLoad) Center(child: CircularProgressIndicator()),
               ],
             );
           }
 
           if (state is RecentLoaded) {
-            Future.microtask(
-              () => {
-                setState(() {
-                  hasLoaded = true;
-                })
-              },
-            );
             var courses = state.courses.entries.toList();
             return ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
