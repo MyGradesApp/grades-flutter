@@ -1,0 +1,27 @@
+name: grade_core
+description: The BLoC core SwiftGrade is built on top of.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  pedantic: ^1.9.0
+  meta: ^1.1.8
+
+  sis_loader:
+    path: ../sis-loader
+
+  equatable: ^1.1.1
+  shared_preferences: ^0.5.6+3
+  bloc: ^3.0.0
+  tuple:
+    git:
+      url: https://github.com/Noskcaj19/tuple
+      ref: d39ed10
+
+dev_dependencies:
+  test: ^1.14.2
