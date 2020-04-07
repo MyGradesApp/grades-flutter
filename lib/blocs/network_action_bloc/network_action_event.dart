@@ -5,6 +5,16 @@ abstract class NetworkActionEvent {
   const NetworkActionEvent();
 }
 
-class FetchNetworkData extends NetworkActionEvent {}
+class FetchNetworkData extends NetworkActionEvent {
+  @override
+  String toString() {
+    return 'FetchNetworkData{}';
+  }
+}
 
-class RefreshNetworkData extends NetworkActionEvent {}
+class RefreshNetworkData extends NetworkActionEvent {
+  @override
+  String toString() {
+    return 'RefreshNetworkData{}';
+  }
+}
