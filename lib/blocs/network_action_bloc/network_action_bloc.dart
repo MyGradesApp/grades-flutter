@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 part 'network_action_event.dart';
@@ -19,7 +18,7 @@ abstract class NetworkActionBloc<D>
     NetworkActionEvent event,
   ) async* {
     if (event is FetchNetworkData) {
-      yield NetworkLoading<D>();
+      yield NetworkLoading();
       try {
         var data = await fetch();
         yield NetworkLoaded<D>(data);

@@ -1,11 +1,8 @@
 part of 'network_action_bloc.dart';
 
 @immutable
-abstract class NetworkActionEvent extends Equatable {
+abstract class NetworkActionEvent {
   const NetworkActionEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class FetchNetworkData extends NetworkActionEvent {}
