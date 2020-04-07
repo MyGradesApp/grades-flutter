@@ -10,9 +10,6 @@ import 'package:grades/repos/sis_repository.dart';
 import 'package:grades/screens/home_screen/course_list_page.dart';
 import 'package:grades/screens/home_screen/recent_page.dart';
 import 'package:grades/screens/home_screen/upcoming_page.dart';
-import 'package:grades/widgets/offline_bar.dart';
-
-import '../../widgets/offline_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   final SISRepository _sisRepository;
@@ -78,20 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: MultiBlocProvider(
-              providers: providers,
-              child: PageView.builder(
-                controller: controller,
-                itemCount: pages.length,
-                itemBuilder: (context, position) => pages[position],
-              ),
-            ),
-          ),
-          OfflineBar(),
-        ],
+      body: MultiBlocProvider(
+        providers: providers,
+        child: PageView.builder(
+          controller: controller,
+          itemCount: pages.length,
+          itemBuilder: (context, position) => pages[position],
+        ),
       ),
     );
   }

@@ -12,6 +12,7 @@ import 'package:grades/screens/login/login_screen.dart';
 import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/simple_bloc_delegate.dart';
+import 'package:grades/widgets/offline_bar.dart';
 
 import 'blocs/authentication/authentication_bloc.dart';
 
@@ -51,6 +52,14 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      builder: (BuildContext context, Widget child) {
+        return Column(
+          children: <Widget>[
+            Expanded(child: child),
+            OfflineBar(),
+          ],
+        );
+      },
       routes: {
         '/course_grades': (context) => CourseGradesScreen(),
         '/grade_info': (context) => GradeInfoScreen(),

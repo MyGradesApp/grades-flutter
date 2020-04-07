@@ -9,10 +9,22 @@ class OfflineBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OfflineBloc, OfflineState>(
-      builder: (BuildContext context, OfflineState state) {
-        return Text('Offline: ${state.offline}');
-      },
+    return DefaultTextStyle(
+      style: TextStyle(),
+      child: SafeArea(
+        top: false,
+        child: Container(
+          width: double.infinity,
+          color: Colors.orange,
+          child: BlocBuilder<OfflineBloc, OfflineState>(
+            builder: (BuildContext context, OfflineState state) {
+              return Center(
+                child: Text('Offline: ${state.offline}'),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
