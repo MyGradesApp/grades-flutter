@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grades/blocs/academic_info/academic_info_bloc.dart';
-import 'package:grades/blocs/network_action_bloc/network_action_bloc.dart';
-import 'package:grades/blocs/offline/offline_bloc.dart';
-import 'package:grades/repos/sis_repository.dart';
+import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/academic_info_screen.dart';
 import 'package:grades/screens/course_grades/course_grades_screen.dart';
 import 'package:grades/screens/grade_info_screen.dart';
@@ -13,8 +10,6 @@ import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/simple_bloc_delegate.dart';
 import 'package:grades/widgets/offline_bar.dart';
-
-import 'blocs/authentication/authentication_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

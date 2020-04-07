@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grades/blocs/offline/offline_bloc.dart';
+import 'package:grade_core/grade_core.dart';
 
 class OfflineBar extends StatelessWidget {
   const OfflineBar({

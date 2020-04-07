@@ -4,15 +4,15 @@ description: Made for students, by students. The unofficial grades app for the s
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.8.0-dev <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   # 1st party packages
-  sis_loader:
-    path: vendored/sis-loader
+  grade_core:
+    path: vendored/grade_core
 
   shared_preferences: ^0.5.6+3
   # General small unities

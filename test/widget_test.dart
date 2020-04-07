@@ -7,10 +7,8 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:grades/blocs/authentication/authentication_bloc.dart';
-import 'package:grades/blocs/offline/offline_bloc.dart';
+import 'package:grade_core/grade_core.dart';
 import 'package:grades/main.dart';
-import 'package:grades/repos/sis_repository.dart';
 
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {

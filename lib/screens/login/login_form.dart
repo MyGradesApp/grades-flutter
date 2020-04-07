@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grades/blocs/authentication/authentication_bloc.dart';
-import 'package:grades/blocs/login/login_bloc.dart';
+import 'package:grade_core/grade_core.dart';
 
 class LoginForm extends StatefulWidget {
   @override

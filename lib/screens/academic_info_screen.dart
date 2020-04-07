@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grades/blocs/academic_info/academic_info_bloc.dart';
-import 'package:grades/blocs/network_action_bloc/network_action_bloc.dart';
-import 'package:grades/repos/sis_repository.dart';
+import 'package:grade_core/grade_core.dart';
 
 class AcademicInfoScreen extends StatefulWidget {
   @override
