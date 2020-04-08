@@ -8,6 +8,8 @@ import 'package:sis_loader/sis_loader.dart';
 
 import '../blocs/offline/offline_bloc.dart';
 
+const Duration TIMEOUT = Duration(seconds: 5);
+
 class SISRepository {
   final SharedPreferences prefs;
   final OfflineBloc _offlineBloc;
@@ -39,7 +41,7 @@ class SISRepository {
 
   Future<List<Course>> getCourses() async {
     return await _offlineWrapper(
-      _sisLoader.getCourses().timeout(Duration(seconds: 5)),
+      _sisLoader.getCourses(),
       whenOffline: () => _dataPersistence.courses,
     );
   }
@@ -72,7 +74,7 @@ class SISRepository {
       }
     }
     try {
-      return await (it.then((T v) {
+      return await (it.timeout(TIMEOUT).then((T v) {
         return v;
       }));
     } catch (e) {
