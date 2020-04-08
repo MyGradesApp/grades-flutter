@@ -15,13 +15,18 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = BlocProvider.of<CourseGradesBloc>(context);
     return RefreshIndicator(
       onRefresh: () {
-        BlocProvider.of<CourseGradesBloc>(context).add(RefreshNetworkData());
+        bloc.add(RefreshNetworkData());
         return _refreshCompleter.future;
       },
       child: BlocConsumer<CourseGradesBloc, NetworkActionState>(
         listener: (context, state) {
+          if (state is NetworkLoaded<List<Grade>>) {
+            RepositoryProvider.of<DataPersistence>(context)
+                .setGradesForCourse(bloc.course.courseName, state.data);
+          }
           if (state is NetworkLoaded || state is NetworkError) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();

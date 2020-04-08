@@ -23,11 +23,10 @@ class _CourseListPageState extends State<CourseListPage> {
       child: BlocConsumer<CourseListBloc, NetworkActionState>(
         listener: (context, NetworkActionState state) {
           if (state is NetworkLoaded<List<Course>>) {
-            _refreshCompleter?.complete();
-            _refreshCompleter = Completer();
             RepositoryProvider.of<DataPersistence>(context).courses =
                 state.data;
-          } else if (state is NetworkError) {
+          }
+          if (state is NetworkLoaded || state is NetworkError) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
