@@ -44,6 +44,10 @@ class DataPersistence {
         jsonDecode(gradesStr) as Map<String, dynamic>);
     dynCourses.forEach((String course, dynamic gradesListDyn) {
       var grades = <Grade>[];
+      if (gradesListDyn == null) {
+        out[course] = [];
+        return;
+      }
       var gradesList = List<dynamic>.from(gradesListDyn as List);
 
       gradesList.forEach((dynamic grade) {
