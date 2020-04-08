@@ -39,9 +39,19 @@ class SISRepository {
   }
 
   Future<AcademicInfo> getAcademicInfo() async {
-    return AcademicInfo(
-      await sisLoader.getUserProfile(),
-      await sisLoader.getAbsences(),
+    return await _offlineWrapper(
+      Future.value(AcademicInfo(
+        await sisLoader.getUserProfile(),
+        await sisLoader.getAbsences(),
+      )),
+      whenOffline: () => null,
+    );
+  }
+
+  Future<List<Grade>> getCourseGrades(Course course) async {
+    return await _offlineWrapper(
+      _sisLoader.courseService.getGrades(course),
+      whenOffline: () => null,
     );
   }
 

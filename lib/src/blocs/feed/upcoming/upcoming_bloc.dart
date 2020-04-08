@@ -50,8 +50,9 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
     var courses = await _sisRepository.getCourses();
 
     await _courseFetchingSubscription?.cancel();
-    _courseFetchingSubscription = fetchCourseGrades(courses, isGradeUpcoming)
-        .listen((event) => add(event));
+    _courseFetchingSubscription =
+        fetchCourseGrades(_sisRepository, courses, isGradeUpcoming)
+            .listen((event) => add(event));
   }
 
   Stream<UpcomingState> _mapGradeLoadedToState(GradesLoaded event) async* {

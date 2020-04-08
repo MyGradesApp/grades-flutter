@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 import '../../../repos/sis_repository.dart';
+import '../feed.dart';
 import '../feed_event.dart';
 
 part 'recent_state.dart';
@@ -49,7 +50,8 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
 
     await _courseFetchingSubscription?.cancel();
     _courseFetchingSubscription =
-        _fetchCourseGrades(courses).listen((event) => add(event));
+        fetchCourseGrades(_sisRepository, courses, isGradeRecent)
+            .listen((event) => add(event));
   }
 
   Stream<RecentState> _mapGradeLoadedToState(GradesLoaded event) async* {
@@ -72,16 +74,6 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
       // fully loaded
       throw Exception('Unexpected state');
     }
-  }
-
-  Stream<FeedEvent> _fetchCourseGrades(List<Course> courses) async* {
-    for (var course in courses) {
-      var grades = await course.getGrades();
-      grades = grades.where(isGradeRecent).toList();
-
-      yield GradesLoaded(course: course, grades: grades);
-    }
-    yield DoneLoading();
   }
 
   @override
