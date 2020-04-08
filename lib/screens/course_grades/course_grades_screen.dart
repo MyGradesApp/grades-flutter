@@ -15,12 +15,14 @@ class CourseGradesScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Text('Grades for: ${course.courseName}'),
-          BlocProvider<CourseGradesBloc>(
-            create: (_) => CourseGradesBloc(
-              course: course,
-              sisRepository: RepositoryProvider.of<SISRepository>(context),
-            )..add(FetchNetworkData()),
-            child: CourseGradesView(),
+          Expanded(
+            child: BlocProvider<CourseGradesBloc>(
+              create: (_) => CourseGradesBloc(
+                course: course,
+                sisRepository: RepositoryProvider.of<SISRepository>(context),
+              )..add(FetchNetworkData()),
+              child: CourseGradesView(),
+            ),
           ),
         ],
       ),

@@ -36,7 +36,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           }
           if (state is NetworkLoaded<List<Grade>>) {
             return ListView.builder(
-              shrinkWrap: true,
               itemCount: state.data.length,
               itemBuilder: (context, i) {
                 var grade = state.data[i];
