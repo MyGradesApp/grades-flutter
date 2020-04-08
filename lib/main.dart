@@ -10,18 +10,21 @@ import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/simple_bloc_delegate.dart';
 import 'package:grades/widgets/offline_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
   var offlineBloc = OfflineBloc();
-  var sisRepository = SISRepository(offlineBloc);
+  var prefs = await SharedPreferences.getInstance();
+  var sisRepository = SISRepository(offlineBloc, prefs);
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
         create: (context) =>
-            AuthenticationBloc(sisRepository: sisRepository)..add(AppStarted()),
+            AuthenticationBloc(sisRepository: sisRepository, prefs: prefs)
+              ..add(AppStarted()),
       ),
       BlocProvider(
         create: (context) => offlineBloc,
@@ -29,14 +32,16 @@ void main() {
     ],
     child: App(
       sisRepository: sisRepository,
+      prefs: prefs,
     ),
   ));
 }
 
 class App extends StatelessWidget {
+  final SharedPreferences prefs;
   final SISRepository _sisRepository;
 
-  App({@required SISRepository sisRepository})
+  App({@required SISRepository sisRepository, @required this.prefs})
       : assert(sisRepository != null),
         _sisRepository = sisRepository;
 
@@ -44,9 +49,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SwiftGrade',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.dark(),
       builder: (BuildContext context, Widget child) {
         return Column(
           children: [
@@ -76,19 +79,24 @@ class App extends StatelessWidget {
               child: AcademicInfoScreen(),
             ),
       },
-      home: AppRoot(sisRepository: _sisRepository),
+      home: AppRoot(
+        sisRepository: _sisRepository,
+        prefs: prefs,
+      ),
     );
   }
 }
 
 class AppRoot extends StatelessWidget {
+  final SharedPreferences prefs;
+  final SISRepository _sisRepository;
+
   const AppRoot({
     Key key,
     @required SISRepository sisRepository,
+    @required this.prefs,
   })  : _sisRepository = sisRepository,
         super(key: key);
-
-  final SISRepository _sisRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +107,7 @@ class AppRoot extends StatelessWidget {
         } else if (state is Unauthenticated) {
           return LoginScreen(
             sisRepository: _sisRepository,
+            prefs: prefs,
           );
         } else if (state is Authenticated) {
           return HomeScreen(

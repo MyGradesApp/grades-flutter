@@ -9,17 +9,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  SharedPreferences prefs;
   testWidgets('App smoke test', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues(<String, dynamic>{});
+    prefs = await SharedPreferences.getInstance();
     var offlineBloc = OfflineBloc();
-    var sisRepository = SISRepository(offlineBloc);
+    var sisRepository = SISRepository(offlineBloc, prefs);
 
     await tester.pumpWidget(MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => AuthenticationBloc(sisRepository: sisRepository)
-            ..add(AppStarted()),
+          create: (context) =>
+              AuthenticationBloc(sisRepository: sisRepository, prefs: prefs)
+                ..add(AppStarted()),
         ),
         BlocProvider(
           create: (context) => offlineBloc,
@@ -27,6 +32,7 @@ void main() {
       ],
       child: App(
         sisRepository: sisRepository,
+        prefs: prefs,
       ),
     ));
   });
