@@ -23,9 +23,8 @@ void main() async {
 
   runApp(MultiRepositoryProvider(
     providers: [
-      RepositoryProvider(
-        create: (_) => dataPersistenceRepository,
-      ),
+      RepositoryProvider(create: (_) => dataPersistenceRepository),
+      RepositoryProvider(create: (_) => sisRepository)
     ],
     child: MultiBlocProvider(
       providers: [
@@ -91,9 +90,7 @@ class App extends StatelessWidget {
             );
           },
           routes: {
-            '/course_grades': (_) => CourseGradesScreen(
-                  sisRepository: _sisRepository,
-                ),
+            '/course_grades': (_) => CourseGradesScreen(),
             '/grade_info': (_) => GradeInfoScreen(),
             '/settings': (_) => SettingsScreen(),
             '/academic_info': (_) => BlocProvider(
@@ -104,7 +101,6 @@ class App extends StatelessWidget {
                 ),
           },
           home: AppRoot(
-            sisRepository: _sisRepository,
             prefs: prefs,
           ),
         );
@@ -115,14 +111,11 @@ class App extends StatelessWidget {
 
 class AppRoot extends StatelessWidget {
   final SharedPreferences prefs;
-  final SISRepository _sisRepository;
 
   const AppRoot({
     Key key,
-    @required SISRepository sisRepository,
     @required this.prefs,
-  })  : _sisRepository = sisRepository,
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,13 +125,10 @@ class AppRoot extends StatelessWidget {
           return SplashScreen();
         } else if (state is Unauthenticated) {
           return LoginScreen(
-            sisRepository: _sisRepository,
             prefs: prefs,
           );
         } else if (state is Authenticated) {
-          return HomeScreen(
-            sisRepository: _sisRepository,
-          );
+          return HomeScreen();
         }
         return null;
       },

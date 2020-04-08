@@ -6,31 +6,25 @@ import 'package:grades/screens/home_screen/recent_page.dart';
 import 'package:grades/screens/home_screen/upcoming_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  final SISRepository _sisRepository;
-
-  HomeScreen({@required SISRepository sisRepository})
-      : assert(sisRepository != null),
-        _sisRepository = sisRepository;
-
   @override
-  _HomeScreenState createState() =>
-      _HomeScreenState(sisRepository: _sisRepository);
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final SISRepository _sisRepository;
   final PageController controller = PageController(initialPage: 1);
-  List<Widget> pages;
+  List<Widget> pages = [
+    RecentPage(),
+    CourseListPage(),
+    UpcomingPage(),
+  ];
 
   List<BlocProvider<dynamic>> providers;
 
-  _HomeScreenState({@required SISRepository sisRepository})
-      : assert(sisRepository != null),
-        _sisRepository = sisRepository {
-    providers = [
+  List<BlocProvider> _buildProviders(SISRepository sisRepository) {
+    return [
       BlocProvider<RecentBloc>(
         create: (_) =>
-            RecentBloc(sisRepository: _sisRepository)..add(FetchData()),
+            RecentBloc(sisRepository: sisRepository)..add(FetchData()),
       ),
       BlocProvider<CourseListBloc>(
         create: (_) => CourseListBloc(sisRepository: sisRepository)
@@ -38,13 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       BlocProvider<UpcomingBloc>(
         create: (_) =>
-            UpcomingBloc(sisRepository: _sisRepository)..add(FetchData()),
+            UpcomingBloc(sisRepository: sisRepository)..add(FetchData()),
       ),
-    ];
-    pages = [
-      RecentPage(),
-      CourseListPage(),
-      UpcomingPage(),
     ];
   }
 
@@ -69,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: MultiBlocProvider(
-        providers: providers,
+        providers: providers ??=
+            _buildProviders(RepositoryProvider.of<SISRepository>(context)),
         child: PageView.builder(
           controller: controller,
           itemCount: pages.length,
