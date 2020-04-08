@@ -11,9 +11,10 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final SharedPreferences prefs;
   final SISRepository _sisRepository;
 
-  LoginBloc({@required SISRepository sisRepository})
+  LoginBloc({@required SISRepository sisRepository, @required this.prefs})
       : assert(sisRepository != null),
         _sisRepository = sisRepository;
 
@@ -28,7 +29,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginState.loading();
       try {
         await _sisRepository.login(event.username, event.password);
-        var prefs = await SharedPreferences.getInstance();
         await prefs.setString('sis_username', event.username);
         await prefs.setString('sis_password', event.password);
         yield LoginState.success();

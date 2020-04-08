@@ -8,11 +8,12 @@ import 'package:sis_loader/sis_loader.dart';
 import '../blocs/offline/offline_bloc.dart';
 
 class SISRepository {
+  final SharedPreferences prefs;
   final OfflineBloc _offlineBloc;
   bool _offline = false;
   SISLoader _sisLoader = SISLoader(client: CookieClient());
 
-  SISRepository(OfflineBloc offlineBloc)
+  SISRepository(OfflineBloc offlineBloc, this.prefs)
       : assert(offlineBloc != null),
         _offlineBloc = offlineBloc {
     _offlineBloc.listen((state) {
@@ -82,7 +83,6 @@ class SISRepository {
   Future<bool> _attemptLogin() async {
     try {
       // TODO: Prefs should be abstracted out
-      var prefs = await SharedPreferences.getInstance();
       var username = prefs.getString('sis_username');
       var password = prefs.getString('sis_password');
       await login(username, password);

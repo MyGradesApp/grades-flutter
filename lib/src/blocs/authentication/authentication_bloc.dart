@@ -12,9 +12,11 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
+  final SharedPreferences prefs;
   final SISRepository _sisRepository;
 
-  AuthenticationBloc({@required SISRepository sisRepository})
+  AuthenticationBloc(
+      {@required SISRepository sisRepository, @required this.prefs})
       : assert(sisRepository != null),
         _sisRepository = sisRepository;
 
@@ -26,7 +28,6 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      var prefs = await SharedPreferences.getInstance();
       try {
         await _sisRepository.login(
           prefs.getString('sis_username'),
