@@ -28,7 +28,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
-      listener: (BuildContext context, state) {
+      listener: (context, state) {
         if (state.isFailure) {
           // TODO: Show more failure info
           Scaffold.of(context)

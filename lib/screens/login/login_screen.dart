@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocProvider<LoginBloc>(
-            create: (BuildContext context) =>
+            create: (context) =>
                 LoginBloc(sisRepository: _sisRepository, prefs: prefs),
             child: LoginForm(),
           ),

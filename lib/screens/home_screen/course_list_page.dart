@@ -21,7 +21,7 @@ class _CourseListPageState extends State<CourseListPage> {
         return _refreshCompleter.future;
       },
       child: BlocConsumer<CourseListBloc, NetworkActionState>(
-        listener: (BuildContext context, NetworkActionState state) {
+        listener: (context, NetworkActionState state) {
           if (state is NetworkLoaded) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();

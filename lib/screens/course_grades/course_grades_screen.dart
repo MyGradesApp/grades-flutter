@@ -22,7 +22,7 @@ class CourseGradesScreen extends StatelessWidget {
         children: <Widget>[
           Text('Grades for: ${course.courseName}'),
           BlocProvider<CourseGradesBloc>(
-            create: (context) => CourseGradesBloc(
+            create: (_) => CourseGradesBloc(
               course: course,
               sisRepository: _sisRepository,
             )..add(FetchNetworkData()),

@@ -21,13 +21,13 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         return _refreshCompleter.future;
       },
       child: BlocConsumer<CourseGradesBloc, NetworkActionState>(
-        listener: (BuildContext context, state) {
+        listener: (context, state) {
           if (state is NetworkLoaded || state is NetworkError) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
         },
-        builder: (BuildContext context, state) {
+        builder: (context, state) {
           if (state is NetworkLoading) {
             return CircularProgressIndicator();
           }

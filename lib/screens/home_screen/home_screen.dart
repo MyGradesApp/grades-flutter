@@ -29,16 +29,15 @@ class _HomeScreenState extends State<HomeScreen> {
         _sisRepository = sisRepository {
     providers = [
       BlocProvider<RecentBloc>(
-        create: (BuildContext context) =>
+        create: (_) =>
             RecentBloc(sisRepository: _sisRepository)..add(FetchData()),
       ),
       BlocProvider<CourseListBloc>(
-        create: (BuildContext context) =>
-            CourseListBloc(sisRepository: sisRepository)
-              ..add(FetchNetworkData()),
+        create: (_) => CourseListBloc(sisRepository: sisRepository)
+          ..add(FetchNetworkData()),
       ),
       BlocProvider<UpcomingBloc>(
-        create: (BuildContext context) =>
+        create: (_) =>
             UpcomingBloc(sisRepository: _sisRepository)..add(FetchData()),
       ),
     ];

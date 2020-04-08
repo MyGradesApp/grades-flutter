@@ -22,13 +22,13 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
           return _refreshCompleter.future;
         },
         child: BlocConsumer<AcademicInfoBloc, NetworkActionState>(
-          listener: (BuildContext context, NetworkActionState state) {
+          listener: (context, NetworkActionState state) {
             if (state is NetworkLoaded || state is NetworkError) {
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             }
           },
-          builder: (BuildContext context, NetworkActionState state) {
+          builder: (context, NetworkActionState state) {
             if (state is NetworkLoading) {
               return CircularProgressIndicator();
             }

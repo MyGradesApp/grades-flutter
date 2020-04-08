@@ -22,12 +22,12 @@ void main() async {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
-        create: (context) =>
+        create: (_) =>
             AuthenticationBloc(sisRepository: sisRepository, prefs: prefs)
               ..add(AppStarted()),
       ),
       BlocProvider(
-        create: (context) => ThemeBloc(
+        create: (_) => ThemeBloc(
           initialStateSource: () {
             var themeStr = prefs.getString('theme');
             return ThemeModeExt.fromString(themeStr) ?? ThemeMode.system;
@@ -38,7 +38,7 @@ void main() async {
         ),
       ),
       BlocProvider(
-        create: (context) => offlineBloc,
+        create: (_) => offlineBloc,
       ),
     ],
     child: App(
@@ -59,18 +59,18 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeMode>(
-      builder: (context, themeMode) {
+      builder: (context, ThemeMode themeMode) {
         return MaterialApp(
           title: 'SwiftGrade',
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: themeMode,
-          builder: (BuildContext context, Widget child) {
+          builder: (context, child) {
             return Column(
               children: [
                 Expanded(child: child),
                 BlocBuilder<OfflineBloc, bool>(
-                  builder: (BuildContext context, offline) {
+                  builder: (context, offline) {
                     if (offline) {
                       return OfflineBar();
                     } else {
@@ -82,12 +82,12 @@ class App extends StatelessWidget {
             );
           },
           routes: {
-            '/course_grades': (context) => CourseGradesScreen(
+            '/course_grades': (_) => CourseGradesScreen(
                   sisRepository: _sisRepository,
                 ),
-            '/grade_info': (context) => GradeInfoScreen(),
-            '/settings': (context) => SettingsScreen(),
-            '/academic_info': (context) => BlocProvider(
+            '/grade_info': (_) => GradeInfoScreen(),
+            '/settings': (_) => SettingsScreen(),
+            '/academic_info': (_) => BlocProvider(
                   create: (context) =>
                       AcademicInfoBloc(sisRepository: _sisRepository)
                         ..add(FetchNetworkData()),
@@ -118,7 +118,7 @@ class AppRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (BuildContext context, AuthenticationState state) {
+      builder: (context, AuthenticationState state) {
         if (state is Uninitialized) {
           return SplashScreen();
         } else if (state is Unauthenticated) {
