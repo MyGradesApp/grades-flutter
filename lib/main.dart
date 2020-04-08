@@ -19,31 +19,40 @@ void main() async {
   var offlineBloc = OfflineBloc();
   var prefs = await SharedPreferences.getInstance();
   var sisRepository = SISRepository(offlineBloc, prefs);
-  runApp(MultiBlocProvider(
+  var dataPersistenceRepository = DataPersistence(prefs);
+
+  runApp(MultiRepositoryProvider(
     providers: [
-      BlocProvider(
-        create: (_) =>
-            AuthenticationBloc(sisRepository: sisRepository, prefs: prefs)
-              ..add(AppStarted()),
-      ),
-      BlocProvider(
-        create: (_) => ThemeBloc(
-          initialStateSource: () {
-            var themeStr = prefs.getString('theme');
-            return ThemeModeExt.fromString(themeStr) ?? ThemeMode.system;
-          },
-          stateSaver: (theme) {
-            prefs.setString('theme', theme.toPrefsString());
-          },
-        ),
-      ),
-      BlocProvider(
-        create: (_) => offlineBloc,
+      RepositoryProvider(
+        create: (_) => dataPersistenceRepository,
       ),
     ],
-    child: App(
-      sisRepository: sisRepository,
-      prefs: prefs,
+    child: MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              AuthenticationBloc(sisRepository: sisRepository, prefs: prefs)
+                ..add(AppStarted()),
+        ),
+        BlocProvider(
+          create: (_) => ThemeBloc(
+            initialStateSource: () {
+              var themeStr = prefs.getString('theme');
+              return ThemeModeExt.fromString(themeStr) ?? ThemeMode.system;
+            },
+            stateSaver: (theme) {
+              prefs.setString('theme', theme.toPrefsString());
+            },
+          ),
+        ),
+        BlocProvider(
+          create: (_) => offlineBloc,
+        ),
+      ],
+      child: App(
+        sisRepository: sisRepository,
+        prefs: prefs,
+      ),
     ),
   ));
 }
