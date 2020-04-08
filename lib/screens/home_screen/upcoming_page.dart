@@ -17,6 +17,7 @@ class _UpcomingPageState extends State<UpcomingPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       onRefresh: () {
         BlocProvider.of<UpcomingBloc>(context).add(RefreshData());
