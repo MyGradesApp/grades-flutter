@@ -49,9 +49,17 @@ class App extends StatelessWidget {
       ),
       builder: (BuildContext context, Widget child) {
         return Column(
-          children: <Widget>[
+          children: [
             Expanded(child: child),
-            OfflineBar(),
+            BlocBuilder<OfflineBloc, OfflineState>(
+              builder: (BuildContext context, OfflineState state) {
+                if (state.offline) {
+                  return OfflineBar();
+                }else {
+                  return Container();
+                }
+              },
+            ),
           ],
         );
       },
