@@ -17,6 +17,8 @@ class CourseGradesBloc extends NetworkActionBloc<List<Grade>> {
         _course = course,
         super(format: (g) => 'grades.length: ${g.length}');
 
+  Course get course => _course;
+
   @override
   Future<List<Grade>> fetch() async {
     return await _sisRepository.getCourseGrades(_course);

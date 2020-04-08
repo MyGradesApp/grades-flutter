@@ -57,7 +57,7 @@ class SISRepository {
   Future<List<Grade>> getCourseGrades(Course course) async {
     return await _offlineWrapper(
       _sisLoader.courseService.getGrades(course),
-      whenOffline: () => null,
+      whenOffline: () => _dataPersistence.grades[course.courseName],
     );
   }
 

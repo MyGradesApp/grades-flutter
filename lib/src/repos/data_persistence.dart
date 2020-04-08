@@ -5,18 +5,62 @@ import 'package:sis_loader/sis_loader.dart';
 
 class DataPersistence {
   final SharedPreferences prefs;
-  Map<Course, List<Grade>> grades;
+  Map<String, List<Grade>> _grades;
   List<Course> _courses;
+
+  DataPersistence(this.prefs) {
+    _grades = _loadGrades();
+    _courses = _loadCourses();
+  }
+
+  Map<String, List<Grade>> get grades => _grades;
+
+  set grades(Map<String, List<Grade>> grades) {
+    _grades = grades;
+    _saveGrades();
+  }
+
+  void setGradesForCourse(String course, List<Grade> grades) {
+    _grades[course] = grades;
+    _saveGrades();
+  }
 
   List<Course> get courses => _courses;
 
-  set courses(List<Course> value) {
-    _courses = value;
+  set courses(List<Course> courses) {
+    _courses = courses;
     _saveCourses();
   }
 
-  DataPersistence(this.prefs) {
-    _courses = _loadCourses();
+  Map<String, List<Grade>> _loadGrades() {
+    var gradesStr = prefs.getString('persisted_grades_v2');
+    if (gradesStr == null || gradesStr.isEmpty || gradesStr == 'null') {
+      gradesStr = '{}';
+    }
+
+    var out = <String, List<Grade>>{};
+
+    var dynCourses = Map<String, dynamic>.from(
+        jsonDecode(gradesStr) as Map<String, dynamic>);
+    dynCourses.forEach((String course, dynamic gradesListDyn) {
+      var grades = <Grade>[];
+      var gradesList = List<dynamic>.from(gradesListDyn as List);
+
+      gradesList.forEach((dynamic grade) {
+        var dynGrade = grade as Map<String, dynamic>;
+        grades.add(
+          Grade(dynGrade.map((k, dynamic v) => MapEntry(k, v as String))),
+        );
+      });
+
+      out[course] = grades;
+    });
+
+    return out;
+  }
+
+  void _saveGrades() {
+    prefs.setString('persisted_grades_v2', jsonEncode(grades));
   }
 
   List<Course> _loadCourses() {
