@@ -4,57 +4,44 @@ import 'package:equatable/equatable.dart';
 import 'package:sis_loader/src/grade.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 
-import '../sis_loader.dart' show debugMocking;
+import '../sis_loader.dart' show SISLoader, debugMocking;
 import 'cookie_client.dart';
 
-class Course extends Equatable {
-  final CookieClient client;
-  final String gradesUrl;
-  final String courseName;
-  final String periodString;
-  final String teacherName;
-  final dynamic gradePercent;
-  final String gradeLetter;
+class CourseService {
+  final SISLoader sisLoader;
 
-  Course(
-      {this.client,
-      this.gradesUrl,
-      this.courseName,
-      this.periodString,
-      this.teacherName,
-      this.gradePercent,
-      this.gradeLetter});
+  CourseService(this.sisLoader);
 
-  Future<String> _gradePage() async {
-    return (await client.get(
-            Uri.parse('https://sis.palmbeachschools.org/focus/' + gradesUrl)))
+  Future<String> _gradePage(Course course) async {
+    return (await course.client.get(Uri.parse(
+            'https://sis.palmbeachschools.org/focus/' + course.gradesUrl)))
         .bodyAsString();
   }
 
-  Future<List<Grade>> getGrades() {
+  Future<List<Grade>> getGrades(Course course) {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
-        () => mock_data.GRADES[courseName],
+        () => mock_data.GRADES[course.courseName],
       );
     }
 
-    return _fetchGrades();
+    return _fetchGrades(course);
   }
 
-  Future<Map<String, String>> getCategoryWeights() {
+  Future<Map<String, String>> getCategoryWeights(Course course) {
     if (debugMocking) {
       return Future.delayed(
         Duration(seconds: 2),
-        () => mock_data.CATEGORY_WEIGHTS[courseName],
+        () => mock_data.CATEGORY_WEIGHTS[course.courseName],
       );
     }
 
-    return _fetchCategoryWeights();
+    return _fetchCategoryWeights(course);
   }
 
-  Future<List<Grade>> _fetchGrades() async {
-    var gradePage = await _gradePage();
+  Future<List<Grade>> _fetchGrades(Course course) async {
+    var gradePage = await _gradePage(course);
 
     Map<String, String> extractRowFields(
         String row, Map<String, String> headers) {
@@ -119,8 +106,8 @@ class Course extends Equatable {
         .toList();
   }
 
-  Future<Map<String, String>> _fetchCategoryWeights() async {
-    var gradePage = await _gradePage();
+  Future<Map<String, String>> _fetchCategoryWeights(Course course) async {
+    var gradePage = await _gradePage(course);
 
     var weightsTableMatch = RegExp(
             r'<TABLE width=100% border=0 cellpadding=0 cellspacing=0 class="DarkGradientBG'
@@ -159,6 +146,25 @@ class Course extends Equatable {
     }
     return out;
   }
+}
+
+class Course extends Equatable {
+  final CookieClient client;
+  final String gradesUrl;
+  final String courseName;
+  final String periodString;
+  final String teacherName;
+  final dynamic gradePercent;
+  final String gradeLetter;
+
+  Course(
+      {this.client,
+      this.gradesUrl,
+      this.courseName,
+      this.periodString,
+      this.teacherName,
+      this.gradePercent,
+      this.gradeLetter});
 
   @override
   String toString() {

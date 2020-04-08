@@ -22,7 +22,7 @@ Future<void> main() async {
   var o = {};
   for (var course in courses) {
     print('\n\n');
-    var grades = await course.getGrades();
+    var grades = await loader.courseService.getGrades(course);
     o[course.courseName] = grades;
 //    for (var grade in grades) {
 //      print(jsonEncode(grade, toEncodable: (value) {

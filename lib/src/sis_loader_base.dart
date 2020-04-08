@@ -15,9 +15,12 @@ bool debugMocking = false;
 
 class SISLoader {
   final CookieClient client;
+  CourseService _courseService;
   bool _loggedIn = false;
 
   SISLoader({@required this.client});
+
+  CourseService get courseService => _courseService ??= CourseService(this);
 
   String get sessionCookies {
     return json.encode(client.cookies, toEncodable: (value) {
