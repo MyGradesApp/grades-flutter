@@ -69,9 +69,9 @@ class App extends StatelessWidget {
             return Column(
               children: [
                 Expanded(child: child),
-                BlocBuilder<OfflineBloc, OfflineState>(
-                  builder: (BuildContext context, OfflineState state) {
-                    if (state.offline) {
+                BlocBuilder<OfflineBloc, bool>(
+                  builder: (BuildContext context, offline) {
+                    if (offline) {
                       return OfflineBar();
                     } else {
                       return Container();

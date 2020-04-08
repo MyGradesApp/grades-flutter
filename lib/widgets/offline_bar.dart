@@ -16,10 +16,10 @@ class OfflineBar extends StatelessWidget {
         child: Container(
           width: double.infinity,
           color: Colors.orange,
-          child: BlocBuilder<OfflineBloc, OfflineState>(
-            builder: (BuildContext context, OfflineState state) {
+          child: BlocBuilder<OfflineBloc, bool>(
+            builder: (BuildContext context, offline) {
               return Center(
-                child: Text('Offline: ${state.offline}'),
+                child: Text('Offline: ${offline}'),
               );
             },
           ),
