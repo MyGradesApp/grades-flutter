@@ -177,6 +177,28 @@ class Course extends Equatable {
     }.toString();
   }
 
+  factory Course.fromJson(Map<String, dynamic> json) {
+    return Course(
+      gradesUrl: json['gradesUrl'] as String,
+      courseName: json['courseName'] as String,
+      periodString: json['periodString'] as String,
+      teacherName: json['teacherName'] as String,
+      gradePercent: json['gradePercent'],
+      gradeLetter: json['gradeLetter'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    var out = <String, dynamic>{};
+    out['gradesUrl'] = gradesUrl;
+    out['courseName'] = courseName;
+    out['periodString'] = periodString;
+    out['teacherName'] = teacherName;
+    out['gradePercent'] = gradePercent;
+    out['gradeLetter'] = gradeLetter;
+    return out;
+  }
+
   @override
   List<Object> get props => [
         gradesUrl,
