@@ -6,6 +6,12 @@ import 'package:sis_loader/sis_loader.dart';
 import 'course_grades_view.dart';
 
 class CourseGradesScreen extends StatelessWidget {
+  final SISRepository _sisRepository;
+
+  CourseGradesScreen({@required SISRepository sisRepository})
+      : assert(sisRepository != null),
+        _sisRepository = sisRepository;
+
   @override
   Widget build(BuildContext context) {
     final course = ModalRoute.of(context).settings.arguments as Course;
@@ -18,6 +24,7 @@ class CourseGradesScreen extends StatelessWidget {
           BlocProvider<CourseGradesBloc>(
             create: (context) => CourseGradesBloc(
               course: course,
+              sisRepository: _sisRepository,
             )..add(FetchNetworkData()),
             child: CourseGradesView(),
           ),

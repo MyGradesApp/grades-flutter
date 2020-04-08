@@ -55,7 +55,7 @@ class App extends StatelessWidget {
               builder: (BuildContext context, OfflineState state) {
                 if (state.offline) {
                   return OfflineBar();
-                }else {
+                } else {
                   return Container();
                 }
               },
@@ -64,7 +64,9 @@ class App extends StatelessWidget {
         );
       },
       routes: {
-        '/course_grades': (context) => CourseGradesScreen(),
+        '/course_grades': (context) => CourseGradesScreen(
+              sisRepository: _sisRepository,
+            ),
         '/grade_info': (context) => GradeInfoScreen(),
         '/settings': (context) => SettingsScreen(),
         '/academic_info': (context) => BlocProvider(
