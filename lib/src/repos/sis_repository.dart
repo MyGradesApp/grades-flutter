@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:grade_core/grade_core.dart';
 import 'package:grade_core/src/errors.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,12 +11,16 @@ import '../blocs/offline/offline_bloc.dart';
 class SISRepository {
   final SharedPreferences prefs;
   final OfflineBloc _offlineBloc;
+  final DataPersistence _dataPersistence;
   bool _offline = false;
   SISLoader _sisLoader = SISLoader(client: CookieClient());
 
-  SISRepository(OfflineBloc offlineBloc, this.prefs)
+  SISRepository(
+      OfflineBloc offlineBloc, DataPersistence dataPersistence, this.prefs)
       : assert(offlineBloc != null),
-        _offlineBloc = offlineBloc {
+        assert(dataPersistence != null),
+        _offlineBloc = offlineBloc,
+        _dataPersistence = dataPersistence {
     _offlineBloc.listen((offline) {
       _offline = offline;
     });
@@ -35,7 +40,7 @@ class SISRepository {
   Future<List<Course>> getCourses() async {
     return await _offlineWrapper(
       _sisLoader.getCourses().timeout(Duration(seconds: 5)),
-      whenOffline: () => [],
+      whenOffline: () => _dataPersistence.courses,
     );
   }
 
