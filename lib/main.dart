@@ -27,6 +27,17 @@ void main() async {
               ..add(AppStarted()),
       ),
       BlocProvider(
+        create: (context) => ThemeBloc(
+          initialStateSource: () {
+            var themeStr = prefs.getString('theme');
+            return ThemeModeExt.fromString(themeStr) ?? ThemeMode.system;
+          },
+          stateSaver: (theme) {
+            prefs.setString('theme', theme.toPrefsString());
+          },
+        ),
+      ),
+      BlocProvider(
         create: (context) => offlineBloc,
       ),
     ],
@@ -47,42 +58,48 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SwiftGrade',
-      theme: ThemeData.dark(),
-      builder: (BuildContext context, Widget child) {
-        return Column(
-          children: [
-            Expanded(child: child),
-            BlocBuilder<OfflineBloc, OfflineState>(
-              builder: (BuildContext context, OfflineState state) {
-                if (state.offline) {
-                  return OfflineBar();
-                } else {
-                  return Container();
-                }
-              },
-            ),
-          ],
+    return BlocBuilder<ThemeBloc, ThemeMode>(
+      builder: (context, themeMode) {
+        return MaterialApp(
+          title: 'SwiftGrade',
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: themeMode,
+          builder: (BuildContext context, Widget child) {
+            return Column(
+              children: [
+                Expanded(child: child),
+                BlocBuilder<OfflineBloc, OfflineState>(
+                  builder: (BuildContext context, OfflineState state) {
+                    if (state.offline) {
+                      return OfflineBar();
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ],
+            );
+          },
+          routes: {
+            '/course_grades': (context) => CourseGradesScreen(
+                  sisRepository: _sisRepository,
+                ),
+            '/grade_info': (context) => GradeInfoScreen(),
+            '/settings': (context) => SettingsScreen(),
+            '/academic_info': (context) => BlocProvider(
+                  create: (context) =>
+                      AcademicInfoBloc(sisRepository: _sisRepository)
+                        ..add(FetchNetworkData()),
+                  child: AcademicInfoScreen(),
+                ),
+          },
+          home: AppRoot(
+            sisRepository: _sisRepository,
+            prefs: prefs,
+          ),
         );
       },
-      routes: {
-        '/course_grades': (context) => CourseGradesScreen(
-              sisRepository: _sisRepository,
-            ),
-        '/grade_info': (context) => GradeInfoScreen(),
-        '/settings': (context) => SettingsScreen(),
-        '/academic_info': (context) => BlocProvider(
-              create: (context) =>
-                  AcademicInfoBloc(sisRepository: _sisRepository)
-                    ..add(FetchNetworkData()),
-              child: AcademicInfoScreen(),
-            ),
-      },
-      home: AppRoot(
-        sisRepository: _sisRepository,
-        prefs: prefs,
-      ),
     );
   }
 }

@@ -17,7 +17,17 @@ class SettingsScreen extends StatelessWidget {
               Navigator.pop(context);
             },
             child: Text('Log out'),
-          )
+          ),
+          RaisedButton(
+            onPressed: () {
+              BlocProvider.of<ThemeBloc>(context).add(AdvanceTheme());
+            },
+            child: BlocBuilder<ThemeBloc, ThemeMode>(
+              builder: (context, themeMode) {
+                return Text('Theme: ${themeMode.toHumanString()}');
+              },
+            ),
+          ),
         ],
       ),
     );
