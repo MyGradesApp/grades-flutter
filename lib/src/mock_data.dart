@@ -3,7 +3,6 @@ import 'package:sis_loader/src/absences.dart';
 
 final COURSES = [
   Course(
-    client: null,
     gradesUrl: '',
     courseName: 'US History',
     periodString: '01 01',
@@ -12,7 +11,6 @@ final COURSES = [
     gradeLetter: 'B',
   ),
   Course(
-    client: null,
     gradesUrl: '',
     courseName: 'AP Bio',
     periodString: '04 04',
@@ -21,7 +19,6 @@ final COURSES = [
     gradeLetter: 'A',
   ),
   Course(
-    client: null,
     gradesUrl: '',
     courseName: 'Astronomy Honors',
     periodString: '05 05',
@@ -30,7 +27,6 @@ final COURSES = [
     gradeLetter: 'A',
   ),
   Course(
-    client: null,
     gradesUrl: '',
     courseName: 'US Gov',
     periodString: '02 02',
@@ -39,7 +35,6 @@ final COURSES = [
     gradeLetter: 'B',
   ),
   Course(
-    client: null,
     gradesUrl: '',
     courseName: 'English Lang Honors',
     periodString: '03 03',

@@ -13,7 +13,7 @@ class CourseService {
   CourseService(this.sisLoader);
 
   Future<String> _gradePage(Course course) async {
-    return (await course.client.get(Uri.parse(
+    return (await sisLoader.client.get(Uri.parse(
             'https://sis.palmbeachschools.org/focus/' + course.gradesUrl)))
         .bodyAsString();
   }
@@ -149,7 +149,6 @@ class CourseService {
 }
 
 class Course extends Equatable {
-  final CookieClient client;
   final String gradesUrl;
   final String courseName;
   final String periodString;
@@ -157,14 +156,14 @@ class Course extends Equatable {
   final dynamic gradePercent;
   final String gradeLetter;
 
-  Course(
-      {this.client,
-      this.gradesUrl,
-      this.courseName,
-      this.periodString,
-      this.teacherName,
-      this.gradePercent,
-      this.gradeLetter});
+  Course({
+    this.gradesUrl,
+    this.courseName,
+    this.periodString,
+    this.teacherName,
+    this.gradePercent,
+    this.gradeLetter,
+  });
 
   @override
   String toString() {
@@ -180,7 +179,6 @@ class Course extends Equatable {
 
   @override
   List<Object> get props => [
-        client,
         gradesUrl,
         courseName,
         periodString,

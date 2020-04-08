@@ -205,7 +205,7 @@ class SISLoader {
           teacherName: match[4],
           gradePercent: percent ?? gradeParts[0],
           gradeLetter: gradeParts.length > 1 ? gradeParts[1] : null,
-          client: client);
+      );
     }).toList();
 
     return courses;
