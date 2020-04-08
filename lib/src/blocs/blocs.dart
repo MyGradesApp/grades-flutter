@@ -9,3 +9,4 @@ export 'feed/upcoming/upcoming_bloc.dart';
 export 'login/login_bloc.dart';
 export 'network_action_bloc/network_action_bloc.dart';
 export 'offline/offline_bloc.dart';
+export 'theme/theme_bloc.dart';
