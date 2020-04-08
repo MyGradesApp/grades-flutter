@@ -8,7 +8,10 @@ part 'network_action_state.dart';
 
 abstract class NetworkActionBloc<D>
     extends Bloc<NetworkActionEvent, NetworkActionState> {
+  final String Function(D) format;
   Future<D> fetch();
+
+  NetworkActionBloc({this.format});
 
   @override
   NetworkActionState get initialState => NetworkLoading();
@@ -21,14 +24,14 @@ abstract class NetworkActionBloc<D>
       yield NetworkLoading();
       try {
         var data = await fetch();
-        yield NetworkLoaded<D>(data);
+        yield NetworkLoaded<D>(data, format: format);
       } catch (_) {
         yield NetworkError();
       }
     } else if (event is RefreshNetworkData) {
       try {
         var data = await fetch();
-        yield NetworkLoaded<D>(data);
+        yield NetworkLoaded<D>(data, format: format);
       } catch (_) {
         yield NetworkError();
       }

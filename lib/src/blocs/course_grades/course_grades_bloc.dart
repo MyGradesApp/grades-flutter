@@ -14,7 +14,8 @@ class CourseGradesBloc extends NetworkActionBloc<List<Grade>> {
   })  : assert(sisRepository != null),
         assert(course != null),
         _sisRepository = sisRepository,
-        _course = course;
+        _course = course,
+        super(format: (g) => 'grades.length: ${g.length}');
 
   @override
   Future<List<Grade>> fetch() async {

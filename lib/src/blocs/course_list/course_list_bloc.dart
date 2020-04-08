@@ -9,7 +9,8 @@ class CourseListBloc extends NetworkActionBloc<List<Course>> {
 
   CourseListBloc({@required SISRepository sisRepository})
       : assert(sisRepository != null),
-        _sisRepository = sisRepository;
+        _sisRepository = sisRepository,
+        super(format: (d) => 'courses.length: ${d.length}');
 
   @override
   Future<List<Course>> fetch() async {

@@ -7,16 +7,26 @@ abstract class NetworkActionState {
 
 class NetworkLoading extends NetworkActionState {
   const NetworkLoading();
-}
-
-class NetworkLoaded<D> extends NetworkActionState {
-  final D data;
-
-  const NetworkLoaded(this.data);
 
   @override
   String toString() {
-    return 'NetworkLoaded{data: $data}';
+    return 'NetworkLoading{}';
+  }
+}
+
+class NetworkLoaded<D> extends NetworkActionState {
+  final String Function(D) format;
+  final D data;
+
+  const NetworkLoaded(this.data, {this.format});
+
+  @override
+  String toString() {
+    if (format != null) {
+      return 'NetworkLoaded{${format(data)}}';
+    } else {
+      return 'NetworkLoaded{data: $data}';
+    }
   }
 }
 
