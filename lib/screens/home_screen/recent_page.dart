@@ -10,7 +10,8 @@ class RecentPage extends StatefulWidget {
   _RecentPageState createState() => _RecentPageState();
 }
 
-class _RecentPageState extends State<RecentPage> {
+class _RecentPageState extends State<RecentPage>
+    with AutomaticKeepAliveClientMixin<RecentPage> {
   Completer<void> _refreshCompleter = Completer<void>();
   bool firstLoad = true;
 
@@ -71,4 +72,7 @@ class _RecentPageState extends State<RecentPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
