@@ -27,6 +27,9 @@ class _CourseListPageState extends State<CourseListPage> {
             _refreshCompleter = Completer();
             RepositoryProvider.of<DataPersistence>(context).courses =
                 state.data;
+          } else if (state is NetworkError) {
+            _refreshCompleter?.complete();
+            _refreshCompleter = Completer();
           }
         },
         builder: (context, state) {
