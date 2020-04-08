@@ -16,8 +16,8 @@ class SISRepository {
   SISRepository(OfflineBloc offlineBloc, this.prefs)
       : assert(offlineBloc != null),
         _offlineBloc = offlineBloc {
-    _offlineBloc.listen((state) {
-      _offline = state.offline;
+    _offlineBloc.listen((offline) {
+      _offline = offline;
     });
   }
 
