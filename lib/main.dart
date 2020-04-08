@@ -18,12 +18,12 @@ void main() async {
 
   var offlineBloc = OfflineBloc();
   var prefs = await SharedPreferences.getInstance();
-  var sisRepository = SISRepository(offlineBloc, prefs);
-  var dataPersistenceRepository = DataPersistence(prefs);
+  var dataPersistence = DataPersistence(prefs);
+  var sisRepository = SISRepository(offlineBloc, dataPersistence, prefs);
 
   runApp(MultiRepositoryProvider(
     providers: [
-      RepositoryProvider(create: (_) => dataPersistenceRepository),
+      RepositoryProvider(create: (_) => dataPersistence),
       RepositoryProvider(create: (_) => sisRepository)
     ],
     child: MultiBlocProvider(

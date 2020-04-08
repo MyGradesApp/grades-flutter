@@ -18,7 +18,8 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, dynamic>{});
     prefs = await SharedPreferences.getInstance();
     var offlineBloc = OfflineBloc();
-    var sisRepository = SISRepository(offlineBloc, prefs);
+    var dataPersistence = DataPersistence(prefs);
+    var sisRepository = SISRepository(offlineBloc, dataPersistence, prefs);
 
     await tester.pumpWidget(MultiBlocProvider(
       providers: [
