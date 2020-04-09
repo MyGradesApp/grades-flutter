@@ -20,10 +20,7 @@ class CourseService {
 
   Future<List<Grade>> getGrades(Course course) {
     if (debugMocking) {
-      return Future.delayed(
-        Duration(seconds: 2),
-        () => mock_data.GRADES[course.courseName],
-      );
+      return Future.value(mock_data.GRADES[course.courseName]);
     }
 
     return _fetchGrades(course);
@@ -31,10 +28,7 @@ class CourseService {
 
   Future<Map<String, String>> getCategoryWeights(Course course) {
     if (debugMocking) {
-      return Future.delayed(
-        Duration(seconds: 2),
-        () => mock_data.CATEGORY_WEIGHTS[course.courseName],
-      );
+      return Future.value(mock_data.CATEGORY_WEIGHTS[course.courseName]);
     }
 
     return _fetchCategoryWeights(course);

@@ -45,9 +45,7 @@ class SISLoader {
     if (username == 's2558161d' && password == 'figure51') {
       debugMocking = true;
       _loggedIn = true;
-      return Future.delayed(
-        Duration(seconds: 3),
-      );
+      return Future.value();
     } else {
       debugMocking = false;
     }
@@ -164,7 +162,7 @@ class SISLoader {
     assert(_loggedIn);
 
     if (debugMocking) {
-      return Future.delayed(Duration(seconds: 2), () => mock_data.COURSES);
+      return Future.value(mock_data.COURSES);
     }
 
     var portalResponse = await client.get(Uri.parse(
@@ -199,12 +197,12 @@ class SISLoader {
       }
 
       return Course(
-          gradesUrl: match[1],
-          courseName: match[2],
-          periodString: match[3],
-          teacherName: match[4],
-          gradePercent: percent ?? gradeParts[0],
-          gradeLetter: gradeParts.length > 1 ? gradeParts[1] : null,
+        gradesUrl: match[1],
+        courseName: match[2],
+        periodString: match[3],
+        teacherName: match[4],
+        gradePercent: percent ?? gradeParts[0],
+        gradeLetter: gradeParts.length > 1 ? gradeParts[1] : null,
       );
     }).toList();
 
@@ -215,7 +213,7 @@ class SISLoader {
     assert(_loggedIn);
 
     if (debugMocking) {
-      return Future.delayed(Duration(seconds: 2), () => mock_data.RAW_PROFILE);
+      return Future.value(mock_data.RAW_PROFILE);
     }
 
     var graduationReqsRequest = await client.get(Uri.parse(
@@ -263,7 +261,7 @@ class SISLoader {
 
   Future<Profile> getUserProfile() async {
     if (debugMocking) {
-      return Future.delayed(Duration(seconds: 2), () => mock_data.PROFILE);
+      return Future.value(mock_data.PROFILE);
     }
     var rawProfile = (await getRawUserProfile())['Top'] as Map<String, dynamic>;
 
@@ -336,7 +334,7 @@ class SISLoader {
 
   Future<String> getName() async {
     if (debugMocking) {
-      return Future.delayed(Duration(seconds: 2), () => mock_data.NAME);
+      return Future.value(mock_data.NAME);
     }
 
     var nameRequest = await client.get(Uri.parse(
@@ -352,7 +350,7 @@ class SISLoader {
 
   Future<Absences> getAbsences() async {
     if (debugMocking) {
-      return Future.delayed(Duration(seconds: 2), () => mock_data.ABSENCES);
+      return Future.value(mock_data.ABSENCES);
     }
 
     var absencesRequest = await client.get(Uri.parse(
