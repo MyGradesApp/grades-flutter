@@ -40,6 +40,16 @@ class _CourseGradesViewState extends State<CourseGradesView> {
             return Text('An error occured');
           }
           if (state is NetworkLoaded<List<Grade>>) {
+            // Data persistence has no saved data for this course
+            if (state.data == null) {
+              return SizedBox.expand(
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Text('No saved data for this course'),
+                ),
+              );
+            }
+
             return ListView.builder(
               itemCount: state.data.length,
               itemBuilder: (context, i) {
