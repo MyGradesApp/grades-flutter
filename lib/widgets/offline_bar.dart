@@ -19,7 +19,33 @@ class OfflineBar extends StatelessWidget {
           child: BlocBuilder<OfflineBloc, OfflineState>(
             builder: (context, state) {
               return Center(
-                child: Text('Offline'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text('Offline'),
+                    ),
+                    if (state.loggingIn)
+                      Row(
+                        children: <Widget>[
+                          SizedBox(width: 10),
+                          Text('-'),
+                          SizedBox(width: 10),
+                          Text('Logging in: '),
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.lightBlueAccent,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               );
             },
           ),
