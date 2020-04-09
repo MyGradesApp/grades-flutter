@@ -4,19 +4,20 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'offline_event.dart';
+part 'offline_state.dart';
 
-class OfflineBloc extends Bloc<OfflineEvent, bool> {
+class OfflineBloc extends Bloc<OfflineEvent, OfflineState> {
   @override
-  bool get initialState => false;
+  OfflineState get initialState => OfflineState(false, false);
 
   @override
-  Stream<bool> mapEventToState(
+  Stream<OfflineState> mapEventToState(
     OfflineEvent event,
   ) async* {
     if (event is NetworkOfflineEvent) {
-      yield true;
+      yield state.update(offline: true);
     } else if (event is NetworkOnlineEvent) {
-      yield false;
+      yield state.update(offline: false);
     }
   }
 }

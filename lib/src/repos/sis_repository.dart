@@ -31,8 +31,8 @@ class SISRepository {
     if (sisLoaderBuilder != null) {
       _sisLoader = sisLoaderBuilder();
     }
-    _offlineBloc.listen((offline) {
-      _offline = offline;
+    _offlineBloc.listen((state) {
+      _offline = state.offline;
     });
   }
 
