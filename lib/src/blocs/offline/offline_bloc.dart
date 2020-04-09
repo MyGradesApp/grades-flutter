@@ -17,7 +17,11 @@ class OfflineBloc extends Bloc<OfflineEvent, OfflineState> {
     if (event is NetworkOfflineEvent) {
       yield state.update(offline: true);
     } else if (event is NetworkOnlineEvent) {
-      yield state.update(offline: false);
+      yield state.update(offline: false, loggingIn: false);
+    } else if (event is LoggingInEvent) {
+      yield state.update(loggingIn: true);
+    } else if (event is StoppedLoggingInEvent) {
+      yield state.update(loggingIn: false);
     }
   }
 }

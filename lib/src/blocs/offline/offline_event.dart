@@ -10,3 +10,7 @@ abstract class OfflineEvent extends Equatable {
 class NetworkOnlineEvent extends OfflineEvent {}
 
 class NetworkOfflineEvent extends OfflineEvent {}
+
+class LoggingInEvent extends OfflineEvent {}
+
+class StoppedLoggingInEvent extends OfflineEvent {}

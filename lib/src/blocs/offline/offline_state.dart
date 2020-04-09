@@ -17,5 +17,10 @@ class OfflineState extends Equatable {
   }
 
   @override
-  List<Object> get props => [offline];
+  List<Object> get props => [offline, loggingIn];
+
+  @override
+  String toString() {
+    return 'OfflineState{offline: $offline, loggingIn: $loggingIn}';
+  }
 }

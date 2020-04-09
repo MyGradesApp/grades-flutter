@@ -102,6 +102,7 @@ class SISRepository {
 
   Future<bool> _attemptLogin() async {
     try {
+      _offlineBloc.add(LoggingInEvent());
       // TODO: Prefs should be abstracted out
       var username = prefs.getString('sis_username');
       var password = prefs.getString('sis_password');
@@ -109,6 +110,7 @@ class SISRepository {
       _offlineBloc.add(NetworkOnlineEvent());
       return true;
     } catch (e) {
+      _offlineBloc.add(StoppedLoggingInEvent());
       if (isHttpError(e)) {
         return false;
       }
