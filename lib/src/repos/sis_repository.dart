@@ -15,14 +15,22 @@ class SISRepository {
   final OfflineBloc _offlineBloc;
   final DataPersistence _dataPersistence;
   bool _offline = false;
-  SISLoader _sisLoader = SISLoader(client: CookieClient());
+  SISLoader Function() sisLoaderBuilder;
+  SISLoader _sisLoader;
+
+  @visibleForTesting
+  bool get offline => _offline;
 
   SISRepository(
-      OfflineBloc offlineBloc, DataPersistence dataPersistence, this.prefs)
+      OfflineBloc offlineBloc, DataPersistence dataPersistence, this.prefs,
+      {this.sisLoaderBuilder})
       : assert(offlineBloc != null),
         assert(dataPersistence != null),
         _offlineBloc = offlineBloc,
         _dataPersistence = dataPersistence {
+    if (sisLoaderBuilder != null) {
+      _sisLoader = sisLoaderBuilder();
+    }
     _offlineBloc.listen((offline) {
       _offline = offline;
     });
@@ -31,7 +39,12 @@ class SISRepository {
   SISLoader get sisLoader => _sisLoader;
 
   Future<void> login(String username, String password, [String session]) async {
-    var loader = SISLoader(client: CookieClient());
+    SISLoader loader;
+    if (sisLoaderBuilder != null) {
+      loader = sisLoaderBuilder();
+    } else {
+      loader = SISLoader(client: CookieClient());
+    }
     if (session != null) {
       loader.sessionCookies = session;
     }

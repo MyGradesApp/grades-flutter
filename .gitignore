@@ -15,3 +15,6 @@ build/
 doc/api/
 /.idea/
 *.iml
+
+## Coverage
+/coverage/
