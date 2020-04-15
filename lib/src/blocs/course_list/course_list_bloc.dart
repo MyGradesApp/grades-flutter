@@ -13,7 +13,7 @@ class CourseListBloc extends NetworkActionBloc<List<Course>> {
         super(format: (d) => 'courses.length: ${d.length}');
 
   @override
-  Future<List<Course>> fetch() async {
-    return await _sisRepository.getCourses();
+  Future<List<Course>> fetch(bool refresh) async {
+    return await _sisRepository.getCourses(refresh: refresh);
   }
 }

@@ -30,13 +30,13 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
   ) async* {
     if (event is FetchData) {
       yield RecentLoading.empty();
-      yield* _fetchCourseData();
+      yield* _fetchCourseData(refresh: false);
     } else if (event is RefreshData) {
       if (state is RecentLoaded) {
         // Preserve the currently loaded courses, we will update the underlying map
         // with new data
         yield RecentLoading((state as RecentLoaded).courses);
-        yield* _fetchCourseData();
+        yield* _fetchCourseData(refresh: true);
       }
     } else if (event is GradesLoaded) {
       yield* _mapGradeLoadedToState(event);
@@ -45,12 +45,12 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
     }
   }
 
-  Stream<RecentState> _fetchCourseData() async* {
-    var courses = await _sisRepository.getCourses();
+  Stream<RecentState> _fetchCourseData({@required bool refresh}) async* {
+    var courses = await _sisRepository.getCourses(refresh: refresh);
 
     await _courseFetchingSubscription?.cancel();
     _courseFetchingSubscription =
-        fetchCourseGrades(_sisRepository, courses, isGradeRecent)
+        fetchCourseGrades(_sisRepository, courses, isGradeRecent, refresh)
             .listen((event) => add(event));
   }
 

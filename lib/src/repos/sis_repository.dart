@@ -10,6 +10,13 @@ import '../blocs/offline/offline_bloc.dart';
 
 const Duration TIMEOUT = Duration(seconds: 5);
 
+const COURSES = 'courses';
+const ACADEMIC_INFO = 'academic_info';
+
+String keyForGrade(Course course) {
+  return 'grades_${course.courseName}';
+}
+
 class SISRepository {
   final SharedPreferences prefs;
   final OfflineBloc _offlineBloc;
@@ -17,6 +24,8 @@ class SISRepository {
   bool _offline = false;
   SISLoader Function() sisLoaderBuilder;
   SISLoader _sisLoader;
+
+  final Map<String, bool> _fetchedState = {};
 
   @visibleForTesting
   bool get offline => _offline;
@@ -52,19 +61,21 @@ class SISRepository {
     _sisLoader = loader;
   }
 
-  Future<List<Course>> getCourses() async {
-    return await _offlineWrapper(
+  Future<List<Course>> getCourses({bool refresh = false}) async {
+    return await _fetchWrapper(
       () async {
         var courses = await _sisLoader.getCourses();
         _dataPersistence.courses = courses;
         return courses;
       },
       whenOffline: () => _dataPersistence.courses,
+      key: COURSES,
+      refresh: refresh,
     );
   }
 
-  Future<AcademicInfo> getAcademicInfo() async {
-    return await _offlineWrapper(
+  Future<AcademicInfo> getAcademicInfo({bool refresh = false}) async {
+    return await _fetchWrapper(
       () async {
         var academicInfo = AcademicInfo(
           await sisLoader.getUserProfile(),
@@ -74,22 +85,29 @@ class SISRepository {
         return academicInfo;
       },
       whenOffline: () => _dataPersistence.academicInfo,
+      key: ACADEMIC_INFO,
+      refresh: refresh,
     );
   }
 
-  Future<List<Grade>> getCourseGrades(Course course) async {
-    return await _offlineWrapper(
+  Future<List<Grade>> getCourseGrades(Course course,
+      {bool refresh = false}) async {
+    return await _fetchWrapper(
       () async {
         var grades = await _sisLoader.courseService.getGrades(course);
         _dataPersistence.setGradesForCourse(course.courseName, grades);
         return grades;
       },
       whenOffline: () => _dataPersistence.grades[course.courseName],
+      key: keyForGrade(course),
+      refresh: refresh,
     );
   }
 
-  Future<T> _offlineWrapper<T>(Future<T> Function() it,
-      {@required T Function() whenOffline}) async {
+  Future<T> _fetchWrapper<T>(Future<T> Function() it,
+      {@required T Function() whenOffline,
+      @required String key,
+      @required bool refresh}) async {
     assert(whenOffline != null);
     if (_offline) {
       var loggedIn = await _attemptLogin();
@@ -97,6 +115,9 @@ class SISRepository {
         // Return offline data
         return whenOffline();
       }
+    }
+    if (_fetchedState[key] ?? false || !refresh) {
+      return whenOffline();
     }
     try {
       return await (it()?.timeout(TIMEOUT));

@@ -11,7 +11,7 @@ class AcademicInfoBloc extends NetworkActionBloc<AcademicInfo> {
         _sisRepository = sisRepository;
 
   @override
-  Future<AcademicInfo> fetch() async {
-    return await _sisRepository.getAcademicInfo();
+  Future<AcademicInfo> fetch(bool refresh) async {
+    return await _sisRepository.getAcademicInfo(refresh: refresh);
   }
 }

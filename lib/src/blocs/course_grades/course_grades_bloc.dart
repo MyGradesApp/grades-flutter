@@ -20,7 +20,7 @@ class CourseGradesBloc extends NetworkActionBloc<List<Grade>> {
   Course get course => _course;
 
   @override
-  Future<List<Grade>> fetch() async {
-    return await _sisRepository.getCourseGrades(_course);
+  Future<List<Grade>> fetch(bool refresh) async {
+    return await _sisRepository.getCourseGrades(_course, refresh: refresh);
   }
 }

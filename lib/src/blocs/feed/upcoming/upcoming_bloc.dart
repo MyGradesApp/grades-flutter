@@ -31,13 +31,13 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
   ) async* {
     if (event is FetchData) {
       yield UpcomingLoading.empty();
-      yield* _fetchCourseData();
+      yield* _fetchCourseData(refresh: false);
     } else if (event is RefreshData) {
       if (state is UpcomingLoaded) {
         // Preserve the currently loaded courses, we will update the underlying map
         // with new data
         yield UpcomingLoading((state as UpcomingLoaded).groups);
-        yield* _fetchCourseData();
+        yield* _fetchCourseData(refresh: true);
       }
     } else if (event is GradesLoaded) {
       yield* _mapGradeLoadedToState(event);
@@ -46,12 +46,12 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
     }
   }
 
-  Stream<UpcomingState> _fetchCourseData() async* {
+  Stream<UpcomingState> _fetchCourseData({@required bool refresh}) async* {
     var courses = await _sisRepository.getCourses();
 
     await _courseFetchingSubscription?.cancel();
     _courseFetchingSubscription =
-        fetchCourseGrades(_sisRepository, courses, isGradeUpcoming)
+        fetchCourseGrades(_sisRepository, courses, isGradeUpcoming, refresh)
             .listen((event) => add(event));
   }
 

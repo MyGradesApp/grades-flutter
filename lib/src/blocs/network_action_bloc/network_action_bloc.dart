@@ -11,7 +11,7 @@ abstract class NetworkActionBloc<D>
     extends Bloc<NetworkActionEvent, NetworkActionState> {
   final String Function(D) format;
 
-  Future<D> fetch();
+  Future<D> fetch(bool refresh);
 
   NetworkActionBloc({this.format});
 
@@ -22,11 +22,15 @@ abstract class NetworkActionBloc<D>
   Stream<NetworkActionState> mapEventToState(
     NetworkActionEvent event,
   ) async* {
+    bool refresh;
     if (event is FetchNetworkData) {
       yield NetworkLoading();
+      refresh = false;
+    } else if (event is RefreshNetworkData) {
+      refresh = true;
     }
     try {
-      var data = await fetch();
+      var data = await fetch(refresh);
       yield NetworkLoaded<D>(data, format: format);
     } catch (e) {
       if (isHttpError(e)) {
