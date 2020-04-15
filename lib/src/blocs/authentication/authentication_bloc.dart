@@ -5,7 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../errors.dart';
 import '../../repos/sis_repository.dart';
+import '../blocs.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -14,11 +16,16 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final SharedPreferences prefs;
   final SISRepository _sisRepository;
+  final OfflineBloc _offlineBloc;
 
   AuthenticationBloc(
-      {@required SISRepository sisRepository, @required this.prefs})
+      {@required SISRepository sisRepository,
+      @required OfflineBloc offlineBloc,
+      @required this.prefs})
       : assert(sisRepository != null),
-        _sisRepository = sisRepository;
+        assert(offlineBloc != null),
+        _sisRepository = sisRepository,
+        _offlineBloc = offlineBloc;
 
   @override
   AuthenticationState get initialState => Uninitialized();
@@ -28,20 +35,36 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      try {
-        await _sisRepository.login(
-          prefs.getString('sis_username'),
-          prefs.getString('sis_password'),
-          prefs.getString('sis_session'),
-        );
-        yield Authenticated();
-      } catch (_) {
+      var username = prefs.getString('sis_username');
+      var password = prefs.getString('sis_password');
+      var session = prefs.getString('sis_session');
+      if (!isEmpty(username) && !isEmpty(password)) {
+        try {
+          await _sisRepository.login(
+            username,
+            password,
+            session,
+          );
+          yield Authenticated.online();
+        } catch (e) {
+          if (isHttpError(e)) {
+            _offlineBloc.add(NetworkOfflineEvent());
+            yield Authenticated.offline();
+          } else {
+            yield Unauthenticated();
+          }
+        }
+      } else {
         yield Unauthenticated();
       }
     } else if (event is LoggedIn) {
-      yield Authenticated();
+      yield Authenticated.online();
     } else if (event is LoggedOut) {
       yield Unauthenticated();
     }
   }
+}
+
+bool isEmpty(String value) {
+  return value == null || value.isEmpty;
 }
