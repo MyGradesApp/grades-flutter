@@ -54,29 +54,32 @@ class SISRepository {
 
   Future<List<Course>> getCourses() async {
     return await _offlineWrapper(
-      _sisLoader?.getCourses(),
+      () => _sisLoader.getCourses(),
       whenOffline: () => _dataPersistence.courses,
     );
   }
 
   Future<AcademicInfo> getAcademicInfo() async {
     return await _offlineWrapper(
-      Future.value(AcademicInfo(
-        await sisLoader?.getUserProfile(),
-        await sisLoader?.getAbsences(),
-      )),
+      () async {
+        var academicInfo = AcademicInfo(
+          await sisLoader.getUserProfile(),
+          await sisLoader.getAbsences(),
+        );
+        return academicInfo;
+      },
       whenOffline: () => null,
     );
   }
 
   Future<List<Grade>> getCourseGrades(Course course) async {
     return await _offlineWrapper(
-      _sisLoader?.courseService?.getGrades(course),
+      () => _sisLoader.courseService.getGrades(course),
       whenOffline: () => _dataPersistence.grades[course.courseName],
     );
   }
 
-  Future<T> _offlineWrapper<T>(Future<T> it,
+  Future<T> _offlineWrapper<T>(Future<T> Function() it,
       {@required T Function() whenOffline}) async {
     assert(whenOffline != null);
     if (_offline) {
@@ -87,9 +90,7 @@ class SISRepository {
       }
     }
     try {
-      return await (it?.timeout(TIMEOUT)?.then((T v) {
-        return v;
-      }));
+      return await (it()?.timeout(TIMEOUT));
     } catch (e) {
       if (isHttpError(e)) {
         _offlineBloc.add(NetworkOfflineEvent());
