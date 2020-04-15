@@ -89,7 +89,7 @@ void main() {
         Future<T> Function(SISRepository) test,
       ) async {
         var offlineBloc = MockOfflineBloc();
-        whenListen(offlineBloc, Stream.value(true));
+        whenListen(offlineBloc, Stream.value(OfflineState(true, false)));
 
         var repo = SISRepository(offlineBloc, dataPersist, prefs,
             sisLoaderBuilder: () => loader);
