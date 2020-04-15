@@ -24,9 +24,11 @@ void main() {
     await tester.pumpWidget(MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) =>
-              AuthenticationBloc(sisRepository: sisRepository, prefs: prefs)
-                ..add(AppStarted()),
+          create: (_) => AuthenticationBloc(
+            sisRepository: sisRepository,
+            offlineBloc: offlineBloc,
+            prefs: prefs,
+          )..add(AppStarted()),
         ),
         BlocProvider(
           create: (_) => ThemeBloc(
