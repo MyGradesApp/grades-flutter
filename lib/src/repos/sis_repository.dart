@@ -54,7 +54,11 @@ class SISRepository {
 
   Future<List<Course>> getCourses() async {
     return await _offlineWrapper(
-      () => _sisLoader.getCourses(),
+      () async {
+        var courses = await _sisLoader.getCourses();
+        _dataPersistence.courses = courses;
+        return courses;
+      },
       whenOffline: () => _dataPersistence.courses,
     );
   }
@@ -75,7 +79,11 @@ class SISRepository {
 
   Future<List<Grade>> getCourseGrades(Course course) async {
     return await _offlineWrapper(
-      () => _sisLoader.courseService.getGrades(course),
+      () async {
+        var grades = await _sisLoader.courseService.getGrades(course);
+        _dataPersistence.setGradesForCourse(course.courseName, grades);
+        return grades;
+      },
       whenOffline: () => _dataPersistence.grades[course.courseName],
     );
   }
