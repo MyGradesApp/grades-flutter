@@ -23,10 +23,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
       },
       child: BlocConsumer<CourseGradesBloc, NetworkActionState>(
         listener: (context, state) {
-          if (state is NetworkLoaded<List<Grade>>) {
-            RepositoryProvider.of<DataPersistence>(context)
-                .setGradesForCourse(bloc.course.courseName, state.data);
-          }
           if (state is NetworkLoaded || state is NetworkError) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
