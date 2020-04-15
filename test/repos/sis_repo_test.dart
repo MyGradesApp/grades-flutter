@@ -39,14 +39,14 @@ void main() {
     test('courses', () async {
       var repo = SISRepository(offlineBloc, dataPersist, prefs);
       await repo.login('s2558161d', 'figure51');
-      var courses = await repo.getCourses();
+      var _ = await repo.getCourses();
       // TODO: Check courses
     });
 
     test('grades', () async {
       var repo = SISRepository(offlineBloc, dataPersist, prefs);
       await repo.login('s2558161d', 'figure51');
-      var grades = await repo.getCourseGrades(Course(courseName: 'US History'));
+      var _ = await repo.getCourseGrades(Course(courseName: 'US History'));
       // TODO: Check grades
     });
 
@@ -75,7 +75,7 @@ void main() {
       var repo = SISRepository(offlineBloc, dataPersist, prefs,
           sisLoaderBuilder: () => loader);
       await repo.login('s2558161d', 'figure51');
-      var courses = await repo.getCourses();
+      var _ = await repo.getCourses();
       // TODO: Check courses
     });
 
