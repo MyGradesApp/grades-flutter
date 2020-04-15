@@ -19,4 +19,9 @@ class Profile extends Equatable {
         class_rank_numerator,
         class_rank_denominator
       ];
+
+  @override
+  String toString() {
+    return 'Profile{cumulative_gpa: $cumulative_gpa, cumulative_weighted_gpa: $cumulative_weighted_gpa, class_rank_numerator: $class_rank_numerator, class_rank_denominator: $class_rank_denominator}';
+  }
 }
