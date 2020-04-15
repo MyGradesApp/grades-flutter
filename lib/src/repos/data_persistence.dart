@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:grade_core/grade_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -7,10 +8,12 @@ class DataPersistence {
   final SharedPreferences prefs;
   Map<String, List<Grade>> _grades;
   List<Course> _courses;
+  AcademicInfo _academicInfo;
 
   DataPersistence(this.prefs) {
     _grades = _loadGrades();
     _courses = _loadCourses();
+    _academicInfo = _loadAcademicInfo();
   }
 
   Map<String, List<Grade>> get grades => _grades;
@@ -23,6 +26,13 @@ class DataPersistence {
   void setGradesForCourse(String course, List<Grade> grades) {
     _grades[course] = grades;
     _saveGrades();
+  }
+
+  AcademicInfo get academicInfo => _academicInfo;
+
+  void setAcademicInfo(AcademicInfo academicInfo) {
+    _academicInfo = academicInfo;
+    _saveAcademicInfo();
   }
 
   List<Course> get courses => _courses;
@@ -82,5 +92,21 @@ class DataPersistence {
 
   void _saveCourses() {
     prefs.setString('persisted_courses_v2', jsonEncode(courses));
+  }
+
+  AcademicInfo _loadAcademicInfo() {
+    var academicString = prefs.getString('persisted_academic_info_v2');
+    if (academicString == null ||
+        academicString.isEmpty ||
+        academicString == 'null') {
+      return null;
+    }
+    return AcademicInfo.fromJson(
+      jsonDecode(academicString) as Map<String, dynamic>,
+    );
+  }
+
+  void _saveAcademicInfo() {
+    prefs.setString('persisted_academic_info_v2', jsonEncode(_academicInfo));
   }
 }
