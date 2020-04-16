@@ -19,7 +19,7 @@ void main() async {
   var offlineBloc = OfflineBloc();
   var prefs = await SharedPreferences.getInstance();
   var dataPersistence = DataPersistence(prefs);
-  var sisRepository = SISRepository(offlineBloc, dataPersistence, prefs);
+  var sisRepository = SISRepository(offlineBloc, dataPersistence);
 
   runApp(MultiRepositoryProvider(
     providers: [
@@ -32,7 +32,6 @@ void main() async {
           create: (_) => AuthenticationBloc(
             sisRepository: sisRepository,
             offlineBloc: offlineBloc,
-            prefs: prefs,
           )..add(AppStarted()),
         ),
         BlocProvider(
@@ -52,17 +51,15 @@ void main() async {
       ],
       child: App(
         sisRepository: sisRepository,
-        prefs: prefs,
       ),
     ),
   ));
 }
 
 class App extends StatelessWidget {
-  final SharedPreferences prefs;
   final SISRepository _sisRepository;
 
-  App({@required SISRepository sisRepository, @required this.prefs})
+  App({@required SISRepository sisRepository})
       : assert(sisRepository != null),
         _sisRepository = sisRepository;
 
@@ -102,9 +99,7 @@ class App extends StatelessWidget {
                   child: AcademicInfoScreen(),
                 ),
           },
-          home: AppRoot(
-            prefs: prefs,
-          ),
+          home: AppRoot(),
         );
       },
     );
@@ -112,11 +107,8 @@ class App extends StatelessWidget {
 }
 
 class AppRoot extends StatelessWidget {
-  final SharedPreferences prefs;
-
   const AppRoot({
     Key key,
-    @required this.prefs,
   }) : super(key: key);
 
   @override
@@ -126,9 +118,7 @@ class AppRoot extends StatelessWidget {
         if (state is Uninitialized) {
           return SplashScreen();
         } else if (state is Unauthenticated) {
-          return LoginScreen(
-            prefs: prefs,
-          );
+          return LoginScreen();
         } else if (state is Authenticated) {
           return HomeScreen();
         }

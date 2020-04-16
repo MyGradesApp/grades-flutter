@@ -19,7 +19,7 @@ void main() {
     prefs = await SharedPreferences.getInstance();
     var offlineBloc = OfflineBloc();
     var dataPersistence = DataPersistence(prefs);
-    var sisRepository = SISRepository(offlineBloc, dataPersistence, prefs);
+    var sisRepository = SISRepository(offlineBloc, dataPersistence);
 
     await tester.pumpWidget(MultiBlocProvider(
       providers: [
@@ -27,7 +27,6 @@ void main() {
           create: (_) => AuthenticationBloc(
             sisRepository: sisRepository,
             offlineBloc: offlineBloc,
-            prefs: prefs,
           )..add(AppStarted()),
         ),
         BlocProvider(
@@ -42,7 +41,6 @@ void main() {
       ],
       child: App(
         sisRepository: sisRepository,
-        prefs: prefs,
       ),
     ));
   });
