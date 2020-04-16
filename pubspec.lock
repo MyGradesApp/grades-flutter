@@ -63,11 +63,11 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/flutter_bloc"
-      ref: "bloc-v3.0.0"
-      resolved-ref: e7aab9803b471a06adbc7ab8bc7d925f1979f3af
+      ref: "flutter_bloc-v3.2.0"
+      resolved-ref: "2f622fe63ba337019291c30ddb9cdde04c841ee7"
       url: "https://github.com/SwiftGrade/bloc"
     source: git
-    version: "3.0.0-dev.1"
+    version: "3.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

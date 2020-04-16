@@ -67,7 +67,7 @@ dependency_overrides:
   flutter_bloc:
     git:
       url: https://github.com/SwiftGrade/bloc
-      ref: bloc-v3.0.0
+      ref: flutter_bloc-v3.2.0
       path: packages/flutter_bloc
 
   nested:
