@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:grade_core/src/utilities/consts.dart';
+import 'package:grade_core/src/utilities/wrapped_secure_storage.dart';
 
 import '../../errors.dart';
 import '../../repos/sis_repository.dart';
@@ -14,15 +15,13 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final SharedPreferences prefs;
   final SISRepository _sisRepository;
   final OfflineBloc _offlineBloc;
 
-  AuthenticationBloc(
-      {@required SISRepository sisRepository,
-      @required OfflineBloc offlineBloc,
-      @required this.prefs})
-      : assert(sisRepository != null),
+  AuthenticationBloc({
+    @required SISRepository sisRepository,
+    @required OfflineBloc offlineBloc,
+  })  : assert(sisRepository != null),
         assert(offlineBloc != null),
         _sisRepository = sisRepository,
         _offlineBloc = offlineBloc;
@@ -35,9 +34,10 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      var username = prefs.getString('sis_username');
-      var password = prefs.getString('sis_password');
-      var session = prefs.getString('sis_session');
+      var secureStorage = WrappedSecureStorage();
+      var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
+      var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
+      var session = await secureStorage.read(key: AuthConst.SIS_SESSION_KEY);
       if (!isEmpty(username) && !isEmpty(password)) {
         try {
           await _sisRepository.login(

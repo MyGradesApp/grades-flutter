@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:mockito/mockito.dart';
@@ -18,19 +19,21 @@ class MockSISLoader extends Mock implements SISLoader {}
 class MockCourseService extends Mock implements CourseService {}
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues(<String, dynamic>{});
+
   var offlineBloc = MockOfflineBloc();
   var dataPersist = MockDataPersistence();
   when(dataPersist.grades).thenAnswer((_) => {});
-  var prefs = MockSharedPrefs();
 
   test('smoke test', () async {
-    var repo = SISRepository(offlineBloc, dataPersist, prefs);
+    var repo = SISRepository(offlineBloc, dataPersist);
     // Internal testing credentials
     await repo.login('s2558161d', 'figure51');
   });
 
   test('session token', () async {
-    var repo = SISRepository(offlineBloc, dataPersist, prefs);
+    var repo = SISRepository(offlineBloc, dataPersist);
     var token = '{"SESSID":"SESSID=fooBarBaz; Path=/home; Secure; HttpOnly"}';
     await repo.login('s2558161d', 'figure51', token);
     expect(repo.sisLoader.sessionCookies, token);
@@ -38,21 +41,21 @@ void main() {
 
   group('online', () {
     test('courses', () async {
-      var repo = SISRepository(offlineBloc, dataPersist, prefs);
+      var repo = SISRepository(offlineBloc, dataPersist);
       await repo.login('s2558161d', 'figure51');
       var _ = await repo.getCourses();
       // TODO: Check courses
     });
 
     test('grades', () async {
-      var repo = SISRepository(offlineBloc, dataPersist, prefs);
+      var repo = SISRepository(offlineBloc, dataPersist);
       await repo.login('s2558161d', 'figure51');
       var _ = await repo.getCourseGrades(Course(courseName: 'US History'));
       // TODO: Check grades
     });
 
     test('academic info', () async {
-      var repo = SISRepository(offlineBloc, dataPersist, prefs);
+      var repo = SISRepository(offlineBloc, dataPersist);
       await repo.login('s2558161d', 'figure51');
       var info = await repo.getAcademicInfo();
       expect(info.absences, Absences(days: 2, periods: 3));
@@ -73,7 +76,7 @@ void main() {
       var loader = MockSISLoader();
       when(loader.getCourses())
           .thenAnswer((_) => Future.error(HttpException('Fake exception')));
-      var repo = SISRepository(offlineBloc, dataPersist, prefs,
+      var repo = SISRepository(offlineBloc, dataPersist,
           sisLoaderBuilder: () => loader);
       await repo.login('s2558161d', 'figure51');
       var _ = await repo.getCourses();
@@ -92,7 +95,7 @@ void main() {
         var offlineBloc = MockOfflineBloc();
         whenListen(offlineBloc, Stream.value(OfflineState(true, false)));
 
-        var repo = SISRepository(offlineBloc, dataPersist, prefs,
+        var repo = SISRepository(offlineBloc, dataPersist,
             sisLoaderBuilder: () => loader);
         await repo.login('s2558161d', 'figure51');
         await test(repo);

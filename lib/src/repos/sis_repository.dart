@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:grade_core/grade_core.dart';
 import 'package:grade_core/src/errors.dart';
+import 'package:grade_core/src/utilities/consts.dart';
+import 'package:grade_core/src/utilities/wrapped_secure_storage.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 import '../blocs/offline/offline_bloc.dart';
@@ -18,7 +19,6 @@ String keyForGrade(Course course) {
 }
 
 class SISRepository {
-  final SharedPreferences prefs;
   final OfflineBloc _offlineBloc;
   final DataPersistence _dataPersistence;
   bool _offline = false;
@@ -30,8 +30,7 @@ class SISRepository {
   @visibleForTesting
   bool get offline => _offline;
 
-  SISRepository(
-      OfflineBloc offlineBloc, DataPersistence dataPersistence, this.prefs,
+  SISRepository(OfflineBloc offlineBloc, DataPersistence dataPersistence,
       {this.sisLoaderBuilder})
       : assert(offlineBloc != null),
         assert(dataPersistence != null),
@@ -137,9 +136,10 @@ class SISRepository {
   Future<bool> _attemptLogin() async {
     try {
       _offlineBloc.add(LoggingInEvent());
-      // TODO: Prefs should be abstracted out
-      var username = prefs.getString('sis_username');
-      var password = prefs.getString('sis_password');
+      // TODO: Storage should be abstracted out
+      var secureStorage = WrappedSecureStorage();
+      var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
+      var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
       await login(username, password);
       _offlineBloc.add(NetworkOnlineEvent());
       return true;

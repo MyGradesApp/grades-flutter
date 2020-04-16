@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:grade_core/src/utilities/consts.dart';
+import 'package:grade_core/src/utilities/wrapped_secure_storage.dart';
 
 import '../../repos/sis_repository.dart';
 
@@ -11,10 +12,9 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final SharedPreferences prefs;
   final SISRepository _sisRepository;
 
-  LoginBloc({@required SISRepository sisRepository, @required this.prefs})
+  LoginBloc({@required SISRepository sisRepository})
       : assert(sisRepository != null),
         _sisRepository = sisRepository;
 
@@ -29,8 +29,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginState.loading();
       try {
         await _sisRepository.login(event.username, event.password);
-        await prefs.setString('sis_username', event.username);
-        await prefs.setString('sis_password', event.password);
+        var secureStorage = WrappedSecureStorage();
+        await secureStorage.write(
+            key: AuthConst.SIS_USERNAME_KEY, value: event.username);
+        await secureStorage.write(
+            key: AuthConst.SIS_USERNAME_KEY, value: event.password);
         yield LoginState.success();
       } catch (e) {
         yield LoginState.failure(e);
