@@ -117,7 +117,10 @@ class SISRepository {
       }
     }
     if (_fetchedState[key] ?? false || !refresh) {
-      return whenOffline();
+      var offlineData = whenOffline();
+      if (offlineData != null) {
+        return offlineData;
+      }
     }
     try {
       return await (it()?.timeout(TIMEOUT));
