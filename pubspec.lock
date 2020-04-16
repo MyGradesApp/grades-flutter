@@ -11,9 +11,11 @@ packages:
   bloc:
     dependency: "direct main"
     description:
-      name: bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/bloc"
+      ref: "bloc-v3.0.0"
+      resolved-ref: e7aab9803b471a06adbc7ab8bc7d925f1979f3af
+      url: "https://github.com/SwiftGrade/bloc"
+    source: git
     version: "3.0.0"
   boolean_selector:
     dependency: transitive
@@ -46,9 +48,11 @@ packages:
   equatable:
     dependency: "direct main"
     description:
-      name: equatable
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "29325c16e1afe8c6d7a1f541fe5b3892c6b8c1d9"
+      url: "https://github.com/SwiftGrade/equatable"
+    source: git
     version: "1.1.1"
   flutter:
     dependency: "direct main"
@@ -58,10 +62,12 @@ packages:
   flutter_bloc:
     dependency: "direct main"
     description:
-      name: flutter_bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
+      path: "packages/flutter_bloc"
+      ref: "bloc-v3.0.0"
+      resolved-ref: e7aab9803b471a06adbc7ab8bc7d925f1979f3af
+      url: "https://github.com/SwiftGrade/bloc"
+    source: git
+    version: "3.0.0-dev.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -76,11 +82,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "16cba90"
-      resolved-ref: "16cba90391c3255986eba2bfc22adf71708888bb"
-      url: "https://github.com/Noskcaj19/font_awesome_flutter.git"
+      ref: master
+      resolved-ref: "4fd74f52c41690103c3f4e1b4ab01c76dfb931f2"
+      url: "https://github.com/SwiftGrade/font_awesome_flutter"
     source: git
-    version: "8.7.0"
+    version: "8.8.1"
   grade_core:
     dependency: "direct main"
     description:
@@ -124,11 +130,13 @@ packages:
     source: hosted
     version: "1.1.8"
   nested:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "1e8b280839744beb823feacce0df64a7e98be93a"
+      url: "https://github.com/SwiftGrade/nested"
+    source: git
     version: "0.0.4"
   path:
     dependency: transitive
@@ -145,18 +153,22 @@ packages:
     source: hosted
     version: "1.9.0"
   provider:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.4"
+      path: "."
+      ref: master
+      resolved-ref: "8ee4430415b6c43a0b5cf98c1b36f51396231ace"
+      url: "https://github.com/SwiftGrade/provider"
+    source: git
+    version: "4.0.5"
   quiver:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "298637e5b8c8518b10dc3941f826ea4c10329575"
+      url: "https://github.com/SwiftGrade/quiver-dart"
+    source: git
     version: "2.1.3"
   rxdart:
     dependency: transitive
@@ -251,9 +263,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d39ed10
+      ref: master
       resolved-ref: d39ed102dfe92b3b46d90e57395c80df333019e7
-      url: "https://github.com/Noskcaj19/tuple"
+      url: "https://github.com/SwiftGrade/tuple"
     source: git
     version: "1.0.3"
   typed_data:
