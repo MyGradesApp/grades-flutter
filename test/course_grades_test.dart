@@ -22,7 +22,8 @@ void main() async {
 
   void testCourseGradesBloc(List<Grade> data) async {
     var sisRepo = MockSISRepo();
-    when(sisRepo.getCourseGrades(course)).thenAnswer((_) => Future.value(data));
+    when(sisRepo.getCourseGrades(course, refresh: anyNamed('refresh')))
+        .thenAnswer((_) => Future.value(data));
     var bloc = CourseGradesBloc(sisRepository: sisRepo, course: course);
     bloc.add(FetchNetworkData());
 
@@ -67,7 +68,7 @@ void main() async {
 
   test('network failure', () async {
     var sisRepo = MockSISRepo();
-    when(sisRepo.getCourseGrades(course))
+    when(sisRepo.getCourseGrades(course, refresh: anyNamed('refresh')))
         .thenThrow(TimeoutException('Fake exception'));
     var bloc = CourseGradesBloc(sisRepository: sisRepo, course: course);
     bloc.add(FetchNetworkData());

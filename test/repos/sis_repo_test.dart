@@ -20,6 +20,7 @@ class MockCourseService extends Mock implements CourseService {}
 void main() {
   var offlineBloc = MockOfflineBloc();
   var dataPersist = MockDataPersistence();
+  when(dataPersist.grades).thenAnswer((_) => {});
   var prefs = MockSharedPrefs();
 
   test('smoke test', () async {
