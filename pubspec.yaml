@@ -40,7 +40,7 @@ dependency_overrides:
     git:
       url: https://github.com/SwiftGrade/bloc
       path: packages/bloc_test
-      ref: bloc-v3.0.0
+      ref: bloc_test-v3.1.0
 
   bloc:
     git:
