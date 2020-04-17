@@ -30,4 +30,13 @@ class NetworkLoaded<D> extends NetworkActionState {
   }
 }
 
-class NetworkError extends NetworkActionState {}
+class NetworkError extends NetworkActionState {
+  final dynamic error;
+
+  NetworkError(this.error);
+
+  @override
+  String toString() {
+    return 'NetworkError{error: $error}';
+  }
+}
