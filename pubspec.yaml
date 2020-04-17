@@ -12,6 +12,9 @@ dependencies:
   pedantic: ^1.9.0
   meta: ^1.1.8
 
+  sentry: ^3.0.1
+  package_info: ^0.4.0+16
+
   sis_loader:
     path: ../sis-loader
 
