@@ -34,6 +34,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             key: AuthConst.SIS_USERNAME_KEY, value: event.username);
         await secureStorage.write(
             key: AuthConst.SIS_USERNAME_KEY, value: event.password);
+        await secureStorage.write(
+            key: AuthConst.SIS_SESSION_KEY,
+            value: _sisRepository.sisLoader.sessionCookies);
         yield LoginState.success();
       } catch (e) {
         yield LoginState.failure(e);

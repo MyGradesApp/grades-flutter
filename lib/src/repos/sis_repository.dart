@@ -140,7 +140,8 @@ class SISRepository {
       var secureStorage = WrappedSecureStorage();
       var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
       var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
-      await login(username, password);
+      var session = await secureStorage.read(key: AuthConst.SIS_SESSION_KEY);
+      await login(username, password, session);
       _offlineBloc.add(NetworkOnlineEvent());
       return true;
     } catch (e) {

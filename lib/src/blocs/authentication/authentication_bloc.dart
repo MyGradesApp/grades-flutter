@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grade_core/src/utilities/consts.dart';
 import 'package:grade_core/src/utilities/wrapped_secure_storage.dart';
+import 'package:pedantic/pedantic.dart';
 
 import '../../errors.dart';
 import '../../repos/sis_repository.dart';
@@ -47,6 +48,9 @@ class AuthenticationBloc
             password,
             session,
           );
+          unawaited(secureStorage.write(
+              key: AuthConst.SIS_SESSION_KEY,
+              value: _sisRepository.sisLoader.sessionCookies));
           yield Authenticated.online();
         } catch (e) {
           if (isHttpError(e)) {
