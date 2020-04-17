@@ -38,7 +38,9 @@ class AuthenticationBloc
       var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
       var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
       var session = await secureStorage.read(key: AuthConst.SIS_SESSION_KEY);
-      if (!isEmpty(username) && !isEmpty(password)) {
+      if (isEmpty(username) || isEmpty(password)) {
+        yield Unauthenticated();
+      } else {
         try {
           await _sisRepository.login(
             username,
@@ -54,8 +56,6 @@ class AuthenticationBloc
             yield Unauthenticated();
           }
         }
-      } else {
-        yield Unauthenticated();
       }
     } else if (event is LoggedIn) {
       yield Authenticated.online();
