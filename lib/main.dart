@@ -16,6 +16,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
+  var package_info = await getPackageInfo();
+  // Used for sentry error reporting and settings page version number
+  GRADES_VERSION = '${package_info.version}+${package_info.buildNumber}';
+
   var offlineBloc = OfflineBloc();
   var prefs = await SharedPreferences.getInstance();
   var dataPersistence = DataPersistence(prefs);

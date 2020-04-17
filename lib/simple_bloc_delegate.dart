@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:grade_core/grade_core.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -10,8 +11,8 @@ class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
     super.onError(bloc, error, stacktrace);
-    print('(${bloc.runtimeType})x: $error');
-    print(stacktrace);
+    print('Exception in ${bloc.runtimeType}');
+    reportException(exception: error, stackTrace: stacktrace);
   }
 
   @override
