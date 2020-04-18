@@ -30,6 +30,10 @@ class SISRepository {
   @visibleForTesting
   bool get offline => _offline;
 
+  void clearCache() {
+    _fetchedState.clear();
+  }
+
   SISRepository(OfflineBloc offlineBloc, DataPersistence dataPersistence,
       {this.sisLoaderBuilder})
       : assert(offlineBloc != null),
@@ -115,7 +119,7 @@ class SISRepository {
         return whenOffline();
       }
     }
-    if (_fetchedState[key] ?? false || !refresh) {
+    if ((_fetchedState[key] ?? false) && !refresh) {
       var offlineData = whenOffline();
       if (offlineData != null) {
         return offlineData;
