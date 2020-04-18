@@ -22,8 +22,7 @@ class _CourseListPageState extends State<CourseListPage> {
       },
       child: BlocConsumer<CourseListBloc, NetworkActionState>(
         listener: (context, NetworkActionState state) {
-          if (state is NetworkLoaded ||
-              state is NetworkError) {
+          if (state is NetworkLoaded || state is NetworkError) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
@@ -56,16 +55,9 @@ class _CourseListPageState extends State<CourseListPage> {
             );
           }
           if (state is NetworkError) {
-            return RefreshIndicator(
-              onRefresh: () {
-                BlocProvider.of<CourseListBloc>(context)
-                    .add(RefreshNetworkData());
-                return Future.value();
-              },
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Center(child: Text('An error occurred')),
-              ),
+            return SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Center(child: Text('An error occurred')),
             );
           }
           return Container();
