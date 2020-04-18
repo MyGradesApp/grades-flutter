@@ -71,8 +71,8 @@ class SISRepository {
         _dataPersistence.courses = courses;
         return courses;
       },
-      whenOffline: () => _dataPersistence.courses,
-      key: COURSES,
+      fetchPersisted: () => _dataPersistence.courses,
+      cacheKey: COURSES,
       refresh: refresh,
     );
   }
@@ -87,8 +87,8 @@ class SISRepository {
         _dataPersistence.setAcademicInfo(academicInfo);
         return academicInfo;
       },
-      whenOffline: () => _dataPersistence.academicInfo,
-      key: ACADEMIC_INFO,
+      fetchPersisted: () => _dataPersistence.academicInfo,
+      cacheKey: ACADEMIC_INFO,
       refresh: refresh,
     );
   }
@@ -101,26 +101,28 @@ class SISRepository {
         _dataPersistence.setGradesForCourse(course.courseName, grades);
         return grades;
       },
-      whenOffline: () => _dataPersistence.grades[course.courseName],
-      key: keyForGrade(course),
+      fetchPersisted: () => _dataPersistence.grades[course.courseName],
+      cacheKey: keyForGrade(course),
       refresh: refresh,
     );
   }
 
-  Future<T> _fetchWrapper<T>(Future<T> Function() it,
-      {@required T Function() whenOffline,
-      @required String key,
-      @required bool refresh}) async {
-    assert(whenOffline != null);
+  Future<T> _fetchWrapper<T>(
+    Future<T> Function() it, {
+    @required T Function() fetchPersisted,
+    @required String cacheKey,
+    @required bool refresh,
+  }) async {
+    assert(fetchPersisted != null);
     if (_offline) {
       var loggedIn = await _attemptLogin();
       if (!loggedIn) {
         // Return offline data
-        return whenOffline();
+        return fetchPersisted();
       }
     }
-    if ((_fetchedState[key] ?? false) && !refresh) {
-      var offlineData = whenOffline();
+    if ((_fetchedState[cacheKey] ?? false) && !refresh) {
+      var offlineData = fetchPersisted();
       if (offlineData != null) {
         return offlineData;
       }
@@ -130,7 +132,7 @@ class SISRepository {
     } catch (e) {
       if (isHttpError(e)) {
         _offlineBloc.add(NetworkOfflineEvent());
-        return whenOffline();
+        return fetchPersisted();
       } else {
         rethrow;
       }
