@@ -47,39 +47,129 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return Column(
-            children: <Widget>[
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: const EdgeInsets.only(top: 14.0),
-                  hintText: 'District Username',
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40.0,
+              vertical: 120.0,
+            ),
+            child: Column(
+              children: <Widget>[
+                const Text(
+                  'SwiftGrade',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 36.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: const EdgeInsets.only(top: 14.0),
-                  hintText: 'District Password',
+                const Text(
+                  'Your grades at a glance',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              RaisedButton(
-                color: Colors.blue,
-                onPressed: _loginButtonEnabled(state) ? _onFormSubmitted : null,
-                child: Text('Login'),
-              ),
-              if (state.isLoading) CircularProgressIndicator(),
-            ],
+                const SizedBox(height: 55.0),
+                _buildInputField(
+                  placeholder: 'District Username',
+                  password: false,
+                ),
+                const SizedBox(height: 40.0),
+                _buildInputField(
+                  placeholder: 'District Password',
+                  password: true,
+                ),
+                const SizedBox(height: 35.0),
+                if (!state.isLoading) _buildLoginButton(state),
+                if (state.isLoading)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
+  Column _buildInputField({
+    @required String placeholder,
+    @required bool password,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: const Color(0xFF3f5573),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6.0,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          height: 60.0,
+          child: TextField(
+            controller: password ? _passwordController : _usernameController,
+            obscureText: password,
+            style: textStyle,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                password ? Icons.lock : Icons.person,
+                color: Colors.white,
+              ),
+              hintText: placeholder,
+              hintStyle: textStyle.copyWith(
+                color: Colors.white54,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginButton(LoginState state) {
+    return Container(
+      width: double.infinity,
+      child: RaisedButton(
+        elevation: 5.0,
+        onPressed: _loginButtonEnabled(state) ? _onFormSubmitted : null,
+        padding: const EdgeInsets.all(15.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        color: const Color(0xff2a84d2),
+        child: Text(
+          'LOGIN',
+          style: textStyle.copyWith(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
+            fontSize: 18.0,
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _onFormSubmitted() async {
+    var currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+
     var username = _username;
     var password = _password;
     _loginBloc.add(LoginPressed(username: username, password: password));
@@ -97,3 +187,8 @@ class _LoginFormState extends State<LoginForm> {
 
   String get _username => _usernameController.text.trim();
 }
+
+final textStyle = TextStyle(
+  color: Colors.white,
+  fontFamily: 'OpenSans',
+);

@@ -14,15 +14,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login Screen')),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BlocProvider<LoginBloc>(
-            create: (context) => LoginBloc(
-                sisRepository: RepositoryProvider.of<SISRepository>(context)),
-            child: LoginForm(),
-          ),
+        child: BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(
+              sisRepository: RepositoryProvider.of<SISRepository>(context)),
+          child: LoginForm(),
         ),
       ),
     );
