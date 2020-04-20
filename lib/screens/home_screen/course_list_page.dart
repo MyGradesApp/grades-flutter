@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/widgets/class_list_item.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListPage extends StatefulWidget {
@@ -36,20 +37,18 @@ class _CourseListPageState extends State<CourseListPage> {
               itemCount: state.data.length,
               itemBuilder: (context, i) {
                 var course = state.data[i];
-                return RaisedButton(
-                  onPressed: () {
+                return ClassListItem(
+                  course: course.courseName,
+                  letterGrade: course.gradeLetter,
+                  percent: course.gradePercent,
+                  teacher: course.teacherName,
+                  onTap: () {
                     Navigator.pushNamed(
                       context,
                       '/course_grades',
                       arguments: course,
                     );
                   },
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: Text(course.courseName)),
-                      Text(course.gradePercent.toString()),
-                    ],
-                  ),
                 );
               },
             );
