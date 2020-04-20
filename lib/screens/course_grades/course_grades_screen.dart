@@ -11,7 +11,10 @@ class CourseGradesScreen extends StatelessWidget {
     final course = ModalRoute.of(context).settings.arguments as Course;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Course grades')),
+      appBar: AppBar(
+        elevation: 0.0,
+        title: Text('Course grades'),
+      ),
       body: Column(
         children: <Widget>[
           Text('Grades for: ${course.courseName}'),

@@ -15,7 +15,10 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Academic Info')),
+      appBar: AppBar(
+        elevation: 0.0,
+        title: Text('Academic Info'),
+      ),
       body: RefreshIndicator(
         onRefresh: () {
           BlocProvider.of<AcademicInfoBloc>(context).add(RefreshNetworkData());

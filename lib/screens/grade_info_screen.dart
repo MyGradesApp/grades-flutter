@@ -9,7 +9,10 @@ class GradeInfoScreen extends StatelessWidget {
     var gradeItems = grade.raw.entries.toList();
     gradeItems.removeWhere((e) => e.value == null);
     return Scaffold(
-      appBar: AppBar(title: Text('Grade Info')),
+      appBar: AppBar(
+        elevation: 0.0,
+        title: Text('Grade Info'),
+      ),
       body: Container(
         child: Column(
           children: <Widget>[
