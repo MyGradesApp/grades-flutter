@@ -73,8 +73,22 @@ class App extends StatelessWidget {
       builder: (context, ThemeMode themeMode) {
         return MaterialApp(
           title: 'SwiftGrade',
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          theme: ThemeData(
+            primaryColor: const Color(0xff2a84d2),
+            scaffoldBackgroundColor: const Color(0xff2a84d2),
+            accentColor: const Color(0xff216bac),
+            cardColor: const Color(0xffffffff),
+            primaryColorLight: Colors.black,
+            brightness: Brightness.light,
+          ),
+          darkTheme: ThemeData(
+            primaryColor: const Color(0xff195080),
+            scaffoldBackgroundColor: const Color(0xff195080),
+            accentColor: const Color(0xff216bac),
+            cardColor: const Color(0xff226baa),
+            primaryColorLight: Colors.white,
+            brightness: Brightness.dark,
+          ),
           themeMode: themeMode,
           builder: (context, child) {
             return Column(
