@@ -4,6 +4,7 @@ import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/home_screen/course_list_page.dart';
 import 'package:grades/screens/home_screen/recent_page.dart';
 import 'package:grades/screens/home_screen/upcoming_page.dart';
+import 'package:tuple/tuple.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,11 +13,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final PageController controller = PageController(initialPage: 1);
-  List<Widget> pages = [
-    RecentPage(),
-    CourseListPage(),
-    UpcomingPage(),
+  List<Tuple2<String, Widget>> pages = [
+    Tuple2('RECENT', RecentPage()),
+    Tuple2('COURSES', CourseListPage()),
+    Tuple2('UPCOMING', UpcomingPage()),
   ];
+  String title = 'COURSES';
 
   List<BlocProvider<dynamic>> providers;
 
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text('Home screen'),
+        title: Text(title),
         leading: IconButton(
           tooltip: 'Profile',
           icon: Icon(
@@ -64,7 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
         child: PageView.builder(
           controller: controller,
           itemCount: pages.length,
-          itemBuilder: (context, position) => pages[position],
+          onPageChanged: (i) {
+            setState(() {
+              title = pages[i].item1;
+            });
+          },
+          itemBuilder: (context, position) => pages[position].item2,
         ),
       ),
     );
