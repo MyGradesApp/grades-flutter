@@ -47,50 +47,55 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40.0,
-              vertical: 120.0,
-            ),
-            child: Column(
-              children: <Widget>[
-                const Text(
-                  'SwiftGrade',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontSize: 36.0,
-                    fontWeight: FontWeight.bold,
+          return Container(
+            height: double.infinity,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                left: 40.0,
+                right: 40.0,
+                top: 120.0,
+                bottom: 45.0,
+              ),
+              child: Column(
+                children: <Widget>[
+                  const Text(
+                    'SwiftGrade',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontSize: 36.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const Text(
-                  'Your grades at a glance',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
+                  const Text(
+                    'Your grades at a glance',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 55.0),
-                _buildInputField(
-                  placeholder: 'District Username',
-                  password: false,
-                ),
-                const SizedBox(height: 40.0),
-                _buildInputField(
-                  placeholder: 'District Password',
-                  password: true,
-                ),
-                const SizedBox(height: 35.0),
-                if (!state.isLoading) _buildLoginButton(state),
-                if (state.isLoading)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: CircularProgressIndicator(),
+                  const SizedBox(height: 55.0),
+                  _buildInputField(
+                    placeholder: 'District Username',
+                    password: false,
                   ),
-              ],
+                  const SizedBox(height: 40.0),
+                  _buildInputField(
+                    placeholder: 'District Password',
+                    password: true,
+                  ),
+                  const SizedBox(height: 35.0),
+                  if (!state.isLoading) _buildLoginButton(state),
+                  if (state.isLoading)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                ],
+              ),
             ),
           );
         },
