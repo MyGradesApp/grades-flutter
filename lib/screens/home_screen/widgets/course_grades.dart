@@ -13,8 +13,19 @@ class CourseGrades extends StatelessWidget {
   Widget build(BuildContext context) {
     if (grades.isNotEmpty) {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(title),
+          Padding(
+            padding: const EdgeInsets.only(left: 11.0),
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
