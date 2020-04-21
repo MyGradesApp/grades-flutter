@@ -31,7 +31,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         },
         builder: (context, state) {
           if (state is NetworkLoading) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
           if (state is NetworkError) {
             return Text('An error occured');
