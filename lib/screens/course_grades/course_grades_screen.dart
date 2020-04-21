@@ -13,21 +13,14 @@ class CourseGradesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text('Course grades'),
+        title: Text(course.courseName),
       ),
-      body: Column(
-        children: <Widget>[
-          Text('Grades for: ${course.courseName}'),
-          Expanded(
-            child: BlocProvider<CourseGradesBloc>(
-              create: (_) => CourseGradesBloc(
-                course: course,
-                sisRepository: RepositoryProvider.of<SISRepository>(context),
-              )..add(FetchNetworkData()),
-              child: CourseGradesView(),
-            ),
-          ),
-        ],
+      body: BlocProvider<CourseGradesBloc>(
+        create: (_) => CourseGradesBloc(
+          course: course,
+          sisRepository: RepositoryProvider.of<SISRepository>(context),
+        )..add(FetchNetworkData()),
+        child: CourseGradesView(),
       ),
     );
   }

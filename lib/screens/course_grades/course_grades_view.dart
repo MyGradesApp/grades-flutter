@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/widgets/GradeItemCard.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseGradesView extends StatefulWidget {
@@ -50,17 +51,17 @@ class _CourseGradesViewState extends State<CourseGradesView> {
               itemCount: state.data.length,
               itemBuilder: (context, i) {
                 var grade = state.data[i];
-                return RaisedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/grade_info',
-                        arguments: grade);
+                return GradeItemCard(
+                  grade: grade,
+                  textColor: Theme.of(context).primaryColorLight,
+                  cardColor: Theme.of(context).cardColor,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/grade_info',
+                      arguments: grade,
+                    );
                   },
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: Text(grade.name)),
-                      Text(grade.grade)
-                    ],
-                  ),
                 );
               },
             );
