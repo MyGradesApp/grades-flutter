@@ -14,12 +14,12 @@ dependencies:
   grade_core:
     path: vendored/grade_core
 
-  shared_preferences: ^0.5.6+3
+  shared_preferences: ^0.5.7
   # General small unities
   # Dart team package
   intl: ^0.16.1
   # Dart team package
-  collection: ^1.14.11
+  collection: ^1.14.12
   pedantic: ^1.9.0
 
   quiver: ^2.1.3
@@ -30,9 +30,9 @@ dependencies:
 
   equatable: ^1.1.1
 
-  bloc: ^3.0.0
+  bloc: ^4.0.0
 
-  flutter_bloc: ^3.2.0
+  flutter_bloc: ^4.0.0
 
   flutter_circular_chart: ^0.1.0
 
@@ -63,13 +63,13 @@ dependency_overrides:
   bloc:
     git:
       url: https://github.com/SwiftGrade/bloc
-      ref: bloc-v3.0.0
+      ref: bloc-v4.0.0
       path: packages/bloc
 
   flutter_bloc:
     git:
       url: https://github.com/SwiftGrade/bloc
-      ref: flutter_bloc-v3.2.0
+      ref: flutter_bloc-v4.0.0
       path: packages/flutter_bloc
 
   nested:
@@ -91,3 +91,14 @@ dependency_overrides:
     git:
       url: https://github.com/SwiftGrade/flutter_circular_chart
       ref: master
+
+  bloc_test:
+    git:
+      url: https://github.com/SwiftGrade/bloc
+      path: packages/bloc_test
+      ref: bloc_test-v5.0.0
+
+  flutter_secure_storage:
+    git:
+      url: https://github.com/SwiftGrade/flutter_secure_storage
+      ref: develop
