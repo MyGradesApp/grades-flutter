@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
-import 'package:grades/widgets/GradeItemCard.dart';
+import 'package:grades/widgets/grade_item_card.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseGradesView extends StatefulWidget {

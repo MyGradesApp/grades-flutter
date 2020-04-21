@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:grades/widgets/GradeItemCard.dart';
+import 'package:grades/widgets/grade_item_card.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseGrades extends StatelessWidget {
@@ -25,6 +25,13 @@ class CourseGrades extends StatelessWidget {
                 grade: grade,
                 textColor: Theme.of(context).primaryColorLight,
                 cardColor: Theme.of(context).cardColor,
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/grade_info',
+                    arguments: grade,
+                  );
+                },
               );
             },
           ),

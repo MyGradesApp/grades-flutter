@@ -7,13 +7,13 @@ class GradeItemCard extends StatelessWidget {
   final Grade grade;
   final Color textColor;
   final Color cardColor;
-  void Function() onTap;
+  final void Function() onTap;
 
   GradeItemCard({
-    this.grade,
-    this.textColor,
-    this.cardColor,
-    this.onTap,
+    @required this.grade,
+    @required this.textColor,
+    @required this.cardColor,
+    @required this.onTap,
   });
 
   @override

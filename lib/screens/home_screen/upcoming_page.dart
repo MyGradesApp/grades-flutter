@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
-import 'package:grades/screens/home_screen/widgets/grades_section.dart';
+
+import 'widgets/course_grades.dart';
 
 class UpcomingPage extends StatefulWidget {
   @override
