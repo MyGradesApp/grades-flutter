@@ -128,7 +128,9 @@ class SISRepository {
       }
     }
     try {
-      return await (it()?.timeout(TIMEOUT));
+      var val = await (it()?.timeout(TIMEOUT));
+      _fetchedState[cacheKey] = true;
+      return val;
     } catch (e) {
       if (isHttpError(e)) {
         _offlineBloc.add(NetworkOfflineEvent());
