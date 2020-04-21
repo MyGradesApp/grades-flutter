@@ -38,6 +38,7 @@ class CourseGrades extends StatelessWidget {
         ],
       );
     } else {
+      // No grades in this course, so we don't display anything
       return Container();
     }
   }

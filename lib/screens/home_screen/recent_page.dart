@@ -35,36 +35,42 @@ class _RecentPageState extends State<RecentPage>
         builder: (context, state) {
           if (state is RecentLoading) {
             var courses = state.partialCourses.entries.toList();
-            return Column(
-              children: <Widget>[
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemCount: courses.length,
-                  itemBuilder: (context, i) {
-                    return CourseGrades(
-                      courses[i].key.courseName,
-                      courses[i].value,
-                    );
-                  },
-                ),
-                if (firstLoad) Center(child: CircularProgressIndicator()),
-              ],
+            return SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  for (var course in courses)
+                    CourseGrades(course.key.courseName, course.value),
+                  if (firstLoad) Center(child: CircularProgressIndicator())
+                ],
+              ),
             );
           }
 
           if (state is RecentLoaded) {
             var courses = state.courses.entries.toList();
-            return ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
-              itemCount: courses.length,
-              itemBuilder: (context, i) {
-                return CourseGrades(
-                  courses[i].key.courseName,
-                  courses[i].value,
-                );
-              },
-            );
+            if (courses.isNotEmpty) {
+              return ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                itemCount: courses.length,
+                itemBuilder: (context, i) {
+                  return CourseGrades(
+                    courses[i].key.courseName,
+                    courses[i].value,
+                  );
+                },
+              );
+            } else {
+              return Container(
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Center(
+                    child: Text('No recent grades'),
+                  ),
+                ),
+              );
+            }
           }
           if (state is RecentError) {
             return Text('An error occurred');

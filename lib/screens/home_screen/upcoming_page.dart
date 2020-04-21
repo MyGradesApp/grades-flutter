@@ -36,36 +36,45 @@ class _UpcomingPageState extends State<UpcomingPage>
           if (state is UpcomingLoading) {
             var groupsList = state.sortedGroups();
 
-            return Column(
-              children: <Widget>[
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemCount: groupsList.length,
-                  itemBuilder: (context, i) {
-                    return CourseGrades(
-                      groupsList[i].item1.toHumanFormat(),
-                      groupsList[i].item2,
-                    );
-                  },
-                ),
-                if (firstLoad) Center(child: CircularProgressIndicator()),
-              ],
+            return SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  for (var group in groupsList)
+                    CourseGrades(
+                      group.item1.toHumanFormat(),
+                      group.item2,
+                    ),
+                  if (firstLoad) Center(child: CircularProgressIndicator()),
+                ],
+              ),
             );
           }
 
           if (state is UpcomingLoaded) {
             var groupsList = state.sortedGroups();
-            return ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
-              itemCount: groupsList.length,
-              itemBuilder: (context, i) {
-                return CourseGrades(
-                  groupsList[i].item1.toHumanFormat(),
-                  groupsList[i].item2,
-                );
-              },
-            );
+            if (groupsList.isNotEmpty) {
+              return ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                itemCount: groupsList.length,
+                itemBuilder: (context, i) {
+                  return CourseGrades(
+                    groupsList[i].item1.toHumanFormat(),
+                    groupsList[i].item2,
+                  );
+                },
+              );
+            } else {
+              return Container(
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Center(
+                    child: Text('No recent grades'),
+                  ),
+                ),
+              );
+            }
           }
           if (state is UpcomingError) {
             return Text('An error occurred');
