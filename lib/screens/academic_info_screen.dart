@@ -33,7 +33,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
           },
           builder: (context, NetworkActionState state) {
             if (state is NetworkLoading) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }
             if (state is NetworkLoaded<AcademicInfo>) {
               var profile = state.data.profile;
@@ -43,21 +43,21 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
                     children: <Widget>[
-                      _buildRow(
+                      _buildCard(
                         'Cumulative GPA:',
                         profile.cumulative_gpa.toString(),
                       ),
-                      _buildRow(
+                      _buildCard(
                         'Weighted GPA:',
                         profile.cumulative_weighted_gpa.toString(),
                       ),
                       if (profile.class_rank_numerator != null &&
                           profile.class_rank_denominator != null)
-                        _buildRow(
+                        _buildCard(
                           'Class Rank:',
                           '${profile.class_rank_numerator} / ${profile.class_rank_denominator}',
                         ),
-                      _buildRow(
+                      _buildCard(
                         'Absences:',
                         '${absences.days} days in ${absences.periods} periods',
                       )
@@ -76,14 +76,30 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
     );
   }
 
-  Widget _buildRow(String left, String right) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(left),
+  Widget _buildCard(String title, String body) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      color: Theme.of(context).accentColor,
+      margin: const EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(9.0),
+        child: ListTile(
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
+          subtitle: Text(
+            body,
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          ),
         ),
-        Text(right),
-      ],
+      ),
     );
   }
 }
