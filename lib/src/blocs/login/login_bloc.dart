@@ -33,7 +33,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await secureStorage.write(
             key: AuthConst.SIS_USERNAME_KEY, value: event.username);
         await secureStorage.write(
-            key: AuthConst.SIS_USERNAME_KEY, value: event.password);
+            key: AuthConst.SIS_PASSWORD_KEY, value: event.password);
         await secureStorage.write(
             key: AuthConst.SIS_SESSION_KEY,
             value: _sisRepository.sisLoader.sessionCookies);
