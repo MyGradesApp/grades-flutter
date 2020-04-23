@@ -64,7 +64,7 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
           return;
         }
         var group = DateGroupingExt.fromDate(grade.dueDate);
-        (groups[group] ??= <Grade>{})..add(grade);
+        (groups[group] ??= <CourseGrade>{})..add(CourseGrade(event.course, grade));
       }
       yield UpcomingLoading(groups);
     } else {
