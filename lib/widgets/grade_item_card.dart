@@ -5,14 +5,10 @@ import 'package:sis_loader/sis_loader.dart';
 
 class GradeItemCard extends StatelessWidget {
   final Grade grade;
-  final Color textColor;
-  final Color cardColor;
   final void Function() onTap;
 
   GradeItemCard({
     @required this.grade,
-    @required this.textColor,
-    @required this.cardColor,
     @required this.onTap,
   });
 
@@ -37,7 +33,6 @@ class GradeItemCard extends StatelessWidget {
     }
 
     return Card(
-      color: cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -54,7 +49,6 @@ class GradeItemCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   grade.name,
-                  style: TextStyle(color: textColor),
                   // TODO: Make it less aggressive about trimming
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -66,7 +60,6 @@ class GradeItemCard extends StatelessWidget {
                 Text(
                   gradeLetter,
                   style: TextStyle(
-                    color: textColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -77,7 +70,6 @@ class GradeItemCard extends StatelessWidget {
                   gradeString,
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                    color: textColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

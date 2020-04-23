@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/widgets/grade_item_card.dart';
+import 'package:sis_loader/src/grade.dart';
 
 import 'widgets/course_grades.dart';
 
@@ -40,7 +42,11 @@ class _RecentPageState extends State<RecentPage>
               child: Column(
                 children: [
                   for (var course in courses)
-                    CourseGrades(course.key.courseName, course.value),
+                    HeaderedGroup(
+                      course.key.courseName,
+                      course.value,
+                      _buildGradeItemCard,
+                    ),
                   if (firstLoad) Center(child: CircularProgressIndicator())
                 ],
               ),
@@ -54,9 +60,10 @@ class _RecentPageState extends State<RecentPage>
                 physics: AlwaysScrollableScrollPhysics(),
                 itemCount: courses.length,
                 itemBuilder: (context, i) {
-                  return CourseGrades(
+                  return HeaderedGroup(
                     courses[i].key.courseName,
                     courses[i].value,
+                    _buildGradeItemCard,
                   );
                 },
               );
@@ -78,6 +85,19 @@ class _RecentPageState extends State<RecentPage>
           return Container();
         },
       ),
+    );
+  }
+
+  GradeItemCard _buildGradeItemCard(Grade grade) {
+    return GradeItemCard(
+      grade: grade,
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/grade_info',
+          arguments: grade,
+        );
+      },
     );
   }
 

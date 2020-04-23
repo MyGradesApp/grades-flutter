@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:grades/widgets/grade_item_card.dart';
-import 'package:sis_loader/sis_loader.dart';
 
-class CourseGrades extends StatelessWidget {
+class HeaderedGroup<T> extends StatelessWidget {
   final String title;
-  final List<Grade> grades;
+  final List<T> items;
+  final Widget Function(T) builder;
 
-  CourseGrades(this.title, this.grades);
+  HeaderedGroup(this.title, this.items, this.builder);
 
   @override
   Widget build(BuildContext context) {
-    if (grades.isNotEmpty) {
+    if (items.isNotEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -29,27 +28,15 @@ class CourseGrades extends StatelessWidget {
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: grades.length,
+            itemCount: items.length,
             itemBuilder: (context, i) {
-              var grade = grades[i];
-              return GradeItemCard(
-                grade: grade,
-                textColor: Theme.of(context).primaryColorLight,
-                cardColor: Theme.of(context).cardColor,
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/grade_info',
-                    arguments: grade,
-                  );
-                },
-              );
+              return builder(items[i]);
             },
           ),
         ],
       );
     } else {
-      // No grades in this course, so we don't display anything
+      // No items in this course, so we don't display anything
       return Container();
     }
   }

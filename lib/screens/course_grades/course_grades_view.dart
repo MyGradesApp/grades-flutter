@@ -53,8 +53,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                 var grade = state.data[i];
                 return GradeItemCard(
                   grade: grade,
-                  textColor: Theme.of(context).primaryColorLight,
-                  cardColor: Theme.of(context).cardColor,
                   onTap: () {
                     Navigator.pushNamed(
                       context,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/screens/home_screen/widgets/upcoming_grade_item.dart';
 
 import 'widgets/course_grades.dart';
 
@@ -41,9 +42,15 @@ class _UpcomingPageState extends State<UpcomingPage>
               child: Column(
                 children: <Widget>[
                   for (var group in groupsList)
-                    CourseGrades(
+                    HeaderedGroup(
                       group.item1.toHumanFormat(),
                       group.item2,
+                      (CourseGrade item) {
+                        return UpcomingGradeItem(
+                          courseName: item.course.courseName,
+                          grade: item.grade,
+                        );
+                      },
                     ),
                   if (firstLoad) Center(child: CircularProgressIndicator()),
                 ],
@@ -58,9 +65,15 @@ class _UpcomingPageState extends State<UpcomingPage>
                 physics: AlwaysScrollableScrollPhysics(),
                 itemCount: groupsList.length,
                 itemBuilder: (context, i) {
-                  return CourseGrades(
+                  return HeaderedGroup(
                     groupsList[i].item1.toHumanFormat(),
                     groupsList[i].item2,
+                    (CourseGrade item) {
+                      return UpcomingGradeItem(
+                        courseName: item.course.courseName,
+                        grade: item.grade,
+                      );
+                    },
                   );
                 },
               );
