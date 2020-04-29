@@ -6,7 +6,7 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: 40.0,
+          horizontal: 20.0,
           vertical: 120.0,
         ),
         child: Center(
