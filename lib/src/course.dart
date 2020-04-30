@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:sis_loader/src/grade.dart';
@@ -10,6 +11,19 @@ import '../sis_loader.dart' show SISLoader, debugMocking;
 import 'cookie_client.dart';
 
 part 'course.g.dart';
+
+abstract class GradeData implements Built<GradeData, GradeDataBuilder> {
+  BuiltList<Grade> get grades;
+
+  @nullable
+  BuiltMap<String, String> get weights;
+
+  GradeData._();
+
+  factory GradeData([void Function(GradeDataBuilder) updates]) = _$GradeData;
+
+  static Serializer<GradeData> get serializer => _$gradeDataSerializer;
+}
 
 class CourseService {
   final SISLoader sisLoader;
@@ -22,25 +36,27 @@ class CourseService {
         .bodyAsString();
   }
 
-  Future<List<Grade>> getGrades(Course course) {
+  Future<GradeData> getGrades(Course course) async {
     if (debugMocking) {
-      return Future.value(mock_data.GRADES[course.courseName]);
+      return Future.value(GradeData((d) => d
+        ..grades.replace(mock_data.GRADES[course.courseName])
+        ..weights.replace(mock_data.CATEGORY_WEIGHTS[course.courseName])));
     }
 
-    return _fetchGrades(course);
-  }
-
-  Future<Map<String, String>> getCategoryWeights(Course course) {
-    if (debugMocking) {
-      return Future.value(mock_data.CATEGORY_WEIGHTS[course.courseName]);
-    }
-
-    return _fetchCategoryWeights(course);
-  }
-
-  Future<List<Grade>> _fetchGrades(Course course) async {
     var gradePage = await _gradePage(course);
 
+    var grades = await _extractGrades(gradePage);
+    var weights = await _extractCategoryWeights(gradePage);
+    return GradeData((d) {
+      d.grades.replace(grades);
+      if (weights != null) {
+        d.weights.replace(weights);
+      }
+      return d;
+    });
+  }
+
+  Future<List<Grade>> _extractGrades(String gradePage) async {
     Map<String, String> extractRowFields(
         String row, Map<String, String> headers) {
       var fieldsMatches = RegExp(
@@ -104,9 +120,7 @@ class CourseService {
         .toList();
   }
 
-  Future<Map<String, String>> _fetchCategoryWeights(Course course) async {
-    var gradePage = await _gradePage(course);
-
+  Future<Map<String, String>> _extractCategoryWeights(String gradePage) async {
     var weightsTableMatch = RegExp(
             r'<TABLE width=100% border=0 cellpadding=0 cellspacing=0 class="DarkGradientBG'
             r' BottomButton"><TR><TD class="DarkGradientBG BottomButton" align=left>'

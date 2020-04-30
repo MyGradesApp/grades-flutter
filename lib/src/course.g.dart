@@ -6,7 +6,62 @@ part of 'course.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<GradeData> _$gradeDataSerializer = new _$GradeDataSerializer();
 Serializer<Course> _$courseSerializer = new _$CourseSerializer();
+
+class _$GradeDataSerializer implements StructuredSerializer<GradeData> {
+  @override
+  final Iterable<Type> types = const [GradeData, _$GradeData];
+  @override
+  final String wireName = 'GradeData';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, GradeData object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'grades',
+      serializers.serialize(object.grades,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Grade)])),
+    ];
+    if (object.weights != null) {
+      result
+        ..add('weights')
+        ..add(serializers.serialize(object.weights,
+            specifiedType: const FullType(BuiltMap,
+                const [const FullType(String), const FullType(String)])));
+    }
+    return result;
+  }
+
+  @override
+  GradeData deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new GradeDataBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'grades':
+          result.grades.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Grade)]))
+              as BuiltList<Object>);
+          break;
+        case 'weights':
+          result.weights.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(String), const FullType(String)])));
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
 
 class _$CourseSerializer implements StructuredSerializer<Course> {
   @override
@@ -80,6 +135,110 @@ class _$CourseSerializer implements StructuredSerializer<Course> {
     }
 
     return result.build();
+  }
+}
+
+class _$GradeData extends GradeData {
+  @override
+  final BuiltList<Grade> grades;
+  @override
+  final BuiltMap<String, String> weights;
+
+  factory _$GradeData([void Function(GradeDataBuilder) updates]) =>
+      (new GradeDataBuilder()..update(updates)).build();
+
+  _$GradeData._({this.grades, this.weights}) : super._() {
+    if (grades == null) {
+      throw new BuiltValueNullFieldError('GradeData', 'grades');
+    }
+  }
+
+  @override
+  GradeData rebuild(void Function(GradeDataBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  GradeDataBuilder toBuilder() => new GradeDataBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is GradeData &&
+        grades == other.grades &&
+        weights == other.weights;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, grades.hashCode), weights.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('GradeData')
+          ..add('grades', grades)
+          ..add('weights', weights))
+        .toString();
+  }
+}
+
+class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
+  _$GradeData _$v;
+
+  ListBuilder<Grade> _grades;
+  ListBuilder<Grade> get grades => _$this._grades ??= new ListBuilder<Grade>();
+  set grades(ListBuilder<Grade> grades) => _$this._grades = grades;
+
+  MapBuilder<String, String> _weights;
+  MapBuilder<String, String> get weights =>
+      _$this._weights ??= new MapBuilder<String, String>();
+  set weights(MapBuilder<String, String> weights) => _$this._weights = weights;
+
+  GradeDataBuilder();
+
+  GradeDataBuilder get _$this {
+    if (_$v != null) {
+      _grades = _$v.grades?.toBuilder();
+      _weights = _$v.weights?.toBuilder();
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(GradeData other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$GradeData;
+  }
+
+  @override
+  void update(void Function(GradeDataBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$GradeData build() {
+    _$GradeData _$result;
+    try {
+      _$result = _$v ??
+          new _$GradeData._(grades: grades.build(), weights: _weights?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'grades';
+        grades.build();
+        _$failedField = 'weights';
+        _weights?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'GradeData', _$failedField, e.toString());
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
   }
 }
 
