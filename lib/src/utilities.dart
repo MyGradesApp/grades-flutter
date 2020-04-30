@@ -18,6 +18,16 @@ class StringOrInt {
         _value = value;
 
   @override
+  bool operator ==(other) {
+    return other is StringOrInt &&
+        _isString == other._isString &&
+        _value == other._value;
+  }
+
+  @override
+  int get hashCode => _value.hashCode;
+
+  @override
   String toString() {
     return _value.toString();
   }
