@@ -15,22 +15,24 @@ void main() {
   group('deserialization', () {
     test('smoke test', () {
       var prefs = MockSharedPrefs();
-      when(prefs.getString('persisted_grades_v2'))
+      when(prefs.getString(DataPersistence.GRADES_KEY))
           .thenReturn('{"foo": [{"key":"success"}]}');
-      when(prefs.getString('persisted_courses_v2'))
+      when(prefs.getString(DataPersistence.COURSES_KEY))
           .thenReturn('[{"key":"success"}]');
       DataPersistence(prefs);
     });
 
     test('course with empty grades', () {
       var prefs = MockSharedPrefs();
-      when(prefs.getString('persisted_grades_v2')).thenReturn('{"foo": []}');
+      when(prefs.getString(DataPersistence.GRADES_KEY))
+          .thenReturn('{"foo": []}');
       DataPersistence(prefs);
     });
 
     test('course with null grades', () {
       var prefs = MockSharedPrefs();
-      when(prefs.getString('persisted_grades_v2')).thenReturn('{"foo": null}');
+      when(prefs.getString(DataPersistence.GRADES_KEY))
+          .thenReturn('{"foo": null}');
       DataPersistence(prefs);
     });
   });
@@ -44,7 +46,7 @@ void main() {
         Grade({'thisisa': 'grade'}),
       ]);
 
-      expect(prefs.getString('persisted_grades_v2'),
+      expect(prefs.getString(DataPersistence.GRADES_KEY),
           '{"foo":[{"thisisa":"grade"}]}');
 
       persist.grades = {
@@ -53,17 +55,26 @@ void main() {
         ]
       };
 
-      expect(prefs.getString('persisted_grades_v2'), '{"foo":[{"bar":"baz"}]}');
+      expect(prefs.getString(DataPersistence.GRADES_KEY),
+          '{"foo":[{"bar":"baz"}]}');
     });
 
     test('courses', () async {
       SharedPreferences.setMockInitialValues(<String, dynamic>{});
       var prefs = await SharedPreferences.getInstance();
       var persist = DataPersistence(prefs);
-      persist.courses = [Course(courseName: 'courseName')];
+      persist.courses = [
+        Course((c) => c
+          ..courseName = 'courseName'
+          ..teacherName = 'Foo'
+          ..periodString = 'Bar'
+          ..gradeLetter = 'Baz'
+          ..gradesUrl = 'Spam'
+          ..gradePercent = StringOrInt('Eggs'))
+      ];
 
       expect(
-          prefs.getString('persisted_courses_v2'),
+          prefs.getString(DataPersistence.COURSES_KEY),
           '[{"gradesUrl":null,"courseName":"courseName","periodString":null,'
           '"teacherName":null,"gradePercent":null,"gradeLetter":null}]');
     });

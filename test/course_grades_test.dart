@@ -11,14 +11,13 @@ import 'helpers.dart';
 class MockSISRepo extends Mock implements SISRepository {}
 
 void main() async {
-  var course = Course(
-    gradesUrl: '/foo/bar.php',
-    courseName: 'US Gov',
-    periodString: '02 02',
-    teacherName: 'Daniel Henderson',
-    gradePercent: 87,
-    gradeLetter: 'B',
-  );
+  var course = Course((c) => c
+    ..gradesUrl = '/foo/bar.php'
+    ..courseName = 'US Gov'
+    ..periodString = '02 02'
+    ..teacherName = 'Daniel Henderson'
+    ..gradePercent = StringOrInt(87)
+    ..gradeLetter = 'B');
 
   void testCourseGradesBloc(List<Grade> data) async {
     var sisRepo = MockSISRepo();

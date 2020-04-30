@@ -1,7 +1,5 @@
+import 'package:grade_core/grade_core.dart';
 import 'package:meta/meta.dart';
-
-import '../../repos/sis_repository.dart';
-import '../network_action_bloc/network_action_bloc.dart';
 
 class AcademicInfoBloc extends NetworkActionBloc<AcademicInfo> {
   final SISRepository _sisRepository;

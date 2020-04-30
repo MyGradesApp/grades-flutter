@@ -50,7 +50,13 @@ void main() {
     test('grades', () async {
       var repo = SISRepository(offlineBloc, dataPersist);
       await repo.login('s2558161d', 'figure51');
-      var _ = await repo.getCourseGrades(Course(courseName: 'US History'));
+      var _ = await repo.getCourseGrades(Course((c) => c
+        ..courseName = 'US History'
+        ..teacherName = 'Foo'
+        ..periodString = 'Bar'
+        ..gradeLetter = 'Baz'
+        ..gradesUrl = 'Spam'
+        ..gradePercent = StringOrInt('Eggs')));
       // TODO: Check grades
     });
 
@@ -58,15 +64,18 @@ void main() {
       var repo = SISRepository(offlineBloc, dataPersist);
       await repo.login('s2558161d', 'figure51');
       var info = await repo.getAcademicInfo();
-      expect(info.absences, Absences(days: 2, periods: 3));
+      expect(
+          info.absences,
+          Absences((a) => a
+            ..days = 2
+            ..periods = 3));
       expect(
         info.profile,
-        Profile(
-          cumulative_gpa: 3.9,
-          cumulative_weighted_gpa: 4.1,
-          class_rank_numerator: 44,
-          class_rank_denominator: 801,
-        ),
+        Profile((p) => p
+          ..cumulative_gpa = 3.9
+          ..cumulative_weighted_gpa = 4.1
+          ..class_rank_numerator = 44
+          ..class_rank_denominator = 801),
       );
     });
   });

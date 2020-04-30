@@ -1,14 +1,27 @@
 import 'dart:convert';
 
-import 'package:grade_core/grade_core.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
+import 'package:grade_core/src/models/models.dart';
+import 'package:grade_core/src/models/serializers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sis_loader/sis_loader.dart';
+import 'package:sis_loader/sis_loader.dart' hide serializers;
 
 class DataPersistence {
   final SharedPreferences prefs;
   Map<String, List<Grade>> _grades;
   List<Course> _courses;
   AcademicInfo _academicInfo;
+
+  static const String ACADEMIC_INFO_KEY = 'persisted_academic_info_v3';
+  static const String GRADES_KEY = 'persisted_grades_v3';
+  static const String COURSES_KEY = 'persisted_courses_v3';
+  static const FullType BUILT_GRADES_TYPE = FullType(BuiltMap, [
+    FullType(String),
+    FullType(BuiltList, [FullType(Grade)])
+  ]);
+  static const FullType BUILT_COURSES_TYPE =
+      FullType(BuiltList, [FullType(Course)]);
 
   DataPersistence(this.prefs) {
     _grades = _loadGrades();
@@ -43,70 +56,77 @@ class DataPersistence {
   }
 
   Map<String, List<Grade>> _loadGrades() {
-    var gradesStr = prefs.getString('persisted_grades_v2');
+    var gradesStr = prefs.getString(DataPersistence.GRADES_KEY);
     if (gradesStr == null || gradesStr.isEmpty || gradesStr == 'null') {
       gradesStr = '{}';
     }
-
-    var out = <String, List<Grade>>{};
-
-    var dynCourses = Map<String, dynamic>.from(
-        jsonDecode(gradesStr) as Map<String, dynamic>);
-    dynCourses.forEach((String course, dynamic gradesListDyn) {
-      var grades = <Grade>[];
-      if (gradesListDyn == null) {
-        out[course] = [];
-        return;
-      }
-      var gradesList = List<dynamic>.from(gradesListDyn as List);
-
-      gradesList.forEach((dynamic grade) {
-        var dynGrade = grade as Map<String, dynamic>;
-        grades.add(
-          Grade(dynGrade.map((k, dynamic v) => MapEntry(k, v as String))),
-        );
-      });
-
-      out[course] = grades;
-    });
-
-    return out;
+    var builtGrades = serializers.deserialize(
+      jsonDecode(gradesStr),
+      specifiedType: DataPersistence.BUILT_GRADES_TYPE,
+    ) as BuiltMap<String, BuiltList<Grade>>;
+    return builtGrades
+        .toMap()
+        .map((key, value) => MapEntry(key, value.toList()));
   }
 
   void _saveGrades() {
-    prefs.setString('persisted_grades_v2', jsonEncode(grades));
+    var builtGrades =
+        _grades.map((key, value) => MapEntry(key, value.build())).build();
+
+    prefs.setString(
+      DataPersistence.GRADES_KEY,
+      jsonEncode(serializers.serialize(
+        builtGrades,
+        specifiedType: DataPersistence.BUILT_GRADES_TYPE,
+      )),
+    );
   }
 
   List<Course> _loadCourses() {
-    var coursesString = prefs.getString('persisted_courses_v2');
+    var coursesString = prefs.getString(DataPersistence.COURSES_KEY);
     if (coursesString == null ||
         coursesString.isEmpty ||
         coursesString == 'null') {
       coursesString = '[]';
     }
 
-    return (jsonDecode(coursesString) as List<dynamic>)
-        .map((dynamic data) => Course.fromJson(data as Map<String, dynamic>))
-        .toList();
+    var builtCourses = serializers.deserialize(
+      jsonDecode(coursesString),
+      specifiedType: DataPersistence.BUILT_COURSES_TYPE,
+    ) as BuiltList<Course>;
+    return builtCourses.toList();
   }
 
   void _saveCourses() {
-    prefs.setString('persisted_courses_v2', jsonEncode(courses));
+    prefs.setString(
+      DataPersistence.COURSES_KEY,
+      jsonEncode(serializers.serialize(
+        _courses.build(),
+        specifiedType: DataPersistence.BUILT_COURSES_TYPE,
+      )),
+    );
   }
 
   AcademicInfo _loadAcademicInfo() {
-    var academicString = prefs.getString('persisted_academic_info_v2');
+    var academicString = prefs.getString(DataPersistence.ACADEMIC_INFO_KEY);
     if (academicString == null ||
         academicString.isEmpty ||
         academicString == 'null') {
       return null;
     }
-    return AcademicInfo.fromJson(
-      jsonDecode(academicString) as Map<String, dynamic>,
+
+    return serializers.deserializeWith(
+      AcademicInfo.serializer,
+      jsonDecode(academicString),
     );
   }
 
   void _saveAcademicInfo() {
-    prefs.setString('persisted_academic_info_v2', jsonEncode(_academicInfo));
+    prefs.setString(
+      DataPersistence.ACADEMIC_INFO_KEY,
+      jsonEncode(
+        serializers.serializeWith(AcademicInfo.serializer, _academicInfo),
+      ),
+    );
   }
 }

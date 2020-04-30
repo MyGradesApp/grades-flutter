@@ -80,9 +80,12 @@ class SISRepository {
   Future<AcademicInfo> getAcademicInfo({bool refresh = false}) async {
     return await _fetchWrapper(
       () async {
+        var profile = await sisLoader.getUserProfile();
+        var absences = await sisLoader.getAbsences();
         var academicInfo = AcademicInfo(
-          await sisLoader.getUserProfile(),
-          await sisLoader.getAbsences(),
+          (a) => a
+            ..profile = profile.toBuilder()
+            ..absences = absences.toBuilder(),
         );
         _dataPersistence.setAcademicInfo(academicInfo);
         return academicInfo;
@@ -159,49 +162,5 @@ class SISRepository {
       }
       rethrow;
     }
-  }
-}
-
-class AcademicInfo {
-  final Profile profile;
-  final Absences absences;
-
-  const AcademicInfo(this.profile, this.absences);
-
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'profile': {
-        'class_rank_numerator': profile.class_rank_numerator,
-        'class_rank_denominator': profile.class_rank_denominator,
-        'cumulative_gpa': profile.cumulative_gpa,
-        'cumulative_weighted_gpa': profile.cumulative_weighted_gpa,
-      },
-      'absences': {
-        'days': absences.days,
-        'periods': absences.periods,
-      },
-    };
-  }
-
-  factory AcademicInfo.fromJson(Map<String, dynamic> json) {
-    return AcademicInfo(
-      Profile(
-        class_rank_denominator:
-            json['profile']['class_rank_denominator'] as int,
-        class_rank_numerator: json['profile']['class_rank_numerator'] as int,
-        cumulative_gpa: json['profile']['cumulative_gpa'] as double,
-        cumulative_weighted_gpa:
-            json['profile']['cumulative_weighted_gpa'] as double,
-      ),
-      Absences(
-        days: json['absences']['days'] as int,
-        periods: json['absences']['periods'] as int,
-      ),
-    );
-  }
-
-  @override
-  String toString() {
-    return 'AcademicInfo{profile: $profile, absences: $absences}';
   }
 }
