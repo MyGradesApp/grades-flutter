@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/widgets/loading_indicator.dart';
 
 class AcademicInfoScreen extends StatefulWidget {
   @override
@@ -33,7 +34,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
           },
           builder: (context, NetworkActionState state) {
             if (state is NetworkLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: LoadingIndicator());
             }
             if (state is NetworkLoaded<AcademicInfo>) {
               if (state.data == null) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/class_list_item.dart';
+import 'package:grades/widgets/loading_indicator.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _CourseListPageState extends State<CourseListPage> {
         },
         builder: (context, state) {
           if (state is NetworkLoading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: LoadingIndicator());
           }
           if (state is NetworkLoaded<List<Course>>) {
             if (state.data == null) {

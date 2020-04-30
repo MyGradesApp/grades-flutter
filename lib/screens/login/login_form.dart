@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/widgets/loading_indicator.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -92,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                   if (state.isLoading)
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0),
-                      child: CircularProgressIndicator(),
+                      child: LoadingIndicator(),
                     ),
                 ],
               ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/home_screen/widgets/upcoming_grade_item.dart';
+import 'package:grades/widgets/loading_indicator.dart';
 
 import 'widgets/course_grades.dart';
 
@@ -52,7 +53,7 @@ class _UpcomingPageState extends State<UpcomingPage>
                         );
                       },
                     ),
-                  if (firstLoad) Center(child: CircularProgressIndicator()),
+                  if (firstLoad) Center(child: LoadingIndicator()),
                 ],
               ),
             );

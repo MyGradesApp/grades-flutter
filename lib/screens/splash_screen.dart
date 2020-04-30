@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/widgets/loading_indicator.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
@@ -33,7 +34,7 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 50),
-              const CircularProgressIndicator(),
+              const LoadingIndicator(),
             ],
           ),
         ),

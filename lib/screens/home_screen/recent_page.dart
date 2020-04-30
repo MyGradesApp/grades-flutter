@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/grade_item_card.dart';
+import 'package:grades/widgets/loading_indicator.dart';
 import 'package:sis_loader/src/grade.dart';
 
 import 'widgets/course_grades.dart';
@@ -47,7 +48,7 @@ class _RecentPageState extends State<RecentPage>
                       course.value,
                       _buildGradeItemCard,
                     ),
-                  if (firstLoad) Center(child: CircularProgressIndicator())
+                  if (firstLoad) Center(child: LoadingIndicator())
                 ],
               ),
             );

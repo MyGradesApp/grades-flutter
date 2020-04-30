@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/home_screen/widgets/course_grades.dart';
 import 'package:grades/widgets/grade_item_card.dart';
+import 'package:grades/widgets/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -67,7 +68,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           },
           builder: (context, state) {
             if (state is NetworkLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: LoadingIndicator());
             }
             if (state is NetworkError) {
               return Text('An error occurred');
