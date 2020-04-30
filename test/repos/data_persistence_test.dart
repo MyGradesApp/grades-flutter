@@ -15,10 +15,13 @@ void main() {
   group('deserialization', () {
     test('smoke test', () {
       var prefs = MockSharedPrefs();
+      var targetCourse =
+          '[{"gradesUrl":"Spam","courseName":"courseName","periodString":"Bar",'
+          '"teacherName":"Foo","gradePercent":"Eggs","gradeLetter":"Baz"}]';
       when(prefs.getString(DataPersistence.GRADES_KEY))
-          .thenReturn('{"foo": [{"key":"success"}]}');
+          .thenReturn('{"foo": $targetCourse}');
       when(prefs.getString(DataPersistence.COURSES_KEY))
-          .thenReturn('[{"key":"success"}]');
+          .thenReturn(targetCourse);
       DataPersistence(prefs);
     });
 
@@ -26,13 +29,6 @@ void main() {
       var prefs = MockSharedPrefs();
       when(prefs.getString(DataPersistence.GRADES_KEY))
           .thenReturn('{"foo": []}');
-      DataPersistence(prefs);
-    });
-
-    test('course with null grades', () {
-      var prefs = MockSharedPrefs();
-      when(prefs.getString(DataPersistence.GRADES_KEY))
-          .thenReturn('{"foo": null}');
       DataPersistence(prefs);
     });
   });
@@ -47,7 +43,7 @@ void main() {
       ]);
 
       expect(prefs.getString(DataPersistence.GRADES_KEY),
-          '{"foo":[{"thisisa":"grade"}]}');
+          '{"foo":[{"raw":{"thisisa":"grade"}}]}');
 
       persist.grades = {
         'foo': [
@@ -56,7 +52,7 @@ void main() {
       };
 
       expect(prefs.getString(DataPersistence.GRADES_KEY),
-          '{"foo":[{"bar":"baz"}]}');
+          '{"foo":[{"raw":{"bar":"baz"}}]}');
     });
 
     test('courses', () async {
@@ -75,8 +71,8 @@ void main() {
 
       expect(
           prefs.getString(DataPersistence.COURSES_KEY),
-          '[{"gradesUrl":null,"courseName":"courseName","periodString":null,'
-          '"teacherName":null,"gradePercent":null,"gradeLetter":null}]');
+          '[{"gradesUrl":"Spam","courseName":"courseName","periodString":"Bar",'
+          '"teacherName":"Foo","gradePercent":"Eggs","gradeLetter":"Baz"}]');
     });
   });
 }
