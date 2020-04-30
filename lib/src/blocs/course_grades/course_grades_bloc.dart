@@ -15,7 +15,7 @@ class CourseGradesBloc extends NetworkActionBloc<List<Grade>> {
         assert(course != null),
         _sisRepository = sisRepository,
         _course = course,
-        super(format: (g) => 'grades.length: ${g != null ? g.length : null}');
+        super(format: (g) => 'grades.length: ${g?.length}');
 
   Course get course => _course;
 

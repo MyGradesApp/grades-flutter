@@ -47,6 +47,10 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
 
   Stream<RecentState> _fetchCourseData({@required bool refresh}) async* {
     var courses = await _sisRepository.getCourses(refresh: refresh);
+    if (courses == null) {
+      add(DoneLoading());
+      return;
+    }
 
     await _courseFetchingSubscription?.cancel();
     _courseFetchingSubscription =

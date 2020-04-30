@@ -37,7 +37,7 @@ class DataPersistence {
   }
 
   void setGradesForCourse(String course, List<Grade> grades) {
-    _grades[course] = grades;
+    (_grades ??= {})[course] = grades;
     _saveGrades();
   }
 
@@ -58,7 +58,7 @@ class DataPersistence {
   Map<String, List<Grade>> _loadGrades() {
     var gradesStr = prefs.getString(DataPersistence.GRADES_KEY);
     if (gradesStr == null || gradesStr.isEmpty || gradesStr == 'null') {
-      gradesStr = '{}';
+      return null;
     }
     var builtGrades = serializers.deserialize(
       jsonDecode(gradesStr),
@@ -87,7 +87,7 @@ class DataPersistence {
     if (coursesString == null ||
         coursesString.isEmpty ||
         coursesString == 'null') {
-      coursesString = '[]';
+      return null;
     }
 
     var builtCourses = serializers.deserialize(

@@ -48,6 +48,10 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
 
   Stream<UpcomingState> _fetchCourseData({@required bool refresh}) async* {
     var courses = await _sisRepository.getCourses();
+    if (courses == null) {
+      add(DoneLoading());
+      return;
+    }
 
     await _courseFetchingSubscription?.cancel();
     _courseFetchingSubscription =
@@ -64,7 +68,8 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
           return;
         }
         var group = DateGroupingExt.fromDate(grade.dueDate);
-        (groups[group] ??= <CourseGrade>{})..add(CourseGrade(event.course, grade));
+        (groups[group] ??= <CourseGrade>{})
+          ..add(CourseGrade(event.course, grade));
       }
       yield UpcomingLoading(groups);
     } else {
