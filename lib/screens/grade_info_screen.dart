@@ -32,7 +32,7 @@ class GradeInfoScreen extends StatelessWidget {
       ]),
     ];
 
-    var rawData = Map<String, String>.from(grade.raw);
+    var rawData = grade.raw.toMap();
     rawData.removeWhere((key, value) => value == null);
     var assignmentName = rawData.remove('Assignment');
 
