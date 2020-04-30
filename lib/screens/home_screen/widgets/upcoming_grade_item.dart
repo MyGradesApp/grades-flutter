@@ -24,7 +24,7 @@ class UpcomingGradeItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/grades_info', arguments: grade);
+          Navigator.pushNamed(context, '/grade_info', arguments: grade);
         },
         child: Row(
           children: <Widget>[

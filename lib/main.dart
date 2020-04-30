@@ -39,6 +39,17 @@ void main() async {
           )..add(AppStarted()),
         ),
         BlocProvider(
+          create: (_) => SettingsBloc(
+            initialStateSource: () {
+              return SettingsState.defaultSettings();
+            },
+            stateSaver: (settings) {
+              // TODO: Implement settings saving
+              print('IMPLEMENT SETTINGS SAVING');
+            },
+          ),
+        ),
+        BlocProvider(
           create: (_) => ThemeBloc(
             initialStateSource: () {
               var themeStr = prefs.getString('theme');

@@ -42,7 +42,18 @@ class SettingsScreen extends StatelessWidget {
                 return Text('Clear persistence data');
               },
             ),
-          )
+          ),
+          RaisedButton(
+            onPressed: () {
+              BlocProvider.of<SettingsBloc>(context)
+                  .add(ToggleSettingsGroupingMode());
+            },
+            child: BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, settings) {
+                return Text('Grouping: ${settings.groupingMode.asString()}');
+              },
+            ),
+          ),
         ],
       ),
     );

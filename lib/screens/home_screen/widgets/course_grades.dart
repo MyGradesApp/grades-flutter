@@ -5,8 +5,9 @@ class HeaderedGroup<T> extends StatelessWidget {
   final String title;
   final List<T> items;
   final Widget Function(T) builder;
+  final String subText;
 
-  HeaderedGroup(this.title, this.items, this.builder);
+  HeaderedGroup(this.title, this.items, this.builder, [this.subText]);
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +16,28 @@ class HeaderedGroup<T> extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 11.0),
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
+            padding: const EdgeInsets.symmetric(horizontal: 11.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                if (subText != null)
+                  Text(
+                    subText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                    ),
+                  ),
+              ],
             ),
           ),
           ListView.builder(
