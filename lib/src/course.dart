@@ -1,11 +1,15 @@
 import 'dart:math';
 
-import 'package:equatable/equatable.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:sis_loader/src/grade.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
+import 'package:sis_loader/src/utilities.dart';
 
 import '../sis_loader.dart' show SISLoader, debugMocking;
 import 'cookie_client.dart';
+
+part 'course.g.dart';
 
 class CourseService {
   final SISLoader sisLoader;
@@ -142,64 +146,22 @@ class CourseService {
   }
 }
 
-class Course extends Equatable {
-  final String gradesUrl;
-  final String courseName;
-  final String periodString;
-  final String teacherName;
-  final dynamic gradePercent;
-  final String gradeLetter;
+abstract class Course implements Built<Course, CourseBuilder> {
+  String get gradesUrl;
 
-  Course({
-    this.gradesUrl,
-    this.courseName,
-    this.periodString,
-    this.teacherName,
-    this.gradePercent,
-    this.gradeLetter,
-  });
+  String get courseName;
 
-  @override
-  String toString() {
-    return {
-      gradesUrl,
-      courseName,
-      periodString,
-      teacherName,
-      gradePercent,
-      gradeLetter
-    }.toString();
-  }
+  String get periodString;
 
-  factory Course.fromJson(Map<String, dynamic> json) {
-    return Course(
-      gradesUrl: json['gradesUrl'] as String,
-      courseName: json['courseName'] as String,
-      periodString: json['periodString'] as String,
-      teacherName: json['teacherName'] as String,
-      gradePercent: json['gradePercent'],
-      gradeLetter: json['gradeLetter'] as String,
-    );
-  }
+  String get teacherName;
 
-  Map<String, dynamic> toJson() {
-    var out = <String, dynamic>{};
-    out['gradesUrl'] = gradesUrl;
-    out['courseName'] = courseName;
-    out['periodString'] = periodString;
-    out['teacherName'] = teacherName;
-    out['gradePercent'] = gradePercent;
-    out['gradeLetter'] = gradeLetter;
-    return out;
-  }
+  StringOrInt get gradePercent;
 
-  @override
-  List<Object> get props => [
-        gradesUrl,
-        courseName,
-        periodString,
-        teacherName,
-        gradePercent,
-        gradeLetter,
-      ];
+  String get gradeLetter;
+
+  Course._();
+
+  factory Course([void Function(CourseBuilder) updates]) = _$Course;
+
+  static Serializer<Course> get serializer => _$courseSerializer;
 }

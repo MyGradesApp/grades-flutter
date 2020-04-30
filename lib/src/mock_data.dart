@@ -1,57 +1,52 @@
 import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/absences.dart';
+import 'package:sis_loader/src/utilities.dart';
 
 final COURSES = [
-  Course(
-    gradesUrl: '',
-    courseName: 'US History',
-    periodString: '01 01',
-    teacherName: 'Deborah Davis',
-    gradePercent: 82,
-    gradeLetter: 'B',
-  ),
-  Course(
-    gradesUrl: '',
-    courseName: 'AP Bio',
-    periodString: '04 04',
-    teacherName: 'Kristopher Mccanns',
-    gradePercent: 100,
-    gradeLetter: 'A',
-  ),
-  Course(
-    gradesUrl: '',
-    courseName: 'Astronomy Honors',
-    periodString: '05 05',
-    teacherName: 'Jessica Lee',
-    gradePercent: 99,
-    gradeLetter: 'A',
-  ),
-  Course(
-    gradesUrl: '',
-    courseName: 'US Gov',
-    periodString: '02 02',
-    teacherName: 'Daniel Henderson',
-    gradePercent: 87,
-    gradeLetter: 'B',
-  ),
-  Course(
-    gradesUrl: '',
-    courseName: 'English Lang Honors',
-    periodString: '03 03',
-    teacherName: 'Kimberly Phelps',
-    gradePercent: 92,
-    gradeLetter: 'A',
-  ),
+  Course((c) => c
+    ..gradesUrl = ''
+    ..courseName = 'US History'
+    ..periodString = '01 01'
+    ..teacherName = 'Deborah Davis'
+    ..gradePercent = StringOrInt(82)
+    ..gradeLetter = 'B'),
+  Course((c) => c
+    ..gradesUrl = ''
+    ..courseName = 'AP Bio'
+    ..periodString = '04 04'
+    ..teacherName = 'Kristopher Mccanns'
+    ..gradePercent = StringOrInt(100)
+    ..gradeLetter = 'A'),
+  Course((c) => c
+    ..gradesUrl = ''
+    ..courseName = 'Astronomy Honors'
+    ..periodString = '05 05'
+    ..teacherName = 'Jessica Lee'
+    ..gradePercent = StringOrInt(99)
+    ..gradeLetter = 'A'),
+  Course((c) => c
+    ..gradesUrl = ''
+    ..courseName = 'US Gov'
+    ..periodString = '02 02'
+    ..teacherName = 'Daniel Henderson'
+    ..gradePercent = StringOrInt(87)
+    ..gradeLetter = 'B'),
+  Course((c) => c
+    ..gradesUrl = ''
+    ..courseName = 'English Lang Honors'
+    ..periodString = '03 03'
+    ..teacherName = 'Kimberly Phelps'
+    ..gradePercent = StringOrInt(92)
+    ..gradeLetter = 'A'),
 ];
 
 final Map<String, dynamic> RAW_PROFILE = {};
 
-final PROFILE = Profile(
-  cumulative_gpa: 3.9,
-  cumulative_weighted_gpa: 4.1,
-  class_rank_numerator: 44,
-  class_rank_denominator: 801,
-);
+final PROFILE = Profile((p) => p
+  ..cumulative_gpa = 3.9
+  ..cumulative_weighted_gpa = 4.1
+  ..class_rank_numerator = 44
+  ..class_rank_denominator = 801);
 
 final Map<String, List<Grade>> GRADES = {
   'US History': [
@@ -148,5 +143,7 @@ final Map<String, Map<String, String>> CATEGORY_WEIGHTS = {
   'English Lang Honors': {},
 };
 
-final Absences ABSENCES = Absences(days: 2, periods: 3);
+final Absences ABSENCES = Absences((a) => a
+  ..days = 2
+  ..periods = 3);
 final String NAME = 'John Doe';

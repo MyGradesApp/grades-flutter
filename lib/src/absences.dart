@@ -1,16 +1,16 @@
-import 'package:equatable/equatable.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
-class Absences extends Equatable {
-  final int periods;
-  final int days;
+part 'absences.g.dart';
 
-  Absences({this.periods, this.days});
+abstract class Absences implements Built<Absences, AbsencesBuilder> {
+  int get periods;
 
-  @override
-  String toString() {
-    return '{periods: ${periods}, days: ${days}}';
-  }
+  int get days;
 
-  @override
-  List<Object> get props => [periods, days];
+  Absences._();
+
+  factory Absences([void Function(AbsencesBuilder) updates]) = _$Absences;
+
+  static Serializer<Absences> get serializer => _$absencesSerializer;
 }

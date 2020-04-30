@@ -1,27 +1,20 @@
-import 'package:equatable/equatable.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
-class Profile extends Equatable {
-  final double cumulative_gpa;
-  final double cumulative_weighted_gpa;
-  final int class_rank_numerator;
-  final int class_rank_denominator;
+part 'profile.g.dart';
 
-  Profile(
-      {this.cumulative_gpa,
-      this.cumulative_weighted_gpa,
-      this.class_rank_numerator,
-      this.class_rank_denominator});
+abstract class Profile implements Built<Profile, ProfileBuilder> {
+  double get cumulative_gpa;
 
-  @override
-  List<Object> get props => [
-        cumulative_gpa,
-        cumulative_weighted_gpa,
-        class_rank_numerator,
-        class_rank_denominator
-      ];
+  double get cumulative_weighted_gpa;
 
-  @override
-  String toString() {
-    return 'Profile{cumulative_gpa: $cumulative_gpa, cumulative_weighted_gpa: $cumulative_weighted_gpa, class_rank_numerator: $class_rank_numerator, class_rank_denominator: $class_rank_denominator}';
-  }
+  int get class_rank_numerator;
+
+  int get class_rank_denominator;
+
+  Profile._();
+
+  factory Profile([void Function(ProfileBuilder) updates]) = _$Profile;
+
+  static Serializer<Profile> get serializer => _$profileSerializer;
 }

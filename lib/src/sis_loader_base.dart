@@ -7,6 +7,7 @@ import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/exceptions.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 import 'package:sis_loader/src/profile.dart';
+import 'package:sis_loader/src/utilities.dart';
 
 import 'cookie_client.dart';
 import 'course.dart';
@@ -196,14 +197,20 @@ class SISLoader {
         percent = gradeParts[0];
       }
 
-      return Course(
-        gradesUrl: match[1],
-        courseName: match[2],
-        periodString: match[3],
-        teacherName: match[4],
-        gradePercent: percent ?? gradeParts[0],
-        gradeLetter: gradeParts.length > 1 ? gradeParts[1] : null,
-      );
+      StringOrInt typedPercent;
+      if (percent == null) {
+        typedPercent = StringOrInt(gradeParts[0]);
+      } else {
+        typedPercent = StringOrInt(percent);
+      }
+
+      return Course((c) => c
+        ..gradesUrl = match[1]
+        ..courseName = match[2]
+        ..periodString = match[3]
+        ..teacherName = match[4]
+        ..gradePercent = typedPercent
+        ..gradeLetter = (gradeParts.length > 1 ? gradeParts[1] : null));
     }).toList();
 
     return courses;
@@ -279,15 +286,15 @@ class SISLoader {
         classRankDenominator = int.tryParse(classRankPieces[1]);
       }
     }
-    return Profile(
-        cumulative_gpa: rawProfile['cumluative_gpa'] != null
-            ? double.tryParse(rawProfile['cumluative_gpa'] as String)
-            : null,
-        cumulative_weighted_gpa: rawProfile['cumulative_weighted_gpa'] != null
-            ? double.tryParse(rawProfile['cumulative_weighted_gpa'] as String)
-            : null,
-        class_rank_numerator: classRankNumerator,
-        class_rank_denominator: classRankDenominator);
+    return Profile((p) => p
+      ..cumulative_gpa = rawProfile['cumluative_gpa'] != null
+          ? double.tryParse(rawProfile['cumluative_gpa'] as String)
+          : null
+      ..cumulative_weighted_gpa = rawProfile['cumulative_weighted_gpa'] != null
+          ? double.tryParse(rawProfile['cumulative_weighted_gpa'] as String)
+          : null
+      ..class_rank_numerator = classRankNumerator
+      ..class_rank_denominator = classRankDenominator);
   }
 
   Future<List<dynamic>> getStudentInfo() async {
@@ -364,9 +371,8 @@ class SISLoader {
     }
     var absentPeriods = absencesMatch.group(1);
     var absentDays = absencesMatch.group(2);
-    return Absences(
-      periods: int.tryParse(absentPeriods),
-      days: int.tryParse(absentDays),
-    );
+    return Absences((a) => a
+      ..periods = int.tryParse(absentPeriods)
+      ..days = int.tryParse(absentDays));
   }
 }

@@ -1,5 +1,9 @@
-import 'package:equatable/equatable.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:intl/intl.dart';
+
+part 'grade.g.dart';
 
 final shortMonthDateFormat = DateFormat('MMM dd, yyyy hh:mm aa');
 final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
@@ -35,10 +39,15 @@ DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
   return null;
 }
 
-class Grade extends Equatable {
-  final Map<String, String> raw;
+abstract class Grade implements Built<Grade, GradeBuilder> {
+  BuiltMap<String, String> get raw;
 
-  Grade(this.raw);
+  Grade._();
+
+  factory Grade(Map<String, String> raw) =>
+      _$Grade._(raw: (raw..removeWhere((_, v) => v == null)).build());
+
+  static Serializer<Grade> get serializer => _$gradeSerializer;
 
   String get grade => raw['Grade'];
 
@@ -71,20 +80,4 @@ class Grade extends Equatable {
       return null;
     }
   }
-
-  factory Grade.fromJson(Map<String, dynamic> json) {
-    return Grade(Map<String, String>.from(json));
-  }
-
-  Map<String, dynamic> toJson() {
-    return raw;
-  }
-
-  @override
-  String toString() {
-    return 'Grade${toJson()}';
-  }
-
-  @override
-  List<Object> get props => [raw];
 }
