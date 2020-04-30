@@ -17,8 +17,18 @@ class GradeInfoScreen extends StatelessWidget {
       pointsUpper = double.tryParse(matches?.group(1) ?? '0');
       pointsLower = double.tryParse(matches?.group(2) ?? '0');
     }
-    var pointsChartData = [
-      CircularStackEntry([
+
+    List<CircularSegmentEntry> items;
+    if (pointsUpper == 0 && pointsLower == 0) {
+      items = [
+        CircularSegmentEntry(
+          1,
+          const Color(0xff2ad5d5),
+          rankKey: 'achieved',
+        )
+      ];
+    } else {
+      items = [
         CircularSegmentEntry(
           pointsUpper ?? 0,
           const Color(0xff2ad5d5),
@@ -29,7 +39,11 @@ class GradeInfoScreen extends StatelessWidget {
           Colors.blueGrey,
           rankKey: 'missed',
         ),
-      ]),
+      ];
+    }
+
+    var pointsChartData = [
+      CircularStackEntry(items),
     ];
 
     var rawData = grade.raw.toMap();
