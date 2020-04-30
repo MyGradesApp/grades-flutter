@@ -36,6 +36,12 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
               return Center(child: CircularProgressIndicator());
             }
             if (state is NetworkLoaded<AcademicInfo>) {
+              if (state.data == null) {
+                return SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Center(child: Text('No offline data')),
+                );
+              }
               var profile = state.data.profile;
               var absences = state.data.absences;
               return SizedBox.expand(

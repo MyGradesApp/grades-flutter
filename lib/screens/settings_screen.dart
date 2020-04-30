@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -29,6 +30,19 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
           ),
+          RaisedButton(
+            onPressed: () async {
+              var prefs = await SharedPreferences.getInstance();
+              await prefs.remove(DataPersistence.GRADES_KEY);
+              await prefs.remove(DataPersistence.COURSES_KEY);
+              await prefs.remove(DataPersistence.ACADEMIC_INFO_KEY);
+            },
+            child: BlocBuilder<ThemeBloc, ThemeMode>(
+              builder: (context, themeMode) {
+                return Text('Clear persistence data');
+              },
+            ),
+          )
         ],
       ),
     );

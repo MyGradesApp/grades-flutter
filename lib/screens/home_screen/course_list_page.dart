@@ -33,6 +33,12 @@ class _CourseListPageState extends State<CourseListPage> {
             return Center(child: CircularProgressIndicator());
           }
           if (state is NetworkLoaded<List<Course>>) {
+            if (state.data == null) {
+              return SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Center(child: Text('No offline data')),
+              );
+            }
             return ListView.builder(
               itemCount: state.data.length,
               itemBuilder: (context, i) {
