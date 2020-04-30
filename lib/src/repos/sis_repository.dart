@@ -96,7 +96,7 @@ class SISRepository {
     );
   }
 
-  Future<List<Grade>> getCourseGrades(Course course,
+  Future<GradeData> getCourseGrades(Course course,
       {bool refresh = false}) async {
     return await _fetchWrapper(
       () async {

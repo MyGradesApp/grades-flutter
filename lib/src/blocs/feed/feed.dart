@@ -9,8 +9,8 @@ Stream<FeedEvent> fetchCourseGrades(
     bool Function(Grade element) test,
     bool refresh) async* {
   for (var course in courses) {
-    var grades = await sisRepository.getCourseGrades(course, refresh: refresh);
-    grades = grades.where(test).toList();
+    var gradeData = await sisRepository.getCourseGrades(course, refresh: refresh);
+    var grades = gradeData.grades.where(test).toList();
 
     yield GradesLoaded(course: course, grades: grades);
   }

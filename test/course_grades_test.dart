@@ -22,7 +22,7 @@ void main() async {
   void testCourseGradesBloc(List<Grade> data) async {
     var sisRepo = MockSISRepo();
     when(sisRepo.getCourseGrades(course, refresh: anyNamed('refresh')))
-        .thenAnswer((_) => Future.value(data));
+        .thenAnswer((_) => Future.value(GradeData(grades: data)));
     var bloc = CourseGradesBloc(sisRepository: sisRepo, course: course);
     bloc.add(FetchNetworkData());
 
@@ -60,8 +60,8 @@ void main() async {
       var sisRepo = MockSISRepo();
       var bloc = CourseGradesBloc(sisRepository: sisRepo, course: course);
       expect(bloc.format(null), 'grades.length: null');
-      expect(bloc.format([]), 'grades.length: 0');
-      expect(bloc.format([Grade({})]), 'grades.length: 1');
+      expect(bloc.format(GradeData(grades: [])), 'grades.length: 0');
+      expect(bloc.format(GradeData(grades: [Grade({})])), 'grades.length: 1');
     });
   });
 

@@ -9,17 +9,15 @@ import 'package:sis_loader/sis_loader.dart' hide serializers;
 
 class DataPersistence {
   final SharedPreferences prefs;
-  Map<String, List<Grade>> _grades;
+  Map<String, GradeData> _grades;
   List<Course> _courses;
   AcademicInfo _academicInfo;
 
   static const String ACADEMIC_INFO_KEY = 'persisted_academic_info_v3';
   static const String GRADES_KEY = 'persisted_grades_v3';
   static const String COURSES_KEY = 'persisted_courses_v3';
-  static const FullType BUILT_GRADES_TYPE = FullType(BuiltMap, [
-    FullType(String),
-    FullType(BuiltList, [FullType(Grade)])
-  ]);
+  static const FullType BUILT_GRADES_TYPE =
+      FullType(BuiltMap, [FullType(String), FullType(GradeData)]);
   static const FullType BUILT_COURSES_TYPE =
       FullType(BuiltList, [FullType(Course)]);
 
@@ -29,14 +27,14 @@ class DataPersistence {
     _academicInfo = _loadAcademicInfo();
   }
 
-  Map<String, List<Grade>> get grades => _grades;
+  Map<String, GradeData> get grades => _grades;
 
-  set grades(Map<String, List<Grade>> grades) {
+  set grades(Map<String, GradeData> grades) {
     _grades = grades;
     _saveGrades();
   }
 
-  void setGradesForCourse(String course, List<Grade> grades) {
+  void setGradesForCourse(String course, GradeData grades) {
     (_grades ??= {})[course] = grades;
     _saveGrades();
   }
@@ -55,7 +53,7 @@ class DataPersistence {
     _saveCourses();
   }
 
-  Map<String, List<Grade>> _loadGrades() {
+  Map<String, GradeData> _loadGrades() {
     var gradesStr = prefs.getString(DataPersistence.GRADES_KEY);
     if (gradesStr == null || gradesStr.isEmpty || gradesStr == 'null') {
       return null;
@@ -63,20 +61,15 @@ class DataPersistence {
     var builtGrades = serializers.deserialize(
       jsonDecode(gradesStr),
       specifiedType: DataPersistence.BUILT_GRADES_TYPE,
-    ) as BuiltMap<String, BuiltList<Grade>>;
-    return builtGrades
-        .toMap()
-        .map((key, value) => MapEntry(key, value.toList()));
+    );
+    return (builtGrades as BuiltMap<String, GradeData>).toMap();
   }
 
   void _saveGrades() {
-    var builtGrades =
-        _grades.map((key, value) => MapEntry(key, value.build())).build();
-
     prefs.setString(
       DataPersistence.GRADES_KEY,
       jsonEncode(serializers.serialize(
-        builtGrades,
+        _grades.build(),
         specifiedType: DataPersistence.BUILT_GRADES_TYPE,
       )),
     );

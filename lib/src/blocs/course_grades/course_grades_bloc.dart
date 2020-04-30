@@ -4,7 +4,7 @@ import 'package:sis_loader/sis_loader.dart';
 
 import '../network_action_bloc/network_action_bloc.dart';
 
-class CourseGradesBloc extends NetworkActionBloc<List<Grade>> {
+class CourseGradesBloc extends NetworkActionBloc<GradeData> {
   final SISRepository _sisRepository;
   final Course _course;
 
@@ -15,12 +15,12 @@ class CourseGradesBloc extends NetworkActionBloc<List<Grade>> {
         assert(course != null),
         _sisRepository = sisRepository,
         _course = course,
-        super(format: (g) => 'grades.length: ${g?.length}');
+        super(format: (g) => 'grades.length: ${g?.grades?.length}');
 
   Course get course => _course;
 
   @override
-  Future<List<Grade>> fetch(bool refresh) async {
+  Future<GradeData> fetch(bool refresh) async {
     return await _sisRepository.getCourseGrades(_course, refresh: refresh);
   }
 }

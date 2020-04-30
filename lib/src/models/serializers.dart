@@ -4,11 +4,11 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:sis_loader/sis_loader.dart' as sis_loader;
 import 'package:sis_loader/sis_loader.dart'
-    show Absences, Course, Grade, Profile;
+    show Absences, Course, Grade, GradeData, Profile;
 
 part 'serializers.g.dart';
 
-@SerializersFor([AcademicInfo])
+@SerializersFor([AcademicInfo, GradeData])
 final Serializers serializers = (_$serializers.toBuilder()
       ..merge(sis_loader.serializers)
       ..addBuilderFactory(
@@ -21,7 +21,7 @@ final Serializers serializers = (_$serializers.toBuilder()
       )
       ..addBuilderFactory(
         DataPersistence.BUILT_GRADES_TYPE,
-        () => MapBuilder<String, BuiltList<Grade>>(),
+        () => MapBuilder<String, GradeData>(),
       )
       ..addPlugin(StandardJsonPlugin()))
     .build();

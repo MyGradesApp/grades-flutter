@@ -15,6 +15,7 @@ void main() {
   group('deserialization', () {
     test('smoke test', () {
       var prefs = MockSharedPrefs();
+<<<<<<< Updated upstream
       var targetCourse =
           '[{"gradesUrl":"Spam","courseName":"courseName","periodString":"Bar",'
           '"teacherName":"Foo","gradePercent":"Eggs","gradeLetter":"Baz"}]';
@@ -22,6 +23,12 @@ void main() {
           .thenReturn('{"foo": $targetCourse}');
       when(prefs.getString(DataPersistence.COURSES_KEY))
           .thenReturn(targetCourse);
+=======
+      when(prefs.getString('persisted_grades_v2'))
+          .thenReturn('{"foo": [{"key":"success"}]}');
+      when(prefs.getString('persisted_courses_v3'))
+          .thenReturn('[{"key":"success"}]');
+>>>>>>> Stashed changes
       DataPersistence(prefs);
     });
 
@@ -70,9 +77,15 @@ void main() {
       ];
 
       expect(
+<<<<<<< Updated upstream
           prefs.getString(DataPersistence.COURSES_KEY),
           '[{"gradesUrl":"Spam","courseName":"courseName","periodString":"Bar",'
           '"teacherName":"Foo","gradePercent":"Eggs","gradeLetter":"Baz"}]');
+=======
+          prefs.getString('persisted_courses_v3'),
+          '[{"gradesUrl":null,"courseName":"courseName","periodString":null,'
+          '"teacherName":null,"gradePercent":null,"gradeLetter":null}]');
+>>>>>>> Stashed changes
     });
   });
 }
