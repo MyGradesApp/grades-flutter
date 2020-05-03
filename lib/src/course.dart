@@ -13,6 +13,7 @@ import 'cookie_client.dart';
 part 'course.g.dart';
 
 abstract class GradeData implements Built<GradeData, GradeDataBuilder> {
+  @nullable
   BuiltList<Grade> get grades;
 
   @nullable
