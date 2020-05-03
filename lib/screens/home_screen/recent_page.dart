@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/loading_indicator.dart';
+import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
+import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 import 'package:sis_loader/src/grade.dart';
 
 import 'widgets/course_grades.dart';
@@ -69,19 +72,16 @@ class _RecentPageState extends State<RecentPage>
                 },
               );
             } else {
-              return Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Center(
-                    child: Text('No recent grades'),
-                  ),
-                ),
+              return FullscreenSimpleIconMessage(
+                icon: FontAwesomeIcons.inbox,
+                text: 'No recent grades',
               );
             }
           }
           if (state is RecentError) {
-            return Text('An error occurred');
+            return FullscreenErrorMessage(
+              text: 'There was an unknown error',
+            );
           }
           return Container();
         },

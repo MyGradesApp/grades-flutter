@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/class_list_item.dart';
 import 'package:grades/widgets/loading_indicator.dart';
+import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
+import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class CourseListPage extends StatefulWidget {
@@ -35,9 +38,9 @@ class _CourseListPageState extends State<CourseListPage> {
           }
           if (state is NetworkLoaded<List<Course>>) {
             if (state.data == null) {
-              return SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Center(child: Text('No offline data')),
+              return FullscreenSimpleIconMessage(
+                icon: FontAwesomeIcons.inbox,
+                text: 'No courses available offline',
               );
             }
             return ListView.builder(
@@ -61,9 +64,8 @@ class _CourseListPageState extends State<CourseListPage> {
             );
           }
           if (state is NetworkError) {
-            return SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              child: Center(child: Text('An error occurred')),
+            return FullscreenErrorMessage(
+              text: 'There was an unknown error',
             );
           }
           return Container();

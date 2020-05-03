@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/loading_indicator.dart';
+import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 
 class AcademicInfoScreen extends StatefulWidget {
   @override
@@ -40,7 +41,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
               if (state.data == null) {
                 return SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
-                  child: Center(child: Text('No offline data')),
+                  child: Center(child: Text('No data available offline')),
                 );
               }
               var profile = state.data.profile;
@@ -74,7 +75,9 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
               );
             }
             if (state is NetworkError) {
-              return Text('An error occured');
+              return FullscreenErrorMessage(
+                text: 'There was an unknown error',
+              );
             }
             return Container();
           },

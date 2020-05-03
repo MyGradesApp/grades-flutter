@@ -4,10 +4,13 @@ import 'package:collection/collection.dart' as collection;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/home_screen/widgets/course_grades.dart';
 import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/loading_indicator.dart';
+import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
+import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 import 'package:intl/intl.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -71,16 +74,16 @@ class _CourseGradesViewState extends State<CourseGradesView> {
               return Center(child: LoadingIndicator());
             }
             if (state is NetworkError) {
-              return Text('An error occurred');
+              return FullscreenErrorMessage(
+                text: 'There was an unknown error',
+              );
             }
             if (state is NetworkLoaded<GradeData>) {
               // Data persistence has no saved data for this course
               if (state.data == null) {
-                return SizedBox.expand(
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: Text('No saved data for this course'),
-                  ),
+                return FullscreenSimpleIconMessage(
+                  icon: FontAwesomeIcons.inbox,
+                  text: 'No saved data for this course',
                 );
               }
 
@@ -104,6 +107,12 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
               var groupKeys = groupedGrades.keys.toList()..sort();
 
+              if (groupKeys.isEmpty) {
+                return FullscreenSimpleIconMessage(
+                  icon: FontAwesomeIcons.inbox,
+                  text: 'This course has no grades',
+                );
+              }
               return ListView.builder(
                 itemCount: groupKeys.length,
                 itemBuilder: (context, i) {
