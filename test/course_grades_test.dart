@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:mockito/mockito.dart';
@@ -19,24 +18,24 @@ void main() async {
     ..gradePercent = StringOrInt(87)
     ..gradeLetter = 'B');
 
-  void testCourseGradesBloc(List<Grade> data) async {
+  void testCourseGradesBloc(GradeData data) async {
     var sisRepo = MockSISRepo();
     when(sisRepo.getCourseGrades(course, refresh: anyNamed('refresh')))
-        .thenAnswer((_) => Future.value(GradeData(grades: data)));
+        .thenAnswer((_) => Future.value(GradeData((d) => d.replace(data))));
     var bloc = CourseGradesBloc(sisRepository: sisRepo, course: course);
     bloc.add(FetchNetworkData());
 
-    await testNetworkBlocFetch<NetworkLoaded<List<Grade>>>(
+    await testNetworkBlocFetch<NetworkLoaded<GradeData>>(
       bloc,
-      (e) => listEquals(e.data, data),
+      (e) => e.data == data,
     );
 
     bloc = CourseGradesBloc(sisRepository: sisRepo, course: course);
     bloc.add(RefreshNetworkData());
 
-    await testNetworkBlocRefresh<NetworkLoaded<List<Grade>>>(
+    await testNetworkBlocRefresh<NetworkLoaded<GradeData>>(
       bloc,
-      (e) => listEquals(e.data, data),
+      (e) => e.data == data,
     );
   }
 
@@ -60,8 +59,11 @@ void main() async {
       var sisRepo = MockSISRepo();
       var bloc = CourseGradesBloc(sisRepository: sisRepo, course: course);
       expect(bloc.format(null), 'grades.length: null');
-      expect(bloc.format(GradeData(grades: [])), 'grades.length: 0');
-      expect(bloc.format(GradeData(grades: [Grade({})])), 'grades.length: 1');
+      expect(bloc.format(GradeData((d) => d..grades.replace(<Grade>[]))),
+          'grades.length: 0');
+      expect(
+          bloc.format(GradeData((d) => d.grades..replace(<Grade>[Grade({})]))),
+          'grades.length: 1');
     });
   });
 
@@ -84,17 +86,25 @@ void main() async {
 
   group('offline', () {
     test('no data', () async {
-      await testCourseGradesBloc(null);
+      await testCourseGradesBloc(GradeData(
+        (d) => d
+          ..grades = null
+          ..weights = null,
+      ));
     });
 
     test('empty data', () async {
-      await testCourseGradesBloc([]);
+      await testCourseGradesBloc(GradeData(
+        (d) =>
+            d..grades.replace(<Grade>[])..weights.replace(<String, String>{}),
+      ));
     });
 
     test('normal data', () async {
-      await testCourseGradesBloc([
-        Grade({'key': 'success'})
-      ]);
+      await testCourseGradesBloc(GradeData((d) => d
+        ..grades.replace(<Grade>[
+          Grade({'key': 'success'})
+        ])));
     });
   });
 }

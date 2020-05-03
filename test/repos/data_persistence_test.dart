@@ -15,20 +15,13 @@ void main() {
   group('deserialization', () {
     test('smoke test', () {
       var prefs = MockSharedPrefs();
-<<<<<<< Updated upstream
-      var targetCourse =
+      var courseData =
           '[{"gradesUrl":"Spam","courseName":"courseName","periodString":"Bar",'
           '"teacherName":"Foo","gradePercent":"Eggs","gradeLetter":"Baz"}]';
+      var gradeData = '{"grades":[{"raw":{"foo":"Bar"}}]}';
       when(prefs.getString(DataPersistence.GRADES_KEY))
-          .thenReturn('{"foo": $targetCourse}');
-      when(prefs.getString(DataPersistence.COURSES_KEY))
-          .thenReturn(targetCourse);
-=======
-      when(prefs.getString('persisted_grades_v2'))
-          .thenReturn('{"foo": [{"key":"success"}]}');
-      when(prefs.getString('persisted_courses_v3'))
-          .thenReturn('[{"key":"success"}]');
->>>>>>> Stashed changes
+          .thenReturn('{"foo": $gradeData}');
+      when(prefs.getString(DataPersistence.COURSES_KEY)).thenReturn(courseData);
       DataPersistence(prefs);
     });
 
@@ -45,21 +38,25 @@ void main() {
       SharedPreferences.setMockInitialValues(<String, dynamic>{});
       var prefs = await SharedPreferences.getInstance();
       var persist = DataPersistence(prefs);
-      persist.setGradesForCourse('foo', [
-        Grade({'thisisa': 'grade'}),
-      ]);
+      persist.setGradesForCourse(
+          'foo',
+          GradeData((d) => d
+            ..grades.replace(<Grade>[
+              Grade({'thisisa': 'grade'}),
+            ])));
 
       expect(prefs.getString(DataPersistence.GRADES_KEY),
-          '{"foo":[{"raw":{"thisisa":"grade"}}]}');
+          '{"foo":{"grades":[{"raw":{"thisisa":"grade"}}]}}');
 
       persist.grades = {
-        'foo': [
-          Grade({'bar': 'baz'}),
-        ]
+        'foo': GradeData((d) => d
+          ..grades.replace(<Grade>[
+            Grade({'bar': 'baz'}),
+          ]))
       };
 
       expect(prefs.getString(DataPersistence.GRADES_KEY),
-          '{"foo":[{"raw":{"bar":"baz"}}]}');
+          '{"foo":{"grades":[{"raw":{"bar":"baz"}}]}}');
     });
 
     test('courses', () async {
@@ -77,15 +74,9 @@ void main() {
       ];
 
       expect(
-<<<<<<< Updated upstream
           prefs.getString(DataPersistence.COURSES_KEY),
           '[{"gradesUrl":"Spam","courseName":"courseName","periodString":"Bar",'
           '"teacherName":"Foo","gradePercent":"Eggs","gradeLetter":"Baz"}]');
-=======
-          prefs.getString('persisted_courses_v3'),
-          '[{"gradesUrl":null,"courseName":"courseName","periodString":null,'
-          '"teacherName":null,"gradePercent":null,"gradeLetter":null}]');
->>>>>>> Stashed changes
     });
   });
 }
