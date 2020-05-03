@@ -121,9 +121,12 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: HeaderedGroup(
-                      group.toHeader(),
-                      grades,
-                      (Grade grade) => GradeItemCard(
+                      title: group.toHeader(),
+                      subtitle: ((state.data.weights != null)
+                          ? state.data.weights[group.raw()]?.toString()
+                          : null),
+                      children: grades,
+                      builder: (Grade grade) => GradeItemCard(
                         grade: grade,
                         onTap: () {
                           Navigator.pushNamed(
@@ -133,9 +136,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                           );
                         },
                       ),
-                      ((state.data.weights != null)
-                          ? state.data.weights[group.raw()]?.toString()
-                          : null),
                     ),
                   );
                 },

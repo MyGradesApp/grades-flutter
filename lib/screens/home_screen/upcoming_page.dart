@@ -46,9 +46,10 @@ class _UpcomingPageState extends State<UpcomingPage>
               children: [
                 for (var group in groupsList)
                   HeaderedGroup(
-                    group.item1.toHumanFormat(),
-                    group.item2,
-                    (CourseGrade item) {
+                    title: group.item1.toHumanFormat(),
+                    children: group.item2,
+                    maxCount: 10,
+                    builder: (CourseGrade item) {
                       return UpcomingGradeItem(
                         courseName: item.course.courseName,
                         grade: item.grade,
@@ -72,9 +73,10 @@ class _UpcomingPageState extends State<UpcomingPage>
                 itemCount: groupsList.length,
                 itemBuilder: (context, i) {
                   return HeaderedGroup(
-                    groupsList[i].item1.toHumanFormat(),
-                    groupsList[i].item2,
-                    (CourseGrade item) {
+                    title: groupsList[i].item1.toHumanFormat(),
+                    children: groupsList[i].item2,
+                    maxCount: 10,
+                    builder: (CourseGrade item) {
                       return UpcomingGradeItem(
                         courseName: item.course.courseName,
                         grade: item.grade,

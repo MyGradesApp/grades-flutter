@@ -47,9 +47,10 @@ class _RecentPageState extends State<RecentPage>
               children: [
                 for (var course in courses)
                   HeaderedGroup(
-                    course.key.courseName,
-                    course.value,
-                    _buildGradeItemCard,
+                    title: course.key.courseName,
+                    children: course.value,
+                    maxCount: 4,
+                    builder: _buildGradeItemCard,
                   ),
                 if (firstLoad)
                   Padding(
@@ -68,9 +69,10 @@ class _RecentPageState extends State<RecentPage>
                 itemCount: courses.length,
                 itemBuilder: (context, i) {
                   return HeaderedGroup(
-                    courses[i].key.courseName,
-                    courses[i].value,
-                    _buildGradeItemCard,
+                    title: courses[i].key.courseName,
+                    children: courses[i].value,
+                    maxCount: 4,
+                    builder: _buildGradeItemCard,
                   );
                 },
               );
