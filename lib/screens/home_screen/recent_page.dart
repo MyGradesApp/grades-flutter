@@ -41,19 +41,22 @@ class _RecentPageState extends State<RecentPage>
         builder: (context, state) {
           if (state is RecentLoading) {
             var courses = state.partialCourses.entries.toList();
-            return SingleChildScrollView(
+
+            return ListView(
               physics: AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  for (var course in courses)
-                    HeaderedGroup(
-                      course.key.courseName,
-                      course.value,
-                      _buildGradeItemCard,
-                    ),
-                  if (firstLoad) Center(child: LoadingIndicator())
-                ],
-              ),
+              children: [
+                for (var course in courses)
+                  HeaderedGroup(
+                    course.key.courseName,
+                    course.value,
+                    _buildGradeItemCard,
+                  ),
+                if (firstLoad)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Center(child: LoadingIndicator()),
+                  ),
+              ],
             );
           }
 

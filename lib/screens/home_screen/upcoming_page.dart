@@ -41,24 +41,26 @@ class _UpcomingPageState extends State<UpcomingPage>
           if (state is UpcomingLoading) {
             var groupsList = state.sortedGroups();
 
-            return SingleChildScrollView(
+            return ListView(
               physics: AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: <Widget>[
-                  for (var group in groupsList)
-                    HeaderedGroup(
-                      group.item1.toHumanFormat(),
-                      group.item2,
-                      (CourseGrade item) {
-                        return UpcomingGradeItem(
-                          courseName: item.course.courseName,
-                          grade: item.grade,
-                        );
-                      },
-                    ),
-                  if (firstLoad) Center(child: LoadingIndicator()),
-                ],
-              ),
+              children: [
+                for (var group in groupsList)
+                  HeaderedGroup(
+                    group.item1.toHumanFormat(),
+                    group.item2,
+                    (CourseGrade item) {
+                      return UpcomingGradeItem(
+                        courseName: item.course.courseName,
+                        grade: item.grade,
+                      );
+                    },
+                  ),
+                if (firstLoad)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Center(child: LoadingIndicator()),
+                  ),
+              ],
             );
           }
 
