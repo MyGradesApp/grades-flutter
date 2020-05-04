@@ -56,6 +56,16 @@ class AuthenticationBloc
           if (isHttpError(e)) {
             _offlineBloc.add(NetworkOfflineEvent());
             yield Authenticated.offline();
+          } else if (e is NoSuchMethodError) {
+            // Try to login again, but without a session
+            await _sisRepository.login(
+              username,
+              password,
+            );
+            unawaited(secureStorage.write(
+                key: AuthConst.SIS_SESSION_KEY,
+                value: _sisRepository.sisLoader.sessionCookies));
+            yield Authenticated.online();
           } else {
             yield Unauthenticated();
           }
