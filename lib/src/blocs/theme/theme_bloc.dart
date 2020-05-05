@@ -57,10 +57,10 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeMode> {
   Stream<ThemeMode> mapEventToState(
     ThemeEvent event,
   ) async* {
-    print(state);
     if (event is AdvanceTheme) {
       yield* _mapAdvanceThemeToState();
     }
+    stateSaver(state);
   }
 
   Stream<ThemeMode> _mapAdvanceThemeToState() async* {

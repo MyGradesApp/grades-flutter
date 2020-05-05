@@ -11,7 +11,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AcademicInfo.serializer)
       ..add(Grade.serializer)
       ..add(GradeData.serializer)
+      ..add(GroupingMode.serializer)
       ..add(Profile.serializer)
+      ..add(SettingsState.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Grade)]),
           () => new ListBuilder<Grade>())

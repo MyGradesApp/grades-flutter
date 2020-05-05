@@ -1,49 +1,37 @@
 part of 'settings_bloc.dart';
 
-enum GroupingMode { Date, Category }
+class GroupingMode extends EnumClass {
+  static const GroupingMode date = _$date;
+  static const GroupingMode category = _$category;
 
-extension GroupingModeMethods on GroupingMode {
-  String asString() {
-    if (this == GroupingMode.Date) {
-      return 'date';
-    } else {
-      return 'category';
-    }
-  }
+  static Serializer<GroupingMode> get serializer => _$groupingModeSerializer;
+
+  const GroupingMode._(String name) : super(name);
+
+  static BuiltSet<GroupingMode> get values => _$values;
+  static GroupingMode valueOf(String name) => _$valueOf(name);
 
   GroupingMode toggled() {
-    if (this == GroupingMode.Category) {
-      return GroupingMode.Date;
+    if (this == GroupingMode.category) {
+      return GroupingMode.date;
     } else {
-      return GroupingMode.Category;
-    }
-  }
-
-  static GroupingMode groupingModeFromString(String src) {
-    if (src == 'date') {
-      return GroupingMode.Date;
-    } else if (src == 'category') {
-      return GroupingMode.Category;
-    } else {
-      throw FormatException('Invalid value: ${src}');
+      return GroupingMode.category;
     }
   }
 }
 
-class SettingsState {
-  final GroupingMode groupingMode;
+abstract class SettingsState
+    implements Built<SettingsState, SettingsStateBuilder> {
+  GroupingMode get groupingMode;
 
-  const SettingsState({
-    @required this.groupingMode,
-  });
+  SettingsState._();
 
-  SettingsState update({GroupingMode groupingMode}) {
-    return SettingsState(
-      groupingMode: groupingMode ?? this.groupingMode,
-    );
-  }
+  factory SettingsState([void Function(SettingsStateBuilder) updates]) =
+      _$SettingsState;
 
   static SettingsState defaultSettings() {
-    return SettingsState(groupingMode: GroupingMode.Category);
+    return SettingsState((s) => s..groupingMode = GroupingMode.category);
   }
+
+  static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 }

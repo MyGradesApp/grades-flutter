@@ -8,7 +8,12 @@ import 'package:sis_loader/sis_loader.dart'
 
 part 'serializers.g.dart';
 
-@SerializersFor([AcademicInfo, GradeData])
+@SerializersFor([
+  AcademicInfo,
+  GradeData,
+  SettingsState,
+  GroupingMode,
+])
 final Serializers serializers = (_$serializers.toBuilder()
       ..merge(sis_loader.serializers)
       ..addBuilderFactory(
