@@ -57,7 +57,7 @@ class HeaderedGroup<T> extends StatelessWidget {
             itemCount: displayedChildren + 1,
             itemBuilder: (context, i) {
               if (i == displayedChildren) {
-                if (children.length > maxCount) {
+                if (maxCount != null && children.length > maxCount) {
                   return Text('and ${children.length - maxCount} more');
                 }
                 return Container();
