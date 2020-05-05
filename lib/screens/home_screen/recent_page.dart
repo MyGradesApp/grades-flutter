@@ -10,7 +10,7 @@ import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 import 'package:sis_loader/src/grade.dart';
 
-import 'widgets/course_grades.dart';
+import '../../widgets/headered_group.dart';
 
 class RecentPage extends StatefulWidget {
   @override

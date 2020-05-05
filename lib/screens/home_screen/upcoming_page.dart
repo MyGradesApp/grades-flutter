@@ -9,7 +9,7 @@ import 'package:grades/widgets/loading_indicator.dart';
 import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 
-import 'widgets/course_grades.dart';
+import '../../widgets/headered_group.dart';
 
 class UpcomingPage extends StatefulWidget {
   @override
