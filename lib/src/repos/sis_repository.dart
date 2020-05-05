@@ -9,7 +9,7 @@ import 'package:sis_loader/sis_loader.dart';
 
 import '../blocs/offline/offline_bloc.dart';
 
-const Duration TIMEOUT = Duration(seconds: 5);
+const Duration TIMEOUT = Duration(seconds: 20);
 
 const COURSES = 'courses';
 const ACADEMIC_INFO = 'academic_info';
