@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grade_core/src/sentry.dart';
 import 'package:grade_core/src/utilities/consts.dart';
 import 'package:grade_core/src/utilities/wrapped_secure_storage.dart';
+import 'package:pedantic/pedantic.dart';
 
 import '../../repos/sis_repository.dart';
 
@@ -39,8 +41,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             value: _sisRepository.sisLoader.sessionCookies);
         _sisRepository.clearCache();
         yield LoginState.success();
-      } catch (e) {
-        yield LoginState.failure(e);
+      } catch (e, st) {
+        yield LoginState.failure(e, st);
+        unawaited(
+          reportBlocException(exception: e, stackTrace: st, bloc: this),
+        );
       }
     }
   }

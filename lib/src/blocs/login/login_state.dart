@@ -6,12 +6,14 @@ class LoginState {
   final bool isSuccess;
   final bool isFailure;
   final dynamic error;
+  final StackTrace stackTrace;
 
   const LoginState({
     @required this.isLoading,
     @required this.isSuccess,
     @required this.isFailure,
     this.error,
+    this.stackTrace,
   });
 
   factory LoginState.empty() {
@@ -38,12 +40,16 @@ class LoginState {
     );
   }
 
-  factory LoginState.failure(dynamic error) {
+  factory LoginState.failure(
+    dynamic error,
+    StackTrace stackTrace,
+  ) {
     return LoginState(
       isLoading: false,
       isSuccess: false,
       isFailure: true,
       error: error,
+      stackTrace: stackTrace,
     );
   }
 

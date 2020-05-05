@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grade_core/grade_core.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 import '../../../repos/sis_repository.dart';
@@ -30,13 +32,27 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
   ) async* {
     if (event is FetchData) {
       yield RecentLoading.empty();
-      yield* _fetchCourseData(refresh: false);
+      try {
+        yield* _fetchCourseData(refresh: false);
+      } catch (e, st) {
+        yield RecentError(e, st);
+        unawaited(
+          reportBlocException(exception: e, stackTrace: st, bloc: this),
+        );
+      }
     } else if (event is RefreshData) {
       if (state is RecentLoaded) {
         // Preserve the currently loaded courses, we will update the underlying map
         // with new data
         yield RecentLoading((state as RecentLoaded).courses);
-        yield* _fetchCourseData(refresh: true);
+        try {
+          yield* _fetchCourseData(refresh: true);
+        } catch (e, st) {
+          yield RecentError(e, st);
+          unawaited(
+            reportBlocException(exception: e, stackTrace: st, bloc: this),
+          );
+        }
       }
     } else if (event is GradesLoaded) {
       yield* _mapGradeLoadedToState(event);

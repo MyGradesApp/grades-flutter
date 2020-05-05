@@ -34,7 +34,7 @@ void testNetworkBlocFetchError(Bloc bloc) async {
       <dynamic>[
         isA<NetworkLoading>(), // Initial state
         isA<NetworkLoading>(),
-        isA<NetworkError>(),
+        isA<NetworkActionError>(),
       ],
     ),
   );
@@ -46,7 +46,7 @@ void testNetworkBlocRefreshError(Bloc bloc) async {
     emitsInOrder(
       <dynamic>[
         isA<NetworkLoading>(), // Initial state
-        isA<NetworkError>(),
+        isA<NetworkActionError>(),
       ],
     ),
   );

@@ -32,6 +32,16 @@ class RecentLoaded extends RecentState {
 }
 
 class RecentError extends RecentState {
+  final dynamic error;
+  final StackTrace stackTrace;
+
+  RecentError(this.error, this.stackTrace);
+
   @override
   List<Object> get props => [];
+
+  @override
+  String toString() {
+    return 'RecentError{error: $error, stackTrace: $stackTrace}';
+  }
 }

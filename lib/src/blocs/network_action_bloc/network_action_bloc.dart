@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:grade_core/grade_core.dart';
+import 'package:pedantic/pedantic.dart';
 
 part 'network_action_event.dart';
 part 'network_action_state.dart';
@@ -31,8 +33,11 @@ abstract class NetworkActionBloc<D>
     try {
       var data = await fetch(refresh);
       yield NetworkLoaded<D>(data, format: format);
-    } catch (e) {
-      yield NetworkError(e);
+    } catch (e, st) {
+      yield NetworkActionError(e, st);
+      unawaited(
+        reportBlocException(exception: e, stackTrace: st, bloc: this),
+      );
     }
   }
 }

@@ -57,6 +57,16 @@ class UpcomingLoaded extends UpcomingState {
 }
 
 class UpcomingError extends UpcomingState {
+  final dynamic error;
+  final StackTrace stackTrace;
+
+  UpcomingError(this.error, this.stackTrace);
+
+  @override
+  String toString() {
+    return 'UpcomingError{error: $error, stackTrace: $stackTrace}';
+  }
+
   @override
   List<Object> get props => [];
 }
