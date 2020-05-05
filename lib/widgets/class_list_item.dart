@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grades/widgets/indicator_dots/colored_grade_dot.dart';
+import 'package:sis_loader/sis_loader.dart' show StringOrInt;
+
+import 'colored_grade_dot.dart';
 
 class ClassListItem extends StatelessWidget {
   ClassListItem(
@@ -8,8 +10,7 @@ class ClassListItem extends StatelessWidget {
       @required this.letterGrade,
       @required this.percent,
       this.onTap})
-      : assert(percent is int || percent is String),
-        assert(course != null),
+      : assert(course != null),
         assert(teacher != null),
         assert(percent != null);
 
@@ -17,8 +18,7 @@ class ClassListItem extends StatelessWidget {
   final String teacher;
   final String letterGrade;
 
-  // String | int
-  final dynamic percent;
+  final StringOrInt percent;
   final void Function() onTap;
 
   Widget _buildColumn(String topText, String bottomText,
@@ -32,7 +32,10 @@ class ClassListItem extends StatelessWidget {
             Text(
               topText,
               style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 19, color: textColor),
+                fontWeight: FontWeight.bold,
+                fontSize: 19,
+                color: textColor,
+              ),
             ),
           ],
         ),
@@ -62,17 +65,7 @@ class ClassListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String fmt_percent;
-    if (percent is int) {
-      fmt_percent = '$percent%';
-    } else {
-      if (percent == 'Not Graded') {
-        fmt_percent = 'N/A';
-      } else {
-        // Handle cases that aren't `Not Graded`
-        fmt_percent = percent as String;
-      }
-    }
+    var fmt_percent = _formatPercent(percent);
 
     return Card(
       color: Theme.of(context).cardColor,
@@ -96,12 +89,30 @@ class ClassListItem extends StatelessWidget {
                 Theme.of(context).primaryColorLight,
               ),
             ),
-            _buildColumn(fmt_percent, letterGrade ?? '', CrossAxisAlignment.end,
-                Theme.of(context).primaryColorLight,
-                chevron: true, grade: letterGrade),
+            _buildColumn(
+              fmt_percent,
+              letterGrade ?? '',
+              CrossAxisAlignment.end,
+              Theme.of(context).primaryColorLight,
+              chevron: true,
+              grade: letterGrade,
+            ),
           ]),
         ),
       ),
     );
+  }
+
+  String _formatPercent(StringOrInt percent) {
+    if (percent.isInt) {
+      return '${percent.integer}%';
+    } else {
+      if (percent.string == 'Not Graded') {
+        return 'N/A';
+      } else {
+        // Handle casesthat aren't `Not Graded`
+        return percent.string;
+      }
+    }
   }
 }

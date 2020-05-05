@@ -1,0 +1,6 @@
+[submodule "vendored/sis-loader"]
+	path = vendored/sis-loader
+	url = git@github.com:SwiftGrade/dart-sis-loader.git
+[submodule "vendored/grade_core"]
+	path = vendored/grade_core
+	url = git@github.com:SwiftGrade/grades-core.git

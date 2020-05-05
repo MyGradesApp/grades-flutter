@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:grades/utilities/helpers/grades.dart';
+import 'package:grade_core/grade_core.dart';
+import 'package:grades/widgets/colored_grade_dot.dart';
 import 'package:sis_loader/sis_loader.dart';
-
-import 'indicator_dots/colored_grade_dot.dart';
 
 class GradeItemCard extends StatelessWidget {
   final Grade grade;
-  final Color textColor;
-  final Color cardColor;
-  final bool showIndicator;
+  final void Function() onTap;
+
+  GradeItemCard({
+    @required this.grade,
+    @required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,6 @@ class GradeItemCard extends StatelessWidget {
     }
 
     return Card(
-      color: cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -40,9 +41,7 @@ class GradeItemCard extends StatelessWidget {
         customBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        onTap: () {
-          Navigator.pushNamed(context, '/grades_detail', arguments: grade);
-        },
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(17.0),
           child: Row(
@@ -50,7 +49,6 @@ class GradeItemCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   grade.name,
-                  style: TextStyle(color: textColor),
                   // TODO: Make it less aggressive about trimming
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -61,8 +59,9 @@ class GradeItemCard extends StatelessWidget {
               if (gradeLetter != null)
                 Text(
                   gradeLetter,
-                  style:
-                      TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               Container(
                 width: gradeSize,
@@ -70,8 +69,9 @@ class GradeItemCard extends StatelessWidget {
                 child: Text(
                   gradeString,
                   textAlign: TextAlign.end,
-                  style:
-                      TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const Icon(
@@ -85,7 +85,4 @@ class GradeItemCard extends StatelessWidget {
       ),
     );
   }
-
-  GradeItemCard(
-      {this.grade, this.textColor, this.cardColor, this.showIndicator});
 }

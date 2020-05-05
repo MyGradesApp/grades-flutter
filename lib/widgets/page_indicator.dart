@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// An indicator showing the currently selected page of a PageController
@@ -29,17 +28,15 @@ class PageIndicator extends AnimatedWidget {
     var zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
     return Container(
       width: _kDotSpacing,
-      child: Center(
-        child: Material(
-          color: color,
-          type: MaterialType.circle,
-          child: Container(
-            width: _kDotSize * zoom,
-            height: _kDotSize * zoom,
-            child: InkWell(
-              onTap: () => onPageSelected(index),
-              customBorder: const CircleBorder(),
-            ),
+      child: Material(
+        color: color,
+        type: MaterialType.circle,
+        child: Container(
+          width: _kDotSize * zoom,
+          height: _kDotSize * zoom,
+          child: InkWell(
+            onTap: () => onPageSelected(index),
+            customBorder: const CircleBorder(),
           ),
         ),
       ),

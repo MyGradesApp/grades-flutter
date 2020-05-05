@@ -1,0 +1,21 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build a Flutter app for iOS"
+  lane :build_flutter_app do
+    xcclean
+    sh("flutter build ios --release")
+    build_app
+  end
+
+  desc "Deploy beta release"
+  lane :beta do
+    build_flutter_app
+    upload_to_testflight(
+        ipa: "build/Runner.ipa",
+        username: "pairadocs10@gmail.com",
+        skip_submission: true,
+        uses_non_exempt_encryption: true
+    )
+  end
+end
