@@ -33,7 +33,9 @@ class _RecentPageState extends State<RecentPage>
       child: BlocConsumer<RecentBloc, RecentState>(
         listener: (context, state) {
           if (state is RecentLoaded || state is RecentError) {
-            firstLoad = false;
+            setState(() {
+              firstLoad = false;
+            });
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
