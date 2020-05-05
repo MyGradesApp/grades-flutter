@@ -75,13 +75,17 @@ class GradeInfoScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(1.0),
             child: Card(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).cardColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
               margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child:
-                  _buildItem(keys[i], values[i], pointsData: pointsChartData),
+              child: _buildItem(
+                keys[i],
+                values[i],
+                Theme.of(context).textTheme.bodyText1.color,
+                pointsData: pointsChartData,
+              ),
             ),
           );
         },
@@ -89,15 +93,19 @@ class GradeInfoScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(String key, dynamic value,
-      {List<CircularStackEntry> pointsData}) {
+  Widget _buildItem(
+    String key,
+    dynamic value,
+    Color textColor, {
+    List<CircularStackEntry> pointsData,
+  }) {
     if (key == 'Points' && value is String && gradeRegExp.hasMatch(value)) {
       return AnimatedCircularChart(
         size: const Size(240.0, 240.0),
         holeLabel: value,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           fontSize: 28,
-          color: Colors.white,
+          color: textColor,
         ),
         initialChartData: pointsData,
         chartType: CircularChartType.Radial,
@@ -111,16 +119,10 @@ class GradeInfoScreen extends StatelessWidget {
             width: 100,
             child: Text(
               key.toString(),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Text(
-            _formatItem(value),
-            style: const TextStyle(color: Colors.white),
-          ),
+          Text(_formatItem(value)),
         ],
       ),
     );

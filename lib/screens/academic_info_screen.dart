@@ -91,7 +91,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).cardColor,
       margin: const EdgeInsets.all(10),
       child: Padding(
         padding: const EdgeInsets.all(9.0),
@@ -101,12 +101,14 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: Colors.white,
             ),
           ),
           subtitle: Text(
             body,
-            style: const TextStyle(fontSize: 18, color: Colors.white),
+            style: TextStyle(
+              fontSize: 18,
+              color: Theme.of(context).textTheme.bodyText1.color,
+            ),
           ),
         ),
       ),
