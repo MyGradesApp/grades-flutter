@@ -99,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      settings.groupingMode == GroupingMode.Date
+                      settings.groupingMode == GroupingMode.date
                           ? 'Recency'
                           : 'Category',
                       style: TextStyle(
@@ -108,7 +108,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     SizedBox(width: 15),
                     Icon(
-                      settings.groupingMode == GroupingMode.Date
+                      settings.groupingMode == GroupingMode.date
                           ? Icons.today
                           : Icons.format_list_bulleted,
                     ),

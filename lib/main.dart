@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
@@ -41,11 +43,23 @@ void main() async {
         BlocProvider(
           create: (_) => SettingsBloc(
             initialStateSource: () {
-              return SettingsState.defaultSettings();
+              try {
+                var settings = serializers.deserializeWith(
+                  SettingsState.serializer,
+                  jsonDecode(prefs.getString('settings')),
+                );
+                return settings;
+              } catch (_) {
+                return SettingsState.defaultSettings();
+              }
             },
             stateSaver: (settings) {
-              // TODO: Implement settings saving
-              print('IMPLEMENT SETTINGS SAVING');
+              prefs.setString(
+                'settings',
+                jsonEncode(
+                  serializers.serializeWith(SettingsState.serializer, settings),
+                ),
+              );
             },
           ),
         ),

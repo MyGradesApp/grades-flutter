@@ -40,7 +40,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         actions: [
           if (_hasCategories)
             IconButton(
-              icon: Icon(_currentGroupingMode == GroupingMode.Category
+              icon: Icon(_currentGroupingMode == GroupingMode.category
                   ? Icons.format_list_bulleted
                   : Icons.today),
               onPressed: () {
@@ -89,14 +89,14 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
               Map<ToHeader, List<Grade>> groupedGrades;
               switch (
-                  _hasCategories ? _currentGroupingMode : GroupingMode.Date) {
-                case GroupingMode.Date:
+                  _hasCategories ? _currentGroupingMode : GroupingMode.date) {
+                case GroupingMode.date:
                   groupedGrades = collection.groupBy(
                     state.data.grades,
                     (Grade e) => _dateRangeForWeek(e.assignedDate),
                   );
                   break;
-                case GroupingMode.Category:
+                case GroupingMode.category:
                   groupedGrades = collection.groupBy(
                     state.data.grades,
                     (Grade e) =>
