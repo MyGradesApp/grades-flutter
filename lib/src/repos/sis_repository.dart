@@ -58,7 +58,6 @@ class SISRepository {
       loader = SISLoader(client: CookieClient());
     }
     if (session != null) {
-      print(session);
       loader.sessionCookies = session;
     }
     await loader.login(username, password);
