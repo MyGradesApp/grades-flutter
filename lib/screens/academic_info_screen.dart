@@ -28,7 +28,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         },
         child: BlocConsumer<AcademicInfoBloc, NetworkActionState>(
           listener: (context, NetworkActionState state) {
-            if (state is NetworkLoaded || state is NetworkError) {
+            if (state is NetworkLoaded || state is NetworkActionError) {
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             }
@@ -74,7 +74,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                 ),
               );
             }
-            if (state is NetworkError) {
+            if (state is NetworkActionError) {
               return FullscreenErrorMessage(
                 text: 'There was an unknown error',
               );

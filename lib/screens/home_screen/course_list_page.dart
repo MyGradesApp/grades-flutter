@@ -27,7 +27,7 @@ class _CourseListPageState extends State<CourseListPage> {
       },
       child: BlocConsumer<CourseListBloc, NetworkActionState>(
         listener: (context, NetworkActionState state) {
-          if (state is NetworkLoaded || state is NetworkError) {
+          if (state is NetworkLoaded || state is NetworkActionError) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
@@ -63,7 +63,7 @@ class _CourseListPageState extends State<CourseListPage> {
               },
             );
           }
-          if (state is NetworkError) {
+          if (state is NetworkActionError) {
             return FullscreenErrorMessage(
               text: 'There was an unknown error',
             );

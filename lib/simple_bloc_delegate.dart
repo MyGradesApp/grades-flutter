@@ -12,7 +12,12 @@ class SimpleBlocDelegate extends BlocDelegate {
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
     super.onError(bloc, error, stacktrace);
     print('Exception in ${bloc.runtimeType}');
-    reportException(exception: error, stackTrace: stacktrace);
+    reportBlocException(
+      exception: error,
+      stackTrace: stacktrace,
+      tags: {'caught': 'root'},
+      bloc: bloc,
+    );
   }
 
   @override

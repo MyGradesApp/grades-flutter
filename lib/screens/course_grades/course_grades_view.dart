@@ -58,7 +58,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         },
         child: BlocConsumer<CourseGradesBloc, NetworkActionState>(
           listener: (context, state) {
-            if (state is NetworkLoaded || state is NetworkError) {
+            if (state is NetworkLoaded || state is NetworkActionError) {
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             }
@@ -73,7 +73,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
             if (state is NetworkLoading) {
               return Center(child: LoadingIndicator());
             }
-            if (state is NetworkError) {
+            if (state is NetworkActionError) {
               return FullscreenErrorMessage(
                 text: 'There was an unknown error',
               );
