@@ -9,6 +9,7 @@ import 'package:grades/screens/grade_info_screen.dart';
 import 'package:grades/screens/home_screen/home_screen.dart';
 import 'package:grades/screens/login/login_screen.dart';
 import 'package:grades/screens/settings_screen.dart';
+import 'package:grades/screens/sis_webview.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/simple_bloc_delegate.dart';
 import 'package:grades/widgets/offline_bar.dart';
@@ -26,6 +27,10 @@ void main() async {
   var prefs = await SharedPreferences.getInstance();
   var dataPersistence = DataPersistence(prefs);
   var sisRepository = SISRepository(offlineBloc, dataPersistence);
+
+  var secureStorage = WrappedSecureStorage();
+  var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
+  var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
 
   runApp(MultiRepositoryProvider(
     providers: [
@@ -80,6 +85,8 @@ void main() async {
       ],
       child: App(
         sisRepository: sisRepository,
+        username: username,
+        password: password,
       ),
     ),
   ));
@@ -87,8 +94,13 @@ void main() async {
 
 class App extends StatelessWidget {
   final SISRepository _sisRepository;
+  final String username;
+  final String password;
 
-  App({@required SISRepository sisRepository})
+  App(
+      {@required SISRepository sisRepository,
+      @required this.username,
+      @required this.password})
       : assert(sisRepository != null),
         _sisRepository = sisRepository;
 
@@ -141,6 +153,7 @@ class App extends StatelessWidget {
                         ..add(FetchNetworkData()),
                   child: AcademicInfoScreen(),
                 ),
+            '/sis_webview': (_) => SISWebview(username, password),
           },
           home: AppRoot(),
         );

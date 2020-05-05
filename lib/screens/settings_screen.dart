@@ -119,6 +119,15 @@ class SettingsScreen extends StatelessWidget {
               ),
               _buildCard(
                 child: Text(
+                  'Open SIS',
+                  style: HEADER_TEXT_STYLE,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/sis_webview');
+                },
+              ),
+              _buildCard(
+                child: Text(
                   'Terms of Service',
                   style: HEADER_TEXT_STYLE,
                 ),

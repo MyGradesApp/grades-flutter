@@ -41,6 +41,8 @@ void main() {
       ],
       child: App(
         sisRepository: sisRepository,
+        username: '',
+        password: '',
       ),
     ));
   });
