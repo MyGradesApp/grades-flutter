@@ -74,6 +74,9 @@ class AuthenticationBloc
     } else if (event is LoggedIn) {
       yield Authenticated.online();
     } else if (event is LoggedOut) {
+      var secureStorage = WrappedSecureStorage();
+      await secureStorage.delete(key: AuthConst.SIS_PASSWORD_KEY);
+      await secureStorage.delete(key: AuthConst.SIS_SESSION_KEY);
       yield Unauthenticated();
     }
   }
