@@ -78,6 +78,8 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
     if (state is RecentLoading) {
       var grades = Map.of((state as RecentLoading).partialCourses);
       grades[event.course] = event.grades;
+      // Remove empty items to prevent useless rebuilds
+      grades.removeWhere((key, value) => value.isEmpty);
       yield RecentLoading(grades);
     } else {
       // We probably shouldn't be able to get a GradeLoaded if we are already
