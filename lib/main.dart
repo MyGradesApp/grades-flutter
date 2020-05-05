@@ -11,6 +11,8 @@ import 'package:grades/screens/login/login_screen.dart';
 import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/sis_webview.dart';
 import 'package:grades/screens/splash_screen.dart';
+import 'package:grades/screens/tos_display_screen.dart';
+import 'package:grades/screens/tos_query_screen.dart';
 import 'package:grades/simple_bloc_delegate.dart';
 import 'package:grades/widgets/offline_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -154,6 +156,8 @@ class App extends StatelessWidget {
                   child: AcademicInfoScreen(),
                 ),
             '/sis_webview': (_) => SISWebview(username, password),
+            '/terms_query': (_) => TermsQueryScreen(),
+            '/terms_display': (_) => TermsDisplayScreen(),
           },
           home: AppRoot(),
         );

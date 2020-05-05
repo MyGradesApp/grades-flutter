@@ -132,7 +132,7 @@ class SettingsScreen extends StatelessWidget {
                   style: HEADER_TEXT_STYLE,
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/terms_settings');
+                  Navigator.pushNamed(context, '/terms_display');
                 },
               ),
               _buildCard(
