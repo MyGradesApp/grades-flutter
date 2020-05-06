@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+enum SISBookmarks {
+  GraduationReqs,
+  GradeSummary,
+}
+
 class SISWebview extends StatefulWidget {
   final String username;
   final String password;
@@ -25,6 +30,38 @@ class _SISWebviewState extends State<SISWebview> {
     return Scaffold(
       appBar: AppBar(
         title: Text('SIS'),
+        actions: [
+          PopupMenuButton<SISBookmarks>(
+            icon: Icon(Icons.bookmark),
+            onSelected: (bookmark) {
+              switch (bookmark) {
+                case SISBookmarks.GraduationReqs:
+                  controller.loadUrl(
+                      'https://sis.palmbeachschools.org/focus/Modules.php?'
+                      'force_package=SIS&modname=GraduationRequirements/'
+                      'GraduationRequirements.php');
+                  break;
+                case SISBookmarks.GradeSummary:
+                  controller.loadUrl(
+                      'https://sis.palmbeachschools.org/focus/Modules.php?'
+                      'modname=Students/Student.php#!98');
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                enabled: !loggingIn,
+                value: SISBookmarks.GraduationReqs,
+                child: Text('Graduation Requirements'),
+              ),
+              PopupMenuItem(
+                enabled: !loggingIn,
+                value: SISBookmarks.GradeSummary,
+                child: Text('Grade Summary'),
+              ),
+            ],
+          )
+        ],
       ),
       body: Stack(
         children: [
