@@ -220,7 +220,12 @@ class SISLoader {
             r'''<\/tr><td style='display:none'>Z<\/td><TD valign=middle><img src="modules\/Grades\/Grades\.png" border=0><\/td><td>([\s\S]*?)<\/table>''')
         .firstMatch(portalResponseBody);
     if (coursesTableMatch == null) {
-      throw UnknownReauthenticationException();
+      if (RegExp(r'Welcome, .{,48}?</').hasMatch(portalResponseBody)) {
+        // No courses
+        return [];
+      } else {
+        throw UnknownReauthenticationException();
+      }
     }
     var coursesTable = coursesTableMatch.group(1);
 
