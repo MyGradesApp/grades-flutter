@@ -8,8 +8,10 @@ abstract class Profile implements Built<Profile, ProfileBuilder> {
 
   double get cumulative_weighted_gpa;
 
+  @nullable
   int get class_rank_numerator;
 
+  @nullable
   int get class_rank_denominator;
 
   Profile._();

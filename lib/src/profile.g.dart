@@ -24,14 +24,19 @@ class _$ProfileSerializer implements StructuredSerializer<Profile> {
       'cumulative_weighted_gpa',
       serializers.serialize(object.cumulative_weighted_gpa,
           specifiedType: const FullType(double)),
-      'class_rank_numerator',
-      serializers.serialize(object.class_rank_numerator,
-          specifiedType: const FullType(int)),
-      'class_rank_denominator',
-      serializers.serialize(object.class_rank_denominator,
-          specifiedType: const FullType(int)),
     ];
-
+    if (object.class_rank_numerator != null) {
+      result
+        ..add('class_rank_numerator')
+        ..add(serializers.serialize(object.class_rank_numerator,
+            specifiedType: const FullType(int)));
+    }
+    if (object.class_rank_denominator != null) {
+      result
+        ..add('class_rank_denominator')
+        ..add(serializers.serialize(object.class_rank_denominator,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -93,12 +98,6 @@ class _$Profile extends Profile {
     }
     if (cumulative_weighted_gpa == null) {
       throw new BuiltValueNullFieldError('Profile', 'cumulative_weighted_gpa');
-    }
-    if (class_rank_numerator == null) {
-      throw new BuiltValueNullFieldError('Profile', 'class_rank_numerator');
-    }
-    if (class_rank_denominator == null) {
-      throw new BuiltValueNullFieldError('Profile', 'class_rank_denominator');
     }
   }
 
