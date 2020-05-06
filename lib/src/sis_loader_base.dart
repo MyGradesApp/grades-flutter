@@ -177,8 +177,8 @@ class SISLoader {
     return _extractMeta(await portalRequest.bodyAsString());
   }
 
-  Future<void> setSemester(String year, String semesterKey) async {
-    var x = await client.post(
+  Future<void> setTerm(String year, String semesterKey) async {
+    await client.post(
       Uri.parse(
           'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'),
       {'side_syear': year, 'side_mp': semesterKey},
@@ -232,16 +232,24 @@ class SISLoader {
       var gradeParts = match[5].split('&nbsp;');
       dynamic percent;
       // TODO: Make more general
-      if (gradeParts[0] != 'Not Graded') {
-        percent =
-            int.tryParse(gradeParts[0].substring(0, gradeParts[0].length - 1));
+      if (match[5].isNotEmpty) {
+        if (gradeParts[0] != 'Not Graded') {
+          percent = int.tryParse(
+              gradeParts[0].substring(0, gradeParts[0].length - 1));
+        } else {
+          percent = gradeParts[0];
+        }
       } else {
-        percent = gradeParts[0];
+        percent = null;
       }
 
       StringOrInt typedPercent;
       if (percent == null) {
-        typedPercent = StringOrInt(gradeParts[0]);
+        if (gradeParts[0].isEmpty) {
+          typedPercent = null;
+        } else {
+          typedPercent = StringOrInt(gradeParts[0]);
+        }
       } else {
         typedPercent = StringOrInt(percent);
       }

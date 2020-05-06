@@ -18,12 +18,14 @@ class _$GradeDataSerializer implements StructuredSerializer<GradeData> {
   @override
   Iterable<Object> serialize(Serializers serializers, GradeData object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'grades',
-      serializers.serialize(object.grades,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Grade)])),
-    ];
+    final result = <Object>[];
+    if (object.grades != null) {
+      result
+        ..add('grades')
+        ..add(serializers.serialize(object.grades,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(Grade)])));
+    }
     if (object.weights != null) {
       result
         ..add('weights')
@@ -85,14 +87,19 @@ class _$CourseSerializer implements StructuredSerializer<Course> {
       'teacherName',
       serializers.serialize(object.teacherName,
           specifiedType: const FullType(String)),
-      'gradePercent',
-      serializers.serialize(object.gradePercent,
-          specifiedType: const FullType(StringOrInt)),
-      'gradeLetter',
-      serializers.serialize(object.gradeLetter,
-          specifiedType: const FullType(String)),
     ];
-
+    if (object.gradePercent != null) {
+      result
+        ..add('gradePercent')
+        ..add(serializers.serialize(object.gradePercent,
+            specifiedType: const FullType(StringOrInt)));
+    }
+    if (object.gradeLetter != null) {
+      result
+        ..add('gradeLetter')
+        ..add(serializers.serialize(object.gradeLetter,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -147,11 +154,7 @@ class _$GradeData extends GradeData {
   factory _$GradeData([void Function(GradeDataBuilder) updates]) =>
       (new GradeDataBuilder()..update(updates)).build();
 
-  _$GradeData._({this.grades, this.weights}) : super._() {
-    if (grades == null) {
-      throw new BuiltValueNullFieldError('GradeData', 'grades');
-    }
-  }
+  _$GradeData._({this.grades, this.weights}) : super._();
 
   @override
   GradeData rebuild(void Function(GradeDataBuilder) updates) =>
@@ -223,12 +226,13 @@ class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
     _$GradeData _$result;
     try {
       _$result = _$v ??
-          new _$GradeData._(grades: grades.build(), weights: _weights?.build());
+          new _$GradeData._(
+              grades: _grades?.build(), weights: _weights?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'grades';
-        grades.build();
+        _grades?.build();
         _$failedField = 'weights';
         _weights?.build();
       } catch (e) {
@@ -278,12 +282,6 @@ class _$Course extends Course {
     }
     if (teacherName == null) {
       throw new BuiltValueNullFieldError('Course', 'teacherName');
-    }
-    if (gradePercent == null) {
-      throw new BuiltValueNullFieldError('Course', 'gradePercent');
-    }
-    if (gradeLetter == null) {
-      throw new BuiltValueNullFieldError('Course', 'gradeLetter');
     }
   }
 

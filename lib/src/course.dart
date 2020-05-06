@@ -170,8 +170,10 @@ abstract class Course implements Built<Course, CourseBuilder> {
 
   String get teacherName;
 
+  @nullable
   StringOrInt get gradePercent;
 
+  @nullable
   String get gradeLetter;
 
   Course._();
