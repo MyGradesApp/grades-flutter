@@ -220,7 +220,7 @@ class SISLoader {
             r'''<\/tr><td style='display:none'>Z<\/td><TD valign=middle><img src="modules\/Grades\/Grades\.png" border=0><\/td><td>([\s\S]*?)<\/table>''')
         .firstMatch(portalResponseBody);
     if (coursesTableMatch == null) {
-      if (RegExp(r'Welcome, .{,48}?</').hasMatch(portalResponseBody)) {
+      if (RegExp(r'Welcome, .{0,48}?<\/').hasMatch(portalResponseBody)) {
         // No courses
         return [];
       } else {
