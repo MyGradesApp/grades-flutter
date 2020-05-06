@@ -3,7 +3,9 @@ default_platform(:ios)
 platform :ios do
   desc "Build a Flutter app for iOS"
   lane :build_flutter_app do
-    xcclean
+    xcclean(
+    	scheme: "Runner"
+    )
     sh("flutter build ios --release")
     build_app
   end
