@@ -11,8 +11,7 @@ class ClassListItem extends StatelessWidget {
       @required this.percent,
       this.onTap})
       : assert(course != null),
-        assert(teacher != null),
-        assert(percent != null);
+        assert(teacher != null);
 
   final String course;
   final String teacher;
@@ -104,7 +103,9 @@ class ClassListItem extends StatelessWidget {
   }
 
   String _formatPercent(StringOrInt percent) {
-    if (percent.isInt) {
+    if (percent == null) {
+      return 'N/A';
+    } else if (percent.isInt) {
       return '${percent.integer}%';
     } else {
       if (percent.string == 'Not Graded') {
