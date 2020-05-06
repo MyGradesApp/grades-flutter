@@ -16,12 +16,13 @@ bool debugMocking = false;
 
 class SISMeta {
   final Map<String, String> semesters;
+  final Map<String, String> years;
 
-  SISMeta({@required this.semesters});
+  SISMeta({@required this.semesters, @required this.years});
 
   @override
   String toString() {
-    return 'SISMeta{semesters: $semesters}';
+    return 'SISMeta{semesters: $semesters, years: $years}';
   }
 }
 
@@ -68,7 +69,7 @@ class SISLoader {
             response.redirects.first.location.toString() ==
                 'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php')) {
       _loggedIn = true;
-      return SISMeta(semesters: mock_data.SEMESTERS);
+      return SISMeta(semesters: mock_data.SEMESTERS, years: mock_data.YEARS);
     }
 
     var body = await response.bodyAsString();
@@ -162,13 +163,26 @@ class SISLoader {
             .allMatches(body);
     var semesters = {for (var e in semesterOptions) e.group(1): e.group(2)};
 
-    return SISMeta(semesters: semesters);
+    var yearOptions =
+        RegExp(r'<OPTION value=(\d*?)(?: SELECTED)?>(.*?)<\/OPTION>')
+            .allMatches(body);
+    var years = {for (var e in yearOptions) e.group(1): e.group(2)};
+
+    return SISMeta(semesters: semesters, years: years);
   }
 
   Future<SISMeta> fetchMeta() async {
     var portalRequest = await client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
     return _extractMeta(await portalRequest.bodyAsString());
+  }
+
+  Future<void> setSemester(String year, String semesterKey) async {
+    var x = await client.post(
+      Uri.parse(
+          'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'),
+      {'side_syear': year, 'side_mp': semesterKey},
+    );
   }
 
   Future<void> _reauth(String data) async {

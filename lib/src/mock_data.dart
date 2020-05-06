@@ -6,6 +6,10 @@ final SEMESTERS = {
   'key': 'Semester',
 };
 
+final YEARS = {
+  '2020': '2020-2021',
+};
+
 final COURSES = [
   Course((c) => c
     ..gradesUrl = ''
