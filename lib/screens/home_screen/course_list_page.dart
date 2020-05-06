@@ -43,6 +43,12 @@ class _CourseListPageState extends State<CourseListPage> {
                 text: 'No courses available offline',
               );
             }
+            if (state.data.isEmpty) {
+              return FullscreenSimpleIconMessage(
+                icon: FontAwesomeIcons.inbox,
+                text: 'No courses',
+              );
+            }
             return ListView.builder(
               itemCount: state.data.length,
               itemBuilder: (context, i) {
