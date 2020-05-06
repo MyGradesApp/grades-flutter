@@ -176,6 +176,13 @@ class AppRoot extends StatelessWidget {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, AuthenticationState state) {
         if (state is Uninitialized) {
+          SharedPreferences.getInstance().then((prefs) {
+            var hasAcceptedTerms = prefs.getBool('accepted_terms') ?? false;
+
+            if (!hasAcceptedTerms) {
+              Navigator.pushNamed(context, '/terms_query');
+            }
+          });
           return SplashScreen();
         } else if (state is Unauthenticated) {
           return LoginScreen();
