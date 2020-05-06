@@ -14,6 +14,17 @@ import 'course.dart';
 
 bool debugMocking = false;
 
+class SISMeta {
+  final Map<String, String> semesters;
+
+  SISMeta({@required this.semesters});
+
+  @override
+  String toString() {
+    return 'SISMeta{semesters: $semesters}';
+  }
+}
+
 class SISLoader {
   final CookieClient client;
   CourseService _courseService;
@@ -42,7 +53,7 @@ class SISLoader {
     client.cookies.addAll(Map<String, Cookie>.from(newCookiesRaw as Map));
   }
 
-  Future<void> login(String username, String password) async {
+  Future<SISMeta> login(String username, String password) async {
     if (username == 's2558161d' && password == 'figure51') {
       debugMocking = true;
       _loggedIn = true;
@@ -57,7 +68,7 @@ class SISLoader {
             response.redirects.first.location.toString() ==
                 'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php')) {
       _loggedIn = true;
-      return;
+      return SISMeta(semesters: mock_data.SEMESTERS);
     }
 
     var body = await response.bodyAsString();
@@ -132,7 +143,7 @@ class SISLoader {
             .firstMatch(await enboardRequest.bodyAsString())
             .group(1);
 
-    await client.post(
+    var finalRequest = await client.post(
         Uri.parse(
             'https://sis.palmbeachschools.org/focus/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'),
         {
@@ -141,6 +152,23 @@ class SISLoader {
         });
 
     _loggedIn = true;
+
+    return _extractMeta(await finalRequest.bodyAsString());
+  }
+
+  SISMeta _extractMeta(String body) {
+    var semesterOptions =
+        RegExp(r'<OPTION value="(\d+)" (?:SELECTED)?>(.+?)<\/OPTION>')
+            .allMatches(body);
+    var semesters = {for (var e in semesterOptions) e.group(1): e.group(2)};
+
+    return SISMeta(semesters: semesters);
+  }
+
+  Future<SISMeta> fetchMeta() async {
+    var portalRequest = await client.get(Uri.parse(
+        'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
+    return _extractMeta(await portalRequest.bodyAsString());
   }
 
   Future<void> _reauth(String data) async {

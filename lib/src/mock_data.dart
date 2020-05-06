@@ -2,6 +2,10 @@ import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/utilities.dart';
 
+final SEMESTERS = {
+  'key': 'Semester',
+};
+
 final COURSES = [
   Course((c) => c
     ..gradesUrl = ''
