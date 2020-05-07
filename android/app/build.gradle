@@ -44,12 +44,24 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+<<<<<<< HEAD
+    
+// UNCOMMENT FOR RELEASE BUILD
+
+    buildTypes {
+        release {
+             // UNCOMMENT FOR RELEASE BUILD
+                 signingConfig signingConfigs.release
+
+                // signingConfig signingConfigs.debug 
+=======
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+>>>>>>> 2255f31ab20fa8c7dce2dc3ca4c031979722a04c
         }
     }
 }
