@@ -8,6 +8,9 @@
 .buildlog/
 .history
 .svn/
+/key
+*.keystore
+*.jks
 
 # IntelliJ related
 *.iml
