@@ -52,7 +52,7 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    
+
 // UNCOMMENT FOR RELEASE BUILD
 
   signingConfigs {
@@ -68,10 +68,10 @@ android {
 
     buildTypes {
         release {
-             // UNCOMMENT FOR RELEASE BUILD
-                 signingConfig signingConfigs.release
+            // UNCOMMENT FOR RELEASE BUILD
+            // signingConfig signingConfigs.release
 
-                // signingConfig signingConfigs.debug 
+            signingConfig signingConfigs.debug
         }
     }
 }
