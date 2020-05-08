@@ -8,6 +8,7 @@ import 'package:grades/utilities/update.dart';
 const TextStyle HEADER_TEXT_STYLE = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 18,
+  color: Colors.white,
 );
 
 class SettingsScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.hasData && Platform.isIOS) {
                     return _buildCard(
-                      accentColor: const Color.fromARGB(255, 211, 117, 116),
+                      const Color.fromARGB(255, 211, 117, 116),
                       child: Row(children: [
                         const Expanded(
                           child: Text(
@@ -39,6 +40,7 @@ class SettingsScreen extends StatelessWidget {
                           'Click to update now',
                           style: TextStyle(
                             fontSize: 17,
+                            color: Colors.white,
                           ),
                         ),
                       ]),
@@ -63,6 +65,7 @@ class SettingsScreen extends StatelessWidget {
                       theme.toHumanString(),
                       style: TextStyle(
                         fontSize: 17,
+                        color: Colors.white,
                       ),
                     ),
                     SizedBox(width: 15),
@@ -104,6 +107,7 @@ class SettingsScreen extends StatelessWidget {
                           : 'Category',
                       style: TextStyle(
                         fontSize: 17,
+                        color: Colors.white,
                       ),
                     ),
                     SizedBox(width: 15),
@@ -161,7 +165,6 @@ class SettingsScreen extends StatelessWidget {
   Widget _buildCard({
     @required Widget child,
     @required void Function() onPressed,
-    Color accentColor,
   }) {
     return Padding(
       padding: const EdgeInsets.all(4),
@@ -169,7 +172,7 @@ class SettingsScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        color: accentColor,
+        color: const Color(0xff226baa),
         child: FlatButton(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
