@@ -34,6 +34,9 @@ class TermsQueryScreen extends StatelessWidget {
                         padding: EdgeInsets.all(15.0),
                         child: Text(
                           TOS_STRING,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -48,6 +51,7 @@ class TermsQueryScreen extends StatelessWidget {
                       fontSize: 17.0,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'OpenSans',
+                      color: Colors.white,
                     )),
                 color: const Color(0xff2a84d2),
                 padding: const EdgeInsets.all(15.0),

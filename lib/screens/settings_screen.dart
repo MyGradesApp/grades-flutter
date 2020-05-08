@@ -73,7 +73,7 @@ class SettingsScreen extends StatelessWidget {
                       () {
                         switch (theme) {
                           case ThemeMode.system:
-                            return Icons.computer;
+                            return Icons.phone_iphone;
                             break;
                           case ThemeMode.light:
                             return Icons.wb_sunny;

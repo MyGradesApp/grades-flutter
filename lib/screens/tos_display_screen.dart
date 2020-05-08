@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/screens/login/login_form.dart';
 import 'package:grades/utilities/tos_const.dart';
 
 class TermsDisplayScreen extends StatefulWidget {
@@ -28,6 +29,9 @@ class _TermsDisplayScreenState extends State<TermsDisplayScreen> {
                       padding: EdgeInsets.all(15.0),
                       child: Text(
                         TOS_STRING,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
