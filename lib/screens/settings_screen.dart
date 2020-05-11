@@ -85,6 +85,7 @@ class SettingsScreen extends StatelessWidget {
                             throw Exception();
                         }
                       }(),
+                      color: Colors.white,
                     ),
                   ]),
                   onPressed: () {
@@ -115,6 +116,7 @@ class SettingsScreen extends StatelessWidget {
                       settings.groupingMode == GroupingMode.date
                           ? Icons.today
                           : Icons.format_list_bulleted,
+                      color: Colors.white,
                     ),
                   ],
                 ),

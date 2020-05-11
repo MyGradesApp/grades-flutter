@@ -101,6 +101,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
+              color: Colors.white,
             ),
           ),
           subtitle: Text(
