@@ -30,6 +30,7 @@ class _SISWebviewState extends State<SISWebview> {
     return Scaffold(
       appBar: AppBar(
         title: Text('SIS'),
+        elevation: 0.0,
         actions: [
           PopupMenuButton<SISBookmarks>(
             icon: Icon(Icons.bookmark),
