@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grades/screens/login/login_form.dart';
 import 'package:grades/utilities/tos_const.dart';
 
 class TermsDisplayScreen extends StatefulWidget {
