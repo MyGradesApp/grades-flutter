@@ -28,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (snapshot.hasData && Platform.isIOS) {
                     return _buildCard(
-                      const Color.fromARGB(255, 211, 117, 116),
+                      accentColor: Color.fromARGB(255, 211, 117, 116),
                       child: Row(children: [
                         const Expanded(
                           child: Text(
@@ -165,6 +165,7 @@ class SettingsScreen extends StatelessWidget {
   Widget _buildCard({
     @required Widget child,
     @required void Function() onPressed,
+    Color accentColor = const Color(0xff226baa),
   }) {
     return Padding(
       padding: const EdgeInsets.all(4),
@@ -172,7 +173,7 @@ class SettingsScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        color: const Color(0xff226baa),
+        color: accentColor,
         child: FlatButton(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
