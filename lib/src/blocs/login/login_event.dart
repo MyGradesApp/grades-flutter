@@ -16,6 +16,6 @@ class LoginPressed extends LoginEvent {
 
   @override
   String toString() {
-    return 'LoginPressed{username: $username, password: $password}';
+    return 'LoginPressed{username: <..>, password: <..>}';
   }
 }
