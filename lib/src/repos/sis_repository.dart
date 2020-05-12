@@ -138,6 +138,20 @@ class SISRepository {
       if (isHttpError(e)) {
         _offlineBloc.add(NetworkOfflineEvent());
         return fetchPersisted();
+      } else if (isSISError(e)) {
+        var loggedIn = await _attemptLogin();
+
+        if (loggedIn) {
+          try {
+            var val = await (it()?.timeout(TIMEOUT));
+            _fetchedState[cacheKey] = true;
+            return val;
+          } catch (_) {
+            throw SISRepoReauthFailure();
+          }
+        } else {
+          throw SISRepoReauthFailure();
+        }
       } else {
         rethrow;
       }
@@ -162,5 +176,12 @@ class SISRepository {
       }
       rethrow;
     }
+  }
+}
+
+class SISRepoReauthFailure implements Exception {
+  @override
+  String toString() {
+    return 'SISRepoReauthFailure: Failed to reauthenticate after session invalidation';
   }
 }
