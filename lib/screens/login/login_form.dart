@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/loading_indicator.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -31,16 +32,28 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
-          // TODO: Show more failure info
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-              content: Text(
-                'An error occured',
-                textAlign: TextAlign.center,
-              ),
-              backgroundColor: Colors.red,
-            ));
+          if (state.error is InvalidAuthException) {
+            Scaffold.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                content: Text(
+                  'Incorrect username or password',
+                  textAlign: TextAlign.center,
+                ),
+                backgroundColor: Colors.red,
+              ));
+          } else {
+            // TODO: Show more failure info
+            Scaffold.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                content: Text(
+                  'An error occured',
+                  textAlign: TextAlign.center,
+                ),
+                backgroundColor: Colors.red,
+              ));
+          }
         }
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());

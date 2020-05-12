@@ -70,6 +70,15 @@ class _CourseListPageState extends State<CourseListPage> {
             );
           }
           if (state is NetworkActionError) {
+            if (state.error is SISRepoReauthFailure) {
+              reportException(
+                exception: state.error,
+                stackTrace: state.stackTrace,
+              );
+              return FullscreenErrorMessage(
+                  text:
+                      'Your session has expired and we couldn\'t log you back in.\n');
+            }
             return FullscreenErrorMessage(
               text: 'There was an unknown error',
             );
