@@ -4,8 +4,10 @@ import 'package:built_value/serializer.dart';
 part 'profile.g.dart';
 
 abstract class Profile implements Built<Profile, ProfileBuilder> {
+  @nullable
   double get cumulative_gpa;
 
+  @nullable
   double get cumulative_weighted_gpa;
 
   @nullable
