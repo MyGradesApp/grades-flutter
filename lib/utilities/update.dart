@@ -29,6 +29,8 @@ Future<bool> checkUpdateAvailable() async {
       return false;
     }
 
+    print(
+        'current; ${GRADES_VERSION} - found: ${version} = ${_compareVersions(GRADES_VERSION, version as String)}');
     if (_compareVersions(GRADES_VERSION, version as String) ==
         PartialOrdering.Greater) {
       return true;
@@ -46,11 +48,11 @@ enum PartialOrdering {
 }
 
 PartialOrdering _compareVersions(String current, String other) {
-  var cSplit = RegExp(r'(\d+)')
+  var cSplit = RegExp(r'(\d+)(?:\+.*)?')
       .allMatches(current)
       .map((match) => match.group(1))
       .toList();
-  var oSplit = RegExp(r'(\d+)')
+  var oSplit = RegExp(r'(\d+)(?:\+.*)?')
       .allMatches(other)
       .map((match) => match.group(1))
       .toList();

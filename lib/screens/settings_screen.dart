@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
               FutureBuilder<bool>(
                 future: checkUpdateAvailable(),
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.hasData && Platform.isIOS) {
+                  if (snapshot.hasData && snapshot.data && Platform.isIOS) {
                     return _buildCard(
                       accentColor: Color.fromARGB(255, 211, 117, 116),
                       child: Row(children: [
