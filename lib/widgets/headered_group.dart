@@ -58,7 +58,22 @@ class HeaderedGroup<T> extends StatelessWidget {
             itemBuilder: (context, i) {
               if (i == displayedChildren) {
                 if (maxCount != null && children.length > maxCount) {
-                  return Text('and ${children.length - maxCount} more');
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 11.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(),
+                        ),
+                        Text(
+                          'and ${children.length - maxCount} more',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
                 }
                 return Container();
               }
