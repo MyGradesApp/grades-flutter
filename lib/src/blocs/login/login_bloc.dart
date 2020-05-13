@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grade_core/grade_core.dart';
 import 'package:grade_core/src/sentry.dart';
 import 'package:grade_core/src/utilities/consts.dart';
 import 'package:grade_core/src/utilities/wrapped_secure_storage.dart';
@@ -42,10 +43,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _sisRepository.clearCache();
         yield LoginState.success();
       } catch (e, st) {
+        if (!(isHttpError(e) || isSISError(e))) {
+          unawaited(
+            reportBlocException(exception: e, stackTrace: st, bloc: this),
+          );
+        }
         yield LoginState.failure(e, st);
-        unawaited(
-          reportBlocException(exception: e, stackTrace: st, bloc: this),
-        );
       }
     }
   }
