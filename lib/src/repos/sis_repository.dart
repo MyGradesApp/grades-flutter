@@ -171,7 +171,9 @@ class SISRepository {
       return true;
     } catch (e) {
       _offlineBloc.add(StoppedLoggingInEvent());
-      if (isHttpError(e)) {
+      // TODO: Handle errors properly and probably send back to the login screen
+      // in the event reauth fails
+      if (isHttpError(e) || isSISError(e) || e is NoSuchMethodError) {
         return false;
       }
       rethrow;
