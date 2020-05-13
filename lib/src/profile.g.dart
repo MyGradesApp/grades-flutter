@@ -17,14 +17,19 @@ class _$ProfileSerializer implements StructuredSerializer<Profile> {
   @override
   Iterable<Object> serialize(Serializers serializers, Profile object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'cumulative_gpa',
-      serializers.serialize(object.cumulative_gpa,
-          specifiedType: const FullType(double)),
-      'cumulative_weighted_gpa',
-      serializers.serialize(object.cumulative_weighted_gpa,
-          specifiedType: const FullType(double)),
-    ];
+    final result = <Object>[];
+    if (object.cumulative_gpa != null) {
+      result
+        ..add('cumulative_gpa')
+        ..add(serializers.serialize(object.cumulative_gpa,
+            specifiedType: const FullType(double)));
+    }
+    if (object.cumulative_weighted_gpa != null) {
+      result
+        ..add('cumulative_weighted_gpa')
+        ..add(serializers.serialize(object.cumulative_weighted_gpa,
+            specifiedType: const FullType(double)));
+    }
     if (object.class_rank_numerator != null) {
       result
         ..add('class_rank_numerator')
@@ -92,14 +97,7 @@ class _$Profile extends Profile {
       this.cumulative_weighted_gpa,
       this.class_rank_numerator,
       this.class_rank_denominator})
-      : super._() {
-    if (cumulative_gpa == null) {
-      throw new BuiltValueNullFieldError('Profile', 'cumulative_gpa');
-    }
-    if (cumulative_weighted_gpa == null) {
-      throw new BuiltValueNullFieldError('Profile', 'cumulative_weighted_gpa');
-    }
-  }
+      : super._();
 
   @override
   Profile rebuild(void Function(ProfileBuilder) updates) =>
