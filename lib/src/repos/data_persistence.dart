@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
+import 'package:grade_core/grade_core.dart';
 import 'package:grade_core/src/models/models.dart';
 import 'package:grade_core/src/models/serializers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,11 +59,16 @@ class DataPersistence {
     if (gradesStr == null || gradesStr.isEmpty || gradesStr == 'null') {
       return null;
     }
-    var builtGrades = serializers.deserialize(
-      jsonDecode(gradesStr),
-      specifiedType: DataPersistence.BUILT_GRADES_TYPE,
-    );
-    return (builtGrades as BuiltMap<String, GradeData>).toMap();
+    try {
+      var builtGrades = serializers.deserialize(
+        jsonDecode(gradesStr),
+        specifiedType: DataPersistence.BUILT_GRADES_TYPE,
+      );
+      return (builtGrades as BuiltMap<String, GradeData>).toMap();
+    } catch (e, st) {
+      reportException(exception: e, stackTrace: st);
+      return {};
+    }
   }
 
   void _saveGrades() {
@@ -83,11 +89,16 @@ class DataPersistence {
       return null;
     }
 
-    var builtCourses = serializers.deserialize(
-      jsonDecode(coursesString),
-      specifiedType: DataPersistence.BUILT_COURSES_TYPE,
-    ) as BuiltList<Course>;
-    return builtCourses.toList();
+    try {
+      var builtCourses = serializers.deserialize(
+        jsonDecode(coursesString),
+        specifiedType: DataPersistence.BUILT_COURSES_TYPE,
+      ) as BuiltList<Course>;
+      return builtCourses.toList();
+    } catch (e, st) {
+      reportException(exception: e, stackTrace: st);
+      return [];
+    }
   }
 
   void _saveCourses() {
@@ -108,10 +119,15 @@ class DataPersistence {
       return null;
     }
 
-    return serializers.deserializeWith(
-      AcademicInfo.serializer,
-      jsonDecode(academicString),
-    );
+    try {
+      return serializers.deserializeWith(
+        AcademicInfo.serializer,
+        jsonDecode(academicString),
+      );
+    } catch (e, st) {
+      reportException(exception: e, stackTrace: st);
+      return null;
+    }
   }
 
   void _saveAcademicInfo() {
