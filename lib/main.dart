@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -21,77 +22,96 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
-  var package_info = await getPackageInfo();
-  // Used for sentry error reporting and settings page version number
-  GRADES_VERSION = '${package_info.version}+${package_info.buildNumber}';
+  await runZoned(
+    () async {
+      var package_info = await getPackageInfo();
+      // Used for sentry error reporting and settings page version number
+      GRADES_VERSION = '${package_info.version}+${package_info.buildNumber}';
 
-  var offlineBloc = OfflineBloc();
-  var prefs = await SharedPreferences.getInstance();
-  var dataPersistence = DataPersistence(prefs);
-  var sisRepository = SISRepository(offlineBloc, dataPersistence);
+      FlutterError.onError = (details, {bool forceReport = false}) {
+        reportException(
+          exception: details.exception,
+          stackTrace: details.stack,
+        );
+        // Also use Flutter's pretty error logging to the device's console.
+        FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
+      };
 
-  var secureStorage = WrappedSecureStorage();
-  var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
-  var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
+      var offlineBloc = OfflineBloc();
+      var prefs = await SharedPreferences.getInstance();
+      var dataPersistence = DataPersistence(prefs);
+      var sisRepository = SISRepository(offlineBloc, dataPersistence);
 
-  runApp(MultiRepositoryProvider(
-    providers: [
-      RepositoryProvider(create: (_) => dataPersistence),
-      RepositoryProvider(create: (_) => sisRepository)
-    ],
-    child: MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => AuthenticationBloc(
+      var secureStorage = WrappedSecureStorage();
+      var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
+      var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
+      runApp(MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(create: (_) => dataPersistence),
+          RepositoryProvider(create: (_) => sisRepository)
+        ],
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => AuthenticationBloc(
+                sisRepository: sisRepository,
+                offlineBloc: offlineBloc,
+              )..add(AppStarted()),
+            ),
+            BlocProvider(
+              create: (_) => SettingsBloc(
+                initialStateSource: () {
+                  try {
+                    var settings = serializers.deserializeWith(
+                      SettingsState.serializer,
+                      jsonDecode(prefs.getString('settings')),
+                    );
+                    return settings;
+                  } catch (_) {
+                    return SettingsState.defaultSettings();
+                  }
+                },
+                stateSaver: (settings) {
+                  prefs.setString(
+                    'settings',
+                    jsonEncode(
+                      serializers.serializeWith(
+                          SettingsState.serializer, settings),
+                    ),
+                  );
+                },
+              ),
+            ),
+            BlocProvider(
+              create: (_) => ThemeBloc(
+                initialStateSource: () {
+                  var themeStr = prefs.getString('theme');
+                  return ThemeModeExt.fromString(themeStr) ?? ThemeMode.system;
+                },
+                stateSaver: (theme) {
+                  prefs.setString('theme', theme.toPrefsString());
+                },
+              ),
+            ),
+            BlocProvider(
+              create: (_) => offlineBloc,
+            ),
+          ],
+          child: App(
             sisRepository: sisRepository,
-            offlineBloc: offlineBloc,
-          )..add(AppStarted()),
-        ),
-        BlocProvider(
-          create: (_) => SettingsBloc(
-            initialStateSource: () {
-              try {
-                var settings = serializers.deserializeWith(
-                  SettingsState.serializer,
-                  jsonDecode(prefs.getString('settings')),
-                );
-                return settings;
-              } catch (_) {
-                return SettingsState.defaultSettings();
-              }
-            },
-            stateSaver: (settings) {
-              prefs.setString(
-                'settings',
-                jsonEncode(
-                  serializers.serializeWith(SettingsState.serializer, settings),
-                ),
-              );
-            },
+            username: username,
+            password: password,
           ),
         ),
-        BlocProvider(
-          create: (_) => ThemeBloc(
-            initialStateSource: () {
-              var themeStr = prefs.getString('theme');
-              return ThemeModeExt.fromString(themeStr) ?? ThemeMode.system;
-            },
-            stateSaver: (theme) {
-              prefs.setString('theme', theme.toPrefsString());
-            },
-          ),
-        ),
-        BlocProvider(
-          create: (_) => offlineBloc,
-        ),
-      ],
-      child: App(
-        sisRepository: sisRepository,
-        username: username,
-        password: password,
-      ),
-    ),
-  ));
+      ));
+    },
+    onError: (Object error, StackTrace stackTrace) {
+      reportException(
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    },
+  );
 }
 
 class App extends StatelessWidget {
