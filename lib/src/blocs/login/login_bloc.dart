@@ -8,6 +8,7 @@ import 'package:grade_core/src/sentry.dart';
 import 'package:grade_core/src/utilities/consts.dart';
 import 'package:grade_core/src/utilities/wrapped_secure_storage.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 import '../../repos/sis_repository.dart';
 
@@ -43,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _sisRepository.clearCache();
         yield LoginState.success();
       } catch (e, st) {
-        if (!(isHttpError(e) || isSISError(e))) {
+        if (!(isHttpError(e) || e is InvalidAuthException)) {
           unawaited(
             reportBlocException(exception: e, stackTrace: st, bloc: this),
           );
