@@ -283,7 +283,7 @@ class SISLoader {
 
     String bearerTokenCookie;
     try {
-      bearerTokenCookie = graduationReqsRequest.headers['set-cookie']
+      bearerTokenCookie = (graduationReqsRequest.headers['set-cookie'] ?? [])
           .firstWhere((c) => c.startsWith('Module::'));
     } on StateError {
       throw UnknownMissingCookieException('No module cookie present');
