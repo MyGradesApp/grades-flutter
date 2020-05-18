@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart' as collection;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
             }
             if (state is NetworkLoaded<GradeData>) {
               setState(() {
-                _hasCategories = state.data.grades
+                _hasCategories = (state.data?.grades ?? BuiltList())
                     .every((g) => g.raw.containsKey('Category'));
               });
             }

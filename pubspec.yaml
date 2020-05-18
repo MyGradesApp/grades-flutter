@@ -24,6 +24,7 @@ dependencies:
 
   quiver: ^2.1.3
   tuple: ^1.0.3
+  built_collection: ^4.3.2
 
   # Fonts and Icons
   font_awesome_flutter: ^8.8.1
