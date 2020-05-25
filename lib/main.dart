@@ -42,9 +42,6 @@ void main() async {
       var dataPersistence = DataPersistence(prefs);
       var sisRepository = SISRepository(offlineBloc, dataPersistence);
 
-      var secureStorage = WrappedSecureStorage();
-      var username = await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
-      var password = await secureStorage.read(key: AuthConst.SIS_PASSWORD_KEY);
       runApp(MultiRepositoryProvider(
         providers: [
           RepositoryProvider(create: (_) => dataPersistence),
@@ -99,8 +96,6 @@ void main() async {
           ],
           child: App(
             sisRepository: sisRepository,
-            username: username,
-            password: password,
           ),
         ),
       ));
@@ -116,14 +111,10 @@ void main() async {
 
 class App extends StatelessWidget {
   final SISRepository _sisRepository;
-  final String username;
-  final String password;
 
-  App(
-      {@required SISRepository sisRepository,
-      @required this.username,
-      @required this.password})
-      : assert(sisRepository != null),
+  App({
+    @required SISRepository sisRepository,
+  })  : assert(sisRepository != null),
         _sisRepository = sisRepository;
 
   @override
@@ -175,7 +166,7 @@ class App extends StatelessWidget {
                         ..add(FetchNetworkData()),
                   child: AcademicInfoScreen(),
                 ),
-            '/sis_webview': (_) => SISWebview(username, password),
+            '/sis_webview': (_) => SISWebview(),
             '/terms_query': (_) => TermsQueryScreen(),
             '/terms_display': (_) => TermsDisplayScreen(),
           },
