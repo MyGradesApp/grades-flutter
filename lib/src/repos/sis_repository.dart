@@ -104,7 +104,7 @@ class SISRepository {
         _dataPersistence.setGradesForCourse(course.courseName, grades);
         return grades;
       },
-      fetchPersisted: () => _dataPersistence.grades[course.courseName],
+      fetchPersisted: () => (_dataPersistence.grades ?? {})[course.courseName],
       cacheKey: keyForGrade(course),
       refresh: refresh,
     );
