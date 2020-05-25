@@ -44,7 +44,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _sisRepository.clearCache();
         yield LoginState.success();
       } catch (e, st) {
-        if (!(isHttpError(e) || e is InvalidAuthException)) {
+        if (!(isHttpError(e) ||
+            e is InvalidAuthException ||
+            e is NoSuchMethodError)) {
           unawaited(
             reportBlocException(exception: e, stackTrace: st, bloc: this),
           );
