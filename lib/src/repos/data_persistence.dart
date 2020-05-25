@@ -66,7 +66,14 @@ class DataPersistence {
       );
       return (builtGrades as BuiltMap<String, GradeData>).toMap();
     } catch (e, st) {
+      if (e is DeserializationError) {
+        reportException(
+            exception: e.error,
+            stackTrace: e.error.stackTrace,
+            tags: {'detailed_trace': 'deserialization'});
+      }
       reportException(exception: e, stackTrace: st);
+
       return {};
     }
   }
