@@ -29,8 +29,6 @@ Future<bool> checkUpdateAvailable() async {
       return false;
     }
 
-    print(
-        'current; ${GRADES_VERSION} - found: ${version} = ${_compareVersions(GRADES_VERSION, version as String)}');
     if (_compareVersions(GRADES_VERSION, version as String) ==
         PartialOrdering.Greater) {
       return true;
