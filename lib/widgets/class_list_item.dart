@@ -89,7 +89,8 @@ class ClassListItem extends StatelessWidget {
               ),
             ),
             _buildColumn(
-              fmt_percent,
+              // TODO: Update this to async
+              '',
               letterGrade ?? '',
               CrossAxisAlignment.end,
               Theme.of(context).primaryColorLight,
