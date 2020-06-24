@@ -32,8 +32,7 @@ class CourseService {
   CourseService(this.sisLoader);
 
   Future<String> _gradePage(Course course) async {
-    return (await sisLoader.client.get(Uri.parse(
-            'https://sis.palmbeachschools.org/focus/' + course.gradesUrl)))
+    return (await sisLoader.client.get(Uri.parse(course.gradesUrl)))
         .bodyAsString();
   }
 

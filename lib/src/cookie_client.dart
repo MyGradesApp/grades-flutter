@@ -90,8 +90,15 @@ class CookieClient {
       }
       return request.close();
     }).then((HttpClientResponse response) {
-      cookies.addEntries(
-          response.cookies.map((cookie) => MapEntry(cookie.name, cookie)));
+      var values = response.headers[HttpHeaders.setCookieHeader] ?? [];
+      // SAML SSO page returns an illegal cookie, strip that
+      var newCookies = values
+          .where((v) => !v.startsWith('SSO::'))
+          .map((v) => Cookie.fromSetCookieValue(v))
+          .map((cookie) => MapEntry(cookie.name, cookie));
+
+      cookies.addEntries(newCookies);
+
       location = response.headers['location'];
       return response;
     });

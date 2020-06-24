@@ -7,7 +7,6 @@ import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/exceptions.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 import 'package:sis_loader/src/profile.dart';
-import 'package:sis_loader/src/utilities.dart';
 
 import 'cookie_client.dart';
 import 'course.dart';
@@ -30,6 +29,8 @@ class SISLoader {
   final CookieClient client;
   CourseService _courseService;
   bool _loggedIn = false;
+  String requestToken;
+  dynamic initialContext;
 
   SISLoader({@required this.client});
 
@@ -54,53 +55,71 @@ class SISLoader {
     client.cookies.addAll(Map<String, Cookie>.from(newCookiesRaw as Map));
   }
 
-  Future<SISMeta> login(String username, String password) async {
+  // TODO: Errors
+  Future<void> login(String username, String password) async {
     if (username == 's2558161d' && password == 'figure51') {
       debugMocking = true;
       _loggedIn = true;
-      return Future.value();
+      return null;
     } else {
       debugMocking = false;
     }
-    var response = await client
-        .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
-    if (response.statusCode == 200 &&
-        (response.redirects.isEmpty ||
-            response.redirects.first.location.toString() ==
-                'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php')) {
+
+    var samlLogin = await client.get(Uri.parse(
+        'https://sis.palmbeachschools.org/focus/Modules.php?sso=saml'));
+
+    var samlLoginBody = await samlLogin.bodyAsString();
+    var loggedIn = RegExp(r'<title>Portal</title>').hasMatch(samlLoginBody);
+    if (loggedIn) {
+      initialContext = _extractInitialContexts(samlLoginBody);
       _loggedIn = true;
-      return SISMeta(semesters: mock_data.SEMESTERS, years: mock_data.YEARS);
+      return;
     }
 
-    var body = await response.bodyAsString();
+    var samlRequestValue =
+        RegExp(r'<input type="hidden" name="SAMLRequest" value="(.*?)"')
+            .firstMatch(samlLoginBody)
+            .group(1);
+
+    var relayState =
+        RegExp(r'<input type="hidden" name="RelayState" value="(.*?)"')
+            .firstMatch(samlLoginBody)
+            .group(1);
+
+    var ssoLogin = await client.post(
+      Uri.parse(
+          'https://connected.palmbeachschools.org/simplesaml/saml2/idp/SSOService.php'),
+      {'SAMLRequest': samlRequestValue, 'RelayState': relayState},
+    );
+
+    var ssoLoginBody = await ssoLogin.bodyAsString();
     var authState =
         RegExp(r'<input type="hidden" name="AuthState" value="(.*?)"')
-            .firstMatch(body)
+            .firstMatch(ssoLoginBody)
             .group(1);
-    var startAuthForm =
-        RegExp(r'<input .*? type="submit" name="(.*?)" id=".*?" value="(.*?)">')
-            .firstMatch(body);
-    var startAuthSubmitName = startAuthForm.group(1);
-    var startAuthSubmitValue = startAuthForm.group(2);
 
-    var startAuthUrl = Uri.https(
-        'connected.palmbeachschools.org',
-        'simplesaml/module.php/multiauth/selectsource.php/multiauth/selectsource.php?',
-        {'AuthState': authState, startAuthSubmitName: startAuthSubmitValue});
-    var startAuth = await client.get(startAuthUrl);
+    var selectSource = await client.get(Uri.https(
+      'connected.palmbeachschools.org',
+      'simplesaml/module.php/multiauth/selectsource.php/multiauth/selectsource.php',
+      {
+        'AuthState': authState,
+        'src-ZW5ib2FyZHNzby1zcA==': 'Log in using your District Network ID',
+      },
+    ));
 
     var samlRequest =
         RegExp(r'<input type="hidden" name="SAMLRequest" value="(.*?)"')
-            .firstMatch(await startAuth.bodyAsString())
+            .firstMatch(await selectSource.bodyAsString())
             .group(1);
 
     var samlRequestPost = await client.post(
-        Uri.parse('https://www.mysdpbc.org/_saml/EN/post.aspx'),
-        {'SAMLRequest': samlRequest});
+      Uri.parse('https://www.mysdpbc.org/_saml/EN/post.aspx'),
+      {'SAMLRequest': samlRequest},
+    );
 
     var samlRequestForm = RegExp(
-            r'<input name="__RequestVerificationToken" type="hidden" value="(.*?)".*?<input id="RedirectUrl" name="RedirectUrl" type="hidden" value="(.*?)"')
-        .firstMatch(await samlRequestPost.bodyAsString());
+      r'<input name="__RequestVerificationToken" type="hidden" value="(.*?)".*?<input id="RedirectUrl" name="RedirectUrl" type="hidden" value="(.*?)"',
+    ).firstMatch(await samlRequestPost.bodyAsString());
     var samlRequestVerificationToken = samlRequestForm.group(1);
     var samlRequestVerificationTokenUrl = samlRequestForm.group(2);
 
@@ -114,91 +133,49 @@ class SISLoader {
     });
 
     var authResponse = await authRequest.bodyAsString();
-    // Check if it succeeded (failure gives 200 code)
-    var authError = RegExp(
-            '<span class="field-validation-error text-danger" data-valmsg-for="ErrorMessage" data-valmsg-replace="true">(.*?)</span>')
-        .firstMatch(authResponse);
-
-    if (authError != null) {
-      throw InvalidAuthException(authError.group(1));
-    }
-
     var samlResponseMatch = RegExp(
-            r'<input name="SAMLResponse" type="hidden" id="SAMLResponse" value="(.*?)"')
-        .firstMatch(authResponse);
-
-    if (samlResponseMatch == null) {
-      throw UnknownInvalidAuthException('No SAML reponse provided');
-    }
-
-    var samlResponse = samlResponseMatch.group(1);
+      r'<input name="SAMLResponse" type="hidden" id="SAMLResponse" value="(.*?)"',
+    ).firstMatch(authResponse);
 
     var enboardRequest = await client.post(
-        Uri.parse(
-            'https://connected.palmbeachschools.org/simplesaml/module.php/saml/sp/saml2-acs.php/enboardsso-sp'),
-        {'SAMLResponse': samlResponse});
+      Uri.parse(
+          'https://connected.palmbeachschools.org/simplesaml/module.php/saml/sp/saml2-acs.php/enboardsso-sp'),
+      {'SAMLResponse': samlResponseMatch.group(1)},
+    );
 
-    // _reauth
+    var enboardBody = await enboardRequest.bodyAsString();
     var samlResponse2 =
         RegExp(r'<input type="hidden" name="SAMLResponse" value="(.*?)"')
-            .firstMatch(await enboardRequest.bodyAsString())
+            .firstMatch(enboardBody)
             .group(1);
 
     var finalRequest = await client.post(
-        Uri.parse(
-            'https://sis.palmbeachschools.org/focus/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'),
-        {
-          'SAMLResponse': samlResponse2,
-          'RelayState': 'https://sis.palmbeachschools.org/focus/'
-        });
+      Uri.parse(
+          'https://sis.palmbeachschools.org/focus/sso/saml2/acs.php?id=saml'),
+      {'SAMLResponse': samlResponse2, 'RelayState': relayState},
+    );
+
+    var finalRequestBody = await finalRequest.bodyAsString();
+    requestToken = RegExp(r'var request_token     = "(.*?)"')
+        .firstMatch(finalRequestBody)
+        .group(1);
+    initialContext = _extractInitialContexts(finalRequestBody);
 
     _loggedIn = true;
-
-    return _extractMeta(await finalRequest.bodyAsString());
   }
 
-  SISMeta _extractMeta(String body) {
-    var semesterOptions =
-        RegExp(r'<OPTION value="(\d+)" (?:SELECTED)?>(.+?)<\/OPTION>')
-            .allMatches(body);
-    var semesters = {for (var e in semesterOptions) e.group(1): e.group(2)};
-
-    var yearOptions =
-        RegExp(r'<OPTION value=(\d*?)(?: SELECTED)?>(.*?)<\/OPTION>')
-            .allMatches(body);
-    var years = {for (var e in yearOptions) e.group(1): e.group(2)};
-
-    return SISMeta(semesters: semesters, years: years);
-  }
-
-  Future<SISMeta> fetchMeta() async {
-    var portalRequest = await client.get(Uri.parse(
-        'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
-    return _extractMeta(await portalRequest.bodyAsString());
+  dynamic _extractInitialContexts(String body) {
+    return jsonDecode(
+        RegExp(r'var initial_contexts  = (.*?);\n').firstMatch(body).group(1));
   }
 
   Future<void> setTerm(String year, String semesterKey) async {
     await client.post(
       Uri.parse(
-          'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'),
+        'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php',
+      ),
       {'side_syear': year, 'side_mp': semesterKey},
     );
-  }
-
-  Future<void> _reauth(String data) async {
-    var samlResponse2 =
-        RegExp(r'<input type="hidden" name="SAMLResponse" value="(.*?)"')
-            .firstMatch(data)
-            .group(1);
-
-    await client.post(
-        Uri.parse(
-            'https://sis.palmbeachschools.org/focus/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp'),
-        {
-          'SAMLResponse': samlResponse2,
-          'RelayState': 'https://sis.palmbeachschools.org/focus/'
-        });
-    return;
   }
 
   Future<List<Course>> getCourses() async {
@@ -208,67 +185,29 @@ class SISLoader {
       return Future.value(mock_data.COURSES);
     }
 
-    var portalResponse = await client.get(Uri.parse(
-        'https://sis.palmbeachschools.org/focus/Modules.php?modname=misc/Portal.php'));
-    var portalResponseBody = await portalResponse.bodyAsString();
-    // TODO: Add checks to fix session expiration issues everywhere
-    if (RegExp(r'<input type="hidden" name="SAMLResponse" value="(.*?)"')
-        .hasMatch(portalResponseBody)) {
-      await _reauth(portalResponseBody);
-    }
-    var coursesTableMatch = RegExp(
-            r'''<\/tr><td style='display:none'>Z<\/td><TD valign=middle><img src="modules\/Grades\/Grades\.png" border=0><\/td><td>([\s\S]*?)<\/table>''')
-        .firstMatch(portalResponseBody);
-    if (coursesTableMatch == null) {
-      if (RegExp(r'Welcome, .{0,48}?<\/').hasMatch(portalResponseBody)) {
-        // No courses
-        return [];
-      } else {
-        throw UnknownReauthenticationException();
-      }
-    }
-    var coursesTable = coursesTableMatch.group(1);
+    var portal = await client
+        .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
 
-    var coursesMatches = RegExp(
-            r"a href='(.*?)'><b>(.*?)<\/b><\/a><\/td><td nowrap>(.*?)<\/td><td>(.*?)<\/td><td><td><\/td><td nowrap>\s*<a class='grade' href='.*?'>(.*?)<\/a>")
-        .allMatches(coursesTable);
+    initialContext = _extractInitialContexts(await portal.bodyAsString());
 
-    var courses = coursesMatches.map((match) {
-      var gradeParts = match[5].split('&nbsp;');
-      dynamic percent;
-      // TODO: Make more general
-      if (match[5].isNotEmpty) {
-        if (gradeParts[0] != 'Not Graded') {
-          percent = int.tryParse(
-              gradeParts[0].substring(0, gradeParts[0].length - 1));
-        } else {
-          percent = gradeParts[0];
-        }
-      } else {
-        percent = null;
-      }
+    var mps = Map<String, dynamic>.from(
+      initialContext['PortalController']['data']['enrollments'][0]['grades']
+          ['mps'][0] as Map,
+    );
 
-      StringOrInt typedPercent;
-      if (percent == null) {
-        if (gradeParts[0].isEmpty) {
-          typedPercent = null;
-        } else {
-          typedPercent = StringOrInt(gradeParts[0]);
-        }
-      } else {
-        typedPercent = StringOrInt(percent);
-      }
-
+    var rawCourses = initialContext['PortalController']['data']['enrollments']
+        [0]['grades']['rows'] as List<dynamic>;
+    var courses = (rawCourses).map((grade) {
       return Course((c) => c
-        ..gradesUrl = match[1]
-        ..courseName = match[2]
-        ..periodString = match[3]
-        ..teacherName = match[4]
-        ..gradePercent = typedPercent
-        ..gradeLetter = (gradeParts.length > 1 ? gradeParts[1] : null));
-    }).toList();
+        ..gradesUrl = grade[mps['mp_grade_href']] as String
+        ..courseName = grade['course'] as String
+        ..periodString = grade['period_name'] as String
+        ..teacherName = grade['teacher'] as String
+        ..gradePercent = null
+        ..gradeLetter = grade[mps['mp_grade']] as String);
+    });
 
-    return courses;
+    return Future.value(courses.toList());
   }
 
   Future<Map<String, dynamic>> getRawUserProfile() async {
@@ -296,7 +235,7 @@ class SISLoader {
 
     var graduationReqsBody = await graduationReqsRequest.bodyAsString();
 
-    var requestToken = RegExp(r'request_token   = "(.*?)"')
+    var requestToken = RegExp(r'request_token     = "(.*?)"')
         .firstMatch(graduationReqsBody)
         .group(1);
 
@@ -373,7 +312,7 @@ class SISLoader {
 
     var graduationReqsBody = await studentInfoReq.bodyAsString();
 
-    var requestToken = RegExp(r'request_token   = "(.*?)"')
+    var requestToken = RegExp(r'request_token     = "(.*?)"')
         .firstMatch(graduationReqsBody)
         .group(1);
 
