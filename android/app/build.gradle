@@ -72,9 +72,9 @@ android {
     buildTypes {
         release {
             // UNCOMMENT FOR RELEASE BUILD
-            signingConfig signingConfigs.release
+            // signingConfig signingConfigs.release
 
-            // signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
         }
     }
 }
