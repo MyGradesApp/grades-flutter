@@ -32,6 +32,10 @@ class CourseService {
   CourseService(this.sisLoader);
 
   Future<String> _gradePage(Course course) async {
+    if (course.gradesUrl == null) {
+      // This feels weird, perhaps null-safe bubbling would be better?
+      return '';
+    }
     return (await sisLoader.client.get(Uri.parse(course.gradesUrl)))
         .bodyAsString();
   }
@@ -161,6 +165,7 @@ class CourseService {
 }
 
 abstract class Course implements Built<Course, CourseBuilder> {
+  @nullable
   String get gradesUrl;
 
   String get courseName;

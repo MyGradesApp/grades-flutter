@@ -75,9 +75,6 @@ class _$CourseSerializer implements StructuredSerializer<Course> {
   Iterable<Object> serialize(Serializers serializers, Course object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'gradesUrl',
-      serializers.serialize(object.gradesUrl,
-          specifiedType: const FullType(String)),
       'courseName',
       serializers.serialize(object.courseName,
           specifiedType: const FullType(String)),
@@ -88,6 +85,12 @@ class _$CourseSerializer implements StructuredSerializer<Course> {
       serializers.serialize(object.teacherName,
           specifiedType: const FullType(String)),
     ];
+    if (object.gradesUrl != null) {
+      result
+        ..add('gradesUrl')
+        ..add(serializers.serialize(object.gradesUrl,
+            specifiedType: const FullType(String)));
+    }
     if (object.gradePercent != null) {
       result
         ..add('gradePercent')
@@ -271,9 +274,6 @@ class _$Course extends Course {
       this.gradePercent,
       this.gradeLetter})
       : super._() {
-    if (gradesUrl == null) {
-      throw new BuiltValueNullFieldError('Course', 'gradesUrl');
-    }
     if (courseName == null) {
       throw new BuiltValueNullFieldError('Course', 'courseName');
     }
