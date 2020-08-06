@@ -123,10 +123,10 @@ packages:
     description:
       path: "."
       ref: develop
-      resolved-ref: "92da7bfad64fcb786ddc3e32a07f9ecc322df29d"
+      resolved-ref: "9dd2e42ea19aed4ee2a229c13570e7b52301b0ec"
       url: "https://github.com/SwiftGrade/flutter_secure_storage"
     source: git
-    version: "3.3.2"
+    version: "3.3.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -227,7 +227,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.0"
+    version: "1.9.2"
   platform:
     dependency: transitive
     description:
