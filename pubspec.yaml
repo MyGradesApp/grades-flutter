@@ -49,60 +49,6 @@ flutter:
   uses-material-design: true
 
 dependency_overrides:
-  tuple:
-    git:
-      url: https://github.com/SwiftGrade/tuple
-      ref: master
-
-  # Fonts and Icons
-  font_awesome_flutter:
-    git:
-      url: https://github.com/SwiftGrade/font_awesome_flutter
-      ref: master
-
-  equatable:
-    git:
-      url: https://github.com/SwiftGrade/equatable
-      ref: master
-
-  bloc:
-    git:
-      url: https://github.com/SwiftGrade/bloc
-      ref: bloc-v4.0.0
-      path: packages/bloc
-
-  flutter_bloc:
-    git:
-      url: https://github.com/SwiftGrade/bloc
-      ref: flutter_bloc-v4.0.0
-      path: packages/flutter_bloc
-
-  nested:
-    git:
-      url: https://github.com/SwiftGrade/nested
-      ref: master
-
-  provider:
-    git:
-      url: https://github.com/SwiftGrade/provider
-      ref: master
-
-  quiver:
-    git:
-      url: https://github.com/SwiftGrade/quiver-dart
-      ref: master
-
-  flutter_circular_chart:
-    git:
-      url: https://github.com/SwiftGrade/flutter_circular_chart
-      ref: master
-
-  bloc_test:
-    git:
-      url: https://github.com/SwiftGrade/bloc
-      path: packages/bloc_test
-      ref: bloc_test-v5.0.0
-
   flutter_secure_storage:
     git:
       url: https://github.com/SwiftGrade/flutter_secure_storage
