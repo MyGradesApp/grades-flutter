@@ -22,7 +22,7 @@ dependencies:
   flutter_secure_storage: ^3.3.2
 
   equatable: ^1.1.1
-  bloc: ^3.0.0
+  bloc: ^4.0.0
   tuple: ^1.0.3
 
   built_value: ^7.1.0
@@ -32,7 +32,7 @@ dev_dependencies:
   test: ^1.14.2
   mockito: ^4.1.1
 
-  bloc_test: ^4.0.0
+  bloc_test: ^5.0.0
   flutter_test:
     sdk: flutter
 
@@ -41,28 +41,6 @@ dev_dependencies:
 
 
 dependency_overrides:
-  tuple:
-    git:
-      url: https://github.com/Noskcaj19/tuple
-      ref: master
-
-  bloc_test:
-    git:
-      url: https://github.com/SwiftGrade/bloc
-      path: packages/bloc_test
-      ref: bloc_test-v3.1.0
-
-  bloc:
-    git:
-      url: https://github.com/SwiftGrade/bloc
-      path: packages/bloc
-      ref: bloc-v3.0.0
-
-  equatable:
-    git:
-      url: https://github.com/SwiftGrade/equatable
-      ref: master
-
   flutter_secure_storage:
     git:
       url: https://github.com/SwiftGrade/flutter_secure_storage
