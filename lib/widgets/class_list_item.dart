@@ -64,8 +64,6 @@ class ClassListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fmt_percent = _formatPercent(percent);
-
     return Card(
       color: Theme.of(context).cardColor,
       elevation: 0,
@@ -103,18 +101,18 @@ class ClassListItem extends StatelessWidget {
     );
   }
 
-  String _formatPercent(StringOrInt percent) {
-    if (percent == null) {
-      return 'N/A';
-    } else if (percent.isInt) {
-      return '${percent.integer}%';
-    } else {
-      if (percent.string == 'Not Graded') {
-        return 'N/A';
-      } else {
-        // Handle casesthat aren't `Not Graded`
-        return percent.string;
-      }
-    }
-  }
+//  String _formatPercent(StringOrInt percent) {
+//    if (percent == null) {
+//      return 'N/A';
+//    } else if (percent.isInt) {
+//      return '${percent.integer}%';
+//    } else {
+//      if (percent.string == 'Not Graded') {
+//        return 'N/A';
+//      } else {
+//        // Handle casesthat aren't `Not Graded`
+//        return percent.string;
+//      }
+//    }
+//  }
 }
