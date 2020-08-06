@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/logging_bloc_observer.dart';
 import 'package:grades/screens/academic_info_screen.dart';
 import 'package:grades/screens/course_grades/course_grades_screen.dart';
 import 'package:grades/screens/grade_info_screen.dart';
@@ -14,13 +15,12 @@ import 'package:grades/screens/sis_webview.dart';
 import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/tos_display_screen.dart';
 import 'package:grades/screens/tos_query_screen.dart';
-import 'package:grades/simple_bloc_delegate.dart';
 import 'package:grades/widgets/offline_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = LoggingBlocObserver();
 
   await runZoned(
     () async {

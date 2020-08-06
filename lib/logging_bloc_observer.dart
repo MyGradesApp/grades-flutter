@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:grade_core/grade_core.dart';
 
-class SimpleBlocDelegate extends BlocDelegate {
+class LoggingBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
@@ -9,14 +9,14 @@ class SimpleBlocDelegate extends BlocDelegate {
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
-    print('Exception in ${bloc.runtimeType}');
+  void onError(Cubit cubit, Object error, StackTrace stacktrace) {
+    super.onError(cubit, error, stacktrace);
+    print('Exception in ${cubit.runtimeType}');
     reportBlocException(
       exception: error,
       stackTrace: stacktrace,
       tags: {'caught': 'root'},
-      bloc: bloc,
+      bloc: cubit,
     );
   }
 
