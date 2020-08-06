@@ -7,8 +7,7 @@ part 'offline_event.dart';
 part 'offline_state.dart';
 
 class OfflineBloc extends Bloc<OfflineEvent, OfflineState> {
-  @override
-  OfflineState get initialState => OfflineState(false, false);
+  OfflineBloc() : super(OfflineState(false, false));
 
   @override
   Stream<OfflineState> mapEventToState(

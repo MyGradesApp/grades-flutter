@@ -9,7 +9,7 @@ String GRADES_VERSION = '';
 Future<SentryResponse> reportBlocException({
   @required dynamic exception,
   @required dynamic stackTrace,
-  @required Bloc bloc,
+  @required Cubit bloc,
   Map<String, String> tags,
 }) {
   return reportException(

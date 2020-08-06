@@ -22,7 +22,7 @@ dependencies:
   flutter_secure_storage: ^3.3.3
 
   equatable: ^1.2.3
-  bloc: ^4.0.0
+  bloc: ^6.0.1
   tuple: ^1.0.3
 
   built_value: ^7.1.0
@@ -32,7 +32,7 @@ dev_dependencies:
   test: ^1.15.3
   mockito: ^4.1.1
 
-  bloc_test: ^5.0.0
+  bloc_test: ^7.0.0
   flutter_test:
     sdk: flutter
 

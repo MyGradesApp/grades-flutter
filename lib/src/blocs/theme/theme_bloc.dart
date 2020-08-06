@@ -48,10 +48,8 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeMode> {
   final ThemeMode Function() initialStateSource;
   final void Function(ThemeMode) stateSaver;
 
-  ThemeBloc({@required this.initialStateSource, @required this.stateSaver});
-
-  @override
-  ThemeMode get initialState => initialStateSource();
+  ThemeBloc({@required this.initialStateSource, @required this.stateSaver})
+      : super(initialStateSource());
 
   @override
   Stream<ThemeMode> mapEventToState(

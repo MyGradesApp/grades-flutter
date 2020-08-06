@@ -20,10 +20,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc({@required SISRepository sisRepository})
       : assert(sisRepository != null),
-        _sisRepository = sisRepository;
-
-  @override
-  LoginState get initialState => LoginState.empty();
+        _sisRepository = sisRepository,
+        super(LoginState.empty());
 
   @override
   Stream<LoginState> mapEventToState(

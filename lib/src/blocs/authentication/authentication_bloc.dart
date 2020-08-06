@@ -25,10 +25,8 @@ class AuthenticationBloc
   })  : assert(sisRepository != null),
         assert(offlineBloc != null),
         _sisRepository = sisRepository,
-        _offlineBloc = offlineBloc;
-
-  @override
-  AuthenticationState get initialState => Uninitialized();
+        _offlineBloc = offlineBloc,
+        super(Uninitialized());
 
   @override
   Stream<AuthenticationState> mapEventToState(

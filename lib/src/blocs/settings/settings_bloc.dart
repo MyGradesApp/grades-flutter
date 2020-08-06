@@ -16,10 +16,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsState Function() initialStateSource;
   final void Function(SettingsState) stateSaver;
 
-  SettingsBloc({@required this.initialStateSource, @required this.stateSaver});
-
-  @override
-  SettingsState get initialState => initialStateSource();
+  SettingsBloc({@required this.initialStateSource, @required this.stateSaver})
+      : super(initialStateSource());
 
   @override
   Stream<SettingsState> mapEventToState(

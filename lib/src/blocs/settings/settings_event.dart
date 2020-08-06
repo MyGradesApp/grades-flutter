@@ -4,4 +4,4 @@ abstract class SettingsEvent {
   const SettingsEvent();
 }
 
-class ToggleSettingsGroupingMode extends SettingsEvent{ }
+class ToggleSettingsGroupingMode extends SettingsEvent {}

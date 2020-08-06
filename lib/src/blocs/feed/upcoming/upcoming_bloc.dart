@@ -22,10 +22,8 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
 
   UpcomingBloc({@required SISRepository sisRepository})
       : assert(sisRepository != null),
-        _sisRepository = sisRepository;
-
-  @override
-  UpcomingState get initialState => UpcomingLoading.empty();
+        _sisRepository = sisRepository,
+        super(UpcomingLoading.empty());
 
   @override
   Stream<UpcomingState> mapEventToState(

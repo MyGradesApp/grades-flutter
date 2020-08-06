@@ -21,10 +21,8 @@ class RecentBloc extends Bloc<FeedEvent, RecentState> {
 
   RecentBloc({@required SISRepository sisRepository})
       : assert(sisRepository != null),
-        _sisRepository = sisRepository;
-
-  @override
-  RecentState get initialState => RecentLoading.empty();
+        _sisRepository = sisRepository,
+        super(RecentLoading.empty());
 
   @override
   Stream<RecentState> mapEventToState(

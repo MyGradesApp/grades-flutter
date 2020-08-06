@@ -14,10 +14,7 @@ abstract class NetworkActionBloc<D>
 
   Future<D> fetch(bool refresh);
 
-  NetworkActionBloc({this.format});
-
-  @override
-  NetworkActionState get initialState => NetworkLoading();
+  NetworkActionBloc({this.format}) : super(NetworkLoading());
 
   @override
   Stream<NetworkActionState> mapEventToState(
