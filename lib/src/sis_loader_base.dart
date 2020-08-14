@@ -156,7 +156,7 @@ class SISLoader {
     );
 
     var finalRequestBody = await finalRequest.bodyAsString();
-    requestToken = RegExp(r'var request_token     = "(.*?)"')
+    requestToken = RegExp(r'__Module__\.token = "(.*?)"')
         .firstMatch(finalRequestBody)
         .group(1);
     initialContext = _extractInitialContexts(finalRequestBody);
@@ -165,8 +165,13 @@ class SISLoader {
   }
 
   dynamic _extractInitialContexts(String body) {
-    return jsonDecode(
-        RegExp(r'var initial_contexts  = (.*?);\n').firstMatch(body).group(1));
+    var contextMatch = RegExp(r'''const {
+					methods,
+					initial_contexts,
+					request_options,
+				} = ({.*});''').firstMatch(body).group(1);
+
+    return jsonDecode(contextMatch)['initial_contexts'];
   }
 
   Future<void> setTerm(String year, String semesterKey) async {
@@ -231,11 +236,12 @@ class SISLoader {
 
     var startIndex = bearerTokenCookie.indexOf('=') + 1;
     var endIndex = bearerTokenCookie.indexOf(';');
-    var bearerToken = bearerTokenCookie.substring(startIndex, endIndex);
+    var bearerToken =
+        Uri.decodeFull(bearerTokenCookie.substring(startIndex, endIndex));
 
     var graduationReqsBody = await graduationReqsRequest.bodyAsString();
 
-    var requestToken = RegExp(r'request_token     = "(.*?)"')
+    var requestToken = RegExp(r'__Module__\.token = "(.*?)"')
         .firstMatch(graduationReqsBody)
         .group(1);
 
@@ -248,7 +254,7 @@ class SISLoader {
         '{"requests":[{"controller":"GraduationRequirementsReportController","method":"getOneStudentReportData","args":[[[{"ID":1,"TITLE":"Main","TEMPLATE":"main_category","CLASS_NAME":"MainCategoryGraduationRequirementsReport","CREATED_BY_CLASS":null,"CREATED_BY_ID":null,"CREATED_AT":null,"UPDATED_BY_CLASS":null,"UPDATED_BY_ID":null,"UPDATED_AT":null}],$studentId,"COURSE_HISTORY","$todaysDate",""]],"session":null}],"cache":{}}';
     var dataRequest = await client.post(
         Uri.parse(
-            'https://sis.palmbeachschools.org/focus/classes/FocusModule.class.php?modname=GraduationRequirements%2FGraduationRequirements.php&student_id=new&top_deleted_student=true&type=SISStudent&id=' +
+            'https://sis.palmbeachschools.org/focus/classes/FocusModule.class.php?force_package=SIS&modname=GraduationRequirements%2FGraduationRequirements.php&type=SISStudent&id=' +
                 studentId),
         '--FormBoundary\r\nContent-Disposition: form-data; name="__call__"\r\n\r\n$requestData\r\n--FormBoundary\r\nContent-Disposition: form-data; name="__token__"\r\n\r\n$requestToken\r\n--FormBoundary--',
         headers: {
@@ -312,12 +318,12 @@ class SISLoader {
 
     var graduationReqsBody = await studentInfoReq.bodyAsString();
 
-    var requestToken = RegExp(r'request_token     = "(.*?)"')
+    var requestToken = RegExp(r'__Module__\.token = "(.*?)"')
         .firstMatch(graduationReqsBody)
         .group(1);
 
     var studentId =
-        RegExp(r'student_id":(.*?),').firstMatch(graduationReqsBody).group(1);
+        RegExp(r'student_id":"(.*?)",').firstMatch(graduationReqsBody).group(1);
 
     var requestData =
         '{"requests":[{"controller":"EditController","method":"cache:getFieldData","args":["10","SISStudent",$studentId],"session":null}],"cache":{}}';
