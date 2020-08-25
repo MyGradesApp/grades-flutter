@@ -1,19 +1,49 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:grade_core/grade_core.dart';
+import 'package:meta/meta.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-import '../../repos/sis_repository.dart';
-import '../network_action_bloc/network_action_bloc.dart';
+part 'course_list_event.dart';
+part 'course_list_state.dart';
 
-class CourseListBloc extends NetworkActionBloc<List<Course>> {
+class CourseListBloc extends Bloc<CourseListEvent, CourseListState> {
   final SISRepository _sisRepository;
 
   CourseListBloc({@required SISRepository sisRepository})
       : assert(sisRepository != null),
         _sisRepository = sisRepository,
-        super(format: (d) => 'courses.length: ${d?.length}');
+        super(CourseListLoading());
 
   @override
-  Future<List<Course>> fetch(bool refresh) async {
-    return await _sisRepository.getCourses(refresh: refresh);
+  Stream<CourseListState> mapEventToState(CourseListEvent event) async* {
+    bool refresh;
+    if (event is FetchCourseList) {
+      yield CourseListLoading();
+      refresh = false;
+    } else if (event is RefreshCourseList) {
+      refresh = true;
+    }
+    try {
+      var courses = await _sisRepository.getCourses(refresh: refresh);
+      yield CourseListLoaded(courses);
+
+      for (var x = 0; x < courses.length; x++) {
+        var grades = await _sisRepository.getCourseGrades(courses[x]);
+        courses[x] = courses[x].rebuild((c) {
+          if (grades.classPercent != null) {
+            c.gradePercent = StringOrInt(grades.classPercent);
+          }
+        });
+      }
+      yield CourseListLoaded(courses);
+    } catch (e, st) {
+      yield CourseListError(e, st);
+      unawaited(
+        reportBlocException(exception: e, stackTrace: st, bloc: this),
+      );
+    }
   }
 }
