@@ -24,13 +24,15 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25.0),
-              const Text(
-                'Your grades at a glance',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'OpenSans',
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold,
+              const Center(
+                child: Text(
+                  'Your grades at a glance',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 50),
