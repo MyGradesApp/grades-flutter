@@ -28,12 +28,16 @@ class ClassListItem extends StatelessWidget {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text(
-              topText,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 19,
-                color: textColor,
+            AnimatedOpacity(
+              opacity: topText == '' ? 0 : 1,
+              duration: Duration(milliseconds: 150),
+              child: Text(
+                topText,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 19,
+                  color: textColor,
+                ),
               ),
             ),
           ],
@@ -64,6 +68,8 @@ class ClassListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var fmt_percent = _formatPercent(percent);
+
     return Card(
       color: Theme.of(context).cardColor,
       elevation: 0,
@@ -87,8 +93,7 @@ class ClassListItem extends StatelessWidget {
               ),
             ),
             _buildColumn(
-              // TODO: Update this to async
-              '',
+              fmt_percent,
               letterGrade ?? '',
               CrossAxisAlignment.end,
               Theme.of(context).primaryColorLight,
@@ -101,18 +106,18 @@ class ClassListItem extends StatelessWidget {
     );
   }
 
-//  String _formatPercent(StringOrInt percent) {
-//    if (percent == null) {
-//      return 'N/A';
-//    } else if (percent.isInt) {
-//      return '${percent.integer}%';
-//    } else {
-//      if (percent.string == 'Not Graded') {
-//        return 'N/A';
-//      } else {
-//        // Handle casesthat aren't `Not Graded`
-//        return percent.string;
-//      }
-//    }
-//  }
+  String _formatPercent(StringOrInt percent) {
+    if (percent == null) {
+      return '';
+    } else if (percent.isInt) {
+      return '${percent.integer}%';
+    } else {
+      if (percent.string == 'Not Graded') {
+        return 'N/A';
+      } else {
+        // Handle string cases that aren't `Not Graded`
+        return percent.string;
+      }
+    }
+  }
 }

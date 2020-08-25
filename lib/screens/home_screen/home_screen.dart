@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       BlocProvider<CourseListBloc>(
         create: (_) => CourseListBloc(sisRepository: sisRepository)
-          ..add(FetchNetworkData()),
+          ..add(FetchCourseList()),
       ),
       BlocProvider<UpcomingBloc>(
         create: (_) =>

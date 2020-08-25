@@ -8,7 +8,6 @@ import 'package:grades/widgets/class_list_item.dart';
 import 'package:grades/widgets/loading_indicator.dart';
 import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
-import 'package:sis_loader/sis_loader.dart';
 
 class CourseListPage extends StatefulWidget {
   @override
@@ -22,21 +21,21 @@ class _CourseListPageState extends State<CourseListPage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () {
-        BlocProvider.of<CourseListBloc>(context).add(RefreshNetworkData());
+        BlocProvider.of<CourseListBloc>(context).add(RefreshCourseList());
         return _refreshCompleter.future;
       },
-      child: BlocConsumer<CourseListBloc, NetworkActionState>(
-        listener: (context, NetworkActionState state) {
-          if (state is NetworkLoaded || state is NetworkActionError) {
+      child: BlocConsumer<CourseListBloc, CourseListState>(
+        listener: (context, CourseListState state) {
+          if (state is CourseListLoaded || state is CourseListError) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
         },
         builder: (context, state) {
-          if (state is NetworkLoading) {
+          if (state is CourseListLoading) {
             return Center(child: LoadingIndicator());
           }
-          if (state is NetworkLoaded<List<Course>>) {
+          if (state is CourseListLoaded) {
             if (state.data == null) {
               return FullscreenSimpleIconMessage(
                 icon: FontAwesomeIcons.inbox,
@@ -69,7 +68,7 @@ class _CourseListPageState extends State<CourseListPage> {
               },
             );
           }
-          if (state is NetworkActionError) {
+          if (state is CourseListError) {
             if (state.error is SISRepoReauthFailure) {
               reportException(
                 exception: state.error,
