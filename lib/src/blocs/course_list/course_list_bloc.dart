@@ -31,12 +31,16 @@ class CourseListBloc extends Bloc<CourseListEvent, CourseListState> {
       yield CourseListLoaded(courses);
 
       for (var x = 0; x < courses.length; x++) {
-        var grades = await _sisRepository.getCourseGrades(courses[x]);
-        courses[x] = courses[x].rebuild((c) {
-          if (grades.classPercent != null) {
-            c.gradePercent = StringOrInt(grades.classPercent);
-          }
-        });
+        try {
+          var grades = await _sisRepository.getCourseGrades(courses[x]);
+          courses[x] = courses[x].rebuild((c) {
+            if (grades.classPercent != null) {
+              c.gradePercent = StringOrInt(grades.classPercent);
+            }
+          });
+        } catch (e, st) {
+          unawaited(reportException(exception: e, stackTrace: st));
+        }
       }
       yield CourseListLoaded(courses);
     } catch (e, st) {
