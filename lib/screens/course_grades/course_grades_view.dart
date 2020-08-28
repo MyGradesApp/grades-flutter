@@ -129,12 +129,15 @@ class _CourseGradesViewState extends State<CourseGradesView> {
               return Column(
                 children: [
                   Center(
-                    child: Text(
-                      _gradePercent.toString() + '%',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                    child: Padding(
+                      padding: EdgeInsets.all(7),
+                      child: Text(
+                        _gradePercent.toString() + '%',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   Expanded(
