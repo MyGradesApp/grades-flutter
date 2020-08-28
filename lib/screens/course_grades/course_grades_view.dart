@@ -150,8 +150,8 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                                 '%)',
                             style: TextStyle(
                                 color: Colors.amber,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w500),
+                                fontSize: 23,
+                                fontWeight: FontWeight.w400),
                           ),
                         ],
                       )),

@@ -4,7 +4,8 @@ import 'package:sis_loader/sis_loader.dart';
 
 double calculateGradePercent(Map<ToHeader, List<Grade>> groupedGrades,
     BuiltMap<String, String> weights) {
-  var groupKeys = groupedGrades.keys.toList()..sort(), classPercent = 0.0;
+  var groupKeys = groupedGrades.keys.toList()..sort();
+  var classPercent = 0.0;
   for (var group in groupKeys) {
     var groupTotal = 0.0;
     var grades = groupedGrades[group];
