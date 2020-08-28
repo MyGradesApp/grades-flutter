@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/utilities/calculate_grade.dart';
 import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/headered_group.dart';
 import 'package:grades/widgets/loading_indicator.dart';
@@ -30,7 +31,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   Completer<void> _refreshCompleter = Completer<void>();
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
-  StringOrInt _gradePercent;
+  final StringOrInt _gradePercent;
 
   _CourseGradesViewState(this._currentGroupingMode, this._gradePercent);
 
@@ -43,14 +44,14 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         title: Text(bloc.course.courseName),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              setState(() {
-                openGradeCalculator();
-              });
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.edit),
+          //   onPressed: () {
+          //     setState(() {
+          //       openGradeCalculator();
+          //     });
+          //   },
+          // ),
           if (_hasCategories)
             IconButton(
               icon: Icon(_currentGroupingMode == GroupingMode.category
@@ -135,16 +136,19 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            _gradePercent.toString() + '% ',
+                            _gradePercent.toString() + '%',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '(81.67%)',
+                            ' (' +
+                                calculateGradePercent(
+                                    groupedGrades, state.data.weights) +
+                                '%)',
                             style: TextStyle(
-                                color: Colors.green,
+                                color: Colors.amber,
                                 fontSize: 24,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -188,8 +192,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
       ),
     );
   }
-
-  void openGradeCalculator() {}
 }
 
 abstract class ToHeader {
