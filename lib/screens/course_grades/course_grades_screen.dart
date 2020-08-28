@@ -13,12 +13,14 @@ class CourseGradesScreen extends StatelessWidget {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (BuildContext context, settings) {
         return BlocProvider<CourseGradesBloc>(
-          create: (_) => CourseGradesBloc(
-            course: course,
-            sisRepository: RepositoryProvider.of<SISRepository>(context),
-          )..add(FetchNetworkData()),
-          child: CourseGradesView(settings.groupingMode),
-        );
+            create: (_) => CourseGradesBloc(
+                  course: course,
+                  sisRepository: RepositoryProvider.of<SISRepository>(context),
+                )..add(FetchNetworkData()),
+            child: CourseGradesView(
+              settings.groupingMode,
+              course.gradePercent,
+            ));
       },
     );
   }

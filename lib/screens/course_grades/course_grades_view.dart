@@ -17,19 +17,22 @@ import 'package:sis_loader/sis_loader.dart';
 
 class CourseGradesView extends StatefulWidget {
   final GroupingMode _groupingMode;
+  final StringOrInt _gradePercent;
 
-  CourseGradesView(this._groupingMode);
+  CourseGradesView(this._groupingMode, this._gradePercent);
 
   @override
-  _CourseGradesViewState createState() => _CourseGradesViewState(_groupingMode);
+  _CourseGradesViewState createState() =>
+      _CourseGradesViewState(_groupingMode, _gradePercent);
 }
 
 class _CourseGradesViewState extends State<CourseGradesView> {
   Completer<void> _refreshCompleter = Completer<void>();
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
+  StringOrInt _gradePercent;
 
-  _CourseGradesViewState(this._currentGroupingMode);
+  _CourseGradesViewState(this._currentGroupingMode, this._gradePercent);
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,14 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         elevation: 0.0,
         title: Text(bloc.course.courseName),
         actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              setState(() {
+                openGradeCalculator();
+              });
+            },
+          ),
           if (_hasCategories)
             IconButton(
               icon: Icon(_currentGroupingMode == GroupingMode.category
@@ -63,6 +74,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             }
+
             if (state is NetworkLoaded<GradeData>) {
               setState(() {
                 _hasCategories = (state.data?.grades ?? BuiltList())
@@ -114,32 +126,47 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   text: 'This course has no grades',
                 );
               }
-              return ListView.builder(
-                itemCount: groupKeys.length,
-                itemBuilder: (context, i) {
-                  var group = groupKeys[i];
-                  var grades = groupedGrades[group];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: HeaderedGroup(
-                      title: group.toHeader(),
-                      subtitle: ((state.data.weights != null)
-                          ? state.data.weights[group.raw()]?.toString()
-                          : null),
-                      children: grades,
-                      builder: (Grade grade) => GradeItemCard(
-                        grade: grade,
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/grade_info',
-                            arguments: grade,
-                          );
-                        },
-                      ),
+              return Column(
+                children: [
+                  Center(
+                    child: Text(
+                      _gradePercent.toString() + '%',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
                     ),
-                  );
-                },
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: groupKeys.length,
+                      itemBuilder: (context, i) {
+                        var group = groupKeys[i];
+                        var grades = groupedGrades[group];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: HeaderedGroup(
+                            title: group.toHeader(),
+                            subtitle: ((state.data.weights != null)
+                                ? state.data.weights[group.raw()]?.toString()
+                                : null),
+                            children: grades,
+                            builder: (Grade grade) => GradeItemCard(
+                              grade: grade,
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/grade_info',
+                                  arguments: grade,
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }
             return Container();
@@ -148,6 +175,8 @@ class _CourseGradesViewState extends State<CourseGradesView> {
       ),
     );
   }
+
+  void openGradeCalculator() {}
 }
 
 abstract class ToHeader {

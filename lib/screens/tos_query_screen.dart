@@ -23,6 +23,7 @@ class TermsQueryScreen extends StatelessWidget {
                       style: TextStyle(
                         letterSpacing: 1.0,
                         fontSize: 22.0,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'OpenSans',
                       ),

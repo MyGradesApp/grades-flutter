@@ -45,7 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text(title),
+        title: Center(
+          child: Text(
+            title,
+          ),
+        ),
         leading: IconButton(
           tooltip: 'Profile',
           icon: Icon(

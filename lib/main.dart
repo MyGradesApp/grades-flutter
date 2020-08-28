@@ -8,7 +8,7 @@ import 'package:grades/logging_bloc_observer.dart';
 import 'package:grades/screens/academic_info_screen.dart';
 import 'package:grades/screens/course_grades/course_grades_screen.dart';
 import 'package:grades/screens/grade_info_screen.dart';
-import 'package:grades/screens/home_screen/home_screen.dart';
+import 'package:grades/screens/home_screen.dart';
 import 'package:grades/screens/login/login_screen.dart';
 import 'package:grades/screens/settings_screen.dart';
 import 'package:grades/screens/sis_webview.dart';
