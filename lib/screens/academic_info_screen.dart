@@ -20,6 +20,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
       appBar: AppBar(
         elevation: 0.0,
         title: Text('Academic Info'),
+        centerTitle: true,
       ),
       body: RefreshIndicator(
         onRefresh: () {

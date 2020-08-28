@@ -41,6 +41,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
       appBar: AppBar(
         elevation: 0.0,
         title: Text(bloc.course.courseName),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.edit),

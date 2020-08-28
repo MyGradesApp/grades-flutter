@@ -18,6 +18,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         title: Text('Settings'),
+        centerTitle: true,
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (BuildContext context, settings) {
