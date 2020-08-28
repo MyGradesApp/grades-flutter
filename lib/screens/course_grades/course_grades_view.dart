@@ -145,7 +145,8 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                           Text(
                             ' (' +
                                 calculateGradePercent(
-                                    groupedGrades, state.data.weights) +
+                                        groupedGrades, state.data.weights)
+                                    .toStringAsFixed(2) +
                                 '%)',
                             style: TextStyle(
                                 color: Colors.amber,
