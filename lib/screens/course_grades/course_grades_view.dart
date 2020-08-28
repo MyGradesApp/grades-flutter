@@ -129,18 +129,27 @@ class _CourseGradesViewState extends State<CourseGradesView> {
               }
               return Column(
                 children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(7),
-                      child: Text(
-                        _gradePercent.toString() + '%',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _gradePercent.toString() + '% ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '(81.67%)',
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      )),
                   Expanded(
                     child: ListView.builder(
                       itemCount: groupKeys.length,
