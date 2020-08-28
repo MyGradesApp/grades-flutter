@@ -59,15 +59,6 @@ class GradeInfoScreen extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         title: Text(assignmentName),
-        leading: IconButton(
-          tooltip: 'Back',
-          icon: Icon(
-            Icons.arrow_back_ios,
-          ),
-          onPressed: () {
-            Navigator.pop(context, true);
-          },
-        ),
       ),
       body: ListView.builder(
         itemCount: rawData.length,
