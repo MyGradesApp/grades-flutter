@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart' as collection;
@@ -34,7 +33,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
   final StringOrInt _percent;
-  List<dynamic> gradeList;
+  List<DummyGrade> dummyGrades;
 
   _CourseGradesViewState(this._currentGroupingMode, this._percent);
 
@@ -214,7 +213,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   }
 
   void addDummyGrade(BuildContext context, List<ToHeader> groupKeys,
-      Map<ToHeader, List<Grade>> groupedGrades) {
+      Map<ToHeader, List<dynamic>> groupedGrades) {
     var GradePickerArray = <List<dynamic>>[];
     var percentList = <int>[];
     for (var i = 100; i >= 0; i--) {
@@ -228,7 +227,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
       }
       GradePickerArray.add(categoryList);
     }
-    List<dynamic> gradeValues;
+    // List<dynamic> gradeValues;
     Picker(
         adapter: PickerDataAdapter<String>(
             pickerdata: GradePickerArray, isArray: true),
@@ -240,11 +239,15 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         onConfirm: (Picker picker, List value) {
           // print(value.toString());
           print(picker.getSelectedValues());
-          gradeValues = picker.getSelectedValues();
+          var gradeValues = picker.getSelectedValues();
+          var grade =
+              DummyGrade(gradeValues[0].toString(), gradeValues[1].toString());
+          for (var group in groupKeys) {
+            if (group.toHeader().contains(grade.category)) {
+              groupedGrades[group].add(grade);
+            }
+          }
         }).showDialog(context);
-    var grade =
-        Grade.Dummy(gradeValues[0].toString(), gradeValues[1].toString());
-    groupedGrades[gradeValues[1]].add(grade);
   }
 }
 
