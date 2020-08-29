@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart' as collection;
@@ -15,6 +16,7 @@ import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 import 'package:intl/intl.dart';
 import 'package:sis_loader/sis_loader.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 
 class CourseGradesView extends StatefulWidget {
   final GroupingMode _groupingMode;
@@ -32,6 +34,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
   final StringOrInt _percent;
+  List<dynamic> gradeList;
 
   _CourseGradesViewState(this._currentGroupingMode, this._percent);
 
@@ -172,6 +175,34 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                       },
                     ),
                   ),
+                  Card(
+                    color: Colors.pink,
+                    borderOnForeground: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      onTap: () {
+                        addDummyGrade(context, groupKeys, groupedGrades);
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Center(
+                            child: Text(
+                              'Add Dummy Grade',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          )),
+                    ),
+                  ),
                 ],
               );
             }
@@ -180,6 +211,40 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         ),
       ),
     );
+  }
+
+  void addDummyGrade(BuildContext context, List<ToHeader> groupKeys,
+      Map<ToHeader, List<Grade>> groupedGrades) {
+    var GradePickerArray = <List<dynamic>>[];
+    var percentList = <int>[];
+    for (var i = 100; i >= 0; i--) {
+      percentList.add(i);
+    }
+    GradePickerArray.add(percentList);
+    if (groupKeys.length > 1) {
+      var categoryList = <String>[];
+      for (var category in groupKeys) {
+        categoryList.add(category.toHeader());
+      }
+      GradePickerArray.add(categoryList);
+    }
+    List<dynamic> gradeValues;
+    Picker(
+        adapter: PickerDataAdapter<String>(
+            pickerdata: GradePickerArray, isArray: true),
+        hideHeader: true,
+        title: Center(
+          child: Text('Grade Calculator'),
+        ),
+        confirmText: 'Create Dummy Grade',
+        onConfirm: (Picker picker, List value) {
+          // print(value.toString());
+          print(picker.getSelectedValues());
+          gradeValues = picker.getSelectedValues();
+        }).showDialog(context);
+    var grade =
+        Grade.Dummy(gradeValues[0].toString(), gradeValues[1].toString());
+    groupedGrades[gradeValues[1]].add(grade);
   }
 }
 

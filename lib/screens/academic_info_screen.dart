@@ -52,22 +52,24 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
                     children: <Widget>[
+                      // TODO: display actual name
+                      // _buildCard('Name', 'Jon Doe'),
                       _buildCard(
-                        'Cumulative GPA:',
+                        'Cumulative GPA',
                         profile.cumulative_gpa.toString(),
                       ),
                       _buildCard(
-                        'Weighted GPA:',
+                        'Weighted GPA',
                         profile.cumulative_weighted_gpa.toString(),
                       ),
                       if (profile.class_rank_numerator != null &&
                           profile.class_rank_denominator != null)
                         _buildCard(
-                          'Class Rank:',
+                          'Class Rank',
                           '${profile.class_rank_numerator} / ${profile.class_rank_denominator}',
                         ),
                       _buildCard(
-                        'Absences:',
+                        'Absences',
                         '${absences.days} days in ${absences.periods} periods',
                       )
                     ],

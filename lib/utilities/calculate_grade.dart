@@ -26,3 +26,21 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
   }
   return classPercent;
 }
+
+class DummyGrade {
+  String _gradePercent;
+  String _category;
+
+  DummyGrade(String grade, String cat) {
+    _gradePercent = grade;
+    _category = cat;
+  }
+
+  String get grade => _gradePercent;
+
+  String get name => 'Dummy Assignment';
+
+  String get category => _category;
+
+  String get points => '${_gradePercent} / ${_gradePercent}';
+}

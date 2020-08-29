@@ -26,6 +26,9 @@ dependencies:
   tuple: ^1.0.3
   built_collection: ^4.3.2
 
+  flutter_picker:
+    git: git://github.com/SwiftGrade/flutter_picker.git
+
   # Fonts and Icons
   font_awesome_flutter: ^8.8.1
 
