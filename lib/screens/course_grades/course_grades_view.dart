@@ -18,22 +18,22 @@ import 'package:sis_loader/sis_loader.dart';
 
 class CourseGradesView extends StatefulWidget {
   final GroupingMode _groupingMode;
-  final StringOrInt _gradePercent;
+  final StringOrInt _percent;
 
-  CourseGradesView(this._groupingMode, this._gradePercent);
+  CourseGradesView(this._groupingMode, this._percent);
 
   @override
   _CourseGradesViewState createState() =>
-      _CourseGradesViewState(_groupingMode, _gradePercent);
+      _CourseGradesViewState(_groupingMode, _percent);
 }
 
 class _CourseGradesViewState extends State<CourseGradesView> {
   Completer<void> _refreshCompleter = Completer<void>();
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
-  final StringOrInt _gradePercent;
+  final StringOrInt _percent;
 
-  _CourseGradesViewState(this._currentGroupingMode, this._gradePercent);
+  _CourseGradesViewState(this._currentGroupingMode, this._percent);
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +44,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         title: Text(bloc.course.courseName),
         centerTitle: true,
         actions: [
-          // IconButton(
-          //   icon: Icon(Icons.edit),
-          //   onPressed: () {
-          //     setState(() {
-          //       openGradeCalculator();
-          //     });
-          //   },
-          // ),
           if (_hasCategories)
             IconButton(
               icon: Icon(_currentGroupingMode == GroupingMode.category
@@ -120,6 +112,16 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   break;
               }
 
+              String classPercent;
+              var classPercentWithDecimal =
+                  calculateClassPercent(groupedGrades, state.data.weights);
+              if (classPercentWithDecimal.round() ==
+                  int.tryParse(_percent.toString())) {
+                classPercent = classPercentWithDecimal.toStringAsFixed(2) + '%';
+              } else {
+                classPercent = _percent.toString() + '%';
+              }
+
               var groupKeys = groupedGrades.keys.toList()..sort();
 
               if (groupKeys.isEmpty) {
@@ -132,28 +134,14 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                 children: [
                   Padding(
                       padding: EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            _gradePercent.toString() + '%',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            ' (' +
-                                calculateGradePercent(
-                                        groupedGrades, state.data.weights)
-                                    .toStringAsFixed(2) +
-                                '%)',
-                            style: TextStyle(
-                                color: Colors.amber,
-                                fontSize: 23,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ],
+                      child: Center(
+                        child: Text(
+                          classPercent,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
                       )),
                   Expanded(
                     child: ListView.builder(

@@ -2,7 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:grades/screens/course_grades/course_grades_view.dart';
 import 'package:sis_loader/sis_loader.dart';
 
-double calculateGradePercent(Map<ToHeader, List<Grade>> groupedGrades,
+double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
     BuiltMap<String, String> weights) {
   var groupKeys = groupedGrades.keys.toList()..sort();
   var classPercent = 0.0;
