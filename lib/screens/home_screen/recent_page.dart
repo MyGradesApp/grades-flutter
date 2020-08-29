@@ -96,9 +96,9 @@ class _RecentPageState extends State<RecentPage>
     );
   }
 
-  GradeItemCard _buildGradeItemCard(Grade grade) {
+  GradeItemCard _buildGradeItemCard(dynamic grade) {
     return GradeItemCard(
-      grade: grade,
+      grade: grade as Grade,
       onTap: () {
         Navigator.pushNamed(
           context,

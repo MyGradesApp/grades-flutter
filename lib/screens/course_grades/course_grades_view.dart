@@ -33,7 +33,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
   final StringOrInt _percent;
-  List<DummyGrade> dummyGrades;
+  List<DummyGrade> dummyGrades = [];
 
   _CourseGradesViewState(this._currentGroupingMode, this._percent);
 
@@ -145,35 +145,94 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                               fontWeight: FontWeight.bold),
                         ),
                       )),
+
                   Expanded(
                     child: ListView.builder(
                       itemCount: groupKeys.length,
                       itemBuilder: (context, i) {
                         var group = groupKeys[i];
                         var grades = groupedGrades[group];
+                        for (var dummy in dummyGrades) {
+                          if (group.toHeader().contains(dummy.category)) {
+                            grades.add(dummy);
+                          }
+                        }
+                        var allGrades = [...dummyGrades, ...grades];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: HeaderedGroup(
-                            title: group.toHeader(),
-                            subtitle: ((state.data.weights != null)
-                                ? state.data.weights[group.raw()]?.toString()
-                                : null),
-                            children: grades,
-                            builder: (Grade grade) => GradeItemCard(
-                              grade: grade,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/grade_info',
-                                  arguments: grade,
-                                );
-                              },
-                            ),
-                          ),
+                              title: group.toHeader(),
+                              subtitle: ((state.data.weights != null)
+                                  ? state.data.weights[group.raw()]?.toString()
+                                  : null),
+                              children: allGrades,
+                              builder: (dynamic grade) {
+                                if (grade.name == ('Dummy Grade')) {
+                                  return Card(
+                                    color: Colors.pink,
+                                    borderOnForeground: true,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Center(
+                                        child: Text(
+                                          dummyGrades[i].grade,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return GradeItemCard(
+                                    grade: grade as Grade,
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/grade_info',
+                                        arguments: grade,
+                                      );
+                                    },
+                                  );
+                                }
+                              }),
                         );
                       },
                     ),
                   ),
+                  // ListView.builder(
+                  //     itemCount: dummyGrades.length,
+                  //     itemBuilder: (context, i) {
+                  //       return Card(
+                  //         color: Colors.pink,
+                  //         borderOnForeground: true,
+                  //         shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(10.0),
+                  //         ),
+                  //         margin: const EdgeInsets.symmetric(
+                  //             horizontal: 8, vertical: 4),
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(15.0),
+                  //           child: Center(
+                  //             child: Text(
+                  //               dummyGrades[i].grade,
+                  //               style: TextStyle(
+                  //                   color: Colors.white,
+                  //                   fontSize: 16,
+                  //                   fontWeight: FontWeight.w500),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     }),
+                  //   ]),
+                  // ),
                   Card(
                     color: Colors.pink,
                     borderOnForeground: true,
@@ -213,7 +272,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   }
 
   void addDummyGrade(BuildContext context, List<ToHeader> groupKeys,
-      Map<ToHeader, List<dynamic>> groupedGrades) {
+      Map<ToHeader, List<Grade>> groupedGrades) {
     var GradePickerArray = <List<dynamic>>[];
     var percentList = <int>[];
     for (var i = 100; i >= 0; i--) {
@@ -227,7 +286,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
       }
       GradePickerArray.add(categoryList);
     }
-    // List<dynamic> gradeValues;
     Picker(
         adapter: PickerDataAdapter<String>(
             pickerdata: GradePickerArray, isArray: true),
@@ -239,14 +297,9 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         onConfirm: (Picker picker, List value) {
           // print(value.toString());
           print(picker.getSelectedValues());
-          var gradeValues = picker.getSelectedValues();
-          var grade =
-              DummyGrade(gradeValues[0].toString(), gradeValues[1].toString());
-          for (var group in groupKeys) {
-            if (group.toHeader().contains(grade.category)) {
-              groupedGrades[group].add(grade);
-            }
-          }
+          var grade = DummyGrade(picker.getSelectedValues()[0].toString(),
+              picker.getSelectedValues()[1].toString());
+          dummyGrades.add(grade);
         }).showDialog(context);
   }
 }

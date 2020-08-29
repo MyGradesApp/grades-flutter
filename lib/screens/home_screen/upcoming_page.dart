@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/home_screen/widgets/upcoming_grade_item.dart';
 import 'package:grades/widgets/loading_indicator.dart';
+import 'package:sis_loader/src/grade.dart';
 import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 
@@ -49,10 +50,10 @@ class _UpcomingPageState extends State<UpcomingPage>
                     title: group.item1.toHumanFormat(),
                     children: group.item2,
                     maxCount: 10,
-                    builder: (CourseGrade item) {
+                    builder: (dynamic item) {
                       return UpcomingGradeItem(
-                        courseName: item.course.courseName,
-                        grade: item.grade,
+                        courseName: item.course.courseName as String,
+                        grade: item.grade as Grade,
                       );
                     },
                   ),
@@ -76,10 +77,10 @@ class _UpcomingPageState extends State<UpcomingPage>
                     title: groupsList[i].item1.toHumanFormat(),
                     children: groupsList[i].item2,
                     maxCount: 10,
-                    builder: (CourseGrade item) {
+                    builder: (dynamic item) {
                       return UpcomingGradeItem(
-                        courseName: item.course.courseName,
-                        grade: item.grade,
+                        courseName: item.course.courseName as String,
+                        grade: item.grade as Grade,
                       );
                     },
                   );

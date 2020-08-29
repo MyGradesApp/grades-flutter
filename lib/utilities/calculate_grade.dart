@@ -27,20 +27,47 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
   return classPercent;
 }
 
-class DummyGrade {
+class DummyGrade implements Grade {
   String _gradePercent;
   String _category;
 
+  @override
   DummyGrade(String grade, String cat) {
     _gradePercent = grade;
     _category = cat;
   }
 
+  @override
   String get grade => _gradePercent;
 
+  @override
   String get name => 'Dummy Assignment';
 
+  @override
   String get category => _category;
 
+  @override
   String get points => '${_gradePercent} / ${_gradePercent}';
+
+  @override
+  BuiltMap<String, String> get raw => throw UnimplementedError();
+
+  @override
+  GradeBuilder toBuilder() {
+    throw UnimplementedError();
+  }
+
+  @override
+  DateTime get assignedDate => throw UnimplementedError();
+
+  @override
+  DateTime get dateLastModified => throw UnimplementedError();
+
+  @override
+  DateTime get dueDate => throw UnimplementedError();
+
+  @override
+  Grade rebuild(any) {
+    throw UnimplementedError();
+  }
 }
