@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart' as collection;
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -257,36 +259,50 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   }
 
   void removeDummyGradePopup(BuildContext context, Grade grade) {
-    Widget cancelButton = FlatButton(
-      child: Text('Cancel'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text('Remove'),
-      onPressed: () {
-        setState(() {
-          dummyGrades.remove(grade);
-        });
-      },
-    );
-    var alert = AlertDialog(
-      title: Text(
-        'Remove Dummy Grade?',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-      ),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    showDialog<AlertDialog>(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+    if (Platform.isIOS) {
+      showDialog<CupertinoAlertDialog>(
+          context: context,
+          builder: (_) => CupertinoAlertDialog(
+                title: Text('Remove Dummy Grade?'),
+                // content:  Text(''),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Remove'),
+                    onPressed: () {
+                      dummyGrades.remove(grade);
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ));
+    } else {
+      showDialog<AlertDialog>(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: Text('Remove Dummy Grade?'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Remove'),
+                    onPressed: () {
+                      dummyGrades.remove(grade);
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ));
+    }
   }
 }
 
