@@ -16,15 +16,15 @@ final COURSES = [
     ..courseName = 'US History'
     ..periodString = '01 01'
     ..teacherName = 'Deborah Davis'
-    ..gradePercent = StringOrInt(82)
-    ..gradeLetter = 'B'),
+    ..gradePercent = StringOrInt(96)
+    ..gradeLetter = 'A'),
   Course((c) => c
     ..gradesUrl = ''
     ..courseName = 'AP Bio'
     ..periodString = '04 04'
     ..teacherName = 'Kristopher Mccanns'
-    ..gradePercent = StringOrInt(100)
-    ..gradeLetter = 'A'),
+    ..gradePercent = StringOrInt(82)
+    ..gradeLetter = 'B'),
   Course((c) => c
     ..gradesUrl = ''
     ..courseName = 'Astronomy Honors'
@@ -37,7 +37,7 @@ final COURSES = [
     ..courseName = 'US Gov'
     ..periodString = '02 02'
     ..teacherName = 'Daniel Henderson'
-    ..gradePercent = StringOrInt(87)
+    ..gradePercent = StringOrInt(73)
     ..gradeLetter = 'C'),
   Course((c) => c
     ..gradesUrl = ''
@@ -188,7 +188,7 @@ final Map<String, List<Grade>> GRADES = {
 };
 
 final Map<String, Map<String, String>> CATEGORY_WEIGHTS = {
-  'US History': {'Quizzes': '25%', 'Homework/Classwork': '10%'},
+  'US History': {'Quizzes': '75%', 'Homework/Classwork': '25%'},
   'AP Bio': {'Daily Work': '5%', 'Quizzes': '25%', 'Tests': '40%'},
   'Astronomy Honors': {},
   'US Gov': {},
