@@ -145,7 +145,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                               fontWeight: FontWeight.bold),
                         ),
                       )),
-
                   Expanded(
                     child: ListView.builder(
                       itemCount: groupKeys.length,
@@ -157,7 +156,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                             grades.add(dummy);
                           }
                         }
-                        // var allGrades = [...dummyGrades, ...grades];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: HeaderedGroup(
@@ -167,9 +165,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                                   : null),
                               children: grades,
                               builder: (Grade grade) {
-                                // if (grade.name == ('Dummy Assignment')) {
-                                //   return DummyGradeItemCard(grade: grade);
-                                // } else {
                                 return GradeItemCard(
                                   grade: grade,
                                   onTap: () {
@@ -187,33 +182,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                       },
                     ),
                   ),
-                  // ListView.builder(
-                  //     itemCount: dummyGrades.length,
-                  //     itemBuilder: (context, i) {
-                  //       return Card(
-                  //         color: Colors.pink,
-                  //         borderOnForeground: true,
-                  //         shape: RoundedRectangleBorder(
-                  //           borderRadius: BorderRadius.circular(10.0),
-                  //         ),
-                  //         margin: const EdgeInsets.symmetric(
-                  //             horizontal: 8, vertical: 4),
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.all(15.0),
-                  //           child: Center(
-                  //             child: Text(
-                  //               dummyGrades[i].grade,
-                  //               style: TextStyle(
-                  //                   color: Colors.white,
-                  //                   fontSize: 16,
-                  //                   fontWeight: FontWeight.w500),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       );
-                  //     }),
-                  //   ]),
-                  // ),
                   Card(
                     color: Colors.pink,
                     borderOnForeground: true,

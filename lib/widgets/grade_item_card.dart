@@ -33,12 +33,15 @@ class GradeItemCard extends StatelessWidget {
     }
 
     Color bgColor, textColor;
+    IconData iconBtn;
     if (grade.name == ('Dummy Assignment')) {
       bgColor = Colors.pink;
       textColor = Colors.white;
+      iconBtn = Icons.close;
     } else {
       bgColor = Colors.white;
       textColor = Colors.black;
+      iconBtn = Icons.chevron_right;
     }
 
     return Card(
@@ -82,8 +85,8 @@ class GradeItemCard extends StatelessWidget {
                       TextStyle(fontWeight: FontWeight.bold, color: textColor),
                 ),
               ),
-              const Icon(
-                Icons.chevron_right,
+              Icon(
+                iconBtn,
                 color: Colors.black26,
                 size: 18.0,
               ),
@@ -94,74 +97,3 @@ class GradeItemCard extends StatelessWidget {
     );
   }
 }
-
-// class DummyGradeItemCard extends StatelessWidget {
-//   final Grade grade;
-
-//   DummyGradeItemCard({
-//     @required this.grade,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var gradeString = grade.grade;
-//     var percentIndex = gradeString.indexOf('%');
-//     String gradeLetter;
-//     if (percentIndex != -1) {
-//       var extractedGradePercent =
-//           double.tryParse(gradeString.substring(0, percentIndex));
-
-//       if (extractedGradePercent != null) {
-//         gradeLetter = letterGradeForPercent(extractedGradePercent);
-//       }
-//     }
-
-//     return Card(
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(10.0),
-//       ),
-//       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-//       color: Colors.pink,
-//       borderOnForeground: true,
-//       child: Padding(
-//         padding: const EdgeInsets.all(15.0),
-//         child: Row(
-//           children: <Widget>[
-//             Expanded(
-//               child: Text(
-//                 grade.name,
-//                 overflow: TextOverflow.ellipsis,
-//               ),
-//             ),
-//             if (grade != null && gradeLetter != null)
-//               ColoredGradeDot.grade(gradeLetter),
-//             const SizedBox(width: 4),
-//             if (gradeLetter != null)
-//               Text(
-//                 gradeLetter,
-//                 style: TextStyle(
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             Container(
-//               width: 50,
-//               alignment: Alignment.centerRight,
-//               child: Text(
-//                 gradeString,
-//                 textAlign: TextAlign.end,
-//                 style: TextStyle(
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             ),
-//             const Icon(
-//               Icons.edit,
-//               color: Colors.black26,
-//               size: 18.0,
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
