@@ -116,11 +116,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   break;
               }
 
-              // for (var weight in state.data.weights){
-              //   double.tryParse(weights[group.raw()]
-              //                 .substring(0, weights[group.raw()].indexOf('%'))) /
-              //             100.0
-              // }
               var groupKeys = <ToHeader>[];
               groupKeys = groupedGrades.keys.toList()..sort();
 
@@ -151,7 +146,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                         temp.add(dummy);
                       }
                     }
-                    print('temp' + temp.toString());
+                    // print('temp' + temp.toString());
                     groupKeys.add(StringHeader(weight.key, weight.key));
                     groupedGrades
                         .addAll({StringHeader(weight.key, weight.key): temp});
@@ -276,7 +271,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
       if (weights.entries.isNotEmpty) {
         var categoryList = <String>[];
         for (var weight in weights.entries) {
-          print('${weight.key} = ${weight.value}');
+          // print('${weight.key}, ${weight.value}');
           categoryList.add(weight.key);
         }
         GradePickerArray.add(categoryList);
@@ -313,7 +308,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         confirmText: 'Create Dummy Assignment',
         onConfirm: (Picker picker, List value) {
           var values = picker.getSelectedValues();
-          print(values);
+          // print(values);
           var grade = DummyGrade((values[0].toString() + '%'),
               values[1].toString(), dummyGrades.length);
           setState(() {
