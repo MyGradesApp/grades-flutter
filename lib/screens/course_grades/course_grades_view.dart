@@ -34,8 +34,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   bool _hasCategories = true;
   StringOrInt _sisPercent;
   List<DummyGrade> dummyGrades = [];
-  List<ToHeader> _groupKeys;
-  Map<ToHeader, List<Grade>> _groupedGrades;
+  BuiltMap<String, String> _weights;
 
   _CourseGradesViewState(this._currentGroupingMode);
 
@@ -99,16 +98,17 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                 );
               }
 
+              Map<ToHeader, List<Grade>> groupedGrades;
               switch (
                   _hasCategories ? _currentGroupingMode : GroupingMode.date) {
                 case GroupingMode.date:
-                  _groupedGrades = collection.groupBy(
+                  groupedGrades = collection.groupBy(
                     state.data.grades,
                     (Grade e) => _dateRangeForWeek(e.assignedDate),
                   );
                   break;
                 case GroupingMode.category:
-                  _groupedGrades = collection.groupBy(
+                  groupedGrades = collection.groupBy(
                     state.data.grades,
                     (Grade e) =>
                         StringHeader(_titlecase(e.category ?? ''), e.category),
@@ -116,31 +116,60 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   break;
               }
 
-              _groupKeys = _groupedGrades.keys.toList()..sort();
+              // for (var weight in state.data.weights){
+              //   double.tryParse(weights[group.raw()]
+              //                 .substring(0, weights[group.raw()].indexOf('%'))) /
+              //             100.0
+              // }
+              var groupKeys = <ToHeader>[];
+              groupKeys = groupedGrades.keys.toList()..sort();
 
-              if (_groupKeys.isEmpty) {
+              if (groupKeys.isEmpty && dummyGrades.isEmpty) {
                 return FullscreenSimpleIconMessage(
                   icon: FontAwesomeIcons.inbox,
                   text: 'No grades available',
                 );
+              }
+
+              _weights = state.data.weights;
+
+              if (_weights.isNotEmpty) {
+                var keys = <String>[];
+                for (var group in groupKeys) {
+                  keys.add(group.toHeader());
+                  for (var dummy in dummyGrades) {
+                    if (group.toHeader().contains(dummy.category)) {
+                      groupedGrades[group].add(dummy);
+                    }
+                  }
+                }
+                for (var weight in _weights.entries) {
+                  if (!(keys.contains(weight.key))) {
+                    var temp = <Grade>[];
+                    for (var dummy in dummyGrades) {
+                      if (weight.key.contains(dummy.category)) {
+                        temp.add(dummy);
+                      }
+                    }
+                    print('temp' + temp.toString());
+                    groupKeys.add(StringHeader(weight.key, weight.key));
+                    groupedGrades
+                        .addAll({StringHeader(weight.key, weight.key): temp});
+                  }
+                }
               }
               return Column(
                 children: [
                   Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: getClassPercentageWidget(
-                          _groupedGrades, state.data.weights)),
+                          groupedGrades, state.data.weights)),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: _groupKeys.length,
+                      itemCount: groupKeys.length,
                       itemBuilder: (context, i) {
-                        var group = _groupKeys[i];
-                        var grades = _groupedGrades[group];
-                        for (var dummy in dummyGrades) {
-                          if (group.toHeader().contains(dummy.category)) {
-                            grades.add(dummy);
-                          }
-                        }
+                        var group = groupKeys[i];
+                        var grades = groupedGrades[group];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: HeaderedGroup(
@@ -182,15 +211,15 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           child: Icon(FontAwesomeIcons.calculator),
           backgroundColor: Colors.pink,
           onPressed: () {
-            addDummyGrade(context, _groupKeys, _groupedGrades);
+            addDummyGrade(context, _weights);
           }),
     );
   }
 
-  Widget getClassPercentageWidget(Map<ToHeader, List<Grade>> _groupedGrades,
+  Widget getClassPercentageWidget(Map<ToHeader, List<Grade>> groupedGrades,
       BuiltMap<String, String> weights) {
     var classPercentWithDecimal =
-        calculateClassPercent(_groupedGrades, weights, dummyGrades);
+        calculateClassPercent(groupedGrades, weights, dummyGrades);
 
     if (classPercentWithDecimal.round() ==
             int.tryParse(_sisPercent.toString()) &&
@@ -236,21 +265,24 @@ class _CourseGradesViewState extends State<CourseGradesView> {
     }
   }
 
-  void addDummyGrade(BuildContext context, List<ToHeader> _groupKeys,
-      Map<ToHeader, List<Grade>> _groupedGrades) {
+  void addDummyGrade(BuildContext context, BuiltMap<String, String> weights) {
     var GradePickerArray = <List<dynamic>>[];
     var percentList = <int>[];
     for (var i = 100; i >= 0; i--) {
       percentList.add(i);
     }
     GradePickerArray.add(percentList);
-    if (_groupKeys.length > 1) {
-      var categoryList = <String>[];
-      for (var category in _groupKeys) {
-        categoryList.add(category.toHeader());
+    if (weights != null) {
+      if (weights.entries.isNotEmpty) {
+        var categoryList = <String>[];
+        for (var weight in weights.entries) {
+          print('${weight.key} = ${weight.value}');
+          categoryList.add(weight.key);
+        }
+        GradePickerArray.add(categoryList);
       }
-      GradePickerArray.add(categoryList);
     }
+
     Picker(
         adapter: PickerDataAdapter<String>(
             pickerdata: GradePickerArray, isArray: true),
