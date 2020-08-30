@@ -21,28 +21,28 @@ import 'package:flutter_picker/flutter_picker.dart';
 
 class CourseGradesView extends StatefulWidget {
   final GroupingMode _groupingMode;
-  final StringOrInt _sisPercent;
 
-  CourseGradesView(this._groupingMode, this._sisPercent);
+  CourseGradesView(this._groupingMode);
 
   @override
-  _CourseGradesViewState createState() =>
-      _CourseGradesViewState(_groupingMode, _sisPercent);
+  _CourseGradesViewState createState() => _CourseGradesViewState(_groupingMode);
 }
 
 class _CourseGradesViewState extends State<CourseGradesView> {
   Completer<void> _refreshCompleter = Completer<void>();
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
-  final StringOrInt _sisPercent;
+  StringOrInt _sisPercent;
   List<DummyGrade> dummyGrades = [];
-  String _calculatedPercent;
+  List<ToHeader> _groupKeys;
+  Map<ToHeader, List<Grade>> _groupedGrades;
 
-  _CourseGradesViewState(this._currentGroupingMode, this._sisPercent);
+  _CourseGradesViewState(this._currentGroupingMode);
 
   @override
   Widget build(BuildContext context) {
     var bloc = BlocProvider.of<CourseGradesBloc>(context);
+    _sisPercent = bloc.course.gradePercent;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -99,17 +99,16 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                 );
               }
 
-              Map<ToHeader, List<Grade>> groupedGrades;
               switch (
                   _hasCategories ? _currentGroupingMode : GroupingMode.date) {
                 case GroupingMode.date:
-                  groupedGrades = collection.groupBy(
+                  _groupedGrades = collection.groupBy(
                     state.data.grades,
                     (Grade e) => _dateRangeForWeek(e.assignedDate),
                   );
                   break;
                 case GroupingMode.category:
-                  groupedGrades = collection.groupBy(
+                  _groupedGrades = collection.groupBy(
                     state.data.grades,
                     (Grade e) =>
                         StringHeader(_titlecase(e.category ?? ''), e.category),
@@ -117,36 +116,26 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   break;
               }
 
-              _calculatedPercent =
-                  determineClassPercentage(groupedGrades, state.data.weights);
+              _groupKeys = _groupedGrades.keys.toList()..sort();
 
-              var groupKeys = groupedGrades.keys.toList()..sort();
-
-              if (groupKeys.isEmpty) {
+              if (_groupKeys.isEmpty) {
                 return FullscreenSimpleIconMessage(
                   icon: FontAwesomeIcons.inbox,
-                  text: 'This course has no grades',
+                  text: 'No grades available',
                 );
               }
               return Column(
                 children: [
                   Padding(
                       padding: EdgeInsets.only(bottom: 10),
-                      child: Center(
-                        child: Text(
-                          _calculatedPercent,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )),
+                      child: getClassPercentageWidget(
+                          _groupedGrades, state.data.weights)),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: groupKeys.length,
+                      itemCount: _groupKeys.length,
                       itemBuilder: (context, i) {
-                        var group = groupKeys[i];
-                        var grades = groupedGrades[group];
+                        var group = _groupKeys[i];
+                        var grades = _groupedGrades[group];
                         for (var dummy in dummyGrades) {
                           if (group.toHeader().contains(dummy.category)) {
                             grades.add(dummy);
@@ -164,7 +153,8 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                                 return GradeItemCard(
                                   grade: grade,
                                   onTap: () {
-                                    if (grade.name == 'Dummy Assignment') {
+                                    if (grade.name
+                                        .contains('Dummy Assignment')) {
                                       removeDummyGradePopup(context, grade);
                                     } else {
                                       Navigator.pushNamed(
@@ -180,38 +170,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                       },
                     ),
                   ),
-                  Card(
-                    color: Colors.pink,
-                    borderOnForeground: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: InkWell(
-                      customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      onTap: () {
-                        addDummyGrade(context, groupKeys, groupedGrades);
-                        setState(() {
-                          _calculatedPercent = determineClassPercentage(
-                              groupedGrades, state.data.weights);
-                        });
-                      },
-                      child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Center(
-                            child: Text(
-                              'Add Dummy Grade',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )),
-                    ),
-                  ),
                 ],
               );
             }
@@ -219,33 +177,76 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          elevation: 1.0,
+          child: Icon(FontAwesomeIcons.calculator),
+          backgroundColor: Colors.pink,
+          onPressed: () {
+            addDummyGrade(context, _groupKeys, _groupedGrades);
+          }),
     );
   }
 
-  String determineClassPercentage(Map<ToHeader, List<Grade>> groupedGrades,
+  Widget getClassPercentageWidget(Map<ToHeader, List<Grade>> _groupedGrades,
       BuiltMap<String, String> weights) {
-    String classPercent;
-    var classPercentWithDecimal = calculateClassPercent(groupedGrades, weights);
+    var classPercentWithDecimal =
+        calculateClassPercent(_groupedGrades, weights, dummyGrades);
+
     if (classPercentWithDecimal.round() ==
-        int.tryParse(_sisPercent.toString())) {
-      classPercent = classPercentWithDecimal.toStringAsFixed(2) + '%';
+            int.tryParse(_sisPercent.toString()) &&
+        dummyGrades.isEmpty) {
+      return Center(
+        child: Text(
+          classPercentWithDecimal.toStringAsFixed(2) + '%',
+          style: TextStyle(
+              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+      );
+    } else if (dummyGrades.isNotEmpty) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            _sisPercent.toString() + '%',
+            style: TextStyle(
+                color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: Icon(
+              Icons.arrow_forward,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            classPercentWithDecimal.toStringAsFixed(2) + '%',
+            style: TextStyle(
+                color: Colors.pink, fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ],
+      );
     } else {
-      classPercent = _sisPercent.toString() + '%';
+      return Center(
+        child: Text(
+          _sisPercent.toString() + '%',
+          style: TextStyle(
+              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+      );
     }
-    return classPercent;
   }
 
-  void addDummyGrade(BuildContext context, List<ToHeader> groupKeys,
-      Map<ToHeader, List<Grade>> groupedGrades) {
+  void addDummyGrade(BuildContext context, List<ToHeader> _groupKeys,
+      Map<ToHeader, List<Grade>> _groupedGrades) {
     var GradePickerArray = <List<dynamic>>[];
     var percentList = <int>[];
     for (var i = 100; i >= 0; i--) {
       percentList.add(i);
     }
     GradePickerArray.add(percentList);
-    if (groupKeys.length > 1) {
+    if (_groupKeys.length > 1) {
       var categoryList = <String>[];
-      for (var category in groupKeys) {
+      for (var category in _groupKeys) {
         categoryList.add(category.toHeader());
       }
       GradePickerArray.add(categoryList);
@@ -261,8 +262,8 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         onConfirm: (Picker picker, List value) {
           var values = picker.getSelectedValues();
           print(values);
-          var grade =
-              DummyGrade((values[0].toString() + '%'), values[1].toString());
+          var grade = DummyGrade((values[0].toString() + '%'),
+              values[1].toString(), dummyGrades.length);
           setState(() {
             dummyGrades.add(grade);
           });
@@ -275,7 +276,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           context: context,
           builder: (_) => CupertinoAlertDialog(
                 title: Text('Remove Dummy Grade?'),
-                // content:  Text(''),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('Cancel'),

@@ -3,12 +3,19 @@ import 'package:grades/screens/course_grades/course_grades_view.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
-    BuiltMap<String, String> weights) {
+    BuiltMap<String, String> weights, List<DummyGrade> dummyGrades) {
   var groupKeys = groupedGrades.keys.toList()..sort();
   var classPercent = 0.0;
   for (var group in groupKeys) {
     var groupTotal = 0.0;
-    var grades = groupedGrades[group];
+    var grades = [...groupedGrades[group]];
+    if (dummyGrades != null) {
+      for (var dummy in dummyGrades) {
+        if (group.toHeader().contains(dummy.category)) {
+          grades.add(dummy);
+        }
+      }
+    }
     for (var gradeItem in grades) {
       var index = gradeItem.grade.indexOf('%');
       if (index != -1) {
@@ -30,18 +37,20 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
 class DummyGrade implements Grade {
   String _gradePercent;
   String _category;
+  String _name;
 
   @override
-  DummyGrade(String grade, String cat) {
+  DummyGrade(String grade, String cat, int index) {
     _gradePercent = grade;
     _category = cat;
+    _name = 'Dummy Assignment ' + (index + 1).toString();
   }
 
   @override
   String get grade => _gradePercent;
 
   @override
-  String get name => 'Dummy Assignment';
+  String get name => _name;
 
   @override
   String get category => _category;

@@ -19,7 +19,6 @@ class CourseGradesScreen extends StatelessWidget {
                 )..add(FetchNetworkData()),
             child: CourseGradesView(
               settings.groupingMode,
-              course.gradePercent,
             ));
       },
     );
