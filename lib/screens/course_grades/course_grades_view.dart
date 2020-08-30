@@ -287,9 +287,29 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         adapter: PickerDataAdapter<String>(
             pickerdata: GradePickerArray, isArray: true),
         hideHeader: true,
-        title: Center(
-          child: Text('Grade Calculator'),
-        ),
+        title: Column(children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: 7),
+            child: Center(
+              child: Text('Grade Calculator'),
+            ),
+          ),
+          Row(children: [
+            Icon(Icons.info_outline),
+            Expanded(
+              child: Text(
+                'The data presented by this utility may not be entirely accurate.',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ]),
+          Text(
+            'Use at your own risk.',
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            textAlign: TextAlign.center,
+          ),
+        ]),
         confirmText: 'Create Dummy Assignment',
         onConfirm: (Picker picker, List value) {
           var values = picker.getSelectedValues();

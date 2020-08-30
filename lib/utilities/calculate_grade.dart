@@ -38,6 +38,7 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
             : 1.0);
     classPercent += groupTotal;
   }
+  print(classPercent);
   return classPercent;
 }
 
