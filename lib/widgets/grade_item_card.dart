@@ -32,10 +32,20 @@ class GradeItemCard extends StatelessWidget {
       gradeSize = 100;
     }
 
+    Color bgColor, textColor;
+    if (grade.name == ('Dummy Assignment')) {
+      bgColor = Colors.pink;
+      textColor = Colors.white;
+    } else {
+      bgColor = Colors.white;
+      textColor = Colors.black;
+    }
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
+      color: bgColor,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: InkWell(
         customBorder: RoundedRectangleBorder(
@@ -49,8 +59,8 @@ class GradeItemCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   grade.name,
-                  // TODO: Make it less aggressive about trimming
                   overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: textColor),
                 ),
               ),
               if (grade != null && gradeLetter != null)
@@ -59,9 +69,8 @@ class GradeItemCard extends StatelessWidget {
               if (gradeLetter != null)
                 Text(
                   gradeLetter,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: textColor),
                 ),
               Container(
                 width: gradeSize,
@@ -69,9 +78,8 @@ class GradeItemCard extends StatelessWidget {
                 child: Text(
                   gradeString,
                   textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: textColor),
                 ),
               ),
               const Icon(
@@ -86,3 +94,74 @@ class GradeItemCard extends StatelessWidget {
     );
   }
 }
+
+// class DummyGradeItemCard extends StatelessWidget {
+//   final Grade grade;
+
+//   DummyGradeItemCard({
+//     @required this.grade,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     var gradeString = grade.grade;
+//     var percentIndex = gradeString.indexOf('%');
+//     String gradeLetter;
+//     if (percentIndex != -1) {
+//       var extractedGradePercent =
+//           double.tryParse(gradeString.substring(0, percentIndex));
+
+//       if (extractedGradePercent != null) {
+//         gradeLetter = letterGradeForPercent(extractedGradePercent);
+//       }
+//     }
+
+//     return Card(
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(10.0),
+//       ),
+//       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+//       color: Colors.pink,
+//       borderOnForeground: true,
+//       child: Padding(
+//         padding: const EdgeInsets.all(15.0),
+//         child: Row(
+//           children: <Widget>[
+//             Expanded(
+//               child: Text(
+//                 grade.name,
+//                 overflow: TextOverflow.ellipsis,
+//               ),
+//             ),
+//             if (grade != null && gradeLetter != null)
+//               ColoredGradeDot.grade(gradeLetter),
+//             const SizedBox(width: 4),
+//             if (gradeLetter != null)
+//               Text(
+//                 gradeLetter,
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//             Container(
+//               width: 50,
+//               alignment: Alignment.centerRight,
+//               child: Text(
+//                 gradeString,
+//                 textAlign: TextAlign.end,
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//             ),
+//             const Icon(
+//               Icons.edit,
+//               color: Colors.black26,
+//               size: 18.0,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

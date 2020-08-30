@@ -3,14 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-// class HeaderedGroup<T> extends StatelessWidget {
-//   final String title;
-//   final List<T> children;
-//   final Widget Function(T) builder;
-class HeaderedGroup extends StatelessWidget {
+class HeaderedGroup<T> extends StatelessWidget {
   final String title;
-  final List<dynamic> children;
-  final Widget Function(dynamic) builder;
+  final List<T> children;
+  final Widget Function(T) builder;
   final String subtitle;
   final int maxCount;
 

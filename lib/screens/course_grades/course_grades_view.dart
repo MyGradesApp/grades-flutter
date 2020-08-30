@@ -157,7 +157,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                             grades.add(dummy);
                           }
                         }
-                        var allGrades = [...dummyGrades, ...grades];
+                        // var allGrades = [...dummyGrades, ...grades];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: HeaderedGroup(
@@ -165,43 +165,24 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                               subtitle: ((state.data.weights != null)
                                   ? state.data.weights[group.raw()]?.toString()
                                   : null),
-                              children: allGrades,
-                              builder: (dynamic grade) {
-                                if (grade.name == ('Dummy Grade')) {
-                                  return Card(
-                                    color: Colors.pink,
-                                    borderOnForeground: true,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Center(
-                                        child: Text(
-                                          dummyGrades[i].grade,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  return GradeItemCard(
-                                    grade: grade as Grade,
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/grade_info',
-                                        arguments: grade,
-                                      );
-                                    },
-                                  );
-                                }
-                              }),
+                              children: grades,
+                              builder: (Grade grade) {
+                                // if (grade.name == ('Dummy Assignment')) {
+                                //   return DummyGradeItemCard(grade: grade);
+                                // } else {
+                                return GradeItemCard(
+                                  grade: grade,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/grade_info',
+                                      arguments: grade,
+                                    );
+                                  },
+                                );
+                              }
+                              // }),
+                              ),
                         );
                       },
                     ),
@@ -293,12 +274,12 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         title: Center(
           child: Text('Grade Calculator'),
         ),
-        confirmText: 'Create Dummy Grade',
+        confirmText: 'Create Dummy Assignment',
         onConfirm: (Picker picker, List value) {
-          // print(value.toString());
-          print(picker.getSelectedValues());
-          var grade = DummyGrade(picker.getSelectedValues()[0].toString(),
-              picker.getSelectedValues()[1].toString());
+          var values = picker.getSelectedValues();
+          print(values);
+          var grade =
+              DummyGrade((values[0].toString() + '%'), values[1].toString());
           dummyGrades.add(grade);
         }).showDialog(context);
   }
