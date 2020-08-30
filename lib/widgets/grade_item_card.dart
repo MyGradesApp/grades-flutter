@@ -32,15 +32,17 @@ class GradeItemCard extends StatelessWidget {
       gradeSize = 100;
     }
 
-    Color bgColor, textColor;
+    Color bgColor, textColor, btnColor;
     IconData iconBtn;
     if (grade.name == ('Dummy Assignment')) {
       bgColor = Colors.pink;
       textColor = Colors.white;
+      btnColor = Colors.white;
       iconBtn = Icons.close;
     } else {
       bgColor = Colors.white;
       textColor = Colors.black;
+      btnColor = Colors.black26;
       iconBtn = Icons.chevron_right;
     }
 
@@ -87,7 +89,7 @@ class GradeItemCard extends StatelessWidget {
               ),
               Icon(
                 iconBtn,
-                color: Colors.black26,
+                color: btnColor,
                 size: 18.0,
               ),
             ],

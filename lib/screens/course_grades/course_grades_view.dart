@@ -168,16 +168,18 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                                 return GradeItemCard(
                                   grade: grade,
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/grade_info',
-                                      arguments: grade,
-                                    );
+                                    if (grade.name == 'Dummy Assignment') {
+                                      removeDummyGradePopup(context, grade);
+                                    } else {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/grade_info',
+                                        arguments: grade,
+                                      );
+                                    }
                                   },
                                 );
-                              }
-                              // }),
-                              ),
+                              }),
                         );
                       },
                     ),
@@ -248,8 +250,43 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           print(values);
           var grade =
               DummyGrade((values[0].toString() + '%'), values[1].toString());
-          dummyGrades.add(grade);
+          setState(() {
+            dummyGrades.add(grade);
+          });
         }).showDialog(context);
+  }
+
+  void removeDummyGradePopup(BuildContext context, Grade grade) {
+    Widget cancelButton = FlatButton(
+      child: Text('Cancel'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Remove'),
+      onPressed: () {
+        setState(() {
+          dummyGrades.remove(grade);
+        });
+      },
+    );
+    var alert = AlertDialog(
+      title: Text(
+        'Remove Dummy Grade?',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+      ),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 
