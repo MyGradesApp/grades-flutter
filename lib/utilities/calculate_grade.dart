@@ -7,33 +7,38 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
   var groupKeys = groupedGrades.keys.toList()..sort();
   var classPercent = 0.0;
 
-  // for (var group in groupKeys) {
-  //   var groupTotal = 0.0;
-  //   var grades = [...groupedGrades[group]];
-  //   if (dummyGrades != null) {
-  //     for (var dummy in dummyGrades) {
-  //       if (group.toHeader().contains(dummy.category)) {
-  //         grades.add(dummy);
-  //       }
-  //     }
-  //   }
-  //   for (var gradeItem in grades) {
-  //     var index = gradeItem.grade.indexOf('%');
-  //     if (index != -1) {
-  //       var gradePercent = double.tryParse(gradeItem.grade.substring(0, index));
-  //       groupTotal += gradePercent;
-  //     }
-  //   }
-  //   groupTotal = (groupTotal / grades.length) *
-  //       ((weights != null)
-  //           ? (double.tryParse(weights[group.raw()]
-  //                   .substring(0, weights[group.raw()].indexOf('%'))) /
-  //               100.0)
-  //           : 1.0);
-  //   classPercent += groupTotal;
-  // }
-  // return classPercent;
-  return 100.0;
+  for (var group in groupKeys) {
+    var groupTotal = 0.0;
+    var grades = [...groupedGrades[group]];
+    if (grades.isNotEmpty) {
+      if (dummyGrades != null) {
+        for (var dummy in dummyGrades) {
+          if (group.toHeader().contains(dummy.category)) {
+            grades.add(dummy);
+          }
+        }
+      }
+      for (var gradeItem in grades) {
+        var index = gradeItem.grade.indexOf('%');
+        if (index != -1) {
+          var gradePercent =
+              double.tryParse(gradeItem.grade.substring(0, index));
+          groupTotal += gradePercent;
+        }
+      }
+      groupTotal = (groupTotal / grades.length);
+    } else {
+      groupTotal = 100;
+    }
+    groupTotal = groupTotal *
+        ((weights != null)
+            ? (double.tryParse(weights[group.raw()]
+                    .substring(0, weights[group.raw()].indexOf('%'))) /
+                100.0)
+            : 1.0);
+    classPercent += groupTotal;
+  }
+  return classPercent;
 }
 
 class DummyGrade implements Grade {
