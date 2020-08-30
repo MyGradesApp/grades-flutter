@@ -2,7 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grades/screens/course_grades/course_grades_view.dart';
-import 'package:grades/screens/course_grades/dummy/dummy_grades.dart';
+import 'package:grades/screens/course_grades/grade_calc/dummy_grades.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
