@@ -19,6 +19,9 @@ abstract class GradeData implements Built<GradeData, GradeDataBuilder> {
   @nullable
   BuiltMap<String, String> get weights;
 
+  @nullable
+  int get classPercent;
+
   GradeData._();
 
   factory GradeData([void Function(GradeDataBuilder) updates]) = _$GradeData;
@@ -49,6 +52,18 @@ class CourseService {
 
     var gradePage = await _gradePage(course);
 
+    var gradeMatch = RegExp(
+            r'Current grade in class: <span class="jsStudentAverageCell" id="currentStudentGrade\[\]">(.*?)<\/span>')
+        .firstMatch(gradePage);
+    int coursePercent;
+    if (gradeMatch != null) {
+      var classGrade = gradeMatch.group(1).replaceAll('&nbsp;', ' ');
+      var percentMatch = RegExp(r'(\d+)%').firstMatch(classGrade);
+      if (percentMatch != null) {
+        coursePercent = int.parse(percentMatch.group(1));
+      }
+    }
+
     var grades = await _extractGrades(gradePage);
     var weights = await _extractCategoryWeights(gradePage);
     return GradeData((d) {
@@ -56,6 +71,7 @@ class CourseService {
       if (weights != null) {
         d.weights.replace(weights);
       }
+      d.classPercent = coursePercent;
       return d;
     });
   }

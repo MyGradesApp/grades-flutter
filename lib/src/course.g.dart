@@ -33,6 +33,12 @@ class _$GradeDataSerializer implements StructuredSerializer<GradeData> {
             specifiedType: const FullType(BuiltMap,
                 const [const FullType(String), const FullType(String)])));
     }
+    if (object.classPercent != null) {
+      result
+        ..add('classPercent')
+        ..add(serializers.serialize(object.classPercent,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -57,6 +63,10 @@ class _$GradeDataSerializer implements StructuredSerializer<GradeData> {
           result.weights.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap,
                   const [const FullType(String), const FullType(String)])));
+          break;
+        case 'classPercent':
+          result.classPercent = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -153,11 +163,13 @@ class _$GradeData extends GradeData {
   final BuiltList<Grade> grades;
   @override
   final BuiltMap<String, String> weights;
+  @override
+  final int classPercent;
 
   factory _$GradeData([void Function(GradeDataBuilder) updates]) =>
       (new GradeDataBuilder()..update(updates)).build();
 
-  _$GradeData._({this.grades, this.weights}) : super._();
+  _$GradeData._({this.grades, this.weights, this.classPercent}) : super._();
 
   @override
   GradeData rebuild(void Function(GradeDataBuilder) updates) =>
@@ -171,19 +183,22 @@ class _$GradeData extends GradeData {
     if (identical(other, this)) return true;
     return other is GradeData &&
         grades == other.grades &&
-        weights == other.weights;
+        weights == other.weights &&
+        classPercent == other.classPercent;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, grades.hashCode), weights.hashCode));
+    return $jf($jc(
+        $jc($jc(0, grades.hashCode), weights.hashCode), classPercent.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('GradeData')
           ..add('grades', grades)
-          ..add('weights', weights))
+          ..add('weights', weights)
+          ..add('classPercent', classPercent))
         .toString();
   }
 }
@@ -200,12 +215,17 @@ class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
       _$this._weights ??= new MapBuilder<String, String>();
   set weights(MapBuilder<String, String> weights) => _$this._weights = weights;
 
+  int _classPercent;
+  int get classPercent => _$this._classPercent;
+  set classPercent(int classPercent) => _$this._classPercent = classPercent;
+
   GradeDataBuilder();
 
   GradeDataBuilder get _$this {
     if (_$v != null) {
       _grades = _$v.grades?.toBuilder();
       _weights = _$v.weights?.toBuilder();
+      _classPercent = _$v.classPercent;
       _$v = null;
     }
     return this;
@@ -230,7 +250,9 @@ class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
     try {
       _$result = _$v ??
           new _$GradeData._(
-              grades: _grades?.build(), weights: _weights?.build());
+              grades: _grades?.build(),
+              weights: _weights?.build(),
+              classPercent: classPercent);
     } catch (_) {
       String _$failedField;
       try {
