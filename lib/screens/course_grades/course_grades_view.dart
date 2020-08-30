@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart' as collection;
@@ -9,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
-import 'package:grades/utilities/calculate_grade.dart';
+import 'package:grades/utilities/calculate_class_percent.dart';
 import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/headered_group.dart';
 import 'package:grades/widgets/loading_indicator.dart';
@@ -17,7 +16,8 @@ import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
 import 'package:intl/intl.dart';
 import 'package:sis_loader/sis_loader.dart';
-import 'package:flutter_picker/flutter_picker.dart';
+
+import 'dummy/dummy_grades.dart';
 
 class CourseGradesView extends StatefulWidget {
   final GroupingMode _groupingMode;
@@ -32,7 +32,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   Completer<void> _refreshCompleter = Completer<void>();
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
-  StringOrInt _sisPercent;
   List<DummyGrade> dummyGrades = [];
   BuiltMap<String, String> _weights;
 
@@ -41,7 +40,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
   @override
   Widget build(BuildContext context) {
     var bloc = BlocProvider.of<CourseGradesBloc>(context);
-    _sisPercent = bloc.course.gradePercent;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -128,7 +127,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
               _weights = state.data.weights;
 
-              if (_weights.isNotEmpty) {
+              if (dummyGrades != null && dummyGrades.isNotEmpty) {
                 var keys = <String>[];
                 for (var group in groupKeys) {
                   keys.add(group.toHeader());
@@ -138,27 +137,33 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                     }
                   }
                 }
-                for (var weight in _weights.entries) {
-                  if (!(keys.contains(weight.key))) {
-                    var temp = <Grade>[];
-                    for (var dummy in dummyGrades) {
-                      if (weight.key.contains(dummy.category)) {
-                        temp.add(dummy);
+                if (_weights.isNotEmpty) {
+                  for (var weight in _weights.entries) {
+                    if (!(keys.contains(weight.key))) {
+                      var temp = <Grade>[];
+                      for (var dummy in dummyGrades) {
+                        if (weight.key.contains(dummy.category)) {
+                          temp.add(dummy);
+                        }
                       }
+                      // print('temp' + temp.toString());
+                      groupKeys.add(StringHeader(weight.key, weight.key));
+                      groupedGrades
+                          .addAll({StringHeader(weight.key, weight.key): temp});
                     }
-                    // print('temp' + temp.toString());
-                    groupKeys.add(StringHeader(weight.key, weight.key));
-                    groupedGrades
-                        .addAll({StringHeader(weight.key, weight.key): temp});
                   }
                 }
               }
+
               return Column(
                 children: [
                   Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: getClassPercentageWidget(
-                          groupedGrades, state.data.weights)),
+                          groupedGrades,
+                          state.data.weights,
+                          dummyGrades,
+                          bloc.course.gradePercent)),
                   Expanded(
                     child: ListView.builder(
                       itemCount: groupKeys.length,
@@ -176,12 +181,16 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                               builder: (Grade grade) {
                                 return GradeItemCard(
                                   grade: grade,
-                                  onTap: () {
+                                  onTap: () async {
                                     if (grade.name
                                         .contains('Dummy Assignment')) {
-                                      removeDummyGradePopup(context, grade);
+                                      var dummy = await removeDummyGrade(
+                                          context, grade);
+                                      setState(() {
+                                        dummyGrades.remove(dummy);
+                                      });
                                     } else {
-                                      Navigator.pushNamed(
+                                      await Navigator.pushNamed(
                                         context,
                                         '/grade_info',
                                         arguments: grade,
@@ -205,166 +214,14 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           elevation: 1.0,
           child: Icon(FontAwesomeIcons.calculator),
           backgroundColor: Colors.pink,
-          onPressed: () {
-            addDummyGrade(context, _weights);
+          onPressed: () async {
+            var dummy =
+                await createDummyGradePopup(context, _weights, dummyGrades);
+            setState(() {
+              dummyGrades.add(dummy);
+            });
           }),
     );
-  }
-
-  Widget getClassPercentageWidget(Map<ToHeader, List<Grade>> groupedGrades,
-      BuiltMap<String, String> weights) {
-    var classPercentWithDecimal =
-        calculateClassPercent(groupedGrades, weights, dummyGrades);
-
-    if (classPercentWithDecimal.round() ==
-            int.tryParse(_sisPercent.toString()) &&
-        dummyGrades.isEmpty) {
-      return Center(
-        child: Text(
-          classPercentWithDecimal.toStringAsFixed(2) + '%',
-          style: TextStyle(
-              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-      );
-    } else if (dummyGrades.isNotEmpty) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            _sisPercent.toString() + '%',
-            style: TextStyle(
-                color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Icon(
-              Icons.arrow_forward,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            classPercentWithDecimal.toStringAsFixed(2) + '%',
-            style: TextStyle(
-                color: Colors.pink, fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ],
-      );
-    } else {
-      return Center(
-        child: Text(
-          _sisPercent.toString() + '%',
-          style: TextStyle(
-              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-      );
-    }
-  }
-
-  void addDummyGrade(BuildContext context, BuiltMap<String, String> weights) {
-    var GradePickerArray = <List<dynamic>>[];
-    var percentList = <int>[];
-    for (var i = 100; i >= 0; i--) {
-      percentList.add(i);
-    }
-    GradePickerArray.add(percentList);
-    if (weights != null) {
-      if (weights.entries.isNotEmpty) {
-        var categoryList = <String>[];
-        for (var weight in weights.entries) {
-          // print('${weight.key}, ${weight.value}');
-          categoryList.add(weight.key);
-        }
-        GradePickerArray.add(categoryList);
-      }
-    }
-
-    Picker(
-        adapter: PickerDataAdapter<String>(
-            pickerdata: GradePickerArray, isArray: true),
-        hideHeader: true,
-        title: Column(children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: 7),
-            child: Center(
-              child: Text('Grade Calculator'),
-            ),
-          ),
-          Row(children: [
-            Icon(Icons.info_outline),
-            Expanded(
-              child: Text(
-                'The data presented by this utility may not be entirely accurate.',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ]),
-          Text(
-            'Use at your own risk.',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-            textAlign: TextAlign.center,
-          ),
-        ]),
-        confirmText: 'Create Dummy Assignment',
-        onConfirm: (Picker picker, List value) {
-          var values = picker.getSelectedValues();
-          // print(values);
-          var grade = DummyGrade((values[0].toString() + '%'),
-              values[1].toString(), dummyGrades.length);
-          setState(() {
-            dummyGrades.add(grade);
-          });
-        }).showDialog(context);
-  }
-
-  void removeDummyGradePopup(BuildContext context, Grade grade) {
-    if (Platform.isIOS) {
-      showDialog<CupertinoAlertDialog>(
-          context: context,
-          builder: (_) => CupertinoAlertDialog(
-                title: Text('Remove Dummy Grade?'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text('Remove'),
-                    onPressed: () {
-                      setState(() {
-                        dummyGrades.remove(grade);
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ));
-    } else {
-      showDialog<AlertDialog>(
-          context: context,
-          builder: (_) => AlertDialog(
-                title: Text('Remove Dummy Grade?'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text('Remove'),
-                    onPressed: () {
-                      setState(() {
-                        dummyGrades.remove(grade);
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ));
-    }
   }
 }
 
