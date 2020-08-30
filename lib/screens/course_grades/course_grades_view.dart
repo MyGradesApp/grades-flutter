@@ -21,23 +21,24 @@ import 'package:flutter_picker/flutter_picker.dart';
 
 class CourseGradesView extends StatefulWidget {
   final GroupingMode _groupingMode;
-  final StringOrInt _percent;
+  final StringOrInt _sisPercent;
 
-  CourseGradesView(this._groupingMode, this._percent);
+  CourseGradesView(this._groupingMode, this._sisPercent);
 
   @override
   _CourseGradesViewState createState() =>
-      _CourseGradesViewState(_groupingMode, _percent);
+      _CourseGradesViewState(_groupingMode, _sisPercent);
 }
 
 class _CourseGradesViewState extends State<CourseGradesView> {
   Completer<void> _refreshCompleter = Completer<void>();
   GroupingMode _currentGroupingMode;
   bool _hasCategories = true;
-  final StringOrInt _percent;
+  final StringOrInt _sisPercent;
   List<DummyGrade> dummyGrades = [];
+  String _calculatedPercent;
 
-  _CourseGradesViewState(this._currentGroupingMode, this._percent);
+  _CourseGradesViewState(this._currentGroupingMode, this._sisPercent);
 
   @override
   Widget build(BuildContext context) {
@@ -116,15 +117,8 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   break;
               }
 
-              String classPercent;
-              var classPercentWithDecimal =
-                  calculateClassPercent(groupedGrades, state.data.weights);
-              if (classPercentWithDecimal.round() ==
-                  int.tryParse(_percent.toString())) {
-                classPercent = classPercentWithDecimal.toStringAsFixed(2) + '%';
-              } else {
-                classPercent = _percent.toString() + '%';
-              }
+              _calculatedPercent =
+                  determineClassPercentage(groupedGrades, state.data.weights);
 
               var groupKeys = groupedGrades.keys.toList()..sort();
 
@@ -140,7 +134,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                       padding: EdgeInsets.only(bottom: 10),
                       child: Center(
                         child: Text(
-                          classPercent,
+                          _calculatedPercent,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25,
@@ -200,6 +194,10 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                       ),
                       onTap: () {
                         addDummyGrade(context, groupKeys, groupedGrades);
+                        setState(() {
+                          _calculatedPercent = determineClassPercentage(
+                              groupedGrades, state.data.weights);
+                        });
                       },
                       child: Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -222,6 +220,19 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         ),
       ),
     );
+  }
+
+  String determineClassPercentage(Map<ToHeader, List<Grade>> groupedGrades,
+      BuiltMap<String, String> weights) {
+    String classPercent;
+    var classPercentWithDecimal = calculateClassPercent(groupedGrades, weights);
+    if (classPercentWithDecimal.round() ==
+        int.tryParse(_sisPercent.toString())) {
+      classPercent = classPercentWithDecimal.toStringAsFixed(2) + '%';
+    } else {
+      classPercent = _sisPercent.toString() + '%';
+    }
+    return classPercent;
   }
 
   void addDummyGrade(BuildContext context, List<ToHeader> groupKeys,
@@ -275,7 +286,9 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   FlatButton(
                     child: Text('Remove'),
                     onPressed: () {
-                      dummyGrades.remove(grade);
+                      setState(() {
+                        dummyGrades.remove(grade);
+                      });
                       Navigator.of(context).pop();
                     },
                   )
@@ -296,7 +309,9 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   FlatButton(
                     child: Text('Remove'),
                     onPressed: () {
-                      dummyGrades.remove(grade);
+                      setState(() {
+                        dummyGrades.remove(grade);
+                      });
                       Navigator.of(context).pop();
                     },
                   )
