@@ -105,13 +105,13 @@ Future<DummyGrade> createDummyGradePopup(BuildContext context,
       onConfirm: (Picker picker, List value) {
         var values = picker.getSelectedValues();
         // print(values);
-        grade = DummyGrade((values[0].toString() + '%'), values[1].toString(),
-            dummyGrades.length);
+        grade = DummyGrade((values.first.toString() + '%'),
+            values.last.toString(), dummyGrades.length);
       }).showDialog(context);
   return grade;
 }
 
-Future<Grade> removeDummyGrade(BuildContext context, Grade grade) async {
+Future<Grade> removeDummyGradePopup(BuildContext context, Grade grade) async {
   Grade gradeToRemove;
   if (Platform.isIOS) {
     await showDialog<CupertinoAlertDialog>(

@@ -11,6 +11,7 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
   var classPercent = 0.0;
 
   for (var group in groupKeys) {
+    print(group);
     var groupTotal = 0.0;
     var grades = [...groupedGrades[group]];
     if (grades.isNotEmpty) {
@@ -22,21 +23,24 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
         }
       }
       for (var gradeItem in grades) {
-        var index = gradeItem.grade.indexOf('%');
-        if (index != -1) {
-          var gradePercent =
-              double.tryParse(gradeItem.grade.substring(0, index));
-          groupTotal += gradePercent;
+        if (gradeItem != null) {
+          var index = gradeItem.grade.indexOf('%');
+          if (index != -1) {
+            var gradePercent =
+                double.tryParse(gradeItem.grade.substring(0, index));
+            groupTotal += gradePercent;
+          }
         }
       }
       groupTotal = (groupTotal / grades.length);
     } else {
       groupTotal = 100;
     }
+    dynamic cat = group.raw();
     groupTotal = groupTotal *
-        ((weights != null)
-            ? (double.tryParse(weights[group.raw()]
-                    .substring(0, weights[group.raw()].indexOf('%'))) /
+        ((weights != null && cat != null)
+            ? (double.tryParse(
+                    weights[cat].substring(0, weights[cat].indexOf('%'))) /
                 100.0)
             : 1.0);
     classPercent += groupTotal;

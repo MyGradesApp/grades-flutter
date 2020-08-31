@@ -137,6 +137,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                       }
                     }
                   }
+
                   if (_weights.isNotEmpty) {
                     for (var weight in _weights.entries) {
                       if (!(keys.contains(weight.key))) {
@@ -146,11 +147,15 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                             temp.add(dummy);
                           }
                         }
-                        // print('temp' + temp.toString());
                         groupKeys.add(StringHeader(weight.key, weight.key));
                         groupedGrades.addAll(
                             {StringHeader(weight.key, weight.key): temp});
                       }
+                    }
+                  } else {
+                    if (groupedGrades.isEmpty) {
+                      groupKeys.add(StringHeader(''));
+                      groupedGrades.addAll({StringHeader(''): dummyGrades});
                     }
                   }
                 }
@@ -170,6 +175,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                         itemBuilder: (context, i) {
                           var group = groupKeys[i];
                           var grades = groupedGrades[group];
+
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: HeaderedGroup(
@@ -185,7 +191,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                                     onTap: () async {
                                       if (grade.name
                                           .contains('Dummy Assignment')) {
-                                        var dummy = await removeDummyGrade(
+                                        var dummy = await removeDummyGradePopup(
                                             context, grade);
                                         if (dummy != null) {
                                           setState(() {
