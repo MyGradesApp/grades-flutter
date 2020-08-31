@@ -132,6 +132,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   for (var group in groupKeys) {
                     keys.add(group.toHeader());
                     for (var dummy in dummyGrades) {
+                      // for each weight/category, add dummy grades if they belong
                       if (group.toHeader().contains(dummy.category)) {
                         groupedGrades[group].add(dummy);
                       }
@@ -140,6 +141,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
                   if (_weights.isNotEmpty) {
                     for (var weight in _weights.entries) {
+                      // for each weight/category, if it does not exist, add it, and fill it with appropriate dummy grades
                       if (!(keys.contains(weight.key))) {
                         var temp = <Grade>[];
                         for (var dummy in dummyGrades) {
@@ -153,6 +155,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                       }
                     }
                   } else {
+                    // if no categories and no other grades, add all dummy grades to list
                     if (groupedGrades.isEmpty) {
                       groupKeys.add(StringHeader(''));
                       groupedGrades.addAll({StringHeader(''): dummyGrades});
