@@ -35,7 +35,7 @@ class GradeItemCard extends StatelessWidget {
     Color bgColor, textColor, btnColor;
     IconData iconBtn;
     if (grade.name.contains('Dummy Assignment')) {
-      bgColor = Colors.pink;
+      bgColor = Color.fromARGB(255, 211, 117, 116);
       textColor = Colors.white;
       btnColor = Colors.white;
       iconBtn = Icons.close;

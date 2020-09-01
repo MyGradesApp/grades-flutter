@@ -109,7 +109,9 @@ Widget getClassPercentageWidget(
         Text(
           classPercentWithDecimal.toStringAsFixed(2) + '%',
           style: TextStyle(
-              color: Colors.pink, fontSize: 25, fontWeight: FontWeight.bold),
+              color: Color.fromARGB(255, 211, 117, 116),
+              fontSize: 25,
+              fontWeight: FontWeight.bold),
         ),
       ],
     );
