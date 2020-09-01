@@ -10,6 +10,7 @@ final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
 final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
 final longMonthDayDateFormat = DateFormat('EEEE, MMM dd, yyyy hh:mm aa');
 final shortDayTerseDateTimeFormat = DateFormat('EEE, MM/dd/yy hh:mm aa');
+final mockDataFormat = DateFormat('yyyy-MM-dd hh:mm:ss');
 
 DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
   try {
@@ -26,6 +27,9 @@ DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
   } catch (_) {}
   try {
     return longMonthDayDateFormat.parseLoose(src);
+  } catch (_) {}
+  try {
+    return mockDataFormat.parseLoose(src);
   } catch (_) {}
   if (performRegexPass) {
     return _parseDateTimeCascade(
