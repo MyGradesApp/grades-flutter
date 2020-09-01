@@ -11,7 +11,7 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
   var classPercent = 0.0;
 
   for (var group in groupKeys) {
-    print(group);
+    // print(group);
     var groupTotal = 0.0;
     var grades = [...groupedGrades[group]];
     if (grades.isNotEmpty) {

@@ -86,8 +86,12 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
             if (state is NetworkLoaded<GradeData>) {
               setState(() {
-                _hasCategories = (state.data?.grades ?? BuiltList())
-                    .every((g) => g.raw.containsKey('Category'));
+                if (state.data.weights.isNotEmpty) {
+                  _hasCategories = (state.data?.grades ?? BuiltList())
+                      .every((g) => g.raw.containsKey('Category'));
+                } else {
+                  _hasCategories = false;
+                }
               });
             }
           },
@@ -111,18 +115,19 @@ class _CourseGradesViewState extends State<CourseGradesView> {
               _weights = state.data.weights;
 
               Map<ToHeader, List<Grade>> groupedGrades;
+              var grades = state.data.grades.toList()..addAll(dummyGrades);
               switch (
                   _hasCategories ? _currentGroupingMode : GroupingMode.date) {
                 case GroupingMode.date:
                   groupedGrades = collection.groupBy(
-                    state.data.grades,
+                    grades,
                     (Grade e) =>
                         _dateRangeForWeek(e.assignedDate ?? DateTime.now()),
                   );
                   break;
                 case GroupingMode.category:
                   groupedGrades = collection.groupBy(
-                    state.data.grades,
+                    grades,
                     (Grade e) =>
                         StringHeader(_titlecase(e.category ?? ''), e.category),
                   );
@@ -139,43 +144,45 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                 );
               }
 
-              if (dummyGrades != null && dummyGrades.isNotEmpty) {
-                var keys = <String>[];
-                for (var group in groupKeys) {
-                  keys.add(group.toHeader());
-                  for (var dummy in dummyGrades) {
-                    // for each weight/category, add dummy grades if they belong
-                    if (group.toHeader().contains(dummy.category)) {
-                      groupedGrades[group].add(dummy);
-                    }
-                  }
-                }
+              // if (dummyGrades != null && dummyGrades.isNotEmpty) {
+              //   var keys = <String>[];
+              //   for (var group in groupKeys) {
+              //     keys.add(group.toHeader());
+              //     for (var dummy in dummyGrades) {
+              //       // for each weight/category, add dummy grades if they belong
+              //       if (group.toHeader().contains(dummy.category)) {
+              //         groupedGrades[group].add(dummy);
+              //       }
+              //     }
+              //   }
 
-                if (_weights.isNotEmpty) {
-                  for (var weight in _weights.entries) {
-                    // for each weight/category, if it does not exist, add it, and fill it with appropriate dummy grades
-                    if (!(keys.contains(weight.key))) {
-                      var temp = <Grade>[];
-                      for (var dummy in dummyGrades) {
-                        if (weight.key.contains(dummy.category)) {
-                          temp.add(dummy);
-                        }
-                      }
-                      groupKeys.add(StringHeader(weight.key, weight.key));
-                      groupedGrades
-                          .addAll({StringHeader(weight.key, weight.key): temp});
-                    }
-                  }
-                } else {
-                  // if no categories and no other grades, add all dummy grades to list
-                  if (groupedGrades.isEmpty) {
-                    groupKeys.add(StringHeader(''));
-                    groupedGrades.addAll({groupKeys.first: dummyGrades});
-                  } else {
-                    groupedGrades[groupKeys.first].addAll(dummyGrades);
-                  }
-                }
-              }
+              //   if (_weights.isNotEmpty) {
+              //     for (var weight in _weights.entries) {
+              //       // for each weight/category, if it does not exist, add it, and fill it with appropriate dummy grades
+              //       if (!(keys.contains(weight.key))) {
+              //         var temp = <Grade>[];
+              //         for (var dummy in dummyGrades) {
+              //           if (weight.key.contains(dummy.category)) {
+              //             temp.add(dummy);
+              //           }
+              //         }
+              //         groupKeys.add(
+              //             StringHeader(_titlecase(weight.key), weight.key));
+              //         groupedGrades.addAll({
+              //           StringHeader(_titlecase(weight.key), weight.key): temp
+              //         });
+              //       }
+              //     }
+              //   } else {
+              //     // if no categories and no other grades, add all dummy grades to list
+              //     if (groupedGrades.isEmpty) {
+              //       groupKeys.add(StringHeader(''));
+              //       groupedGrades.addAll({groupKeys.first: dummyGrades});
+              //     } else {
+              //       groupedGrades[groupKeys.first].addAll(dummyGrades);
+              //     }
+              //   }
+              // }
 
               return Column(
                 children: [
@@ -286,6 +293,12 @@ class DateRange extends Equatable implements Comparable<DateRange>, ToHeader {
 
   @override
   int compareTo(DateRange other) => -start.compareTo(other.start);
+  // @override
+  // int compareTo(dynamic other) {
+  //   print(other.toString());
+  //   // return -start.compareTo(other.start);
+  //   return 1;
+  // }
 
   @override
   String toHeader() => formatHeader();
