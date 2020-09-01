@@ -47,6 +47,20 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         title: Text(bloc.course.courseName),
         centerTitle: true,
         actions: [
+          // _weights != null
+          //     ? IconButton(
+          //         icon: Icon(FontAwesomeIcons.calculator),
+          //         onPressed: () async {
+          //           var dummy = await createDummyGradePopup(
+          //               context, _weights, dummyGrades);
+          //           if (dummy != null) {
+          //             setState(() {
+          //               dummyGrades.add(dummy);
+          //             });
+          //           }
+          //         },
+          //       )
+          //     : Text(''),
           IconButton(
             icon: Icon(FontAwesomeIcons.calculator),
             onPressed: () async {
@@ -86,12 +100,15 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
             if (state is NetworkLoaded<GradeData>) {
               setState(() {
-                if (state.data.weights.isNotEmpty) {
-                  _hasCategories = (state.data?.grades ?? BuiltList())
-                      .every((g) => g.raw.containsKey('Category'));
-                } else {
-                  _hasCategories = false;
-                }
+                print(state.data.weights.length);
+                _weights = state.data.weights;
+                print('weights' + _weights.toString());
+                // if (state.data?.weights.isNotEmpty) {
+                _hasCategories = (state.data?.grades ?? BuiltList())
+                    .every((g) => g.raw.containsKey('Category'));
+                // } else {
+                //   _hasCategories = false;
+                // }
               });
             }
           },
@@ -112,7 +129,9 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   text: 'No saved data for this course',
                 );
               }
-              _weights = state.data.weights;
+              _weights =
+                  (state.data.weights != null) ? state.data?.weights : null;
+              print('weights' + _weights.toString());
 
               Map<ToHeader, List<Grade>> groupedGrades;
               var grades = state.data.grades.toList()..addAll(dummyGrades);

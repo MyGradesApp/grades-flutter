@@ -56,11 +56,12 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
                       // _buildCard('Name', 'Jon Doe'),
                       _buildCard(
                         'Cumulative GPA',
-                        profile.cumulative_gpa.toString(),
+                        (profile.cumulative_gpa ?? 'Unknown').toString(),
                       ),
                       _buildCard(
                         'Weighted GPA',
-                        profile.cumulative_weighted_gpa.toString(),
+                        (profile.cumulative_weighted_gpa ?? 'Unknown')
+                            .toString(),
                       ),
                       if (profile.class_rank_numerator != null &&
                           profile.class_rank_denominator != null)

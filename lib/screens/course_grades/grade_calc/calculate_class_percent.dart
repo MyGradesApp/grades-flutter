@@ -13,10 +13,12 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
   var weightedList = <Map<String, Grade>>[];
   for (var group in groupKeys) {
     for (var gradeItem in groupedGrades[group]) {
-      if (weights.entries.isNotEmpty) {
-        for (var weight in weights.entries) {
-          if (weight.key.contains(gradeItem.category)) {
-            weightedList.add({weight.key: gradeItem});
+      if (weights != null) {
+        if (weights.entries.isNotEmpty) {
+          for (var weight in weights.entries) {
+            if (weight.key.contains(gradeItem.category)) {
+              weightedList.add({weight.key: gradeItem});
+            }
           }
         }
       } else {
@@ -30,42 +32,44 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
       }
     }
   }
-
-  for (var weight in weights.entries) {
-    var groupTotal = 0.0, weightedGroupCount = 0;
-    for (var weightedItem in weightedList) {
-      if (weightedItem.containsKey(weight.key)) {
-        var index = weightedItem.values.last.grade.indexOf('%');
-        if (index != -1) {
-          var gradePercent = double.tryParse(
-              weightedItem.values.last.grade.substring(0, index));
-          groupTotal += gradePercent;
-          weightedGroupCount++;
+  if (weights != null) {
+    for (var weight in weights.entries) {
+      var groupTotal = 0.0, weightedGroupCount = 0;
+      for (var weightedItem in weightedList) {
+        if (weightedItem.containsKey(weight.key)) {
+          var index = weightedItem.values.last.grade.indexOf('%');
+          if (index != -1) {
+            var gradePercent = double.tryParse(
+                weightedItem.values.last.grade.substring(0, index));
+            groupTotal += gradePercent;
+            weightedGroupCount++;
+          }
         }
       }
+      // TODO: determine accurate way of finding percentage when categories have no grades (for now, just multiply category weight by 100)
+      if (weightedGroupCount > 0) {
+        groupTotal = (groupTotal / weightedGroupCount);
+      } else {
+        groupTotal = 100.0;
+      }
+      groupTotal = groupTotal *
+          (double.tryParse(
+                  weight.value.substring(0, weight.value.indexOf('%'))) /
+              100.0);
+      classPercent += groupTotal;
+      //TODO: Alternative method being considered - disregard category entirely if no grades present (appears to be closer to what SIS does?)
+      // if (count > 0) {
+      //   groupTotal = (groupTotal / count);
+      //   groupTotal = groupTotal *
+      //       (double.tryParse(
+      //               weight.value.substring(0, weight.value.indexOf('%'))) /
+      //           100.0);
+      //   classPercent += groupTotal;
+      // }
     }
-    // TODO: determine accurate way of finding percentage when categories have no grades (for now, just multiply category weight by 100)
-    if (weightedGroupCount > 0) {
-      groupTotal = (groupTotal / weightedGroupCount);
-    } else {
-      groupTotal = 100.0;
-    }
-    groupTotal = groupTotal *
-        (double.tryParse(weight.value.substring(0, weight.value.indexOf('%'))) /
-            100.0);
-    classPercent += groupTotal;
-    //TODO: Alternative method being considered - disregard category entirely if no grades present (appears to be closer to what SIS does?)
-    // if (count > 0) {
-    //   groupTotal = (groupTotal / count);
-    //   groupTotal = groupTotal *
-    //       (double.tryParse(
-    //               weight.value.substring(0, weight.value.indexOf('%'))) /
-    //           100.0);
-    //   classPercent += groupTotal;
-    // }
   }
 
-  if (weights.entries.isEmpty) {
+  if (gradesCount > 0) {
     classPercent = classPercent / gradesCount;
   }
 
@@ -99,7 +103,7 @@ Widget getClassPercentageWidget(
             color: Color(0xff216bac),
           ),
           child: Text(
-            sisPercent.toString() + '%',
+            (sisPercent ?? 'N/G').toString() + (sisPercent != null ? '%' : ''),
             style: TextStyle(
                 color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
           ),
@@ -128,7 +132,7 @@ Widget getClassPercentageWidget(
   } else {
     return Center(
       child: Text(
-        sisPercent.toString() + '%',
+        (sisPercent ?? 'N/G').toString() + (sisPercent != null ? '%' : ''),
         style: TextStyle(
             color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
       ),
