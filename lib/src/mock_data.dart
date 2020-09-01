@@ -13,35 +13,35 @@ final YEARS = {
 final COURSES = [
   Course((c) => c
     ..gradesUrl = ''
-    ..courseName = 'US History'
+    ..courseName = 'US HISTORY'
     ..periodString = '01 01'
     ..teacherName = 'Deborah Davis'
     ..gradePercent = StringOrInt(96)
     ..gradeLetter = 'A'),
   Course((c) => c
     ..gradesUrl = ''
-    ..courseName = 'AP Bio'
+    ..courseName = 'ADV PL BIO'
     ..periodString = '04 04'
     ..teacherName = 'Kristopher Mccanns'
     ..gradePercent = StringOrInt(82)
     ..gradeLetter = 'B'),
   Course((c) => c
     ..gradesUrl = ''
-    ..courseName = 'Astronomy Honors'
+    ..courseName = 'ASTRONOMY HONORS'
     ..periodString = '05 05'
     ..teacherName = 'Jessica Lee'
     ..gradePercent = StringOrInt(99)
     ..gradeLetter = 'A'),
   Course((c) => c
     ..gradesUrl = ''
-    ..courseName = 'US Gov'
+    ..courseName = 'ADV PL US GOV'
     ..periodString = '02 02'
     ..teacherName = 'Daniel Henderson'
     ..gradePercent = StringOrInt(73)
     ..gradeLetter = 'C'),
   Course((c) => c
     ..gradesUrl = ''
-    ..courseName = 'English Lang Honors'
+    ..courseName = 'AICE ENGLISH LANG'
     ..periodString = '03 03'
     ..teacherName = 'Kimberly Phelps'
     ..gradePercent = StringOrInt(92)
@@ -57,11 +57,22 @@ final PROFILE = Profile((p) => p
   ..class_rank_denominator = 801);
 
 final Map<String, List<Grade>> GRADES = {
-  'US History': [
+  'US HISTORY': [
     {
       'Assignment': 'Ch. 14 Quiz',
       'Points': '93 / 100',
       'Grade': '93%',
+      'Comments': null,
+      'Assigned': '2020-01-15',
+      'Due': '2020-01-15 00:00:00.000',
+      'Category': 'Quizzes',
+      'Assignment Files': null,
+      'Date Last Modified': '2020-01-20 19:48:00.000'
+    },
+    {
+      'Assignment': 'Ch. 14 Quiz',
+      'Points': '85 / 100',
+      'Grade': '85%',
       'Comments': null,
       'Assigned': '2020-01-15',
       'Due': '2020-01-15 00:00:00.000',
@@ -114,7 +125,7 @@ final Map<String, List<Grade>> GRADES = {
       'Date Last Modified': '2020-01-20 09:58:00.000'
     },
   ].map((v) => Grade(v)).toList(),
-  'AP Bio': [
+  'ADV PL BIO': [
     {
       'Assignment': 'Genetic Anomalies',
       'Points': '* / 10',
@@ -182,17 +193,62 @@ final Map<String, List<Grade>> GRADES = {
       'Date Last Modified': '2020-01-09 09:18:00.000'
     },
   ].map((v) => Grade(v)).toList(),
-  'Astronomy Honors': [],
-  'US Gov': [],
-  'English Lang Honors': [],
+  'ASTRONOMY HONORS': [
+    {
+      'Assignment': 'Venus Anomalies',
+      'Points': '* / 10',
+      'Grade': 'Exc.',
+      'Comments': null,
+      'Assigned': '2020-01-12 00:00:00.000',
+      'Due': '2020-01-12 00:00:00.000',
+      'Category': null,
+      'Assignment Files': null,
+      'Date Last Modified': '2020-01-15 08:45:00.000'
+    },
+    {
+      'Assignment': 'Saturn Worksheet',
+      'Points': '30 / 37',
+      'Grade': '81%',
+      'Comments': null,
+      'Assigned': '2020-01-10 00:00:00.000',
+      'Due': '2020-01-11 00:00:00.000',
+      'Category': null,
+      'Assignment Files': null,
+      'Date Last Modified': '2020-01-13 15:54:00.000'
+    },
+    {
+      'Assignment': 'Jupiter Drawings',
+      'Points': '20 / 20',
+      'Grade': '100%',
+      'Comments': null,
+      'Assigned': '2020-01-10 00:00:00.000',
+      'Due': '2020-01-11 00:00:00.000',
+      'Category': null,
+      'Assignment Files': null,
+      'Date Last Modified': '2020-01-14 16:15:00.000'
+    },
+    {
+      'Assignment': 'Astronomy Test',
+      'Points': '87 / 100',
+      'Grade': '87%',
+      'Comments': null,
+      'Assigned': '2020-01-07 00:00:00.000',
+      'Due': '2020-01-09 00:00:00.000',
+      'Category': null,
+      'Assignment Files': null,
+      'Date Last Modified': '2020-01-09 09:18:00.000'
+    },
+  ].map((v) => Grade(v)).toList(),
+  'ADV PL US GOV': [],
+  'AICE ENGLISH LANG': [],
 };
 
 final Map<String, Map<String, String>> CATEGORY_WEIGHTS = {
-  'US History': {'Quizzes': '75%', 'Homework/Classwork': '25%'},
-  'AP Bio': {'Daily Work': '5%', 'Quizzes': '25%', 'Tests': '40%'},
-  'Astronomy Honors': {},
-  'US Gov': {},
-  'English Lang Honors': {},
+  'US HISTORY': {'Tests': '45%', 'Homework/Classwork': '25%', 'Quizzes': '30%'},
+  'ADV PL BIO': {'Daily Work': '5%', 'Quizzes': '25%', 'Tests': '40%'},
+  'ASTRONOMY HONORS': {},
+  'ADV PL US GOV': {'Daily Work': '30%', 'Quizzes': '25%', 'Tests': '40%'},
+  'AICE ENGLISH LANG': {},
 };
 
 final Absences ABSENCES = Absences((a) => a
