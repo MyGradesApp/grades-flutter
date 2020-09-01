@@ -66,9 +66,11 @@ class GradeInfoScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(1.0),
             child: Card(
-              color: i > 0
-                  ? Theme.of(context).cardColor
-                  : Theme.of(context).primaryColor,
+              color: keys[i] == 'Points' &&
+                      values[i] is String &&
+                      gradeRegExp.hasMatch(values[i])
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).cardColor,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
