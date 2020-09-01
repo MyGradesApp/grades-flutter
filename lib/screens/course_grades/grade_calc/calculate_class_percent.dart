@@ -6,45 +6,71 @@ import 'package:grades/screens/course_grades/grade_calc/dummy_grades.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
-    BuiltMap<String, String> weights, List<DummyGrade> dummyGrades) {
+    BuiltMap<String, String> weights) {
   var groupKeys = groupedGrades.keys.toList()..sort();
   var classPercent = 0.0;
-
+  var weightedList = <Map<String, Grade>>[];
   for (var group in groupKeys) {
-    // print(group);
-    var groupTotal = 0.0;
-    var grades = [...groupedGrades[group]];
-    if (grades.isNotEmpty) {
-      if (dummyGrades.isNotEmpty) {
-        for (var dummy in dummyGrades) {
-          if (group.toHeader().contains(dummy.category)) {
-            grades.add(dummy);
+    var groupTotal = 0.0, count = 0;
+    for (var gradeItem in groupedGrades[group]) {
+      if (weights.entries.isNotEmpty) {
+        for (var weight in weights.entries) {
+          if (weight.key.contains(gradeItem.category)) {
+            weightedList.add({weight.key: gradeItem});
           }
         }
-      }
-      for (var gradeItem in grades) {
-        if (gradeItem != null) {
-          var index = gradeItem.grade.indexOf('%');
-          if (index != -1) {
-            var gradePercent =
-                double.tryParse(gradeItem.grade.substring(0, index));
-            groupTotal += gradePercent;
-          }
+      } else {
+        var index = gradeItem.grade.indexOf('%');
+        if (index != -1) {
+          var gradePercent =
+              double.tryParse(gradeItem.grade.substring(0, index));
+          groupTotal += gradePercent;
+          count++;
         }
       }
-      groupTotal = (groupTotal / grades.length);
-    } else {
-      groupTotal = 100;
     }
-    dynamic cat = group.raw();
-    groupTotal = groupTotal *
-        ((weights != null && cat != null)
-            ? (double.tryParse(
-                    weights[cat].substring(0, weights[cat].indexOf('%'))) /
-                100.0)
-            : 1.0);
-    classPercent += groupTotal;
+    if (weights.entries.isEmpty) {
+      groupTotal = (groupTotal / count);
+      classPercent += groupTotal;
+    }
   }
+
+  for (var weight in weights.entries) {
+    var groupTotal = 0.0, count = 0;
+    for (var weightedItem in weightedList) {
+      if (weightedItem.containsKey(weight.key)) {
+        var index = weightedItem.values.last.grade.indexOf('%');
+        if (index != -1) {
+          var gradePercent = double.tryParse(
+              weightedItem.values.last.grade.substring(0, index));
+          groupTotal += gradePercent;
+          count++;
+        }
+      }
+    }
+
+    // TODO: determine accurate way of finding percentage when categories have no grades (for now, just multiply category weight by 100)
+    if (count > 0) {
+      groupTotal = (groupTotal / count);
+    } else {
+      groupTotal = 100.0;
+    }
+    groupTotal = groupTotal *
+        (double.tryParse(weight.value.substring(0, weight.value.indexOf('%'))) /
+            100.0);
+    classPercent += groupTotal;
+
+    //TODO: Alternative method being considered - disregard category entirely if no grades present (appears to be closer to what SIS does?)
+    // if (count > 0) {
+    //   groupTotal = (groupTotal / count);
+    //   groupTotal = groupTotal *
+    //       (double.tryParse(
+    //               weight.value.substring(0, weight.value.indexOf('%'))) /
+    //           100.0);
+    //   classPercent += groupTotal;
+    // }
+  }
+
   print(classPercent);
   return classPercent;
 }
@@ -54,9 +80,7 @@ Widget getClassPercentageWidget(
     BuiltMap<String, String> weights,
     List<DummyGrade> dummyGrades,
     StringOrInt sisPercent) {
-  var classPercentWithDecimal =
-      calculateClassPercent(groupedGrades, weights, dummyGrades);
-
+  var classPercentWithDecimal = calculateClassPercent(groupedGrades, weights);
   if (classPercentWithDecimal.round() == int.tryParse(sisPercent.toString()) &&
       dummyGrades.isEmpty) {
     return Center(
