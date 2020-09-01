@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/home_screen/course_list_page.dart';
 import 'package:grades/screens/home_screen/recent_page.dart';
@@ -51,15 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         leading: IconButton(
           tooltip: 'Profile',
-          icon: Icon(
-            Icons.person,
-          ),
+          icon: Icon(FontAwesomeIcons.solidUser),
           onPressed: () => Navigator.pushNamed(context, '/academic_info'),
         ),
         actions: <Widget>[
           IconButton(
             tooltip: 'Settings',
-            icon: Icon(Icons.settings),
+            icon: Icon(FontAwesomeIcons.cog),
             onPressed: () => Navigator.pushNamed(context, '/settings'),
           ),
         ],

@@ -80,7 +80,7 @@ class _RecentPageState extends State<RecentPage>
               );
             } else {
               return FullscreenSimpleIconMessage(
-                icon: FontAwesomeIcons.inbox,
+                icon: FontAwesomeIcons.solidFolderOpen,
                 text: 'No recent grades',
               );
             }

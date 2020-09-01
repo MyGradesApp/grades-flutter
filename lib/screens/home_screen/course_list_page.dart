@@ -38,13 +38,13 @@ class _CourseListPageState extends State<CourseListPage> {
           if (state is CourseListLoaded) {
             if (state.data == null) {
               return FullscreenSimpleIconMessage(
-                icon: FontAwesomeIcons.inbox,
+                icon: FontAwesomeIcons.solidFolderOpen,
                 text: 'No courses available offline',
               );
             }
             if (state.data.isEmpty) {
               return FullscreenSimpleIconMessage(
-                icon: FontAwesomeIcons.inbox,
+                icon: FontAwesomeIcons.solidFolderOpen,
                 text: 'No courses',
               );
             }

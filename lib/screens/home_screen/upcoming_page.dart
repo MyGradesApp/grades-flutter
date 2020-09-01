@@ -87,7 +87,7 @@ class _UpcomingPageState extends State<UpcomingPage>
               );
             } else {
               return FullscreenSimpleIconMessage(
-                icon: FontAwesomeIcons.inbox,
+                icon: FontAwesomeIcons.solidFolderOpen,
                 text: 'No upcoming grades',
               );
             }

@@ -66,7 +66,10 @@ class GradeInfoScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(1.0),
             child: Card(
-              color: Theme.of(context).cardColor,
+              color: i > 0
+                  ? Theme.of(context).cardColor
+                  : Theme.of(context).primaryColor,
+              elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -95,8 +98,8 @@ class GradeInfoScreen extends StatelessWidget {
         size: const Size(240.0, 240.0),
         holeLabel: value,
         labelStyle: TextStyle(
-          fontSize: 28,
-          color: textColor,
+          fontSize: 38,
+          color: Colors.white,
         ),
         initialChartData: pointsData,
         chartType: CircularChartType.Radial,

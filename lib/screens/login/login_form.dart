@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/loading_indicator.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -148,7 +149,7 @@ class _LoginFormState extends State<LoginForm> {
               border: InputBorder.none,
               contentPadding: const EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                password ? Icons.lock : Icons.person,
+                password ? FontAwesomeIcons.lock : FontAwesomeIcons.userAlt,
                 color: Colors.white,
               ),
               hintText: placeholder,

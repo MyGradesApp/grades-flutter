@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/screens/course_grades/course_grades_view.dart';
 import 'package:grades/screens/course_grades/grade_calc/dummy_grades.dart';
 import 'package:sis_loader/sis_loader.dart';
@@ -106,7 +107,7 @@ Widget getClassPercentageWidget(
         Padding(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Icon(
-            Icons.arrow_forward,
+            FontAwesomeIcons.arrowRight,
             color: Colors.white,
           ),
         ),

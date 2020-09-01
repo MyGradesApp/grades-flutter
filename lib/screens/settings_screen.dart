@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/utilities/update.dart';
 
@@ -74,13 +75,13 @@ class SettingsScreen extends StatelessWidget {
                       () {
                         switch (theme) {
                           case ThemeMode.system:
-                            return Icons.phone_iphone;
+                            return FontAwesomeIcons.mobileAlt;
                             break;
                           case ThemeMode.light:
-                            return Icons.wb_sunny;
+                            return FontAwesomeIcons.solidSun;
                             break;
                           case ThemeMode.dark:
-                            return Icons.brightness_2;
+                            return FontAwesomeIcons.solidMoon;
                             break;
                           default:
                             throw Exception();
@@ -115,8 +116,8 @@ class SettingsScreen extends StatelessWidget {
                     SizedBox(width: 15),
                     Icon(
                       settings.groupingMode == GroupingMode.date
-                          ? Icons.today
-                          : Icons.format_list_bulleted,
+                          ? FontAwesomeIcons.calendarAlt
+                          : FontAwesomeIcons.solidListAlt,
                       color: Colors.white,
                     ),
                   ],

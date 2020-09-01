@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grades/widgets/refreshable/fullscreen_icon_message.dart';
 
 class FullscreenErrorMessage extends StatelessWidget {
@@ -12,7 +13,7 @@ class FullscreenErrorMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FullscreenIconMessage(
       icon: Icon(
-        Icons.error_outline,
+        FontAwesomeIcons.exclamationTriangle,
         color: Colors.red,
         size: 66,
       ),

@@ -62,8 +62,8 @@ class _CourseGradesViewState extends State<CourseGradesView> {
           if (_hasCategories)
             IconButton(
               icon: Icon(_currentGroupingMode == GroupingMode.category
-                  ? Icons.format_list_bulleted
-                  : Icons.today),
+                  ? FontAwesomeIcons.solidListAlt
+                  : FontAwesomeIcons.calendarAlt),
               onPressed: () {
                 setState(() {
                   _currentGroupingMode = _currentGroupingMode.toggled();
@@ -108,7 +108,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
               // Data persistence has no saved data for this course
               if (state.data == null) {
                 return FullscreenSimpleIconMessage(
-                  icon: FontAwesomeIcons.inbox,
+                  icon: FontAwesomeIcons.solidFolderOpen,
                   text: 'No saved data for this course',
                 );
               }
@@ -137,7 +137,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
               if (groupKeys.isEmpty && dummyGrades.isEmpty) {
                 return FullscreenSimpleIconMessage(
-                  icon: FontAwesomeIcons.inbox,
+                  icon: FontAwesomeIcons.solidFolderOpen,
                   text: 'No grades available',
                 );
               }
