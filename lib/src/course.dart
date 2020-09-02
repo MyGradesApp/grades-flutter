@@ -66,6 +66,7 @@ class CourseService {
 
     var grades = await _extractGrades(gradePage);
     var weights = await _extractCategoryWeights(gradePage);
+
     return GradeData((d) {
       d.grades.replace(grades);
       if (weights != null) {
@@ -142,13 +143,13 @@ class CourseService {
 
   Future<Map<String, String>> _extractCategoryWeights(String gradePage) async {
     var weightsTableMatch = RegExp(
-            r'<TABLE width=100% border=0 cellpadding=0 cellspacing=0 class="DarkGradientBG'
-            r' BottomButton"><TR><TD class="DarkGradientBG BottomButton" align=left>'
-            r'<font color=#000000><B><TABLE border=0 cellpadding=4 cellspacing=0>(.*?)<\/TABLE><\/B>')
+            r'<TABLE width=100% border=0 cellpadding=0 cellspacing=0 class="GrayDrawHeader">(.*?)</TABLE></font></TD></TR></TABLE>')
         .firstMatch(gradePage);
+
     if (weightsTableMatch == null) {
       return null;
     }
+
     var weightsTable = weightsTableMatch.group(1);
 
     var tableRowsMatches = RegExp(r'<TR>(.*?)<\/TR>').allMatches(weightsTable);
@@ -162,9 +163,7 @@ class CourseService {
         .toList();
 
     // Ensure the data matches the known format
-    if (!(tableRows.length > 2 &&
-        tableRows[0][0] == '' &&
-        tableRows[1][0] == 'Percent of Grade')) {
+    if (!(tableRows.length > 2 && tableRows[1][0] == 'Percent of Grade')) {
       return null;
     }
 
