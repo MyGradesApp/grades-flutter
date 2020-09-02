@@ -31,7 +31,7 @@ class CourseGradesView extends StatefulWidget {
 class _CourseGradesViewState extends State<CourseGradesView> {
   Completer<void> _refreshCompleter = Completer<void>();
   GroupingMode _currentGroupingMode;
-  bool _hasCategories = true;
+  bool _hasCategories = false;
   List<DummyGrade> dummyGrades = [];
   BuiltMap<String, String> _weights;
 
@@ -47,20 +47,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
         title: Text(bloc.course.courseName),
         centerTitle: true,
         actions: [
-          // _weights != null
-          //     ? IconButton(
-          //         icon: Icon(FontAwesomeIcons.calculator),
-          //         onPressed: () async {
-          //           var dummy = await createDummyGradePopup(
-          //               context, _weights, dummyGrades);
-          //           if (dummy != null) {
-          //             setState(() {
-          //               dummyGrades.add(dummy);
-          //             });
-          //           }
-          //         },
-          //       )
-          //     : Text(''),
           IconButton(
             icon: Icon(FontAwesomeIcons.calculator),
             onPressed: () async {
@@ -100,15 +86,10 @@ class _CourseGradesViewState extends State<CourseGradesView> {
 
             if (state is NetworkLoaded<GradeData>) {
               setState(() {
-                print(state.data.weights.length);
-                _weights = state.data.weights;
-                print('weights' + _weights.toString());
-                // if (state.data?.weights.isNotEmpty) {
-                _hasCategories = (state.data?.grades ?? BuiltList())
-                    .every((g) => g.raw.containsKey('Category'));
-                // } else {
-                //   _hasCategories = false;
-                // }
+                _weights = state.data?.weights;
+                if (_weights != null && _weights.isNotEmpty) {
+                  _hasCategories = true;
+                }
               });
             }
           },
@@ -129,9 +110,6 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   text: 'No saved data for this course',
                 );
               }
-              _weights =
-                  (state.data.weights != null) ? state.data?.weights : null;
-              print('weights' + _weights.toString());
 
               Map<ToHeader, List<Grade>> groupedGrades;
               var grades = state.data.grades.toList()..addAll(dummyGrades);
