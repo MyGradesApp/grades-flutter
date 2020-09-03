@@ -5,7 +5,9 @@ import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/home_screen/course_list_page.dart';
 import 'package:grades/screens/home_screen/recent_page.dart';
 import 'package:grades/screens/home_screen/upcoming_page.dart';
+import 'package:grades/utilities/whats_new.dart';
 import 'package:grades/widgets/page_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +16,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      var hasShownUpdateScreen =
+          prefs.getBool('hasShownUpdateScreenGradeCalc3');
+      if (hasShownUpdateScreen == null || !hasShownUpdateScreen) {
+        // prefs.setBool('hasShownUpdateScreenGradeCalc2', true);
+        Future.microtask(() {
+          showUpdatedDialog(context);
+        });
+      }
+    });
+  }
+
   final PageController controller = PageController(initialPage: 1);
   List<Tuple2<String, Widget>> pages = [
     Tuple2('RECENT', RecentPage()),

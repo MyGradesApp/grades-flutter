@@ -189,7 +189,6 @@ class AppRoot extends StatelessWidget {
         if (state is Uninitialized) {
           SharedPreferences.getInstance().then((prefs) {
             var hasAcceptedTerms = prefs.getBool('accepted_terms') ?? false;
-
             if (!hasAcceptedTerms) {
               Navigator.pushNamed(context, '/terms_query');
             }

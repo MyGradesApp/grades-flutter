@@ -10,7 +10,7 @@ void showUpdatedDialog(BuildContext context) {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: SizedBox(
-            height: MediaQuery.of(context).size.height / 1.4,
+            height: MediaQuery.of(context).size.height / 1.3,
             child: DefaultTextStyle(
               style: const TextStyle(color: Colors.white),
               child: Column(
@@ -24,13 +24,6 @@ void showUpdatedDialog(BuildContext context) {
                           Center(
                             child: Column(
                               children: <Widget>[
-                                // const Text(
-                                //   'SwiftGrade',
-                                //   style: TextStyle(
-                                //     fontWeight: FontWeight.bold,
-                                //     fontSize: 26,
-                                //   ),
-                                // ),
                                 const Text(
                                   "What's New",
                                   style: TextStyle(
@@ -43,55 +36,54 @@ void showUpdatedDialog(BuildContext context) {
                           ),
                           _buildNewItem(
                             'Grade Calculator',
-                            'Our most requested feature by far! Want to know what you need to get on the next test? How many assignments can you skip and still pass? Now, SwiftGrade should help you find out. Accessible within each course in the top-right',
+                            'Our most requested feature!\nWant to know what you need to get on the next test? Now, SwiftGrade will help you find out. Accessible within each course in the top-right',
                           ),
                           _buildNewItem('Offline Mode',
-                              'View past assignments without a network connection'),
+                              'View past grades without a network connection'),
                           _buildNewItem('Faster Loading',
-                              'A new and improved backend to quicken login times'),
+                              'A new and improved backend to speed up login times'),
                           _buildNewItem(
                             'Updated Icons',
                             'Almost every button throughout the app has been tweaked for clarity',
                           ),
-                          const Divider(
-                            color: Colors.white,
-                            endIndent: 40,
-                            indent: 40,
+                          _buildNewItem(
+                            'Bug Fixes',
+                            '',
                           ),
                           const Padding(
-                            padding:
-                                EdgeInsets.only(left: 32, right: 22, top: 10),
+                            padding: EdgeInsets.only(
+                                left: 32, right: 22, top: 0, bottom: 10),
                             child: Text(
-                              'Thank you to everyone using SwiftGrade! If you like the app, please, share it with your friends',
+                              'Thank you for using the app! \n\nIf you like SwiftGrade, share it with your friends!',
                               style: TextStyle(
                                 fontSize: 18,
                               ),
                             ),
                           ),
+                          Center(
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(15.0),
+                                child: Text(
+                                  'AWESOME',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
                         ],
                       ),
                     ),
                   ),
-                  Center(
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Text(
-                          'AWESOME',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
                 ],
               ),
             ),
