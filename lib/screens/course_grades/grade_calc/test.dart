@@ -1,10 +1,5 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:grades/screens/course_grades/course_grades_view.dart';
-import 'package:grades/screens/course_grades/grade_calc/dummy_grades.dart';
-import 'package:quiver/pattern.dart';
+import '../course_grades_view.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
@@ -21,8 +16,6 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
         // for each weight, add it to a "weighted" list
         for (var weight in weights.entries) {
           if (weight.value != '0%') {
-            // print('we' + weight.value);
-
             if (weight.key.contains(gradeItem.category)) {
               // if a category is empty, use the following to determine new percentages
 
@@ -32,7 +25,7 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
                   x++;
                 }
               });
-
+              print(weightedList.contains({weight.key}));
               if (x == 0) {
                 weightedDenominatorList.add(int.tryParse(
                     weight.value.substring(0, weight.value.indexOf('%'))));
@@ -122,70 +115,4 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
 
   print(classPercent);
   return classPercent;
-}
-
-Widget getClassPercentageWidget(
-    Map<ToHeader, List<Grade>> groupedGrades,
-    BuiltMap<String, String> weights,
-    List<DummyGrade> dummyGrades,
-    StringOrInt sisPercent) {
-  var classPercentWithDecimal = calculateClassPercent(groupedGrades, weights);
-  if ((classPercentWithDecimal.round() ?? 0) ==
-          int.tryParse(sisPercent.toString()) &&
-      dummyGrades.isEmpty) {
-    return Center(
-      child: Text(
-        classPercentWithDecimal.toStringAsFixed(2) + '%',
-        style: TextStyle(
-            color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-      ),
-    );
-  } else if (dummyGrades.isNotEmpty) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Color(0xff216bac),
-          ),
-          child: Text(
-            (sisPercent ?? 'N/G').toString() + (sisPercent != null ? '%' : ''),
-            style: TextStyle(
-                color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: Icon(
-            FontAwesomeIcons.arrowRight,
-            color: Colors.white,
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Color.fromARGB(255, 211, 117, 116),
-          ),
-          child: Text(
-            classPercentWithDecimal.round() != -1
-                ? classPercentWithDecimal.toStringAsFixed(2)
-                : 'N/G' + (classPercentWithDecimal != -1 ? '%' : ''),
-            style: TextStyle(
-                color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        )
-      ],
-    );
-  } else {
-    return Center(
-      child: Text(
-        (sisPercent ?? 'N/G').toString() + (sisPercent != null ? '%' : ''),
-        style: TextStyle(
-            color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
 }
