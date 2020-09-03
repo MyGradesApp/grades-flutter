@@ -21,9 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
       var hasShownUpdateScreen =
-          prefs.getBool('hasShownUpdateScreenGradeCalc3');
+          prefs.getBool('hasShownUpdateScreenGradeCalculator');
       if (hasShownUpdateScreen == null || !hasShownUpdateScreen) {
-        // prefs.setBool('hasShownUpdateScreenGradeCalc2', true);
+        prefs.setBool('hasShownUpdateScreenGradeCalculator', true);
         Future.microtask(() {
           showUpdatedDialog(context);
         });
