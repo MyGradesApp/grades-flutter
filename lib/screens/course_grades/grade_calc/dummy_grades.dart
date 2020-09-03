@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:grade_core/grade_core.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class DummyGrade implements Grade {
@@ -78,6 +79,9 @@ Future<DummyGrade> createDummyGradePopup(BuildContext context,
       adapter: PickerDataAdapter<String>(
           pickerdata: GradePickerArray, isArray: true),
       hideHeader: true,
+      backgroundColor: Colors.transparent,
+      textStyle:
+          TextStyle(color: Theme.of(context).primaryColorLight, fontSize: 19),
       title: Column(children: [
         Padding(
           padding: EdgeInsets.only(bottom: 7),
@@ -101,7 +105,7 @@ Future<DummyGrade> createDummyGradePopup(BuildContext context,
           textAlign: TextAlign.center,
         ),
       ]),
-      confirmText: 'Create Dummy Assignment',
+      confirmText: 'Add Dummy Grade',
       onConfirm: (Picker picker, List value) {
         var values = picker.getSelectedValues();
         // print(values);
