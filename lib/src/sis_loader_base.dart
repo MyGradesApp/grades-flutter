@@ -203,13 +203,33 @@ class SISLoader {
     var rawCourses = initialContext['PortalController']['data']['enrollments']
         [0]['grades']['rows'] as List<dynamic>;
     var courses = (rawCourses).map((grade) {
-      return Course((c) => c
-        ..gradesUrl = grade[mps['mp_grade_href']] as String
-        ..courseName = grade['course'] as String
-        ..periodString = grade['period_name'] as String
-        ..teacherName = grade['teacher'] as String
-        ..gradePercent = null
-        ..gradeLetter = grade[mps['mp_grade']] as String);
+      var gradeString = grade[mps['mp_grade']] as String;
+      String letter;
+      StringOrInt percent;
+      var letterMatch = RegExp(r'([A-z]+)').firstMatch(gradeString);
+      var percentMatch = RegExp(r'([0-9]+)%').firstMatch(gradeString);
+      if (letterMatch != null) {
+        letter = letterMatch.group(1);
+      }
+      if (percentMatch != null) {
+        // parse will always succeed because the regex matches only digits
+        percent = StringOrInt(int.parse(percentMatch.group(1)));
+      }
+
+      if (percentMatch == null && letter != null) {
+        percent = StringOrInt(letter);
+        letter = null;
+      }
+
+      return Course((c) {
+        return c
+          ..gradesUrl = grade[mps['mp_grade_href']] as String
+          ..courseName = grade['course'] as String
+          ..periodString = grade['period_name'] as String
+          ..teacherName = grade['teacher'] as String
+          ..gradePercent = percent
+          ..gradeLetter = letter;
+      });
     });
 
     return Future.value(courses.toList());
