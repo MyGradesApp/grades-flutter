@@ -40,9 +40,6 @@ class GradeItemCard extends StatelessWidget {
       btnColor = Colors.white;
       iconBtn = Icons.close;
     } else {
-      bgColor = Colors.white;
-      textColor = Colors.black;
-      btnColor = Colors.black26;
       iconBtn = Icons.chevron_right;
     }
 
