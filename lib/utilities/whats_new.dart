@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void showUpdatedDialog(BuildContext context) {
-  showDialog<CupertinoAlertDialog>(
+  showDialog<AlertDialog>(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
