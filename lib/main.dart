@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/logging_bloc_observer.dart';
@@ -205,44 +204,4 @@ class AppRoot extends StatelessWidget {
       },
     );
   }
-}
-
-mixin PortraitModeMixin on StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    _portraitModeOnly();
-    return null;
-  }
-}
-
-/// Forces portrait-only mode in mixin
-mixin PortraitStatefulModeMixin<T extends StatefulWidget> on State<T> {
-  @override
-  Widget build(BuildContext context) {
-    _portraitModeOnly();
-    return null;
-  }
-
-  @override
-  void dispose() {
-    _enableRotation();
-    super.dispose();
-  }
-}
-
-/// blocks rotation; sets orientation to: portrait
-void _portraitModeOnly() {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-}
-
-void _enableRotation() {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
 }
