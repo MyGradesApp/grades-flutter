@@ -100,7 +100,7 @@ class GradeInfoScreen extends StatelessWidget {
         size: const Size(240.0, 240.0),
         holeLabel: value,
         labelStyle: TextStyle(
-          fontSize: 38,
+          fontSize: 36,
           color: Colors.white,
         ),
         initialChartData: pointsData,

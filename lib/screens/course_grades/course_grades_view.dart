@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/course_grades/grade_calc/calculate_class_percent.dart';
+import 'package:grades/utilities/string.dart';
 import 'package:grades/widgets/grade_item_card.dart';
 import 'package:grades/widgets/headered_group.dart';
 import 'package:grades/widgets/loading_indicator.dart';
@@ -158,7 +159,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: HeaderedGroup(
-                              title: group.toHeader(),
+                              title: smartCategoryTitleCase(group.toHeader()),
                               subtitle: ((state.data.weights != null)
                                   ? state.data.weights[group.raw()]?.toString()
                                   : null),
