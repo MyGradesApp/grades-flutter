@@ -90,8 +90,7 @@ bool gradeIsNumeric(String s) {
     return false;
   }
   var index = s.indexOf('%');
-  return double.parse(
-          s.substring(0, index != -1 ? index : s.length), (e) => null) !=
+  return double.tryParse(s.substring(0, index != -1 ? index : s.length)) !=
       null;
 }
 
