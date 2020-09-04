@@ -17,7 +17,8 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
       if (weights != null) {
         for (var weight in weights.entries) {
           if (weight.value != '0%') {
-            if (weight.key.contains(gradeItem.category)) {
+            if (weight.key.contains(gradeItem.category) &&
+                gradeIsNumeric(gradeItem.grade)) {
               if (weightedGradeList
                   .every((item) => !(item.containsKey(weight.key)))) {
                 weightedDenominatorList.add(int.tryParse(
@@ -82,6 +83,18 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
 
   // print(classPercent);
   return classPercent;
+}
+
+bool gradeIsNumeric(String s) {
+  if (s == null) {
+    return false;
+  }
+  var index = s.indexOf('%');
+  if (index != -1) {
+    return double.parse(s.substring(0, index), (e) => null) != null;
+  } else {
+    return false;
+  }
 }
 
 Widget getClassPercentageWidget(
