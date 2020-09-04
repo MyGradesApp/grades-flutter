@@ -90,11 +90,9 @@ bool gradeIsNumeric(String s) {
     return false;
   }
   var index = s.indexOf('%');
-  if (index != -1) {
-    return double.parse(s.substring(0, index), (e) => null) != null;
-  } else {
-    return false;
-  }
+  return double.parse(
+          s.substring(0, index != -1 ? index : s.length), (e) => null) !=
+      null;
 }
 
 Widget getClassPercentageWidget(
@@ -124,7 +122,8 @@ Widget getClassPercentageWidget(
             color: Color(0xff216bac),
           ),
           child: Text(
-            (sisPercent ?? 'N/G').toString() + (sisPercent != null ? '%' : ''),
+            (sisPercent ?? 'NG').toString() +
+                (gradeIsNumeric(sisPercent.toString()) ? '%' : ''),
             style: TextStyle(
                 color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
           ),
@@ -145,7 +144,7 @@ Widget getClassPercentageWidget(
           child: Text(
             classPercentWithDecimal.round() != -1
                 ? classPercentWithDecimal.toStringAsFixed(2)
-                : 'N/G' + (classPercentWithDecimal != -1 ? '%' : ''),
+                : 'NG' + (classPercentWithDecimal != -1 ? '%' : ''),
             style: TextStyle(
                 color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
           ),
@@ -155,7 +154,8 @@ Widget getClassPercentageWidget(
   } else {
     return Center(
       child: Text(
-        (sisPercent ?? 'N/G').toString() + (sisPercent != null ? '%' : ''),
+        (sisPercent ?? 'NG').toString() +
+            (gradeIsNumeric(sisPercent.toString()) ? '%' : ''),
         style: TextStyle(
             color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
       ),

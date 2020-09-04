@@ -26,21 +26,18 @@ class ClassListItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: alignment,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            AnimatedOpacity(
-              opacity: topText == '' ? 0 : 1,
-              duration: Duration(milliseconds: 150),
-              child: Text(
-                topText,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 19,
-                  color: textColor,
-                ),
-              ),
+        AnimatedOpacity(
+          opacity: topText == '' ? 0 : 1,
+          duration: Duration(milliseconds: 150),
+          child: Text(
+            topText,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+              color: textColor,
             ),
-          ],
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         Padding(
           child: Container(
@@ -74,11 +71,11 @@ class ClassListItem extends StatelessWidget {
       color: Theme.of(context).cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(12.0),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+      margin: const EdgeInsets.symmetric(horizontal: 10.5, vertical: 6.5),
       child: InkWell(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(12.0),
         onTap: onTap,
         child: Padding(
           padding:
