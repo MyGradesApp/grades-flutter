@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/utilities/status.dart';
 import 'package:grades/widgets/loading_indicator.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -95,6 +96,41 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                   const SizedBox(height: 55.0),
+                  FutureBuilder(
+                      future: getStatus(),
+                      builder: (context, state) {
+                        if (state.hasData) {
+                          if (!state.data.status
+                              .toString()
+                              .contains('Online')) {
+                            return Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.circular(7)),
+                                child: Padding(
+                                    padding: EdgeInsets.all(7.5),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.info_outline,
+                                          color: Colors.white,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            state.data.message.toString(),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        )
+                                      ],
+                                    )));
+                          }
+                        }
+                        return Container();
+                      }),
+                  const SizedBox(height: 35.0),
                   _buildInputField(
                     placeholder: 'District Username',
                     password: false,
