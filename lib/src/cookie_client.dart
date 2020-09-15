@@ -103,7 +103,14 @@ class CookieClient {
       // SAML SSO page returns an illegal cookie, strip that
       var newCookies = values
           .where((v) => !v.startsWith('SSO::'))
-          .map((v) => Cookie.fromSetCookieValue(v))
+          .map((v) {
+            try {
+              return Cookie.fromSetCookieValue(v);
+            } on FormatException {
+              return null;
+            }
+          })
+          .where((cookie) => cookie != null)
           .map((cookie) => MapEntry(cookie.name, cookie));
 
       cookies.addEntries(newCookies);
