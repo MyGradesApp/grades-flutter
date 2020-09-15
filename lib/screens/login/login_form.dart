@@ -100,9 +100,7 @@ class _LoginFormState extends State<LoginForm> {
                       future: getStatus(),
                       builder: (context, state) {
                         if (state.hasData) {
-                          if (!state.data.status
-                              .toString()
-                              .contains('Online')) {
+                          if (state.data.message.toString().isNotEmpty) {
                             return Container(
                                 decoration: BoxDecoration(
                                     color: Colors.orange,
