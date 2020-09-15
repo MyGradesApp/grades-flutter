@@ -10,7 +10,7 @@ class Status {
   Status(this.status, this.message);
 
   factory Status.fromJson(dynamic json) {
-    return Status(json['Status'] as String, json['Message'] as String);
+    return Status(json['status'] as String, json['message'] as String);
   }
 }
 
