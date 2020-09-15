@@ -36,9 +36,18 @@ class CookieClient {
     }).then((HttpClientResponse response) {
       var values = response.headers[HttpHeaders.setCookieHeader] ?? [];
       // GraduationRequirments page returns an illegal cookie, strip that
+      // Some pages have been seen to return malformed set-cookie headers,
+      // so we just ignore those errors
       var newCookies = values
           .where((v) => !v.startsWith('Module::'))
-          .map((v) => Cookie.fromSetCookieValue(v))
+          .map((v) {
+            try {
+              return Cookie.fromSetCookieValue(v);
+            } on FormatException {
+              return null;
+            }
+          })
+          .where((cookie) => cookie != null)
           .map((cookie) => MapEntry(cookie.name, cookie));
 
       cookies.addEntries(newCookies);
