@@ -141,9 +141,10 @@ Widget getClassPercentageWidget(
             color: Color.fromARGB(255, 211, 117, 116),
           ),
           child: Text(
-            classPercentWithDecimal.round() != -1
-                ? classPercentWithDecimal.toStringAsFixed(2)
-                : 'NG' + (classPercentWithDecimal != -1 ? '%' : ''),
+            (classPercentWithDecimal.round() != -1
+                    ? classPercentWithDecimal.toStringAsFixed(2)
+                    : 'NG') +
+                (classPercentWithDecimal != -1 ? '%' : ''),
             style: TextStyle(
                 color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
           ),
