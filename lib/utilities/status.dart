@@ -17,8 +17,11 @@ class Status {
 Future<Status> getStatus() async {
   var response = await http.get('https://swiftgrade.github.io/status/');
   print(response.body);
-  var stat = Status.fromJson(jsonDecode(response.body));
-  return stat;
+  if (response.body.isNotEmpty) {
+    var stat = Status.fromJson(jsonDecode(response.body));
+    return stat;
+  }
+  return null;
 }
 
 Widget getStatusCard(String message) {

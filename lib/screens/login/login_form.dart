@@ -99,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                   FutureBuilder(
                       future: getStatus(),
                       builder: (context, state) {
-                        if (state.hasData) {
+                        if (state.data != null && state.hasData) {
                           if (state.data.message.toString().isNotEmpty) {
                             return getStatusCard(state.data.message.toString());
                           }
