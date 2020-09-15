@@ -101,29 +101,7 @@ class _LoginFormState extends State<LoginForm> {
                       builder: (context, state) {
                         if (state.hasData) {
                           if (state.data.message.toString().isNotEmpty) {
-                            return Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(7)),
-                                child: Padding(
-                                    padding: EdgeInsets.all(7.5),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.info_outline,
-                                          color: Colors.white,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            state.data.message.toString(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 17),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        )
-                                      ],
-                                    )));
+                            return getStatusCard(state.data.message.toString());
                           }
                         }
                         return Container();

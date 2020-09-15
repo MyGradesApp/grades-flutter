@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/utilities/status.dart';
 import 'package:grades/utilities/update.dart';
 import 'package:grades/widgets/class_list_item.dart';
 import 'package:grades/widgets/loading_indicator.dart';
@@ -59,6 +60,17 @@ class _CourseListPageState extends State<CourseListPage> {
                 if (i == 0) {
                   return Column(children: [
                     getUpdateCard(),
+                    FutureBuilder(
+                        future: getStatus(),
+                        builder: (context, state) {
+                          if (state.hasData) {
+                            if (state.data.message.toString().isNotEmpty) {
+                              return getStatusCard(
+                                  state.data.message.toString());
+                            }
+                          }
+                          return Container();
+                        }),
                     ClassListItem(
                       course: course.courseName,
                       letterGrade: course.gradeLetter,
