@@ -128,7 +128,7 @@ class _CourseListPageState extends State<CourseListPage> {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasData && snapshot.data && Platform.isIOS) {
           return Padding(
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(5),
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),

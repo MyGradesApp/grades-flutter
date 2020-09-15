@@ -23,14 +23,14 @@ Future<Status> getStatus() async {
 
 Widget getStatusCard(String message) {
   return Padding(
-    padding: const EdgeInsets.all(4),
+    padding: const EdgeInsets.all(5),
     child: Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       color: Color.fromARGB(255, 211, 117, 116),
       child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, top: 26, bottom: 26),
+        padding: const EdgeInsets.only(left: 3, top: 15, right: 3, bottom: 15),
         child: SizedBox(
           width: double.infinity,
           child: Row(children: [

@@ -95,7 +95,7 @@ class _LoginFormState extends State<LoginForm> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 55.0),
+                  const SizedBox(height: 25.0),
                   FutureBuilder(
                       future: getStatus(),
                       builder: (context, state) {
@@ -106,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
                         }
                         return Container();
                       }),
-                  const SizedBox(height: 35.0),
+                  const SizedBox(height: 25.0),
                   _buildInputField(
                     placeholder: 'District Username',
                     password: false,
