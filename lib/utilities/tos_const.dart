@@ -31,9 +31,11 @@ Local Storage Objects: We use Local Storage Objects (LSOs) to store your usernam
 
 Third Party Service Providers
 
-We work with a third party service provider to help improve the quality of our service. This third party does not share your information with any other third parties. SwiftGrade uses the following third party service on the App:
+We work with third party service providers to help improve the quality of our service. These third parties do not share your information with any other third parties. SwiftGrade uses the following third party services on the App:
 
 Flutter Sentry - Flutter Sentry is a library used to report errors thrown by our app to an error tracking service. This allows our developer team to continue to improve and refine the user experience. Sentry.io is open source and can be viewed at https://github.com/flutter/sentry. Sentry.io does not share user information with any other third parties.
+
+OneSignal - OneSignal is a push notifications system that allows us to send important updates to our users. This allows our developer team to let users know about potential issues, and eventually update them about grades and assignments. OneSignal is mostly open source and can be viewed at https://github.com/OneSignal/. OneSignal does not share user information with any other third parties.
 
 Changes to this Privacy Policy
 
