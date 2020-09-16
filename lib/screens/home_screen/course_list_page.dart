@@ -64,9 +64,9 @@ class _CourseListPageState extends State<CourseListPage> {
                         future: getStatus(),
                         builder: (context, state) {
                           if (state.data != null && state.hasData) {
-                            if (state.data.message.toString().isNotEmpty) {
+                            if (state.data.status.toString().isNotEmpty) {
                               return getStatusCard(
-                                  state.data.message.toString());
+                                  state.data.status.toString());
                             }
                           }
                           return Container();

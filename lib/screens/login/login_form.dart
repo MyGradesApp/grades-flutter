@@ -100,8 +100,8 @@ class _LoginFormState extends State<LoginForm> {
                       future: getStatus(),
                       builder: (context, state) {
                         if (state.data != null && state.hasData) {
-                          if (state.data.message.toString().isNotEmpty) {
-                            return getStatusCard(state.data.message.toString());
+                          if (state.data.status.toString().isNotEmpty) {
+                            return getStatusCard(state.data.status.toString());
                           }
                         }
                         return Container();

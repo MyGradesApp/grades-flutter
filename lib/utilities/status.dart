@@ -5,12 +5,10 @@ import 'package:http/http.dart' as http;
 
 class Status {
   String status;
-  String message;
-
-  Status(this.status, this.message);
+  Status(this.status);
 
   factory Status.fromJson(dynamic json) {
-    return Status(json['status'] as String, json['message'] as String);
+    return Status(json['status'] as String);
   }
 }
 
