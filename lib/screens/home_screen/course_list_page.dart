@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,8 +9,6 @@ import 'package:grades/widgets/class_list_item.dart';
 import 'package:grades/widgets/loading_indicator.dart';
 import 'package:grades/widgets/refreshable/fullscreen_error_message.dart';
 import 'package:grades/widgets/refreshable/fullscreen_simple_icon_message.dart';
-
-import '../settings_screen.dart';
 
 class CourseListPage extends StatefulWidget {
   @override
@@ -60,17 +56,7 @@ class _CourseListPageState extends State<CourseListPage> {
                 if (i == 0) {
                   return Column(children: [
                     getUpdateCard(),
-                    FutureBuilder(
-                        future: getStatus(),
-                        builder: (context, state) {
-                          if (state.data != null && state.hasData) {
-                            if (state.data.status.toString().isNotEmpty) {
-                              return getStatusCard(
-                                  state.data.status.toString());
-                            }
-                          }
-                          return Container();
-                        }),
+                    getStatusCard(),
                     ClassListItem(
                       course: course.courseName,
                       letterGrade: course.gradeLetter,
@@ -119,56 +105,6 @@ class _CourseListPageState extends State<CourseListPage> {
           return Container();
         },
       ),
-    );
-  }
-
-  Widget getUpdateCard() {
-    return FutureBuilder<bool>(
-      future: checkUpdateAvailable(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData && snapshot.data && Platform.isIOS) {
-          return Padding(
-            padding: const EdgeInsets.all(5),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              color: Color.fromARGB(255, 211, 117, 116),
-              child: FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                onPressed: () {
-                  launchAppstorePage();
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 8.0, top: 26, bottom: 26),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Row(children: [
-                      const Expanded(
-                        child: Text(
-                          'Update Available',
-                          style: HEADER_TEXT_STYLE,
-                        ),
-                      ),
-                      const Text(
-                        'Click to update now',
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
-        return Container();
-      },
     );
   }
 }

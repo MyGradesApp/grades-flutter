@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/screens/settings_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<bool> launchAppstorePage() {
@@ -72,4 +75,54 @@ PartialOrdering _compareVersions(String current, String other) {
     return PartialOrdering.Err;
   }
   return PartialOrdering.Equal;
+}
+
+Widget getUpdateCard() {
+  return FutureBuilder<bool>(
+    future: checkUpdateAvailable(),
+    builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+      if (snapshot.hasData && snapshot.data && Platform.isIOS) {
+        return Padding(
+          padding: const EdgeInsets.all(5),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            color: Color.fromARGB(255, 211, 117, 116),
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              onPressed: () {
+                launchAppstorePage();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 3, top: 15, bottom: 15, right: 3),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Update Available',
+                          style: HEADER_TEXT_STYLE,
+                        ),
+                        const Text(
+                          'Click to update now',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+      return Container();
+    },
+  );
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/utilities/status.dart';
+import 'package:grades/utilities/update.dart';
 import 'package:grades/widgets/loading_indicator.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -96,16 +97,6 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                   const SizedBox(height: 25.0),
-                  FutureBuilder(
-                      future: getStatus(),
-                      builder: (context, state) {
-                        if (state.data != null && state.hasData) {
-                          if (state.data.status.toString().isNotEmpty) {
-                            return getStatusCard(state.data.status.toString());
-                          }
-                        }
-                        return Container();
-                      }),
                   const SizedBox(height: 25.0),
                   _buildInputField(
                     placeholder: 'District Username',
@@ -123,6 +114,9 @@ class _LoginFormState extends State<LoginForm> {
                       padding: const EdgeInsets.only(top: 10.0),
                       child: LoadingIndicator(),
                     ),
+                  const SizedBox(height: 20.0),
+                  getStatusCard(),
+                  getUpdateCard(),
                 ],
               ),
             ),
