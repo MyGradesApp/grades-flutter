@@ -44,8 +44,8 @@ void main() async {
       var dataPersistence = DataPersistence(prefs);
       var sisRepository = SISRepository(offlineBloc, dataPersistence);
 
-      // //Remove this method to stop OneSignal Debugging
-      await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+      // OneSignal Debugging
+      await OneSignal.shared.setLogLevel(OSLogLevel.info, OSLogLevel.none);
 
       if (Platform.isIOS) {
         await OneSignal.shared.init('41c3762a-0f67-4a24-9976-02826fa6d726',
@@ -53,16 +53,17 @@ void main() async {
               OSiOSSettings.autoPrompt: false,
               OSiOSSettings.inAppLaunchUrl: true
             });
+        await OneSignal.shared
+            .setInFocusDisplayType(OSNotificationDisplayType.notification);
+
+        // TODO: shows the iOS push notification prompt. At some point replace with an In-App Message to prompt for notification permission
+        await OneSignal.shared
+            .promptUserForPushNotificationPermission(fallbackToSettings: true);
       } else if (Platform.isAndroid) {
         await OneSignal.shared.init('41c3762a-0f67-4a24-9976-02826fa6d726');
+        await OneSignal.shared
+            .setInFocusDisplayType(OSNotificationDisplayType.notification);
       }
-
-      await OneSignal.shared
-          .setInFocusDisplayType(OSNotificationDisplayType.notification);
-
-      // TODO: shows the iOS push notification prompt. At some point replace with an In-App Message to prompt for notification permission
-      await OneSignal.shared
-          .promptUserForPushNotificationPermission(fallbackToSettings: true);
 
       runApp(MultiRepositoryProvider(
         providers: [
