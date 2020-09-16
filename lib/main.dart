@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:grades/screens/tos_display_screen.dart';
 import 'package:grades/screens/tos_query_screen.dart';
 import 'package:grades/widgets/offline_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +43,26 @@ void main() async {
       var prefs = await SharedPreferences.getInstance();
       var dataPersistence = DataPersistence(prefs);
       var sisRepository = SISRepository(offlineBloc, dataPersistence);
+
+      // //Remove this method to stop OneSignal Debugging
+      await OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+      if (Platform.isIOS) {
+        await OneSignal.shared.init('41c3762a-0f67-4a24-9976-02826fa6d726',
+            iOSSettings: <OSiOSSettings, bool>{
+              OSiOSSettings.autoPrompt: false,
+              OSiOSSettings.inAppLaunchUrl: true
+            });
+      } else if (Platform.isAndroid) {
+        await OneSignal.shared.init('41c3762a-0f67-4a24-9976-02826fa6d726');
+      }
+
+      await OneSignal.shared
+          .setInFocusDisplayType(OSNotificationDisplayType.notification);
+
+      // TODO: shows the iOS push notification prompt. At some point replace with an In-App Message to prompt for notification permission
+      await OneSignal.shared
+          .promptUserForPushNotificationPermission(fallbackToSettings: true);
 
       runApp(MultiRepositoryProvider(
         providers: [
