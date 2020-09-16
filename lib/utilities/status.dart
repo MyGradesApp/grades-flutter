@@ -14,8 +14,8 @@ class Status {
 
 Future<Status> getStatus() async {
   var response = await http.get('https://swiftgrade.github.io/status/');
-  print(response.body);
-  if (response.body.isNotEmpty) {
+  // print(response.body);
+  if (response != null && response.body.isNotEmpty) {
     var stat = Status.fromJson(jsonDecode(response.body));
     return stat;
   }
