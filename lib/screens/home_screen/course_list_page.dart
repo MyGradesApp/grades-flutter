@@ -60,6 +60,17 @@ class _CourseListPageState extends State<CourseListPage> {
                 if (i == 0) {
                   return Column(children: [
                     getUpdateCard(),
+                    FutureBuilder(
+                        future: getStatus(),
+                        builder: (context, state) {
+                          if (state.data != null && state.hasData) {
+                            if (state.data.status.toString().isNotEmpty) {
+                              return getStatusCard(
+                                  state.data.status.toString());
+                            }
+                          }
+                          return Container();
+                        }),
                     ClassListItem(
                       course: course.courseName,
                       letterGrade: course.gradeLetter,
