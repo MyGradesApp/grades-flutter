@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/utilities/update.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const TextStyle HEADER_TEXT_STYLE = TextStyle(
   fontWeight: FontWeight.bold,
@@ -134,6 +135,29 @@ class SettingsScreen extends StatelessWidget {
               //     Navigator.pushNamed(context, '/sis_webview');
               //   },
               // ),
+              _buildCard(
+                child: Row(children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      'Send Feedback',
+                      style: HEADER_TEXT_STYLE,
+                    ),
+                  ),
+                  Icon(
+                    FontAwesomeIcons.solidCommentAlt,
+                    color: Colors.white,
+                  ),
+                ]),
+                onPressed: () {
+                  var _feedback = Uri(
+                      scheme: 'mailto',
+                      path: 'support@getswiftgrade.com',
+                      queryParameters: <String, String>{
+                        'subject': 'SwiftGrade Inquiry'
+                      });
+                  launch(_feedback.toString());
+                },
+              ),
               _buildCard(
                 child: Text(
                   'Terms of Service',
