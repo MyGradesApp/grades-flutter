@@ -95,18 +95,7 @@ class _LoginFormState extends State<LoginForm> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 25.0),
-                  FutureBuilder(
-                      future: getStatus(),
-                      builder: (context, state) {
-                        if (state.data != null && state.hasData) {
-                          if (state.data.status.toString().isNotEmpty) {
-                            return getStatusCard(state.data.status.toString());
-                          }
-                        }
-                        return Container();
-                      }),
-                  const SizedBox(height: 25.0),
+                  const SizedBox(height: 50.0),
                   _buildInputField(
                     placeholder: 'District Username',
                     password: false,
