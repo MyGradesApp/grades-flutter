@@ -44,7 +44,7 @@ void showUpdatedDialog(BuildContext context) {
                               'Push notifications allowing us to let you know about critical issues for now - and some fun stuff in the future ;)'),
                           _buildNewItem(
                             'Status/Update Indicator',
-                            'A message at the top of the app when issues are occuring and when new updates are available',
+                            'A message at the top of the app when issues are occurring and when new updates are available',
                           ),
                           _buildNewItem(
                             'Instagram',
