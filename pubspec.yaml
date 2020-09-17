@@ -1,7 +1,7 @@
 name: grades
 description: The grades app for the School District of Palm Beach County. View your grades at a glance.
 author: GoldinGuy, Noskcaj
-version: 3.0.12+0
+version: 3.0.13+13
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
