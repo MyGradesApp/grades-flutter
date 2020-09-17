@@ -26,20 +26,21 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       // keeps fab from covering keyboard
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xff2a84d2),
-        foregroundColor: Colors.white,
-        onPressed: () {
-          var _feedback = Uri(
-              scheme: 'mailto',
-              path: 'support@getswiftgrade.com',
-              queryParameters: <String, String>{
-                'subject': 'SwiftGrade Inquiry'
-              });
-          launch(_feedback.toString());
-        },
-        child: Icon(FontAwesomeIcons.solidCommentAlt),
-      ),
+      floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: const Color(0xff2a84d2),
+          foregroundColor: Colors.white,
+          onPressed: () {
+            var _feedback = Uri(
+                scheme: 'mailto',
+                path: 'support@getswiftgrade.com',
+                queryParameters: <String, String>{
+                  'subject': 'SwiftGrade Inquiry'
+                });
+            launch(_feedback.toString());
+          },
+          label: Text('Support'),
+          icon: Icon(FontAwesomeIcons.solidCommentAlt)),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
