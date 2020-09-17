@@ -22,7 +22,7 @@ Future<Status> getStatus() async {
   return null;
 }
 
-Widget getStatusCard() {
+Widget buildStatusCardWidget() {
   return FutureBuilder<Status>(
     future: getStatus(),
     builder: (BuildContext context, AsyncSnapshot<Status> snapshot) {

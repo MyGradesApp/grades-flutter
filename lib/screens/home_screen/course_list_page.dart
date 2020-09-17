@@ -55,8 +55,8 @@ class _CourseListPageState extends State<CourseListPage> {
                 var course = state.data[i];
                 if (i == 0) {
                   return Column(children: [
-                    getUpdateCard(),
-                    getStatusCard(),
+                    buildUpdateCardWidget(),
+                    buildStatusCardWidget(),
                     ClassListItem(
                       course: course.courseName,
                       letterGrade: course.gradeLetter,

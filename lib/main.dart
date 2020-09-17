@@ -65,6 +65,13 @@ void main() async {
             .setInFocusDisplayType(OSNotificationDisplayType.notification);
       }
 
+      // TODO: Initial notifications for grades implementation
+      // on silent notif received
+      // OneSignal.shared
+      //     .setNotificationReceivedHandler((OSNotification notification) {
+
+      // });
+
       runApp(MultiRepositoryProvider(
         providers: [
           RepositoryProvider(create: (_) => dataPersistence),

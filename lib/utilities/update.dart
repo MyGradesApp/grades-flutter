@@ -77,7 +77,7 @@ PartialOrdering _compareVersions(String current, String other) {
   return PartialOrdering.Equal;
 }
 
-Widget getUpdateCard() {
+Widget buildUpdateCardWidget() {
   return FutureBuilder<bool>(
     future: checkUpdateAvailable(),
     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
