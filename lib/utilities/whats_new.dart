@@ -41,10 +41,10 @@ void showUpdatedDialog(BuildContext context) {
                           _buildNewItem('Feedback/Support',
                               'A feedback/support button on the login and settings screens'),
                           _buildNewItem('Essential Notifications',
-                              'Push notifications allowing us to let you know what\'s up for now - and some fun stuff in the future'),
+                              'Push notifications allowing us to let you know about critical issues for now - and some fun stuff in the future ;)'),
                           _buildNewItem(
                             'Status/Update Indicator',
-                            'A message at the top of the app when issues are occuring, and let you know when new updates are available',
+                            'A message at the top of the app when issues are occuring and when new updates are available',
                           ),
                           _buildNewItem(
                             'Instagram',
