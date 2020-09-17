@@ -67,7 +67,7 @@ class _UpcomingPageState extends State<UpcomingPage>
 
           if (state is UpcomingLoaded) {
             var groupsList = state.sortedGroups();
-            if (groupsList.isNotEmpty) {
+            if (groupsList != null && groupsList.isNotEmpty) {
               return ListView.builder(
                 physics: AlwaysScrollableScrollPhysics(),
                 itemCount: groupsList.length,

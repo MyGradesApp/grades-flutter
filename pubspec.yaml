@@ -26,6 +26,8 @@ dependencies:
   tuple: ^1.0.3
   built_collection: ^4.3.2
 
+  onesignal_flutter: ^2.0.0
+
   http: ^0.12.2
 
   flutter_picker:

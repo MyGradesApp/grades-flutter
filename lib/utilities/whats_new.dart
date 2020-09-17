@@ -35,20 +35,20 @@ void showUpdatedDialog(BuildContext context) {
                             ),
                           ),
                           _buildNewItem(
-                            'Grade Calculator',
-                            'Our most requested feature!\nWant to know what you need to get on the next test? Now, SwiftGrade will help you find out. Accessible within each course in the top-right',
+                            'Critical Fixes',
+                            'Recently, issues with the grades data source resulted in many users unable to access SwiftGrade.\n \nAlthough we patched this within 24 hours, there was a period of time where we understand many users were frustrated.\n \nThis update aims to ensure that communication is better in the future, through the following: ',
                           ),
-                          _buildNewItem('Offline Mode',
-                              'View past grades without a network connection'),
-                          _buildNewItem('Faster Loading',
-                              'A new and improved backend to speed up login times'),
+                          _buildNewItem('Feedback/Support',
+                              'A feedback/support button on the login and settings screens'),
+                          _buildNewItem('Essential Notifications',
+                              'Push notifications allowing us to let you know what\'s up for now - and some fun stuff in the future'),
                           _buildNewItem(
-                            'Updated Icons',
-                            'Almost every button throughout the app has been tweaked for clarity',
+                            'Status/Update Indicator',
+                            'A message at the top of the app when issues are occuring, and let you know when new updates are available',
                           ),
                           _buildNewItem(
-                            'Bug Fixes',
-                            '',
+                            'Instagram',
+                            'Follow @getswiftgrade to always know the latest info!',
                           ),
                           const Padding(
                             padding: EdgeInsets.only(
