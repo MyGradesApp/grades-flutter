@@ -17,6 +17,7 @@ import 'package:grades/screens/splash_screen.dart';
 import 'package:grades/screens/tos_display_screen.dart';
 import 'package:grades/screens/tos_query_screen.dart';
 import 'package:grades/widgets/offline_bar.dart';
+import 'package:grades/widgets/parent_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -173,7 +174,18 @@ class App extends StatelessWidget {
           builder: (context, child) {
             return Column(
               children: [
+                // BlocBuilder<ParentBloc, ParentState>(
+                //   builder: (context, offlineState) {
+                //     if (offlineState.offline) {
+                //       return ParentBar();
+                //     } else {
+                //       return Container();
+                //     }
+                //   },
+                // ),
+
                 Expanded(child: child),
+                ParentBar(),
                 BlocBuilder<OfflineBloc, OfflineState>(
                   builder: (context, offlineState) {
                     if (offlineState.offline) {

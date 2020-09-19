@@ -11,11 +11,11 @@ class OfflineBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: TextStyle(),
-      child: SafeArea(
-        top: false,
-        child: Container(
-          width: double.infinity,
-          color: Colors.orange,
+      child: Container(
+        width: double.infinity,
+        color: Colors.orange,
+        child: SafeArea(
+          top: false,
           child: BlocBuilder<OfflineBloc, OfflineState>(
             builder: (context, state) {
               return Center(
