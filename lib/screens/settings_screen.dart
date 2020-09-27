@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
+import 'package:grades/utilities/support.dart';
 import 'package:grades/utilities/update.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -149,12 +150,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ]),
                 onPressed: () {
-                  var _feedback = Uri(
-                      scheme: 'mailto',
-                      path: 'support@getswiftgrade.com',
-                      queryParameters: <String, String>{
-                        'subject': 'SwiftGrade Inquiry'
-                      });
+                  var _feedback = Support.email;
                   launch(_feedback.toString());
                 },
               ),

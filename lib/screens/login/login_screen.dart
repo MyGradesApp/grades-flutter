@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:grade_core/grade_core.dart';
 import 'package:grades/screens/login/login_form.dart';
+import 'package:grades/utilities/support.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,12 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: const Color(0xff2a84d2),
           foregroundColor: Colors.white,
           onPressed: () {
-            var _feedback = Uri(
-                scheme: 'mailto',
-                path: 'support@getswiftgrade.com',
-                queryParameters: <String, String>{
-                  'subject': 'SwiftGrade Inquiry'
-                });
+            var _feedback = Support.email;
             launch(_feedback.toString());
           },
           label: Text('Support'),

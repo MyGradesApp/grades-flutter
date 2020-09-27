@@ -60,63 +60,59 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-        context: context,
-        // TODO: if parent mode, set true, else: false
-        removeTop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            title: Text(
-              title,
-            ),
-            centerTitle: true,
-            leading: IconButton(
-              tooltip: 'Profile',
-              icon: Icon(FontAwesomeIcons.solidUser),
-              onPressed: () => Navigator.pushNamed(context, '/academic_info'),
-            ),
-            actions: <Widget>[
-              IconButton(
-                tooltip: 'Settings',
-                icon: Icon(FontAwesomeIcons.cog),
-                onPressed: () => Navigator.pushNamed(context, '/settings'),
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        title: Text(
+          title,
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          tooltip: 'Profile',
+          icon: Icon(FontAwesomeIcons.solidUser),
+          onPressed: () => Navigator.pushNamed(context, '/academic_info'),
+        ),
+        actions: <Widget>[
+          IconButton(
+            tooltip: 'Settings',
+            icon: Icon(FontAwesomeIcons.cog),
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
           ),
-          body: Stack(
-            children: [
-              MultiBlocProvider(
-                providers: providers ??= _buildProviders(
-                    RepositoryProvider.of<SISRepository>(context)),
-                child: PageView.builder(
-                  controller: controller,
-                  itemCount: pages.length,
-                  onPageChanged: (i) {
-                    setState(() {
-                      title = pages[i].item1;
-                    });
-                  },
-                  itemBuilder: (context, position) => pages[position].item2,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20.0),
-                alignment: Alignment.bottomCenter,
-                child: PageIndicator(
-                  controller: controller,
-                  itemCount: pages.length,
-                  onPageSelected: (int page) {
-                    controller.animateToPage(
-                      page,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
-                  },
-                ),
-              )
-            ],
+        ],
+      ),
+      body: Stack(
+        children: [
+          MultiBlocProvider(
+            providers: providers ??=
+                _buildProviders(RepositoryProvider.of<SISRepository>(context)),
+            child: PageView.builder(
+              controller: controller,
+              itemCount: pages.length,
+              onPageChanged: (i) {
+                setState(() {
+                  title = pages[i].item1;
+                });
+              },
+              itemBuilder: (context, position) => pages[position].item2,
+            ),
           ),
-        ));
+          Container(
+            padding: const EdgeInsets.all(20.0),
+            alignment: Alignment.bottomCenter,
+            child: PageIndicator(
+              controller: controller,
+              itemCount: pages.length,
+              onPageSelected: (int page) {
+                controller.animateToPage(
+                  page,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

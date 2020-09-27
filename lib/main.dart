@@ -122,6 +122,9 @@ void main() async {
               ),
             ),
             BlocProvider(
+              create: (_) => ParentBloc(),
+            ),
+            BlocProvider(
               create: (_) => offlineBloc,
             ),
           ],
@@ -172,20 +175,19 @@ class App extends StatelessWidget {
           ),
           themeMode: themeMode,
           builder: (context, child) {
-            return Column(
+            return Material(
+                child: Column(
               children: [
-                // BlocBuilder<ParentBloc, ParentState>(
-                //   builder: (context, offlineState) {
-                //     if (offlineState.offline) {
-                //       return ParentBar();
-                //     } else {
-                //       return Container();
-                //     }
-                //   },
-                // ),
-
                 Expanded(child: child),
-                ParentBar(),
+                BlocBuilder<ParentBloc, ParentState>(
+                  builder: (context, parentState) {
+                    if (parentState.isParent) {
+                      return ParentBar();
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
                 BlocBuilder<OfflineBloc, OfflineState>(
                   builder: (context, offlineState) {
                     if (offlineState.offline) {
@@ -196,7 +198,7 @@ class App extends StatelessWidget {
                   },
                 ),
               ],
-            );
+            ));
           },
           routes: {
             '/course_grades': (_) => CourseGradesScreen(),
