@@ -40,7 +40,7 @@ class _LoginFormState extends State<LoginForm> {
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
                 content: Text(
-                  'Incorrect username or password',
+                  'Invalid username or password',
                   textAlign: TextAlign.center,
                 ),
                 backgroundColor: Colors.red,
@@ -197,10 +197,16 @@ class _LoginFormState extends State<LoginForm> {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
-
     var username = _username;
     var password = _password;
     _loginBloc.add(LoginPressed(username: username, password: password));
+
+    // TODO: Better way of determining if account is parent or student
+    if (username.contains('@')) {
+      BlocProvider.of<ParentBloc>(context).add(IsParentEvent());
+    } else {
+      BlocProvider.of<ParentBloc>(context).add(NotParentEvent());
+    }
   }
 
   bool _loginButtonEnabled(LoginState state) {

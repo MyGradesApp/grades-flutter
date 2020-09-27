@@ -122,7 +122,7 @@ void main() async {
               ),
             ),
             BlocProvider(
-              create: (_) => ParentBloc(),
+              create: (_) => ParentBloc(isParent: false),
             ),
             BlocProvider(
               create: (_) => offlineBloc,
@@ -191,7 +191,7 @@ class App extends StatelessWidget {
                 BlocBuilder<OfflineBloc, OfflineState>(
                   builder: (context, offlineState) {
                     if (offlineState.offline) {
-                      return OfflineBar();
+                      return Builder(builder: (context) => OfflineBar());
                     } else {
                       return Container();
                     }
@@ -241,6 +241,17 @@ class AppRoot extends StatelessWidget {
         } else if (state is Unauthenticated) {
           return LoginScreen();
         } else if (state is Authenticated) {
+          () async {
+            var secureStorage = WrappedSecureStorage();
+            var username =
+                await secureStorage.read(key: AuthConst.SIS_USERNAME_KEY);
+            // TODO: Better way of determining if account is parent or student
+            if (username.contains('@')) {
+              BlocProvider.of<ParentBloc>(context).add(IsParentEvent());
+            } else {
+              BlocProvider.of<ParentBloc>(context).add(NotParentEvent());
+            }
+          }();
           return HomeScreen();
         }
         return null;
