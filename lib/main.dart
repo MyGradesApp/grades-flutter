@@ -122,14 +122,18 @@ void main() async {
               ),
             ),
             BlocProvider(
-              create: (_) => ParentBloc(isParent: false),
+              create: (_) =>
+                  ParentBloc(isParent: false, currentStudent: 'Lila Goldin'),
             ),
             BlocProvider(
               create: (_) => offlineBloc,
             ),
           ],
-          child: App(
-            sisRepository: sisRepository,
+          // TODO: not have nested material apps
+          child: MaterialApp(
+            home: App(
+              sisRepository: sisRepository,
+            ),
           ),
         ),
       ));

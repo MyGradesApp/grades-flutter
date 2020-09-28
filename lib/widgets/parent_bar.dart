@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:grade_core/grade_core.dart';
 
 class ParentBar extends StatelessWidget {
   const ParentBar({
     Key key,
   }) : super(key: key);
+
+  static const students = ['Nathan Goldin', 'Lila Goldin', 'Juno Goldin'];
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class ParentBar extends StatelessWidget {
           style: TextStyle(),
           child: InkWell(
             onTap: () {
-              mainBottomSheet(context);
+              mainBottomSheet(context, accentColor);
             },
             child: Container(
               width: double.infinity,
@@ -31,14 +35,17 @@ class ParentBar extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 12, horizontal: 6),
-                        child:
-                            Text('Lila Goldin', style: TextStyle(fontSize: 16)),
+                        child: Text(
+                            BlocProvider.of<ParentBloc>(context).currentStudent,
+                            style: TextStyle(fontSize: 16)),
                       ),
-                      Icon(
-                        FontAwesomeIcons.chevronDown,
-                        color: Colors.white,
-                        size: 17,
-                      )
+                      students.length > 1
+                          ? Icon(
+                              FontAwesomeIcons.chevronDown,
+                              color: Colors.white,
+                              size: 17,
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -48,32 +55,34 @@ class ParentBar extends StatelessWidget {
     );
   }
 
-  void mainBottomSheet(BuildContext context) {
-    var kids = ['Nathan Goldin', 'Lila Goldin', 'Juno Goldin'];
-
+  void mainBottomSheet(BuildContext context, Color bg) {
     showModalBottomSheet<BottomSheet>(
         context: context,
+        useRootNavigator: true,
+        backgroundColor: bg,
         builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _createTile(context, 'Message', Icons.message, kids[0]),
-              _createTile(context, 'Take Photo', Icons.camera_alt, kids[1]),
-              _createTile(context, 'My Images', Icons.photo_library, kids[2]),
-            ],
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: students.length,
+            itemBuilder: (context, i) {
+              return ListTile(
+                leading: Icon(
+                  FontAwesomeIcons.solidUser,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  students[i],
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                onTap: () {
+                  BlocProvider.of<ParentBloc>(context)
+                      .add(SwitchStudentEvent(newStudent: students[i]));
+                  print(students[i]);
+                  Navigator.pop(context);
+                },
+              );
+            },
           );
         });
-  }
-
-  ListTile _createTile(
-      BuildContext context, String name, IconData icon, String kid) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(name),
-      onTap: () {
-        Navigator.pop(context);
-        print(kid);
-      },
-    );
   }
 }
