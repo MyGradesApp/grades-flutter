@@ -35,9 +35,11 @@ class ParentBar extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 12, horizontal: 6),
-                        child: Text(
-                            BlocProvider.of<ParentBloc>(context).currentStudent,
-                            style: TextStyle(fontSize: 16)),
+                        child: BlocBuilder<ParentBloc, ParentState>(
+                            builder: (context, state) {
+                          return Text(state.currentStudent,
+                              style: TextStyle(fontSize: 16));
+                        }),
                       ),
                       students.length > 1
                           ? Icon(
