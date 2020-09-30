@@ -45,7 +45,9 @@ void main() async {
       var sisRepository = SISRepository(offlineBloc, dataPersistence);
 
       // OneSignal Debugging
-      await OneSignal.shared.setLogLevel(OSLogLevel.info, OSLogLevel.none);
+      if (Platform.isIOS || Platform.isAndroid) {
+        await OneSignal.shared.setLogLevel(OSLogLevel.info, OSLogLevel.none);
+      }
 
       if (Platform.isIOS) {
         await OneSignal.shared.init('41c3762a-0f67-4a24-9976-02826fa6d726',
