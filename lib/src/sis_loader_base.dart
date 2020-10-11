@@ -195,10 +195,15 @@ class SISLoader {
 
     initialContext = _extractInitialContexts(await portal.bodyAsString());
 
-    var mps = Map<String, dynamic>.from(
-      initialContext['PortalController']['data']['enrollments'][0]['grades']
-          ['mps'][0] as Map,
-    );
+    Map<String, dynamic> mps;
+    try {
+      mps = Map<String, dynamic>.from(
+        initialContext['PortalController']['data']['enrollments'][0]['grades']
+            ['mps'][0] as Map,
+      );
+    } on RangeError {
+      return [];
+    }
 
     var rawCourses = initialContext['PortalController']['data']['enrollments']
         [0]['grades']['rows'] as List<dynamic>;
