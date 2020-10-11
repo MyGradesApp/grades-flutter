@@ -34,7 +34,7 @@ class CourseListBloc extends Bloc<CourseListEvent, CourseListState> {
         try {
           var grades = await _sisRepository.getCourseGrades(courses[x]);
           courses[x] = courses[x].rebuild((c) {
-            if (grades.classPercent != null) {
+            if (grades != null && grades.classPercent != null) {
               c.gradePercent = StringOrInt(grades.classPercent);
             }
           });
