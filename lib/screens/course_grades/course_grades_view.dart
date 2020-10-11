@@ -118,7 +118,12 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                   _hasCategories ? _currentGroupingMode : GroupingMode.date) {
                 case GroupingMode.date:
                   groupedGrades = collection.groupBy(grades, (Grade e) {
-                    return _dateRangeForWeek(e.assignedDate);
+                    return _dateRangeForWeek(
+                      e.assignedDate ??
+                          e.dueDate ?? // fallback to ensure it is not null
+                          e.dateLastModified ??
+                          DateTime.now(),
+                    );
                   });
                   break;
                 case GroupingMode.category:
