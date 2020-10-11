@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Status {
   String status;
+
   Status(this.status);
 
   factory Status.fromJson(dynamic json) {
@@ -13,8 +15,13 @@ class Status {
 }
 
 Future<Status> getStatus() async {
-  var response = await http.get('https://swiftgrade.github.io/status/');
-  // print(response.body);
+  http.Response response;
+  try {
+    response = await http.get('https://swiftgrade.github.io/status/');
+  } on SocketException catch (e) {
+    return Future.error(e);
+  }
+
   if (response != null && response.body.isNotEmpty) {
     var stat = Status.fromJson(jsonDecode(response.body));
     return stat;
