@@ -92,6 +92,8 @@ class CourseService {
         var field = headers[rawField];
         var content = match.group(2);
 
+        content = content.replaceAll('&nbsp;', ' ');
+
         if (rawField == 'comment') {
           if (content == '<span class="unreset"></span>') {
             content = null;
@@ -102,8 +104,12 @@ class CourseService {
           if (content.isEmpty) {
             content = null;
           }
+        } else if (rawField == 'stu_points') {
+          // TODO: Render images
+          content =
+              content.replaceAll(RegExp(r'<IMG SRC=.+? height=\d+?>'), '');
         } else if (rawField == 'assignment_files') {
-          if (content == '&nbsp;') {
+          if (content == ' ') {
             content = null;
           } else {
             var match = RegExp(
