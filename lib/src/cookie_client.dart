@@ -55,7 +55,9 @@ class CookieClient {
       return response;
     });
 
-    if ((response.statusCode == 302 || response.statusCode == 303) &&
+    if ((response.statusCode == 301 ||
+            response.statusCode == 302 ||
+            response.statusCode == 303) &&
         location != null) {
       var newLocation = location[0];
       if (newLocation.startsWith('/')) {
