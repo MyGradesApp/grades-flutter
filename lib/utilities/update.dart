@@ -16,7 +16,7 @@ Future<bool> checkUpdateAvailable() async {
   try {
     resp = await HttpClient()
         .getUrl(Uri.parse(
-            'http://itunes.apple.com/lookup?bundleId=com.goldinguy.grades'))
+            'https://itunes.apple.com/lookup?bundleId=com.goldinguy.grades'))
         .then((request) => request.close());
   } catch (_) {
     return false;
