@@ -68,7 +68,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-// UNCOMMENT FOR RELEASE BUILD
 
   signingConfigs {
        release {
@@ -84,9 +83,9 @@ android {
     buildTypes {
         release {
             // UNCOMMENT FOR RELEASE BUILD
-            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
 
-            signingConfig signingConfigs.debug
+            // signingConfig signingConfigs.debug
         }
     }
 }
