@@ -229,9 +229,9 @@ class SISLoader {
       return Course((c) {
         return c
           ..gradesUrl = grade[mps['mp_grade_href']] as String
-          ..courseName = grade['course'] as String
+          ..courseName = grade['course_name'] as String
           ..periodString = grade['period_name'] as String
-          ..teacherName = grade['teacher'] as String
+          ..teacherName = grade['teacher_name'] as String
           ..gradePercent = percent
           ..gradeLetter = letter;
       });
