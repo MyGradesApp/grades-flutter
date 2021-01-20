@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,43 +50,25 @@ class _CourseListPageState extends State<CourseListPage> {
                 text: 'No courses',
               );
             }
-            return ListView.builder(
-              itemCount: state.data.length,
-              itemBuilder: (context, i) {
-                var course = state.data[i];
-                if (i == 0) {
-                  return Column(children: [
-                    buildUpdateCardWidget(),
-                    buildStatusCardWidget(),
-                    ClassListItem(
-                      course: course.courseName,
-                      letterGrade: course.gradeLetter,
-                      percent: course.gradePercent,
-                      teacher: course.teacherName,
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/course_grades',
-                          arguments: course,
-                        );
-                      },
-                    )
-                  ]);
-                }
-                return ClassListItem(
-                  course: course.courseName,
-                  letterGrade: course.gradeLetter,
-                  percent: course.gradePercent,
-                  teacher: course.teacherName,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/course_grades',
-                      arguments: course,
-                    );
-                  },
-                );
-              },
+            return ListView(
+              children: [
+                buildUpdateCardWidget(),
+                buildStatusCardWidget(),
+                for (var course in state.data)
+                  ClassListItem(
+                    course: course.courseName,
+                    letterGrade: course.gradeLetter,
+                    percent: course.gradePercent,
+                    teacher: course.teacherName,
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/course_grades',
+                        arguments: course,
+                      );
+                    },
+                  )
+              ],
             );
           }
           if (state is CourseListError) {
