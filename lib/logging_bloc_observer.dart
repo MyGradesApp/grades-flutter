@@ -9,14 +9,14 @@ class LoggingBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(Cubit cubit, Object error, StackTrace stacktrace) {
-    super.onError(cubit, error, stacktrace);
-    print('Exception in ${cubit.runtimeType}');
+  void onError(BlocBase bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
+    print('Exception in ${bloc.runtimeType}');
     reportBlocException(
       exception: error,
       stackTrace: stacktrace,
       tags: {'caught': 'root'},
-      bloc: cubit,
+      bloc: bloc,
     );
   }
 

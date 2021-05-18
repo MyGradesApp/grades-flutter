@@ -17,7 +17,8 @@ class Status {
 Future<Status> getStatus() async {
   http.Response response;
   try {
-    response = await http.get('https://swiftgrade.github.io/status/');
+    response =
+        await http.get(Uri.parse('https://swiftgrade.github.io/status/'));
   } on SocketException catch (e) {
     return Future.error(e);
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:flutter_circular_chart_two/flutter_circular_chart_two.dart';
 import 'package:intl/intl.dart';
 import 'package:sis_loader/sis_loader.dart';
 

@@ -14,39 +14,40 @@ dependencies:
   grade_core:
     path: vendored/grade_core
 
-  shared_preferences: ^0.5.8
+  shared_preferences: ^2.0.5
   # General small unities
   # Dart team package
-  intl: ^0.16.1
+  intl: ^0.17.0
   # Dart team package
-  collection: ^1.14.13
-  pedantic: ^1.9.2
+  collection: ^1.15.0
+  pedantic: ^1.11.0
 
-  quiver: ^2.1.3
-  tuple: ^1.0.3
-  built_collection: ^4.3.2
+  quiver: ^3.0.1
+  tuple: ^2.0.0
+  built_collection: ^5.0.0
 
-  onesignal_flutter: ^2.0.0
+  onesignal_flutter: ^2.6.3
 
-  http: ^0.12.2
+  http: ^0.13.3
 
   flutter_picker:
     git: git://github.com/SwiftGrade/flutter_picker.git
 
   # Fonts and Icons
-  font_awesome_flutter: ^8.8.1
+  font_awesome_flutter: ^9.0.0
 
-  equatable: ^1.2.3
+  equatable: ^2.0.0
 
-  bloc: ^6.0.1
+  bloc: ^7.0.0
 
-  flutter_bloc: ^6.0.1
+  flutter_bloc: ^7.0.0
 
-  flutter_circular_chart: ^0.1.0
+  flutter_circular_chart_two:
+    git: https://github.com/jcsena/flutter_circular_chart
 
-  url_launcher: ^5.5.0
+  url_launcher: ^6.0.3
 
-  webview_flutter: ^0.3.22+1
+  webview_flutter: ^2.0.6
 
 dev_dependencies:
   flutter_test:
@@ -54,9 +55,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-dependency_overrides:
-  flutter_secure_storage:
-    git:
-      url: https://github.com/SwiftGrade/flutter_secure_storage
-      ref: develop
