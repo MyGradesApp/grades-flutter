@@ -2,14 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart' show required, kDebugMode;
 import 'package:sentry/sentry.dart';
 
-final SentryClient _sentry = SentryClient(
-    dsn: 'https://241147e2e5d342c0be1379508e165cb1@sentry.io/1869892');
 String GRADES_VERSION = '';
 
-Future<SentryResponse> reportBlocException({
+Future<SentryId> reportBlocException({
   @required dynamic exception,
-  @required dynamic stackTrace,
-  @required Cubit bloc,
+  @required StackTrace stackTrace,
+  @required BlocBase bloc,
   Map<String, String> tags,
 }) {
   return reportException(
@@ -19,9 +17,9 @@ Future<SentryResponse> reportBlocException({
 }
 
 // TODO: Refactor this so it doesn't use global version var
-Future<SentryResponse> reportException({
+Future<SentryId> reportException({
   @required dynamic exception,
-  @required dynamic stackTrace,
+  @required StackTrace stackTrace,
   Map<String, String> tags,
 }) {
   if (!kDebugMode) {
@@ -31,13 +29,12 @@ Future<SentryResponse> reportException({
     }
 
     try {
-      final event = Event(
-        exception: exception,
-        stackTrace: stackTrace,
-        release: GRADES_VERSION,
-        tags: tags,
-      );
-      return _sentry.capture(event: event);
+      Sentry.configureScope((p0) {
+        for (var tag in tags.entries) {
+          p0.setTag(tag.key, tag.value);
+        }
+      });
+      return Sentry.captureException(exception, stackTrace: stackTrace);
     } catch (e) {
       print('Sending report to sentry.io failed: $e');
     }
