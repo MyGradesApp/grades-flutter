@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:sentry/sentry.dart';
 import 'package:sis_loader/sis_loader.dart';
 import 'package:sis_loader/src/absences.dart';
 import 'package:sis_loader/src/exceptions.dart';
@@ -197,6 +198,22 @@ class SISLoader {
 
     Map<String, dynamic> mps;
     try {
+      if (initialContext['PortalController'] == null) {
+        await Sentry.captureMessage('Initial context keys: ' +
+            Map<String, dynamic>.from(initialContext as Map).keys.toString());
+      } else if (initialContext['PortalController']['data'] == null) {
+        await Sentry.captureMessage('PortalController keys: ' +
+            Map<String, dynamic>.from(initialContext['PortalController'] as Map)
+                .keys
+                .toString());
+      } else if (initialContext['PortalController']['data']['enrollments'] ==
+          null) {
+        await Sentry.captureMessage('data keys: ' +
+            Map<String, dynamic>.from(
+                    initialContext['PortalController']['data'] as Map)
+                .keys
+                .toString());
+      }
       mps = Map<String, dynamic>.from(
         initialContext['PortalController']['data']['enrollments'][0]['grades']
             ['mps'][0] as Map,
