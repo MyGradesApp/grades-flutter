@@ -101,10 +101,10 @@ class SISLoader {
 
     var selectSource = await client.get(Uri.https(
       'connected.palmbeachschools.org',
-      'simplesaml/module.php/multiauth/selectsource.php/multiauth/selectsource.php',
+      'simplesaml/module.php/multiauth/selectsource.php',
       {
         'AuthState': authState,
-        'src-ZW5ib2FyZHNzby1zcA==': 'Log in using your District Network ID',
+        'src-ZW5ib2FyZHNzby1zcA==': 'Log in using the District Portal',
       },
     ));
 
