@@ -39,7 +39,7 @@ class _$AcademicInfoSerializer implements StructuredSerializer<AcademicInfo> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'profile':
           result.profile.replace(serializers.deserialize(value,
@@ -66,12 +66,8 @@ class _$AcademicInfo extends AcademicInfo {
       (new AcademicInfoBuilder()..update(updates)).build();
 
   _$AcademicInfo._({this.profile, this.absences}) : super._() {
-    if (profile == null) {
-      throw new BuiltValueNullFieldError('AcademicInfo', 'profile');
-    }
-    if (absences == null) {
-      throw new BuiltValueNullFieldError('AcademicInfo', 'absences');
-    }
+    BuiltValueNullFieldError.checkNotNull(profile, 'AcademicInfo', 'profile');
+    BuiltValueNullFieldError.checkNotNull(absences, 'AcademicInfo', 'absences');
   }
 
   @override
@@ -118,9 +114,10 @@ class AcademicInfoBuilder
   AcademicInfoBuilder();
 
   AcademicInfoBuilder get _$this {
-    if (_$v != null) {
-      _profile = _$v.profile?.toBuilder();
-      _absences = _$v.absences?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _profile = $v.profile.toBuilder();
+      _absences = $v.absences.toBuilder();
       _$v = null;
     }
     return this;
@@ -128,9 +125,7 @@ class AcademicInfoBuilder
 
   @override
   void replace(AcademicInfo other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$AcademicInfo;
   }
 

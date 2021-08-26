@@ -16,7 +16,8 @@ void main() async {
     ..periodString = '02 02'
     ..teacherName = 'Daniel Henderson'
     ..gradePercent = StringOrInt(87)
-    ..gradeLetter = 'B');
+    ..gradeLetter = 'B'
+    ..coursePeriodId = 1);
 
   void testCourseGradesBloc(GradeData data) async {
     var sisRepo = MockSISRepo();
@@ -62,7 +63,15 @@ void main() async {
       expect(bloc.format(GradeData((d) => d..grades.replace(<Grade>[]))),
           'grades.length: 0');
       expect(
-          bloc.format(GradeData((d) => d.grades..replace(<Grade>[Grade({})]))),
+          bloc.format(GradeData((d) => d.grades
+            ..replace(<Grade>[
+              Grade((g) => g
+                ..name = 'test'
+                ..letter = 'A'
+                ..rawDueDate = 'Tue, 24 Aug 2021 12:00 am'
+                ..rawAssignedDate = 'Tue, 24 Aug 2021 12:00 am'
+                ..category = 'Test')
+            ]))),
           'grades.length: 1');
     });
   });
@@ -98,13 +107,6 @@ void main() async {
         (d) =>
             d..grades.replace(<Grade>[])..weights.replace(<String, String>{}),
       ));
-    });
-
-    test('normal data', () async {
-      await testCourseGradesBloc(GradeData((d) => d
-        ..grades.replace(<Grade>[
-          Grade({'key': 'success'})
-        ])));
     });
   });
 }

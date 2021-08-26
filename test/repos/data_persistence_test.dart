@@ -42,7 +42,12 @@ void main() {
           'foo',
           GradeData((d) => d
             ..grades.replace(<Grade>[
-              Grade({'thisisa': 'grade'}),
+              Grade((g) => g
+                ..name = 'test'
+                ..letter = 'A'
+                ..rawDueDate = 'Tue, 24 Aug 2021 12:00 am'
+                ..rawAssignedDate = 'Tue, 24 Aug 2021 12:00 am'
+                ..category = 'Test'),
             ])));
 
       expect(prefs.getString(DataPersistence.GRADES_KEY),
@@ -51,7 +56,12 @@ void main() {
       persist.grades = {
         'foo': GradeData((d) => d
           ..grades.replace(<Grade>[
-            Grade({'bar': 'baz'}),
+            Grade((g) => g
+              ..name = 'test'
+              ..letter = 'A'
+              ..rawDueDate = 'Tue, 24 Aug 2021 12:00 am'
+              ..rawAssignedDate = 'Tue, 24 Aug 2021 12:00 am'
+              ..category = 'Test'),
           ]))
       };
 
@@ -70,13 +80,15 @@ void main() {
           ..periodString = 'Bar'
           ..gradeLetter = 'Baz'
           ..gradesUrl = 'Spam'
-          ..gradePercent = StringOrInt('Eggs'))
+          ..gradePercent = StringOrInt('Eggs')
+          ..coursePeriodId = 1)
       ];
 
       expect(
           prefs.getString(DataPersistence.COURSES_KEY),
-          '[{"gradesUrl":"Spam","courseName":"courseName","periodString":"Bar",'
-          '"teacherName":"Foo","gradePercent":"Eggs","gradeLetter":"Baz"}]');
+          '[{"coursePeriodId":1,"courseName":"courseName","periodString":"Bar",'
+          '"teacherName":"Foo","gradesUrl":"Spam","gradePercent":"Eggs",'
+          '"gradeLetter":"Baz"}]');
     });
   });
 }

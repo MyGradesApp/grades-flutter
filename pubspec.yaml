@@ -21,12 +21,12 @@ dependencies:
   shared_preferences: ^2.0.5
   flutter_secure_storage: ^4.2.0
 
-  equatable: ^2.0.0
+  equatable: ^2.0.3
   bloc: ^7.0.0
   tuple: ^2.0.0
 
-  built_value: ^8.0.6
-  built_collection: ^5.0.0
+  built_value: ^8.1.2
+  built_collection: ^5.1.0
 
 dev_dependencies:
 #  test: ^1.17.4
@@ -36,5 +36,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^2.0.3
+  build_runner: ^2.1.1
   built_value_generator: ^8.0.6

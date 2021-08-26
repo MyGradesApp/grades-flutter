@@ -4,11 +4,10 @@ import 'package:grade_core/grade_core.dart';
 
 void testNetworkBlocFetch<T>(Bloc bloc, bool Function(T) pred) async {
   await expectLater(
-    bloc,
+    bloc.stream,
     emitsInOrder(
       <dynamic>[
         isA<NetworkLoading>(), // Initial state
-        isA<NetworkLoading>(),
         predicate<T>(pred)
       ],
     ),
@@ -17,7 +16,7 @@ void testNetworkBlocFetch<T>(Bloc bloc, bool Function(T) pred) async {
 
 void testNetworkBlocRefresh<T>(Bloc bloc, bool Function(T) pred) async {
   await expectLater(
-    bloc,
+    bloc.stream,
     emitsInOrder(
       <dynamic>[
         isA<NetworkLoading>(), // Initial state
@@ -29,11 +28,10 @@ void testNetworkBlocRefresh<T>(Bloc bloc, bool Function(T) pred) async {
 
 void testNetworkBlocFetchError(Bloc bloc) async {
   await expectLater(
-    bloc,
+    bloc.stream,
     emitsInOrder(
       <dynamic>[
         isA<NetworkLoading>(), // Initial state
-        isA<NetworkLoading>(),
         isA<NetworkActionError>(),
       ],
     ),
@@ -42,7 +40,7 @@ void testNetworkBlocFetchError(Bloc bloc) async {
 
 void testNetworkBlocRefreshError(Bloc bloc) async {
   await expectLater(
-    bloc,
+    bloc.stream,
     emitsInOrder(
       <dynamic>[
         isA<NetworkLoading>(), // Initial state

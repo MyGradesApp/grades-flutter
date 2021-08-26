@@ -76,7 +76,7 @@ class _$SettingsStateSerializer implements StructuredSerializer<SettingsState> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'groupingMode':
           result.groupingMode = serializers.deserialize(value,
@@ -97,9 +97,8 @@ class _$SettingsState extends SettingsState {
       (new SettingsStateBuilder()..update(updates)).build();
 
   _$SettingsState._({this.groupingMode}) : super._() {
-    if (groupingMode == null) {
-      throw new BuiltValueNullFieldError('SettingsState', 'groupingMode');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        groupingMode, 'SettingsState', 'groupingMode');
   }
 
   @override
@@ -140,8 +139,9 @@ class SettingsStateBuilder
   SettingsStateBuilder();
 
   SettingsStateBuilder get _$this {
-    if (_$v != null) {
-      _groupingMode = _$v.groupingMode;
+    final $v = _$v;
+    if ($v != null) {
+      _groupingMode = $v.groupingMode;
       _$v = null;
     }
     return this;
@@ -149,9 +149,7 @@ class SettingsStateBuilder
 
   @override
   void replace(SettingsState other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SettingsState;
   }
 
@@ -162,7 +160,10 @@ class SettingsStateBuilder
 
   @override
   _$SettingsState build() {
-    final _$result = _$v ?? new _$SettingsState._(groupingMode: groupingMode);
+    final _$result = _$v ??
+        new _$SettingsState._(
+            groupingMode: BuiltValueNullFieldError.checkNotNull(
+                groupingMode, 'SettingsState', 'groupingMode'));
     replace(_$result);
     return _$result;
   }
