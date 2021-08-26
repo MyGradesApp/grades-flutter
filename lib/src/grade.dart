@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:intl/intl.dart';
@@ -10,27 +9,31 @@ final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
 final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
 final longMonthDayDateFormat = DateFormat('EEEE, MMM dd, yyyy hh:mm aa');
 final shortDayTerseDateTimeFormat = DateFormat('EEE, MM/dd/yy hh:mm aa');
+final terseNewDateTimeFormat = DateFormat('EEE, dd MMM yyyy hh:mm aa');
 final mockDataFormat = DateFormat('yyyy-MM-dd hh:mm:ss');
 
 DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
   try {
-    return shortMonthDateFormat.parseLoose(src);
+    return terseNewDateTimeFormat.parseLoose(src);
   } catch (_) {}
-  try {
-    return longMonthDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return shortMonthDayDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return shortDayTerseDateTimeFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return longMonthDayDateFormat.parseLoose(src);
-  } catch (_) {}
-  try {
-    return mockDataFormat.parseLoose(src);
-  } catch (_) {}
+  // try {
+  //   return shortMonthDateFormat.parseLoose(src);
+  // } catch (_) {}
+  // try {
+  //   return longMonthDateFormat.parseLoose(src);
+  // } catch (_) {}
+  // try {
+  //   return shortMonthDayDateFormat.parseLoose(src);
+  // } catch (_) {}
+  // try {
+  //   return shortDayTerseDateTimeFormat.parseLoose(src);
+  // } catch (_) {}
+  // try {
+  //   return longMonthDayDateFormat.parseLoose(src);
+  // } catch (_) {}
+  // try {
+  //   return mockDataFormat.parseLoose(src);
+  // } catch (_) {}
   if (performRegexPass) {
     return _parseDateTimeCascade(
       src.replaceAllMapped(RegExp(r'\b(\d{1,2})(?:st|nd|rd|th)\b'), (match) {
@@ -44,44 +47,82 @@ DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
 }
 
 abstract class Grade implements Built<Grade, GradeBuilder> {
-  BuiltMap<String, String> get raw;
-
   Grade._();
 
-  factory Grade(Map<String, String> raw) =>
-      _$Grade._(raw: (raw..removeWhere((_, v) => v == null)).build());
+  factory Grade([void Function(GradeBuilder) updates]) = _$Grade;
 
   static Serializer<Grade> get serializer => _$gradeSerializer;
 
-  String get grade => raw['Grade'];
+  @BuiltValueField(wireName: 'ASSIGNMENT_TITLE')
+  String get name;
 
-  String get name => raw['Assignment'];
+  @nullable
+  @BuiltValueField(wireName: 'POINTS_EARNED')
+  String get pointsEarned;
 
-  String get category => raw['Category'];
+  @nullable
+  @BuiltValueField(wireName: 'POINTS_POSSIBLE')
+  String get pointsPossible;
 
-  String get points => raw['Points'];
-
-  DateTime get dateLastModified {
-    if (raw['Date Last Modified'] != null) {
-      return _parseDateTimeCascade(raw['Date Last Modified']);
+  @BuiltValueField(serialize: false)
+  String get grade {
+    if (pointsEarned != null && pointsPossible != null) {
+      var earned = int.tryParse(pointsEarned);
+      var possible = int.tryParse(pointsPossible);
+      if (earned != null && possible != null) {
+        return '${((earned / possible) * 100).toInt()}%';
+      } else {
+        return '$pointsEarned / $pointsPossible';
+      }
     } else {
       return null;
     }
   }
 
-  DateTime get assignedDate {
-    if (raw['Assigned'] != null) {
-      return _parseDateTimeCascade(raw['Assigned']);
-    } else {
-      return null;
-    }
-  }
+  @BuiltValueField(wireName: 'LETTER')
+  String get letter;
 
+  @BuiltValueField(wireName: 'DUE_DATE')
+  String get rawDueDate;
+
+  @BuiltValueField(serialize: false)
   DateTime get dueDate {
-    if (raw['Due'] != null) {
-      return _parseDateTimeCascade(raw['Due']);
+    if (rawDueDate != null) {
+      return _parseDateTimeCascade(rawDueDate);
     } else {
       return null;
     }
   }
+
+  @BuiltValueField(wireName: 'ASSIGNED_DATE')
+  String get rawAssignedDate;
+
+  @BuiltValueField(serialize: false)
+  DateTime get assignedDate {
+    if (rawAssignedDate != null) {
+      return _parseDateTimeCascade(rawAssignedDate);
+    } else {
+      return null;
+    }
+  }
+
+  @nullable
+  @BuiltValueField(wireName: 'UPDATED_AT')
+  String get rawUpdatedAt;
+
+  @BuiltValueField(serialize: false)
+  DateTime get dateLastModified {
+    if (rawUpdatedAt != null) {
+      return _parseDateTimeCascade(rawUpdatedAt);
+    } else {
+      return null;
+    }
+  }
+
+  @BuiltValueField(wireName: 'CATEGORY_TITLE')
+  String get category;
+
+  @nullable
+  @BuiltValueField(wireName: 'COMMENT')
+  String get comment;
 }

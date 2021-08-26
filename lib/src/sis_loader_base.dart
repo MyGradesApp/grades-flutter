@@ -30,7 +30,6 @@ class SISLoader {
   final CookieClient client;
   CourseService _courseService;
   bool _loggedIn = false;
-  String requestToken;
   dynamic initialContext;
 
   SISLoader({@required this.client});
@@ -157,9 +156,6 @@ class SISLoader {
     );
 
     var finalRequestBody = await finalRequest.bodyAsString();
-    requestToken = RegExp(r'__Module__\.token = "(.*?)"')
-        .firstMatch(finalRequestBody)
-        .group(1);
     initialContext = _extractInitialContexts(finalRequestBody);
 
     _loggedIn = true;
@@ -245,6 +241,7 @@ class SISLoader {
 
       return Course((c) {
         return c
+          ..coursePeriodId = grade['cp_id'] as int
           ..gradesUrl = grade[mps['mp_grade_href']] as String
           ..courseName = grade['course_name'] as String
           ..periodString = grade['period_name'] as String

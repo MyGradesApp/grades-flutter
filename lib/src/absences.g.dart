@@ -36,7 +36,7 @@ class _$AbsencesSerializer implements StructuredSerializer<Absences> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'periods':
           result.periods = serializers.deserialize(value,
@@ -63,12 +63,8 @@ class _$Absences extends Absences {
       (new AbsencesBuilder()..update(updates)).build();
 
   _$Absences._({this.periods, this.days}) : super._() {
-    if (periods == null) {
-      throw new BuiltValueNullFieldError('Absences', 'periods');
-    }
-    if (days == null) {
-      throw new BuiltValueNullFieldError('Absences', 'days');
-    }
+    BuiltValueNullFieldError.checkNotNull(periods, 'Absences', 'periods');
+    BuiltValueNullFieldError.checkNotNull(days, 'Absences', 'days');
   }
 
   @override
@@ -112,9 +108,10 @@ class AbsencesBuilder implements Builder<Absences, AbsencesBuilder> {
   AbsencesBuilder();
 
   AbsencesBuilder get _$this {
-    if (_$v != null) {
-      _periods = _$v.periods;
-      _days = _$v.days;
+    final $v = _$v;
+    if ($v != null) {
+      _periods = $v.periods;
+      _days = $v.days;
       _$v = null;
     }
     return this;
@@ -122,9 +119,7 @@ class AbsencesBuilder implements Builder<Absences, AbsencesBuilder> {
 
   @override
   void replace(Absences other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Absences;
   }
 
@@ -135,10 +130,15 @@ class AbsencesBuilder implements Builder<Absences, AbsencesBuilder> {
 
   @override
   _$Absences build() {
-    final _$result = _$v ?? new _$Absences._(periods: periods, days: days);
+    final _$result = _$v ??
+        new _$Absences._(
+            periods: BuiltValueNullFieldError.checkNotNull(
+                periods, 'Absences', 'periods'),
+            days: BuiltValueNullFieldError.checkNotNull(
+                days, 'Absences', 'days'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -19,25 +19,28 @@ class _$GradeDataSerializer implements StructuredSerializer<GradeData> {
   Iterable<Object> serialize(Serializers serializers, GradeData object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
-    if (object.grades != null) {
+    Object value;
+    value = object.grades;
+    if (value != null) {
       result
         ..add('grades')
-        ..add(serializers.serialize(object.grades,
+        ..add(serializers.serialize(value,
             specifiedType:
                 const FullType(BuiltList, const [const FullType(Grade)])));
     }
-    if (object.weights != null) {
+    value = object.weights;
+    if (value != null) {
       result
         ..add('weights')
-        ..add(serializers.serialize(object.weights,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(BuiltMap,
                 const [const FullType(String), const FullType(String)])));
     }
-    if (object.classPercent != null) {
+    value = object.classPercent;
+    if (value != null) {
       result
         ..add('classPercent')
-        ..add(serializers.serialize(object.classPercent,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -51,7 +54,7 @@ class _$GradeDataSerializer implements StructuredSerializer<GradeData> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'grades':
           result.grades.replace(serializers.deserialize(value,
@@ -85,6 +88,9 @@ class _$CourseSerializer implements StructuredSerializer<Course> {
   Iterable<Object> serialize(Serializers serializers, Course object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
+      'coursePeriodId',
+      serializers.serialize(object.coursePeriodId,
+          specifiedType: const FullType(int)),
       'courseName',
       serializers.serialize(object.courseName,
           specifiedType: const FullType(String)),
@@ -95,22 +101,26 @@ class _$CourseSerializer implements StructuredSerializer<Course> {
       serializers.serialize(object.teacherName,
           specifiedType: const FullType(String)),
     ];
-    if (object.gradesUrl != null) {
+    Object value;
+    value = object.gradesUrl;
+    if (value != null) {
       result
         ..add('gradesUrl')
-        ..add(serializers.serialize(object.gradesUrl,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.gradePercent != null) {
+    value = object.gradePercent;
+    if (value != null) {
       result
         ..add('gradePercent')
-        ..add(serializers.serialize(object.gradePercent,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(StringOrInt)));
     }
-    if (object.gradeLetter != null) {
+    value = object.gradeLetter;
+    if (value != null) {
       result
         ..add('gradeLetter')
-        ..add(serializers.serialize(object.gradeLetter,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -125,8 +135,12 @@ class _$CourseSerializer implements StructuredSerializer<Course> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
+        case 'coursePeriodId':
+          result.coursePeriodId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'gradesUrl':
           result.gradesUrl = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -222,10 +236,11 @@ class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
   GradeDataBuilder();
 
   GradeDataBuilder get _$this {
-    if (_$v != null) {
-      _grades = _$v.grades?.toBuilder();
-      _weights = _$v.weights?.toBuilder();
-      _classPercent = _$v.classPercent;
+    final $v = _$v;
+    if ($v != null) {
+      _grades = $v.grades?.toBuilder();
+      _weights = $v.weights?.toBuilder();
+      _classPercent = $v.classPercent;
       _$v = null;
     }
     return this;
@@ -233,9 +248,7 @@ class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
 
   @override
   void replace(GradeData other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$GradeData;
   }
 
@@ -273,6 +286,8 @@ class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
 
 class _$Course extends Course {
   @override
+  final int coursePeriodId;
+  @override
   final String gradesUrl;
   @override
   final String courseName;
@@ -289,22 +304,20 @@ class _$Course extends Course {
       (new CourseBuilder()..update(updates)).build();
 
   _$Course._(
-      {this.gradesUrl,
+      {this.coursePeriodId,
+      this.gradesUrl,
       this.courseName,
       this.periodString,
       this.teacherName,
       this.gradePercent,
       this.gradeLetter})
       : super._() {
-    if (courseName == null) {
-      throw new BuiltValueNullFieldError('Course', 'courseName');
-    }
-    if (periodString == null) {
-      throw new BuiltValueNullFieldError('Course', 'periodString');
-    }
-    if (teacherName == null) {
-      throw new BuiltValueNullFieldError('Course', 'teacherName');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        coursePeriodId, 'Course', 'coursePeriodId');
+    BuiltValueNullFieldError.checkNotNull(courseName, 'Course', 'courseName');
+    BuiltValueNullFieldError.checkNotNull(
+        periodString, 'Course', 'periodString');
+    BuiltValueNullFieldError.checkNotNull(teacherName, 'Course', 'teacherName');
   }
 
   @override
@@ -318,6 +331,7 @@ class _$Course extends Course {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Course &&
+        coursePeriodId == other.coursePeriodId &&
         gradesUrl == other.gradesUrl &&
         courseName == other.courseName &&
         periodString == other.periodString &&
@@ -331,7 +345,11 @@ class _$Course extends Course {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, gradesUrl.hashCode), courseName.hashCode),
+                $jc(
+                    $jc(
+                        $jc($jc(0, coursePeriodId.hashCode),
+                            gradesUrl.hashCode),
+                        courseName.hashCode),
                     periodString.hashCode),
                 teacherName.hashCode),
             gradePercent.hashCode),
@@ -341,6 +359,7 @@ class _$Course extends Course {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Course')
+          ..add('coursePeriodId', coursePeriodId)
           ..add('gradesUrl', gradesUrl)
           ..add('courseName', courseName)
           ..add('periodString', periodString)
@@ -353,6 +372,11 @@ class _$Course extends Course {
 
 class CourseBuilder implements Builder<Course, CourseBuilder> {
   _$Course _$v;
+
+  int _coursePeriodId;
+  int get coursePeriodId => _$this._coursePeriodId;
+  set coursePeriodId(int coursePeriodId) =>
+      _$this._coursePeriodId = coursePeriodId;
 
   String _gradesUrl;
   String get gradesUrl => _$this._gradesUrl;
@@ -382,13 +406,15 @@ class CourseBuilder implements Builder<Course, CourseBuilder> {
   CourseBuilder();
 
   CourseBuilder get _$this {
-    if (_$v != null) {
-      _gradesUrl = _$v.gradesUrl;
-      _courseName = _$v.courseName;
-      _periodString = _$v.periodString;
-      _teacherName = _$v.teacherName;
-      _gradePercent = _$v.gradePercent;
-      _gradeLetter = _$v.gradeLetter;
+    final $v = _$v;
+    if ($v != null) {
+      _coursePeriodId = $v.coursePeriodId;
+      _gradesUrl = $v.gradesUrl;
+      _courseName = $v.courseName;
+      _periodString = $v.periodString;
+      _teacherName = $v.teacherName;
+      _gradePercent = $v.gradePercent;
+      _gradeLetter = $v.gradeLetter;
       _$v = null;
     }
     return this;
@@ -396,9 +422,7 @@ class CourseBuilder implements Builder<Course, CourseBuilder> {
 
   @override
   void replace(Course other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Course;
   }
 
@@ -411,10 +435,15 @@ class CourseBuilder implements Builder<Course, CourseBuilder> {
   _$Course build() {
     final _$result = _$v ??
         new _$Course._(
+            coursePeriodId: BuiltValueNullFieldError.checkNotNull(
+                coursePeriodId, 'Course', 'coursePeriodId'),
             gradesUrl: gradesUrl,
-            courseName: courseName,
-            periodString: periodString,
-            teacherName: teacherName,
+            courseName: BuiltValueNullFieldError.checkNotNull(
+                courseName, 'Course', 'courseName'),
+            periodString: BuiltValueNullFieldError.checkNotNull(
+                periodString, 'Course', 'periodString'),
+            teacherName: BuiltValueNullFieldError.checkNotNull(
+                teacherName, 'Course', 'teacherName'),
             gradePercent: gradePercent,
             gradeLetter: gradeLetter);
     replace(_$result);
@@ -422,4 +451,4 @@ class CourseBuilder implements Builder<Course, CourseBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

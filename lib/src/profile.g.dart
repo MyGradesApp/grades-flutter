@@ -18,29 +18,32 @@ class _$ProfileSerializer implements StructuredSerializer<Profile> {
   Iterable<Object> serialize(Serializers serializers, Profile object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
-    if (object.cumulative_gpa != null) {
+    Object value;
+    value = object.cumulative_gpa;
+    if (value != null) {
       result
         ..add('cumulative_gpa')
-        ..add(serializers.serialize(object.cumulative_gpa,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    if (object.cumulative_weighted_gpa != null) {
+    value = object.cumulative_weighted_gpa;
+    if (value != null) {
       result
         ..add('cumulative_weighted_gpa')
-        ..add(serializers.serialize(object.cumulative_weighted_gpa,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    if (object.class_rank_numerator != null) {
+    value = object.class_rank_numerator;
+    if (value != null) {
       result
         ..add('class_rank_numerator')
-        ..add(serializers.serialize(object.class_rank_numerator,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    if (object.class_rank_denominator != null) {
+    value = object.class_rank_denominator;
+    if (value != null) {
       result
         ..add('class_rank_denominator')
-        ..add(serializers.serialize(object.class_rank_denominator,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -54,7 +57,7 @@ class _$ProfileSerializer implements StructuredSerializer<Profile> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'cumulative_gpa':
           result.cumulative_gpa = serializers.deserialize(value,
@@ -163,11 +166,12 @@ class ProfileBuilder implements Builder<Profile, ProfileBuilder> {
   ProfileBuilder();
 
   ProfileBuilder get _$this {
-    if (_$v != null) {
-      _cumulative_gpa = _$v.cumulative_gpa;
-      _cumulative_weighted_gpa = _$v.cumulative_weighted_gpa;
-      _class_rank_numerator = _$v.class_rank_numerator;
-      _class_rank_denominator = _$v.class_rank_denominator;
+    final $v = _$v;
+    if ($v != null) {
+      _cumulative_gpa = $v.cumulative_gpa;
+      _cumulative_weighted_gpa = $v.cumulative_weighted_gpa;
+      _class_rank_numerator = $v.class_rank_numerator;
+      _class_rank_denominator = $v.class_rank_denominator;
       _$v = null;
     }
     return this;
@@ -175,9 +179,7 @@ class ProfileBuilder implements Builder<Profile, ProfileBuilder> {
 
   @override
   void replace(Profile other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Profile;
   }
 
@@ -199,4 +201,4 @@ class ProfileBuilder implements Builder<Profile, ProfileBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

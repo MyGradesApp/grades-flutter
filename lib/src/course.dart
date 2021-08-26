@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -7,7 +7,7 @@ import 'package:sis_loader/src/grade.dart';
 import 'package:sis_loader/src/mock_data.dart' as mock_data;
 import 'package:sis_loader/src/utilities.dart';
 
-import '../sis_loader.dart' show SISLoader, debugMocking;
+import '../sis_loader.dart' show SISLoader, debugMocking, serializers;
 import 'cookie_client.dart';
 
 part 'course.g.dart';
@@ -34,13 +34,42 @@ class CourseService {
 
   CourseService(this.sisLoader);
 
-  Future<String> _gradePage(Course course) async {
+  Future<String> _gradeRawData(Course course) async {
     if (course.gradesUrl == null) {
       // This feels weird, perhaps null-safe bubbling would be better?
       return '';
     }
-    return (await sisLoader.client.get(Uri.parse(course.gradesUrl)))
-        .bodyAsString();
+
+    var gradeRequest = await sisLoader.client.get(Uri.parse(course.gradesUrl));
+    var gradesBody = await gradeRequest.bodyAsString();
+    var bearerToken =
+        RegExp(r'static get session_id\(\) {[\w\W]+?return "(.+?)";')
+            .firstMatch(gradesBody)
+            .group(1);
+
+    var requestToken = RegExp(r'__Module__\.token = "(.+?)"')
+        .allMatches(gradesBody)
+        .last
+        .group(1);
+
+    var userId = RegExp(r'"USERNAME":"(.+?)"').firstMatch(gradesBody).group(1);
+
+    var requestData =
+        '{"requests":[{"controller":"StudentGBGradesController","method":"getGradebookGrid","args":[${course.coursePeriodId}]}]}';
+    var dataRequest = await sisLoader.client.post(
+        Uri.https(
+            'sis.palmbeachschools.org', 'focus/classes/FocusModule.class.php', {
+          'modname': 'Grades/StudentGBGrades.php',
+          'force_package': 'SIS',
+          'student_id': userId,
+          'course_period_id': course.coursePeriodId.toString(),
+        }),
+        '--FormBoundary\r\nContent-Disposition: form-data; name="course_period_id"\r\n\r\n${course.coursePeriodId}\r\n--FormBoundary\r\nContent-Disposition: form-data; name="__call__"\r\n\r\n$requestData\r\n--FormBoundary\r\nContent-Disposition: form-data; name="__token__"\r\n\r\n$requestToken\r\n--FormBoundary--\r\n',
+        headers: {
+          'authorization': 'Bearer ' + bearerToken,
+          'content-type': 'multipart/form-data; boundary=FormBoundary',
+        });
+    return dataRequest.bodyAsString();
   }
 
   Future<GradeData> getGrades(Course course) async {
@@ -50,142 +79,53 @@ class CourseService {
         ..weights.replace(mock_data.CATEGORY_WEIGHTS[course.courseName])));
     }
 
-    var gradePage = await _gradePage(course);
+    var gradeRawData = await _gradeRawData(course);
+    var gradeDataResponse = jsonDecode(gradeRawData)[0];
 
-    var gradeMatch = RegExp(
-            r'Current grade in class: <span class="jsStudentAverageCell" id="currentStudentGrade\[\]">(.*?)<\/span>')
-        .firstMatch(gradePage);
+    if (gradeDataResponse['error'] != null) {
+      throw Exception(gradeDataResponse['error']);
+    }
+
+    var gradeData = (gradeDataResponse['result']['data'] as List<dynamic>)
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .map((e) =>
+            serializers.deserializeWith(Grade.serializer, e)); //as Grade;
+
+    Map<String, String> weights;
+    if (gradeDataResponse['result']['weighted_categories'] != null) {
+      weights = Map.fromEntries((gradeDataResponse['result']
+              ['weighted_categories'] as Map<dynamic, dynamic>)
+          .entries
+          .map((e) => MapEntry(e.value['title'] as String,
+              '${e.value['final_grade_percent']}%')));
+    } else {
+      weights = {};
+      // weights = Map.fromEntries(Set.from(gradeData.map((e) => e.category))
+      //     .map((e) => MapEntry(e as String, '')));
+    }
+
+    var rawCourseGrade =
+        gradeDataResponse['result']['weighted_grade'] as String;
     int coursePercent;
-    if (gradeMatch != null) {
-      var classGrade = gradeMatch.group(1).replaceAll('&nbsp;', ' ');
+    if (rawCourseGrade != null) {
+      var classGrade = rawCourseGrade.replaceAll('&nbsp;', ' ');
       var percentMatch = RegExp(r'(\d+)%').firstMatch(classGrade);
       if (percentMatch != null) {
         coursePercent = int.parse(percentMatch.group(1));
       }
     }
 
-    var grades = await _extractGrades(gradePage);
-    var weights = await _extractCategoryWeights(gradePage);
-
-    return GradeData((d) {
-      d.grades.replace(grades);
-      if (weights != null) {
-        d.weights.replace(weights);
-      }
-      d.classPercent = coursePercent;
-      return d;
-    });
-  }
-
-  Future<List<Grade>> _extractGrades(String gradePage) async {
-    Map<String, String> extractRowFields(
-        String row, Map<String, String> headers) {
-      var fieldsMatches = RegExp(
-              r'<TD class="LO_field" style="white-space:normal !important;" data-col="(.*?)">(?:<DIV.*?>)?(.*?)(?:<\/DIV>)?<\/TD>')
-          .allMatches(row);
-
-      // ignore: omit_local_variable_types
-      Map<String, String> fields = {};
-
-      for (var match in fieldsMatches) {
-        var rawField = match.group(1).toLowerCase();
-        var field = headers[rawField];
-        var content = match.group(2);
-
-        content = content.replaceAll('&nbsp;', ' ');
-
-        if (rawField == 'comment') {
-          if (content == '<span class="unreset"></span>') {
-            content = null;
-          }
-        } else if (rawField == 'assigned_date' ||
-            rawField == 'due_date' ||
-            rawField == 'modified_date') {
-          if (content.isEmpty) {
-            content = null;
-          }
-        } else if (rawField == 'stu_points') {
-          // TODO: Render images
-          content =
-              content.replaceAll(RegExp(r'<IMG SRC=.+? height=\d+?>'), '');
-        } else if (rawField == 'assignment_files') {
-          if (content == ' ') {
-            content = null;
-          } else {
-            var match = RegExp(
-                    r'<UL><LI style="margin:5px 0px;"><A class="previewIframe" href="javascript:void(0)" data-href="(.*?)">(.*?)<\/A><\/LI><\/UL>')
-                .firstMatch(content);
-            if (match != null) {
-              content = match.group(2);
-            } else {
-              content = content.replaceAll(RegExp(r'<[^>]*>'), '');
-            }
-          }
-        }
-        fields[field] = content;
-      }
-
-      return fields;
-    }
-
-    var headerMatches = RegExp(
-            '<TD class="LO_header" data-assoc="(.*?)"><A HREF=\'.*?\'>(.*?)<')
-        .allMatches(gradePage);
-
-    // ignore: omit_local_variable_types
-    Map<String, String> headers = {};
-
-    for (var match in headerMatches) {
-      headers[match.group(1).toLowerCase()] = match.group(2);
-    }
-
-    var gradesMatches =
-        RegExp('<TR id="LOy_row.+?"(.*?)<\/TR>').allMatches(gradePage);
-
-    return gradesMatches
-        .map((m) => Grade(extractRowFields(m.group(1), headers)))
-        .toList();
-  }
-
-  Future<Map<String, String>> _extractCategoryWeights(String gradePage) async {
-    var weightsTableMatch = RegExp(
-            r'<TABLE width=100% border=0 cellpadding=0 cellspacing=0 class="GrayDrawHeader">(.*?)</TABLE></font></TD></TR></TABLE>')
-        .firstMatch(gradePage);
-
-    if (weightsTableMatch == null) {
-      return null;
-    }
-
-    var weightsTable = weightsTableMatch.group(1);
-
-    var tableRowsMatches = RegExp(r'<TR>(.*?)<\/TR>').allMatches(weightsTable);
-
-    var tableRows = tableRowsMatches
-        .map((m) => RegExp(
-                r'<(?:TD|TH)(?: .*?)?>(?:<[bB]>)?(.*?)(?:<\/[bB]>)?<\/(?:TD|TH)>')
-            .allMatches(m.group(1))
-            .map((m) => m.group(1).replaceAll('&nbsp;', ''))
-            .toList())
-        .toList();
-
-    // Ensure the data matches the known format
-    if (!(tableRows.length > 2 && tableRows[1][0] == 'Percent of Grade')) {
-      return null;
-    }
-
-    // ignore: omit_local_variable_types
-    Map<String, String> out = {};
-    for (var i = 1; i < min(tableRows[0].length, tableRows[1].length); i++) {
-      if (tableRows[0][i].trim().isEmpty && tableRows[1][i].trim().isEmpty) {
-        continue;
-      }
-      out[tableRows[0][i]] = tableRows[1][i];
-    }
-    return out;
+    return GradeData((b) => b
+      ..grades.replace(gradeData)
+      ..weights.replace(weights)
+      ..classPercent = coursePercent);
   }
 }
 
 abstract class Course implements Built<Course, CourseBuilder> {
+  // Course+term id
+  int get coursePeriodId;
+
   @nullable
   String get gradesUrl;
 

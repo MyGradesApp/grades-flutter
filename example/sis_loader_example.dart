@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:sis_loader/sis_loader.dart';
@@ -22,8 +21,11 @@ Future<void> main() async {
 
   var o = {};
   for (var course in courses) {
-    print('\n\n');
     var grades = await loader.courseService.getGrades(course);
+    print(grades);
+    print(serializers.serialize(grades.grades));
+    print('\n\n');
+    // exit(2);
     o[course.courseName] = grades;
 //    for (var grade in grades) {
 //      print(jsonEncode(grade, toEncodable: (value) {
@@ -36,11 +38,9 @@ Future<void> main() async {
 //    }
   }
 
-  var studentInfo = await loader.getStudentInfo();
-
-  var communityServiceInfo = studentInfo.firstWhere(
-      (v) => v['title'] == 'Total Number of Community Service Hours');
-  print(communityServiceInfo['value']);
-
-  print(jsonEncode(o));
+  // var studentInfo = await loader.getStudentInfo();
+  //
+  // var communityServiceInfo = studentInfo.firstWhere(
+  //     (v) => v['title'] == 'Total Number of Community Service Hours');
+  // print(communityServiceInfo['value']);
 }
