@@ -11,11 +11,9 @@ class GradeInfoScreen extends StatelessWidget {
     var grade = ModalRoute.of(context).settings.arguments as Grade;
 
     double pointsUpper, pointsLower;
-    if (grade.raw.containsKey('Points')) {
-      var matches = gradeRegExp?.firstMatch(grade.points);
-
-      pointsUpper = double.tryParse(matches?.group(1) ?? '0');
-      pointsLower = double.tryParse(matches?.group(2) ?? '0');
+    if (grade.pointsEarned != null && grade.pointsPossible != null) {
+      pointsUpper = double.tryParse(grade.pointsEarned ?? '0');
+      pointsLower = double.tryParse(grade.pointsPossible ?? '0');
     }
 
     List<CircularSegmentEntry> items;
@@ -46,9 +44,18 @@ class GradeInfoScreen extends StatelessWidget {
       CircularStackEntry(items),
     ];
 
-    var rawData = grade.raw.toMap();
-    rawData.removeWhere((key, value) => value == null);
-    var assignmentName = rawData.remove('Assignment');
+    var rawData = <String, dynamic>{
+      'Assignment': grade.name,
+      'Points': grade.grade,
+      'Grade': grade.letter,
+      'Assigned': grade.assignedDate,
+      'Due': grade.dueDate,
+      'Last Modified': grade.dateLastModified,
+      'Category': grade.category,
+      'Comment': grade.comment,
+    };
+    rawData.removeWhere((key, dynamic value) => value == null);
+    var assignmentName = rawData.remove('Assignment') as String;
 
     var keys = rawData.keys.toList();
     var values = rawData.values.toList();
@@ -68,7 +75,7 @@ class GradeInfoScreen extends StatelessWidget {
             child: Card(
               color: keys[i] == 'Points' &&
                       values[i] is String &&
-                      gradeRegExp.hasMatch(values[i])
+                      gradeRegExp.hasMatch(values[i] as String)
                   ? Theme.of(context).primaryColor
                   : Theme.of(context).cardColor,
               elevation: 0,
@@ -126,9 +133,9 @@ class GradeInfoScreen extends StatelessWidget {
 
   String _formatItem(dynamic item) {
     if (item is DateTime) {
-      return DateFormat.yMMMMd().format(item);
+      return DateFormat('MMMM d yyyy hh:mm aa').format(item);
     } else {
-      return item as String;
+      return item.toString();
     }
   }
 }

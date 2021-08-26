@@ -32,7 +32,7 @@ class DummyGrade implements Grade {
   String get points => '${_gradePercent} / ${_gradePercent}';
 
   @override
-  BuiltMap<String, String> get raw => throw UnimplementedError();
+  BuiltMap<String, dynamic> get raw => throw UnimplementedError();
 
   @override
   GradeBuilder toBuilder() {
@@ -52,6 +52,34 @@ class DummyGrade implements Grade {
   Grade rebuild(any) {
     throw UnimplementedError();
   }
+
+  @override
+  // TODO: implement comment
+  String get comment => throw UnimplementedError();
+
+  @override
+  // TODO: implement letter
+  String get letter => throw UnimplementedError();
+
+  @override
+  // TODO: implement pointsEarned
+  String get pointsEarned => throw UnimplementedError();
+
+  @override
+  // TODO: implement pointsPossible
+  String get pointsPossible => throw UnimplementedError();
+
+  @override
+  // TODO: implement rawAssignedDate
+  String get rawAssignedDate => throw UnimplementedError();
+
+  @override
+  // TODO: implement rawDueDate
+  String get rawDueDate => throw UnimplementedError();
+
+  @override
+  // TODO: implement rawUpdatedAt
+  String get rawUpdatedAt => throw UnimplementedError();
 }
 
 Future<DummyGrade> createDummyGradePopup(BuildContext context,
