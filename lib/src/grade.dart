@@ -66,10 +66,11 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
 
   @BuiltValueField(serialize: false)
   String get grade {
+    // if ()
     if (pointsEarned != null && pointsPossible != null) {
-      var earned = int.tryParse(pointsEarned);
-      var possible = int.tryParse(pointsPossible);
-      if (earned != null && possible != null) {
+      var earned = double.tryParse(pointsEarned);
+      var possible = double.tryParse(pointsPossible);
+      if (earned != null && possible != null && possible != 0) {
         return '${((earned / possible) * 100).toInt()}%';
       } else {
         return '$pointsEarned / $pointsPossible';
@@ -80,7 +81,15 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
   }
 
   @BuiltValueField(wireName: 'LETTER')
-  String get letter;
+  String get rawLetter;
+
+  String get letter {
+    if (rawLetter == r'<i class="ui check icon"></i>') {
+      return 'Complete';
+    } else {
+      return rawLetter;
+    }
+  }
 
   @BuiltValueField(wireName: 'DUE_DATE')
   String get rawDueDate;

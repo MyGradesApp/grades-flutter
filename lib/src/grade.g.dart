@@ -21,7 +21,7 @@ class _$GradeSerializer implements StructuredSerializer<Grade> {
       'ASSIGNMENT_TITLE',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'LETTER',
-      serializers.serialize(object.letter,
+      serializers.serialize(object.rawLetter,
           specifiedType: const FullType(String)),
       'DUE_DATE',
       serializers.serialize(object.rawDueDate,
@@ -89,7 +89,7 @@ class _$GradeSerializer implements StructuredSerializer<Grade> {
               specifiedType: const FullType(String)) as String;
           break;
         case 'LETTER':
-          result.letter = serializers.deserialize(value,
+          result.rawLetter = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'DUE_DATE':
@@ -127,7 +127,7 @@ class _$Grade extends Grade {
   @override
   final String pointsPossible;
   @override
-  final String letter;
+  final String rawLetter;
   @override
   final String rawDueDate;
   @override
@@ -146,7 +146,7 @@ class _$Grade extends Grade {
       {this.name,
       this.pointsEarned,
       this.pointsPossible,
-      this.letter,
+      this.rawLetter,
       this.rawDueDate,
       this.rawAssignedDate,
       this.rawUpdatedAt,
@@ -154,7 +154,7 @@ class _$Grade extends Grade {
       this.comment})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(name, 'Grade', 'name');
-    BuiltValueNullFieldError.checkNotNull(letter, 'Grade', 'letter');
+    BuiltValueNullFieldError.checkNotNull(rawLetter, 'Grade', 'rawLetter');
     BuiltValueNullFieldError.checkNotNull(rawDueDate, 'Grade', 'rawDueDate');
     BuiltValueNullFieldError.checkNotNull(
         rawAssignedDate, 'Grade', 'rawAssignedDate');
@@ -175,7 +175,7 @@ class _$Grade extends Grade {
         name == other.name &&
         pointsEarned == other.pointsEarned &&
         pointsPossible == other.pointsPossible &&
-        letter == other.letter &&
+        rawLetter == other.rawLetter &&
         rawDueDate == other.rawDueDate &&
         rawAssignedDate == other.rawAssignedDate &&
         rawUpdatedAt == other.rawUpdatedAt &&
@@ -195,7 +195,7 @@ class _$Grade extends Grade {
                                 $jc($jc(0, name.hashCode),
                                     pointsEarned.hashCode),
                                 pointsPossible.hashCode),
-                            letter.hashCode),
+                            rawLetter.hashCode),
                         rawDueDate.hashCode),
                     rawAssignedDate.hashCode),
                 rawUpdatedAt.hashCode),
@@ -209,7 +209,7 @@ class _$Grade extends Grade {
           ..add('name', name)
           ..add('pointsEarned', pointsEarned)
           ..add('pointsPossible', pointsPossible)
-          ..add('letter', letter)
+          ..add('rawLetter', rawLetter)
           ..add('rawDueDate', rawDueDate)
           ..add('rawAssignedDate', rawAssignedDate)
           ..add('rawUpdatedAt', rawUpdatedAt)
@@ -235,9 +235,9 @@ class GradeBuilder implements Builder<Grade, GradeBuilder> {
   set pointsPossible(String pointsPossible) =>
       _$this._pointsPossible = pointsPossible;
 
-  String _letter;
-  String get letter => _$this._letter;
-  set letter(String letter) => _$this._letter = letter;
+  String _rawLetter;
+  String get rawLetter => _$this._rawLetter;
+  set rawLetter(String rawLetter) => _$this._rawLetter = rawLetter;
 
   String _rawDueDate;
   String get rawDueDate => _$this._rawDueDate;
@@ -268,7 +268,7 @@ class GradeBuilder implements Builder<Grade, GradeBuilder> {
       _name = $v.name;
       _pointsEarned = $v.pointsEarned;
       _pointsPossible = $v.pointsPossible;
-      _letter = $v.letter;
+      _rawLetter = $v.rawLetter;
       _rawDueDate = $v.rawDueDate;
       _rawAssignedDate = $v.rawAssignedDate;
       _rawUpdatedAt = $v.rawUpdatedAt;
@@ -297,8 +297,8 @@ class GradeBuilder implements Builder<Grade, GradeBuilder> {
             name: BuiltValueNullFieldError.checkNotNull(name, 'Grade', 'name'),
             pointsEarned: pointsEarned,
             pointsPossible: pointsPossible,
-            letter: BuiltValueNullFieldError.checkNotNull(
-                letter, 'Grade', 'letter'),
+            rawLetter: BuiltValueNullFieldError.checkNotNull(
+                rawLetter, 'Grade', 'rawLetter'),
             rawDueDate: BuiltValueNullFieldError.checkNotNull(
                 rawDueDate, 'Grade', 'rawDueDate'),
             rawAssignedDate: BuiltValueNullFieldError.checkNotNull(
