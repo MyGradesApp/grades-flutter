@@ -14,7 +14,7 @@ class GradeItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var gradeString = grade.grade ?? grade.letter;
+    var gradeString = grade.grade ?? grade.letter ?? '';
     var percentIndex = gradeString.indexOf('%');
     String gradeLetter;
     if (percentIndex != -1) {

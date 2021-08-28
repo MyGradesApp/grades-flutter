@@ -46,7 +46,8 @@ class GradeInfoScreen extends StatelessWidget {
 
     var rawData = <String, dynamic>{
       'Assignment': grade.name,
-      'Points': grade.grade,
+      if (grade.pointsEarned != null && grade.pointsPossible != null)
+        'Points': '${grade.pointsEarned} / ${grade.pointsPossible}',
       'Grade': grade.letter,
       'Assigned': grade.assignedDate,
       'Due': grade.dueDate,
