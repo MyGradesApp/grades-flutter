@@ -76,6 +76,9 @@ class DummyGrade implements Grade {
 
   @override
   String get rawUpdatedAt => throw UnimplementedError();
+
+  @override
+  String get rawLetter => throw UnimplementedError();
 }
 
 Future<DummyGrade> createDummyGradePopup(BuildContext context,
