@@ -9,10 +9,14 @@ final shortMonthDayDateFormat = DateFormat('EEE, MMM dd, yyyy hh:mm aa');
 final longMonthDateFormat = DateFormat('MMMM dd, yyyy, hh:mm aa');
 final longMonthDayDateFormat = DateFormat('EEEE, MMM dd, yyyy hh:mm aa');
 final shortDayTerseDateTimeFormat = DateFormat('EEE, MM/dd/yy hh:mm aa');
+final terseNewDateFormat = DateFormat('EEE, dd MMM yyyy');
 final terseNewDateTimeFormat = DateFormat('EEE, dd MMM yyyy hh:mm aa');
 final mockDataFormat = DateFormat('yyyy-MM-dd hh:mm:ss');
 
 DateTime _parseDateTimeCascade(String src, [bool performRegexPass = true]) {
+  try {
+    return terseNewDateFormat.parseLoose(src);
+  } catch (_) {}
   try {
     return terseNewDateTimeFormat.parseLoose(src);
   } catch (_) {}
@@ -65,8 +69,7 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
   String get pointsPossible;
 
   @BuiltValueField(serialize: false)
-  String get grade {
-    // if ()
+  String get displayGrade {
     if (pointsEarned != null && pointsPossible != null) {
       var earned = double.tryParse(pointsEarned);
       var possible = double.tryParse(pointsPossible);
@@ -76,12 +79,34 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
         return '$pointsEarned / $pointsPossible';
       }
     } else {
-      return null;
+      return letter;
     }
+  }
+
+  @BuiltValueField(serialize: false)
+  double get percentage {
+    if (pointsEarned != null && pointsPossible != null) {
+      var earned = double.tryParse(pointsEarned);
+      var possible = double.tryParse(pointsPossible);
+      possible = possible == 0 ? 1 : possible;
+      if (earned != null && possible != null) {
+        return ((earned / possible) * 100);
+      } else if (earned != null) {
+        return earned;
+      }
+    }
+    return null;
   }
 
   @BuiltValueField(wireName: 'LETTER')
   String get rawLetter;
+
+  String get normalLetter {
+    if (RegExp(r'[A-Fa-f]').hasMatch(rawLetter)) {
+      return rawLetter;
+    }
+    return null;
+  }
 
   String get letter {
     if (rawLetter == r'<i class="ui check icon"></i>') {
