@@ -5,34 +5,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:grade_core/grade_core.dart';
 import 'package:sis_loader/sis_loader.dart';
 
 class DummyGrade implements Grade {
-  String _gradePercent;
+  double _gradePercent;
   String _category;
   String _name;
 
   @override
-  DummyGrade(String grade, String cat, int index) {
+  DummyGrade(double grade, String cat, int index) {
     _gradePercent = grade;
     _category = cat;
     _name = 'Dummy Assignment ' + (index + 1).toString();
   }
 
   @override
-  String get grade => _gradePercent;
-
-  @override
   String get name => _name;
 
   @override
   String get category => _category;
-
-  @override
-  String get points => '${_gradePercent} / ${_gradePercent}';
-
-  @override
-  BuiltMap<String, dynamic> get raw => throw UnimplementedError();
 
   @override
   GradeBuilder toBuilder() {
@@ -57,8 +49,7 @@ class DummyGrade implements Grade {
   String get comment => throw UnimplementedError();
 
   @override
-  // TODO: implement letter
-  String get letter => throw UnimplementedError();
+  String get letter => normalLetter;
 
   @override
   // TODO: implement pointsEarned
@@ -79,6 +70,15 @@ class DummyGrade implements Grade {
 
   @override
   String get rawLetter => throw UnimplementedError();
+
+  @override
+  String get displayGrade => '$_gradePercent%';
+
+  @override
+  String get normalLetter => letterGradeForPercent(percentage);
+
+  @override
+  double get percentage => _gradePercent;
 }
 
 Future<DummyGrade> createDummyGradePopup(BuildContext context,
@@ -134,8 +134,7 @@ Future<DummyGrade> createDummyGradePopup(BuildContext context,
       confirmText: 'Add Dummy Grade',
       onConfirm: (Picker picker, List value) {
         var values = picker.getSelectedValues();
-        // print(values);
-        grade = DummyGrade((values.first.toString() + '%'),
+        grade = DummyGrade(int.parse(values.first as String).toDouble(),
             values.last.toString(), dummyGrades.length);
       }).showDialog(context);
   return grade;

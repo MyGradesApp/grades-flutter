@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grade_core/grade_core.dart';
 import 'package:grades/widgets/colored_grade_dot.dart';
 import 'package:sis_loader/sis_loader.dart';
 
@@ -14,17 +13,8 @@ class GradeItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var gradeString = grade.grade ?? grade.letter ?? '';
-    var percentIndex = gradeString.indexOf('%');
-    String gradeLetter;
-    if (percentIndex != -1) {
-      var extractedGradePercent =
-          double.tryParse(gradeString.substring(0, percentIndex));
-
-      if (extractedGradePercent != null) {
-        gradeLetter = letterGradeForPercent(extractedGradePercent);
-      }
-    }
+    var gradeString = grade.displayGrade;
+    var gradeLetter = grade.letter;
     double gradeSize;
     if (grade != null && gradeLetter != null) {
       gradeSize = 50;

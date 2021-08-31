@@ -17,8 +17,8 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
       if (weights != null) {
         for (var weight in weights.entries) {
           if (weight.value != '0%') {
-            if (weight.key.contains(gradeItem.category) &&
-                gradeIsNumeric(gradeItem.grade)) {
+            if (weight.key.contains(
+                gradeItem.category) /*&& gradeIsNumeric(gradeItem.grade)*/) {
               if (weightedGradeList
                   .every((item) => !(item.containsKey(weight.key)))) {
                 weightedDenominatorList.add(int.tryParse(
@@ -32,11 +32,8 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
           }
         }
       } else {
-        var index = gradeItem.grade.indexOf('%');
-        if (index != -1) {
-          var gradePercent =
-              double.tryParse(gradeItem.grade.substring(0, index));
-          classPercent += gradePercent;
+        if (gradeItem.percentage != null) {
+          classPercent += gradeItem.percentage * 100;
           gradesCount++;
         }
       }
@@ -53,11 +50,8 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
       gradesCount = 0;
       weightedGradeList.forEach((weightedItem) {
         if (weightedItem.values.first.containsKey(weight.toString() + '%')) {
-          var index = weightedItem.values.last.values.last.grade.indexOf('%');
-          if (index != -1) {
-            var gradePercent = double.tryParse(
-                weightedItem.values.last.values.last.grade.substring(0, index));
-            groupTotal += gradePercent;
+          if (weightedItem.values.last.values.last.percentage != null) {
+            groupTotal += weightedItem.values.last.values.last.percentage;
             gradesCount++;
           }
         }
