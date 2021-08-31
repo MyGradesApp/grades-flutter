@@ -113,7 +113,8 @@ class UpcomingBloc extends Bloc<FeedEvent, UpcomingState> {
 bool isGradeUpcoming(Grade grade) {
   if (grade.dueDate != null && grade.dueDate is DateTime) {
     // We assume any "upcoming" grade will be "Not Graded"
-    if (grade.grade != 'Not Graded') {
+    // TODO: earned == null? is enough
+    if (grade.pointsEarned != null || grade.rawLetter != 'NG') {
       return false;
     }
     var gradeDueDate = grade.dueDate;
