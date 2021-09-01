@@ -8,75 +8,62 @@ import 'package:sis_loader/sis_loader.dart';
 
 double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
     BuiltMap<String, String> weights) {
-  var groupKeys = groupedGrades.keys.toList()..sort();
-  var classPercent = 0.0, gradesCount = 0.0, weightedDenominatorList = <int>[];
-  var weightedGradeList = <Map<String, Map<String, Grade>>>[];
-
-  for (var group in groupKeys) {
-    for (var gradeItem in groupedGrades[group]) {
-      if (weights != null) {
-        for (var weight in weights.entries) {
-          if (weight.value != '0%') {
-            if (weight.key.contains(
-                gradeItem.category) /*&& gradeIsNumeric(gradeItem.grade)*/) {
-              if (weightedGradeList
-                  .every((item) => !(item.containsKey(weight.key)))) {
-                weightedDenominatorList.add(int.tryParse(
-                    weight.value.substring(0, weight.value.indexOf('%'))));
-              }
-
-              weightedGradeList.add({
-                weight.key: {weight.value: gradeItem}
-              });
-            }
-          }
-        }
-      } else {
-        if (gradeItem.percentage != null) {
-          classPercent += gradeItem.percentage * 100;
-          gradesCount++;
-        }
+  var groupNumerators = <String, List<double>>{};
+  var groupDenomonators = <String, List<double>>{};
+  var categories = <String>{};
+  for (var gradeGroup in groupedGrades.entries) {
+    // TODO: Group
+    var grades = gradeGroup.value;
+    for (var grade in grades) {
+      if (grade.pointsEarned == null || grade.pointsPossible == null) {
+        continue;
+      }
+      categories.add(grade.category);
+      var pointsEarned = double.tryParse(grade.pointsEarned);
+      if (pointsEarned != null) {
+        (groupNumerators[grade.category] ??= []).add(pointsEarned);
+      }
+      var pointsPossible = double.tryParse(grade.pointsPossible);
+      if (pointsPossible != null) {
+        (groupDenomonators[grade.category] ??= []).add(pointsPossible);
       }
     }
   }
-  classPercent = classPercent / (gradesCount != 0 ? gradesCount : 1);
 
-  // print(weightedGradeList);
-  // print(weightedDenominatorList);
-
-  if (weights != null && weightedDenominatorList.isNotEmpty) {
-    weightedDenominatorList.forEach((weight) {
-      var groupTotal = 0.0;
-      gradesCount = 0;
-      weightedGradeList.forEach((weightedItem) {
-        if (weightedItem.values.first.containsKey(weight.toString() + '%')) {
-          if (weightedItem.values.last.values.last.percentage != null) {
-            groupTotal += weightedItem.values.last.values.last.percentage;
-            gradesCount++;
-          }
-        }
-      });
-      groupTotal = groupTotal / (gradesCount != 0 ? gradesCount : 1);
-      if (weights.entries.length != weightedDenominatorList.length) {
-        groupTotal = groupTotal *
-            (weight / weightedDenominatorList.fold(0, (num p, c) => p + c));
-        // print((weight.toString() +
-        //     '/' +
-        //     (weightedDenominatorList.fold(0, (num p, c) => p + c).toString())));
-      } else {
-        groupTotal = groupTotal * (weight / 100);
+  var total = 0.0;
+  for (var weightEntry in weights.entries) {
+    var category = weightEntry.key;
+    var rawWeight = weightEntry.value;
+    var weight = 100.0;
+    if (rawWeight != null) {
+      weight = double.tryParse(rawWeight.substring(0, rawWeight.indexOf('%')));
+      if (weight == 0) {
+        weight = 100.0;
       }
-      classPercent += groupTotal;
-    });
+    }
+    var numeratorSum = ((groupNumerators[category] ?? [1])
+        .fold<double>(0, (previousValue, element) => previousValue + element));
+    var denomSum = ((groupDenomonators[category] ?? [1])
+        .fold<double>(0, (previousValue, element) => previousValue + element));
+    total += (numeratorSum / denomSum) * weight;
   }
 
-  if (classPercent == 0.0 &&
-      weightedGradeList.every((item) => item.containsKey('Conduct'))) {
-    classPercent = -1;
+  if (weights.isEmpty) {
+    var numeratorSum = 0.0;
+    var denomSum = 0.0;
+    for (var category in categories) {
+      numeratorSum += ((groupNumerators[category] ?? [])
+          .fold(0, (previousValue, element) => previousValue + element));
+      denomSum += ((groupDenomonators[category] ?? [])
+          .fold(0, (previousValue, element) => previousValue + element));
+    }
+    total += (numeratorSum / denomSum) * 100;
   }
 
-  // print(classPercent);
-  return classPercent;
+  if (total == 0.0 && weights.keys.every((item) => item == 'Conduct')) {
+    total = -1;
+  }
+  return total;
 }
 
 bool gradeIsNumeric(String s) {

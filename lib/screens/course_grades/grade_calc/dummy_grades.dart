@@ -52,12 +52,10 @@ class DummyGrade implements Grade {
   String get letter => normalLetter;
 
   @override
-  // TODO: implement pointsEarned
-  String get pointsEarned => throw UnimplementedError();
+  String get pointsEarned => _gradePercent.toString();
 
   @override
-  // TODO: implement pointsPossible
-  String get pointsPossible => throw UnimplementedError();
+  String get pointsPossible => '100';
 
   @override
   String get rawAssignedDate => throw UnimplementedError();
