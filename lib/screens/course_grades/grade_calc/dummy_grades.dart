@@ -70,7 +70,7 @@ class DummyGrade implements Grade {
   String get rawLetter => throw UnimplementedError();
 
   @override
-  String get displayGrade => '$_gradePercent%';
+  String get displayGrade => '${_gradePercent.round()}%';
 
   @override
   String get normalLetter => letterGradeForPercent(percentage);
