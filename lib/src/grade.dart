@@ -102,7 +102,7 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
   String get rawLetter;
 
   String get normalLetter {
-    if (RegExp(r'[A-Fa-f]').hasMatch(rawLetter)) {
+    if (RegExp(r'^[A-Fa-f]$').hasMatch(rawLetter)) {
       return rawLetter;
     }
     return null;
