@@ -16,7 +16,10 @@ class GradeItemCard extends StatelessWidget {
     var gradeString = grade.displayGrade;
     var gradeLetter = grade.letter;
     double gradeSize;
-    if (grade != null && gradeLetter != null) {
+
+    if (grade.normalLetter == null) {
+      gradeSize = 100;
+    } else if (grade != null && gradeLetter != null) {
       gradeSize = 50;
     } else {
       gradeSize = 100;
@@ -55,10 +58,12 @@ class GradeItemCard extends StatelessWidget {
                   style: TextStyle(color: textColor),
                 ),
               ),
-              if (grade != null && gradeLetter != null)
+              if (grade != null &&
+                  gradeLetter != null &&
+                  grade.normalLetter != null)
                 ColoredGradeDot.grade(gradeLetter),
               const SizedBox(width: 4),
-              if (gradeLetter != null)
+              if (gradeLetter != null && grade.normalLetter != null)
                 Text(
                   gradeLetter,
                   style:
