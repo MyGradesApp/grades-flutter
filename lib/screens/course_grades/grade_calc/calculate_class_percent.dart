@@ -45,6 +45,9 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
         .fold<double>(0, (previousValue, element) => previousValue + element));
     var denomSum = ((groupDenomonators[category] ?? [1])
         .fold<double>(0, (previousValue, element) => previousValue + element));
+    if (denomSum == 0.0) {
+      denomSum = 1.0;
+    }
     total += (numeratorSum / denomSum) * weight;
   }
 
@@ -56,6 +59,9 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
           .fold(0, (previousValue, element) => previousValue + element));
       denomSum += ((groupDenomonators[category] ?? [])
           .fold(0, (previousValue, element) => previousValue + element));
+    }
+    if (denomSum == 0.0) {
+      denomSum = 1.0;
     }
     total += (numeratorSum / denomSum) * 100;
   }
@@ -81,6 +87,15 @@ Widget getClassPercentageWidget(
     List<DummyGrade> dummyGrades,
     StringOrInt sisPercent) {
   var classPercentWithDecimal = calculateClassPercent(groupedGrades, weights);
+  if (!classPercentWithDecimal.isFinite) {
+    return Center(
+      child: Text(
+        '??%',
+        style: TextStyle(
+            color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
   if ((classPercentWithDecimal.round() ?? 0) ==
           int.tryParse(sisPercent.toString()) &&
       dummyGrades.isEmpty) {
