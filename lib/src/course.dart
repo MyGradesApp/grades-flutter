@@ -93,11 +93,13 @@ class CourseService {
 
     Map<String, String> weights;
     if (gradeDataResponse['result']['weighted_categories'] != null) {
-      weights = Map.fromEntries((gradeDataResponse['result']
-              ['weighted_categories'] as Map<dynamic, dynamic>)
-          .entries
-          .map((e) => MapEntry(e.value['title'] as String,
-              '${e.value['final_grade_percent']}%')));
+      if (gradeDataResponse['result']['weighted_categories'] is Map) {
+        weights = Map.fromEntries((gradeDataResponse['result']
+                ['weighted_categories'] as Map<dynamic, dynamic>)
+            .entries
+            .map((e) => MapEntry(e.value['title'] as String,
+                '${e.value['final_grade_percent']}%')));
+      }
     } else {
       weights = {};
       // weights = Map.fromEntries(Set.from(gradeData.map((e) => e.category))
