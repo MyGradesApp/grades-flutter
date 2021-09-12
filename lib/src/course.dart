@@ -90,8 +90,7 @@ class CourseService {
         .map((e) => Map<String, dynamic>.from(e as Map))
         .map((e) =>
             serializers.deserializeWith(Grade.serializer, e)); //as Grade;
-
-    Map<String, String> weights;
+    var weights = <String, String>{};
     if (gradeDataResponse['result']['weighted_categories'] != null) {
       if (gradeDataResponse['result']['weighted_categories'] is Map) {
         weights = Map.fromEntries((gradeDataResponse['result']
@@ -99,11 +98,14 @@ class CourseService {
             .entries
             .map((e) => MapEntry(e.value['title'] as String,
                 '${e.value['final_grade_percent']}%')));
+      } else if (gradeDataResponse['result']['weighted_categories'] is List) {
+        for (var categoryRaw in (gradeDataResponse['result']
+            ['weighted_categories'] as List<dynamic>)) {
+          var category = categoryRaw as Map<String, dynamic>;
+          weights[category['title'] as String] =
+              '${category['final_grade_percent']}%';
+        }
       }
-    } else {
-      weights = {};
-      // weights = Map.fromEntries(Set.from(gradeData.map((e) => e.category))
-      //     .map((e) => MapEntry(e as String, '')));
     }
 
     var rawCourseGrade =
