@@ -65,16 +65,26 @@ class SISLoader {
       debugMocking = false;
     }
 
-    var samlLogin = await client.get(Uri.parse(
-        'https://sis.palmbeachschools.org/focus/Modules.php?sso=saml'));
+    var mainPage = await client
+        .get(Uri.parse('https://sis.palmbeachschools.org/focus/Modules.php'));
 
-    var samlLoginBody = await samlLogin.bodyAsString();
-    var loggedIn = RegExp(r'<title>Portal</title>').hasMatch(samlLoginBody);
+    var mainPageBody = await mainPage.bodyAsString();
+    var loggedIn =
+        !RegExp(r'<div class="login-content"></div>').hasMatch(mainPageBody);
     if (loggedIn) {
-      initialContext = _extractInitialContexts(samlLoginBody);
+      initialContext = _extractInitialContexts(mainPageBody);
       _loggedIn = true;
       return;
     }
+
+    var moduleToken = RegExp(r'__Module__\.token = "(.*?)"')
+        .firstMatch(mainPageBody)
+        .group(1);
+
+    var samlLogin = await client.get(Uri.parse(
+        r'https://sis.palmbeachschools.org/focus/classes/FocusModule.class.php?__call__=["SSO\\Login","redirect","saml",{"redirect_url":"https://sis.palmbeachschools.org/focus/Modules.php","force_auth":false,"username":null}]&__token__=' +
+            moduleToken));
+    var samlLoginBody = await samlLogin.bodyAsString();
 
     var samlRequestValue =
         RegExp(r'<input type="hidden" name="SAMLRequest" value="(.*?)"')
@@ -102,7 +112,7 @@ class SISLoader {
       'connected.palmbeachschools.org',
       'simplesaml/module.php/multiauth/selectsource.php',
       {
-        'AuthState': authState,
+        'AuthState': Uri.decodeFull(authState),
         'src-ZW5ib2FyZHNzby1zcA==': 'Log in using the District Portal',
       },
     ));
@@ -264,19 +274,15 @@ class SISLoader {
     var graduationReqsRequest = await client.get(Uri.parse(
         'https://sis.palmbeachschools.org/focus/Modules.php?modname=GraduationRequirements/GraduationRequirements.php&student_id=new&top_deleted_student=true'));
 
-    String bearerTokenCookie;
+    String bearerToken;
     try {
-      bearerTokenCookie = (graduationReqsRequest.headers['set-cookie'] ?? [])
-          .firstWhere((c) => c.startsWith('Module::'));
+      var raw = client.illegalCookies.entries
+          .firstWhere((element) => element.key.startsWith('Module::'));
+      bearerToken = Uri.decodeFull(raw.value);
     } on StateError {
       throw UnknownMissingCookieException('No module cookie present');
     }
-    assert(bearerTokenCookie != null);
-
-    var startIndex = bearerTokenCookie.indexOf('=') + 1;
-    var endIndex = bearerTokenCookie.indexOf(';');
-    var bearerToken =
-        Uri.decodeFull(bearerTokenCookie.substring(startIndex, endIndex));
+    assert(bearerToken != null);
 
     var graduationReqsBody = await graduationReqsRequest.bodyAsString();
 

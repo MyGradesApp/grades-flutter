@@ -20,11 +20,40 @@ extension StringBody on HttpClientResponse {
   }
 }
 
+class MyCookie implements Cookie {
+  @override
+  String domain;
+
+  @override
+  DateTime expires;
+
+  @override
+  bool httpOnly;
+
+  @override
+  int maxAge;
+
+  @override
+  String name;
+
+  @override
+  String path;
+
+  @override
+  bool secure;
+
+  @override
+  String value;
+
+  MyCookie(this.name, this.value);
+}
+
 // This implements just enough functionality to login and fetch grades on sis
 // it should be improved for general use (proper cookie handling and redirects, etc)
 class CookieClient {
   final HttpClient _client = HttpClient();
   final Map<String, Cookie> cookies = {};
+  final Map<String, String> illegalCookies = {};
 
   Future<HttpClientResponse> get(Uri url) async {
     List<String> location;
@@ -32,6 +61,10 @@ class CookieClient {
       // We need to handle redirects ourselves
       request.followRedirects = false;
       request.cookies.addAll(cookies.values);
+      for (var illegalCookieEntry in illegalCookies.entries) {
+        request.cookies
+            .add(MyCookie(illegalCookieEntry.key, illegalCookieEntry.value));
+      }
       return request.close();
     }).then((HttpClientResponse response) {
       var values = response.headers[HttpHeaders.setCookieHeader] ?? [];
@@ -39,12 +72,17 @@ class CookieClient {
       // Some pages have been seen to return malformed set-cookie headers,
       // so we just ignore those errors
       var newCookies = values
-          .where((v) => !v.startsWith('Module::'))
           .map((v) {
             try {
               return Cookie.fromSetCookieValue(v);
             } on FormatException {
-              return null;
+              try {
+                var cookie = RegExp('^(.+?)=(.+?);').firstMatch(v);
+                illegalCookies[cookie.group(1)] = cookie.group(2);
+                return null;
+              } on NoSuchMethodError {
+                return null;
+              }
             }
           })
           .where((cookie) => cookie != null)
@@ -88,6 +126,10 @@ class CookieClient {
       // We need to handle redirects ourselves
       request.followRedirects = false;
       request.cookies.addAll(cookies.values);
+      for (var illegalCookieEntry in illegalCookies.entries) {
+        request.cookies
+            .add(MyCookie(illegalCookieEntry.key, illegalCookieEntry.value));
+      }
       headers?.forEach((name, value) {
         request.headers.add(name, value);
       });
@@ -104,12 +146,17 @@ class CookieClient {
       var values = response.headers[HttpHeaders.setCookieHeader] ?? [];
       // SAML SSO page returns an illegal cookie, strip that
       var newCookies = values
-          .where((v) => !v.startsWith('SSO::'))
           .map((v) {
             try {
               return Cookie.fromSetCookieValue(v);
             } on FormatException {
-              return null;
+              try {
+                var cookie = RegExp('^(.+?)=(.+?);').firstMatch(v);
+                illegalCookies[cookie.group(1)] = cookie.group(2);
+                return null;
+              } on NoSuchMethodError {
+                return null;
+              }
             }
           })
           .where((cookie) => cookie != null)
