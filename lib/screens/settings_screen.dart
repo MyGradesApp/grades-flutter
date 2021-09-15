@@ -139,6 +139,23 @@ class SettingsScreen extends StatelessWidget {
                 child: Row(children: <Widget>[
                   Expanded(
                     child: Text(
+                      'Join The Beta',
+                      style: HEADER_TEXT_STYLE,
+                    ),
+                  ),
+                  Icon(
+                    FontAwesomeIcons.solidRocket,
+                    color: Colors.white,
+                  ),
+                ]),
+                onPressed: () {
+                  launch("https://testflight.apple.com/join/N9fTLKmf");
+                },
+              ),
+              _buildCard(
+                child: Row(children: <Widget>[
+                  Expanded(
+                    child: Text(
                       'Send Feedback',
                       style: HEADER_TEXT_STYLE,
                     ),
