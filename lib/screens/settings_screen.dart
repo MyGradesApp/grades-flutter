@@ -144,7 +144,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   Icon(
-                    FontAwesomeIcons.solidRocket,
+                    FontAwesomeIcons.rocket,
                     color: Colors.white,
                   ),
                 ]),
