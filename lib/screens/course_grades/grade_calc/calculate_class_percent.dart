@@ -20,13 +20,12 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
       }
       categories.add(grade.category);
       var pointsEarned = double.tryParse(grade.pointsEarned);
-      if (pointsEarned != null) {
-        (groupNumerators[grade.category] ??= []).add(pointsEarned);
-      }
       var pointsPossible = double.tryParse(grade.pointsPossible);
-      if (pointsPossible != null) {
-        (groupDenomonators[grade.category] ??= []).add(pointsPossible);
+      if (pointsEarned == null || pointsPossible == null) {
+        continue;
       }
+      (groupNumerators[grade.category] ??= []).add(pointsEarned);
+      (groupDenomonators[grade.category] ??= []).add(pointsPossible);
     }
   }
 
