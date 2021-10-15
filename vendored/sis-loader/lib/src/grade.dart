@@ -111,6 +111,8 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
   String get letter {
     if (rawLetter == r'<i class="ui check icon"></i>') {
       return 'Complete';
+    } else if (rawLetter == r'<i class="ui x icon"></i>') {
+      return 'Incomplete';
     } else {
       return rawLetter;
     }
