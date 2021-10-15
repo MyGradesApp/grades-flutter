@@ -36,7 +36,7 @@ double calculateClassPercent(Map<ToHeader, List<Grade>> groupedGrades,
     var weight = 100.0;
     if (rawWeight != null) {
       weight = double.tryParse(rawWeight.substring(0, rawWeight.indexOf('%')));
-      if (weight == 0) {
+      if (weight == 0 && weights.length == 1) {
         weight = 100.0;
       }
     }
