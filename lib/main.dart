@@ -164,7 +164,7 @@ class App extends StatelessWidget {
     return BlocBuilder<ThemeBloc, ThemeMode>(
       builder: (context, ThemeMode themeMode) {
         return MaterialApp(
-          title: 'SwiftGrade',
+          title: 'MyGrades',
           theme: ThemeData(
             primaryColor: const Color(0xff2a84d2),
             scaffoldBackgroundColor: const Color(0xff2a84d2),

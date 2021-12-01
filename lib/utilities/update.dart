@@ -8,7 +8,7 @@ import 'package:grades/screens/settings_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<bool> launchAppstorePage() {
-  return launch('https://apps.apple.com/us/app/swiftgrade/id1495113299');
+  return launch('https://apps.apple.com/us/app/mygrades/id1495113299');
 }
 
 Future<bool> checkUpdateAvailable() async {

@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               const Text(
-                'SwiftGrade',
+                'MyGrades',
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'OpenSans',

@@ -35,26 +35,20 @@ void showUpdatedDialog(BuildContext context) {
                             ),
                           ),
                           _buildNewItem(
-                            'Critical Fixes',
-                            'Recently, issues with the grades data source resulted in many users unable to access SwiftGrade.\n \nAlthough we patched this within 24 hours, there was a period of time where we understand many users were frustrated.\n \nThis update aims to ensure that communication is better in the future, through the following: ',
+                            'SwiftGrade is rebranding to MyGrades!',
+                            'Find us on the app store as MyGrades, the web as mygrades.app, and insta as @mygradesapp',
                           ),
-                          _buildNewItem('Feedback/Support',
-                              'A feedback/support button on the login and settings screens'),
-                          _buildNewItem('Essential Notifications',
-                              'Push notifications allowing us to let you know about critical issues for now - and some fun stuff in the future ;)'),
+                          _buildNewItem('Beta Testing',
+                              'If you want to be on the bleeding edge, join the beta in settings!'),
                           _buildNewItem(
-                            'Status/Update Indicator',
-                            'A message at the top of the app when issues are occurring and when new updates are available',
-                          ),
-                          _buildNewItem(
-                            'Instagram',
-                            'Follow @getswiftgrade to always know the latest info!',
+                            'Leave a Review!',
+                            'If you appreciate MyGrades, please leave a review on the App Store!',
                           ),
                           const Padding(
                             padding: EdgeInsets.only(
                                 left: 32, right: 22, top: 0, bottom: 10),
                             child: Text(
-                              'Thank you for using the app! \n\nIf you like SwiftGrade, share it with your friends!',
+                              'Thank you for using the app! \n\nIf you like MyGrades, share it with your friends!',
                               style: TextStyle(
                                 fontSize: 18,
                               ),

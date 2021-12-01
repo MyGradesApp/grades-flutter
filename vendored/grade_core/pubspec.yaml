@@ -1,5 +1,5 @@
 name: grade_core
-description: The BLoC core SwiftGrade is built on top of.
+description: The BLoC core MyGrades is built on top of.
 version: 1.0.0
 
 environment:

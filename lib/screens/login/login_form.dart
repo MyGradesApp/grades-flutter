@@ -76,7 +76,7 @@ class _LoginFormState extends State<LoginForm> {
               child: Column(
                 children: <Widget>[
                   const Text(
-                    'SwiftGrade',
+                    'MyGrades',
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'OpenSans',

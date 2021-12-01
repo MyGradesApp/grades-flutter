@@ -19,7 +19,7 @@ class TermsQueryScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 40),
                     const Text(
-                      'Welcome to SwiftGrade',
+                      'Welcome to MyGrades',
                       style: TextStyle(
                         letterSpacing: 1.0,
                         fontSize: 22.0,

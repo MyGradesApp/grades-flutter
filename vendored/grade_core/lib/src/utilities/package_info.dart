@@ -7,8 +7,8 @@ import 'package:package_info/package_info.dart' as package_info;
 Future<package_info.PackageInfo> getPackageInfo() async {
   if (Platform.isWindows) {
     return package_info.PackageInfo(
-      appName: 'SwiftGrade',
-      packageName: 'com.goldinguy.swiftgrade',
+      appName: 'MyGrades',
+      packageName: 'com.goldinguy.mygrades',
       buildNumber: '2',
       version: '1.2.3',
     );

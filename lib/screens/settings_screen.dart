@@ -168,9 +168,9 @@ class SettingsScreen extends StatelessWidget {
                 onPressed: () {
                   var _feedback = Uri(
                       scheme: 'mailto',
-                      path: 'support@getswiftgrade.com',
+                      path: 'support@mygrades.app',
                       queryParameters: <String, String>{
-                        'subject': 'SwiftGrade Inquiry'
+                        'subject': 'MyGrades Inquiry'
                       });
                   launch(_feedback.toString());
                 },
