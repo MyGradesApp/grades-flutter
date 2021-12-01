@@ -10,7 +10,7 @@ Future<package_info.PackageInfo> getPackageInfo() async {
       appName: 'MyGrades',
       packageName: 'com.goldinguy.mygrades',
       buildNumber: '2',
-      version: '1.2.3',
+      version: '1.3.0',
     );
   } else {
     var data = await package_info.PackageInfo.fromPlatform();

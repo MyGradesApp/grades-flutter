@@ -41,7 +41,7 @@ MyGrades is an app built on Flutter, a framework that enables cross-platform com
 
 `Open App` => `If previously logged in, automatically authenticate (otherwise go to login screen) and enter home page with all of your courses complete with class avgs and letter grades` => `Swipe left for recent grades, or swipe right to see upcoming assignments` => `Click on a class to see the grades in that class, sorted by either category (w/ weights) or recency` => `Click on a specific assignment to see more details`
 
-MyGrades has two major submodules, [sis-dart-loader](https://github.com/MyGrades/dart-sis-loader), which gathers the student data that the app displays, and [grade-core](https://github.com/MyGrades/grades-core), which stores and formats it
+MyGrades has two major submodules, [sis-dart-loader](https://github.com/MyGradesApp/dart-sis-loader), which gathers the student data that the app displays, and [grade-core](https://github.com/MyGradesApp/grades-core), which stores and formats it
 
 ## Development setup
 
@@ -61,7 +61,7 @@ flutter run -d "target device"
 
 ## Contributing
 
-1. Fork MyGrades [here](https://github.com/MyGrades/grades-flutter/fork)
+1. Fork MyGrades [here](https://github.com/MyGradesApp/grades-flutter/fork)
 2. Create a feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
@@ -77,7 +77,7 @@ You can view the MyGrades `terms of service` and `privacy policy` [here](https:/
 
 [discord-url]: https://discord.gg/gKYSMeJ
 [discord]: https://img.shields.io/discord/689176425701703810
-[issues]: https://img.shields.io/github/issues/MyGrades/grades-flutter
-[issues-url]: https://github.com/MyGrades/grades-flutter/issues
-[contributors-shield]: https://img.shields.io/github/contributors/MyGrades/grades-flutter.svg?style=flat-square
-[contributors-url]: https://github.com/MyGrades/grades-flutter/graphs/contributors
+[issues]: https://img.shields.io/github/issues/MyGradesApp/grades-flutter
+[issues-url]: https://github.com/MyGradesApp/grades-flutter/issues
+[contributors-shield]: https://img.shields.io/github/contributors/MyGradesApp/grades-flutter.svg?style=flat-square
+[contributors-url]: https://github.com/MyGradesApp/grades-flutter/graphs/contributors

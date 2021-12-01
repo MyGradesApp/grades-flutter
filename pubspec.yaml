@@ -31,7 +31,7 @@ dependencies:
   http: ^0.13.3
 
   flutter_picker:
-    git: git://github.com/MyGrades/flutter_picker.git
+    git: git://github.com/MyGradesApp/flutter_picker.git
 
   # Fonts and Icons
   font_awesome_flutter: ^9.0.0
