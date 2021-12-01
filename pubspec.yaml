@@ -1,6 +1,6 @@
 name: grades
 description: The grades app for the School District of Palm Beach County. View your grades at a glance. Formerly known as SwiftGrade.
-author: GoldinGuy, Noskcaj
+publish_to: none,
 version: 3.2.0+0
 
 environment:
