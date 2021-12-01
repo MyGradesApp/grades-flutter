@@ -6,6 +6,7 @@ analyzer:
     missing_required_param: error
     # treat missing returns as a warning (not a hint)
     missing_return: error
+    todo: ignore
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false

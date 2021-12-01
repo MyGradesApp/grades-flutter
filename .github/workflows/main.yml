@@ -25,5 +25,5 @@ jobs:
 
       - name: Run Flutter tests
         run: |
-          flutter analyze --no-pub --no-current-package lib
+          flutter analyze --no-pub --no-current-package --no-fatal-infos --no-fatal-warnings lib
           flutter test
