@@ -18,7 +18,7 @@ Future<Status> getStatus() async {
   http.Response response;
   try {
     response =
-        await http.get(Uri.parse('https://mygrades.github.io/status/'));
+        await http.get(Uri.parse('https://mygradesapp.github.io/status/'));
   } on SocketException catch (e) {
     return Future.error(e);
   }
