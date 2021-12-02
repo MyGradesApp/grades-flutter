@@ -15,9 +15,10 @@ platform :ios do
     build_flutter_app
     upload_to_testflight(
         ipa: "build/Runner.ipa",
-        username: "pairadocs10@gmail.com",
+        username: "sethgoldin27@gmail.com",
         skip_submission: true,
-        uses_non_exempt_encryption: true
+        uses_non_exempt_encryption: true,
+        
     )
   end
 end
