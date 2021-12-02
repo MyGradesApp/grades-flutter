@@ -26,12 +26,11 @@ dependencies:
   tuple: ^2.0.0
   built_collection: ^5.0.0
 
-  onesignal_flutter: ^2.6.3
+  onesignal_flutter: ^2.6.4
 
   http: ^0.13.3
 
-  flutter_picker:
-    git: git://github.com/MyGradesApp/flutter_picker.git
+  flutter_picker: ^2.0.2
 
   # Fonts and Icons
   font_awesome_flutter: ^9.0.0

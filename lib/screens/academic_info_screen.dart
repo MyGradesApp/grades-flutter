@@ -21,6 +21,7 @@ class _AcademicInfoScreenState extends State<AcademicInfoScreen> {
         elevation: 0.0,
         title: Text('Academic Info'),
         centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: RefreshIndicator(
         onRefresh: () {

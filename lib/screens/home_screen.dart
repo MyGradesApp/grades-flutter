@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           title,
         ),
+        backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
         leading: IconButton(
           tooltip: 'Profile',

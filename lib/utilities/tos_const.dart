@@ -1,7 +1,7 @@
 const TOS_STRING = """
-We are doing this as an accommodation, we are not collecting your information, and we are not making a profit. There are no assurances if you use this application that your data or credentials are completely safe. Users assume all the risk.
-
 MyGrades is approved by the School District of Palm Beach County Technology Clearinghouse Committee.
+
+MyGrades is not collecting your information or making any profit. There are no assurances if you use this application that your data or credentials are completely safe. Users assume all the risk.
 
 Terms of Use
 

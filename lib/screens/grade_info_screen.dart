@@ -67,6 +67,7 @@ class GradeInfoScreen extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         title: Text(assignmentName),
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: ListView.builder(
         itemCount: rawData.length,

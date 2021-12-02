@@ -14,6 +14,7 @@ class _TermsDisplayScreenState extends State<TermsDisplayScreen> {
       appBar: AppBar(
         title: const Text('Terms of Service'),
         elevation: 0.0,
+        backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
       ),
       body: Center(

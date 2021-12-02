@@ -36,10 +36,12 @@ void showUpdatedDialog(BuildContext context) {
                           ),
                           _buildNewItem(
                             'SwiftGrade is rebranding to MyGrades!',
-                            'Find us on the app store as MyGrades, the web as mygrades.app, and insta as @mygradesapp',
+                            'Find us on the app store as MyGrades, the web as mygrades.app, and instagram as @mygradesapp',
                           ),
                           _buildNewItem('Beta Testing',
                               'If you want to be on the bleeding edge, join the beta in settings!'),
+                                 _buildNewItem('Bug Fixes Galore',
+                              'Many users were experiencing issues due to changes in SIS. This update includes improvements across the app.'),
                           _buildNewItem(
                             'Leave a Review!',
                             'If you appreciate MyGrades, please leave a review on the App Store!',

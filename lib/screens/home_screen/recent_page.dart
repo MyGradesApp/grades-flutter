@@ -45,6 +45,7 @@ class _RecentPageState extends State<RecentPage>
             var courses = state.partialCourses.entries.toList();
 
             return ListView(
+              
               physics: AlwaysScrollableScrollPhysics(),
               children: [
                 for (var course in courses)

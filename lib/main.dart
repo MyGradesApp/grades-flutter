@@ -166,9 +166,10 @@ class App extends StatelessWidget {
         return MaterialApp(
           title: 'MyGrades',
           theme: ThemeData(
-            primaryColor: const Color(0xff2a84d2),
-            scaffoldBackgroundColor: const Color(0xff2a84d2),
-            accentColor: const Color(0xff216bac),
+            primaryColor: Colors.blue[600],
+            scaffoldBackgroundColor: Colors.blue[600],
+            backgroundColor: Colors.blue[600],
+            accentColor: Colors.blue[600],
             cardColor: const Color(0xffffffff),
             primaryColorLight: Colors.black,
             brightness: Brightness.light,
@@ -182,6 +183,7 @@ class App extends StatelessWidget {
             brightness: Brightness.dark,
           ),
           themeMode: themeMode,
+          debugShowCheckedModeBanner: false,
           builder: (context, child) {
             return Column(
               children: [

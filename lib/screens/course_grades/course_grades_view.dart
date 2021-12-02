@@ -45,6 +45,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(bloc.course.courseName),
         centerTitle: true,
         actions: [

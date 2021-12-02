@@ -20,6 +20,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         title: Text('Settings'),
+        backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
