@@ -44,7 +44,7 @@ dependencies:
   flutter_circular_chart_two:
     git: https://github.com/jcsena/flutter_circular_chart
 
-  url_launcher: ^6.0.3
+  url_launcher: ^6.1.2
 
   webview_flutter: ^2.0.6
 

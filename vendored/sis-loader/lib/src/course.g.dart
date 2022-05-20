@@ -181,7 +181,7 @@ class _$GradeData extends GradeData {
   final int classPercent;
 
   factory _$GradeData([void Function(GradeDataBuilder) updates]) =>
-      (new GradeDataBuilder()..update(updates)).build();
+      (new GradeDataBuilder()..update(updates))._build();
 
   _$GradeData._({this.grades, this.weights, this.classPercent}) : super._();
 
@@ -258,7 +258,9 @@ class GradeDataBuilder implements Builder<GradeData, GradeDataBuilder> {
   }
 
   @override
-  _$GradeData build() {
+  GradeData build() => _build();
+
+  _$GradeData _build() {
     _$GradeData _$result;
     try {
       _$result = _$v ??
@@ -301,7 +303,7 @@ class _$Course extends Course {
   final String gradeLetter;
 
   factory _$Course([void Function(CourseBuilder) updates]) =>
-      (new CourseBuilder()..update(updates)).build();
+      (new CourseBuilder()..update(updates))._build();
 
   _$Course._(
       {this.coursePeriodId,
@@ -432,7 +434,9 @@ class CourseBuilder implements Builder<Course, CourseBuilder> {
   }
 
   @override
-  _$Course build() {
+  Course build() => _build();
+
+  _$Course _build() {
     final _$result = _$v ??
         new _$Course._(
             coursePeriodId: BuiltValueNullFieldError.checkNotNull(
@@ -451,4 +455,4 @@ class CourseBuilder implements Builder<Course, CourseBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:package_info/package_info.dart' as package_info;
 
 Future<package_info.PackageInfo> getPackageInfo() async {
-  if (Platform.isWindows) {
+  if (Platform.isWindows | Platform.isLinux) {
     return package_info.PackageInfo(
       appName: 'MyGrades',
       packageName: 'com.goldinguy.mygrades',
