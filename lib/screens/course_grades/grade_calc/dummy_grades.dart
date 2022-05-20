@@ -77,6 +77,14 @@ class DummyGrade implements Grade {
 
   @override
   double get percentage => _gradePercent;
+
+  @override
+  // TODO: implement pointsEarnedRaw
+  StringOrNum get pointsEarnedRaw => throw UnimplementedError();
+
+  @override
+  // TODO: implement pointsPossibleRaw
+  StringOrNum get pointsPossibleRaw => throw UnimplementedError();
 }
 
 Future<DummyGrade> createDummyGradePopup(BuildContext context,

@@ -157,6 +157,7 @@ class _CourseGradesViewState extends State<CourseGradesView> {
                           bloc.course.gradePercent)),
                   Expanded(
                     child: ListView.builder(
+                      controller: ScrollController(),
                       itemCount: groupKeys.length,
                       itemBuilder: (context, i) {
                         var group = groupKeys[i];

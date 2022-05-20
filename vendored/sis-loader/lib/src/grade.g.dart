@@ -34,19 +34,19 @@ class _$GradeSerializer implements StructuredSerializer<Grade> {
           specifiedType: const FullType(String)),
     ];
     Object value;
-    value = object.pointsEarned;
+    value = object.pointsEarnedRaw;
     if (value != null) {
       result
         ..add('POINTS_EARNED')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(StringOrNum)));
     }
-    value = object.pointsPossible;
+    value = object.pointsPossibleRaw;
     if (value != null) {
       result
         ..add('POINTS_POSSIBLE')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(StringOrNum)));
     }
     value = object.rawUpdatedAt;
     if (value != null) {
@@ -81,12 +81,12 @@ class _$GradeSerializer implements StructuredSerializer<Grade> {
               specifiedType: const FullType(String)) as String;
           break;
         case 'POINTS_EARNED':
-          result.pointsEarned = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+          result.pointsEarnedRaw = serializers.deserialize(value,
+              specifiedType: const FullType(StringOrNum)) as StringOrNum;
           break;
         case 'POINTS_POSSIBLE':
-          result.pointsPossible = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+          result.pointsPossibleRaw = serializers.deserialize(value,
+              specifiedType: const FullType(StringOrNum)) as StringOrNum;
           break;
         case 'LETTER':
           result.rawLetter = serializers.deserialize(value,
@@ -123,9 +123,9 @@ class _$Grade extends Grade {
   @override
   final String name;
   @override
-  final String pointsEarned;
+  final StringOrNum pointsEarnedRaw;
   @override
-  final String pointsPossible;
+  final StringOrNum pointsPossibleRaw;
   @override
   final String rawLetter;
   @override
@@ -144,8 +144,8 @@ class _$Grade extends Grade {
 
   _$Grade._(
       {this.name,
-      this.pointsEarned,
-      this.pointsPossible,
+      this.pointsEarnedRaw,
+      this.pointsPossibleRaw,
       this.rawLetter,
       this.rawDueDate,
       this.rawAssignedDate,
@@ -173,8 +173,8 @@ class _$Grade extends Grade {
     if (identical(other, this)) return true;
     return other is Grade &&
         name == other.name &&
-        pointsEarned == other.pointsEarned &&
-        pointsPossible == other.pointsPossible &&
+        pointsEarnedRaw == other.pointsEarnedRaw &&
+        pointsPossibleRaw == other.pointsPossibleRaw &&
         rawLetter == other.rawLetter &&
         rawDueDate == other.rawDueDate &&
         rawAssignedDate == other.rawAssignedDate &&
@@ -193,8 +193,8 @@ class _$Grade extends Grade {
                         $jc(
                             $jc(
                                 $jc($jc(0, name.hashCode),
-                                    pointsEarned.hashCode),
-                                pointsPossible.hashCode),
+                                    pointsEarnedRaw.hashCode),
+                                pointsPossibleRaw.hashCode),
                             rawLetter.hashCode),
                         rawDueDate.hashCode),
                     rawAssignedDate.hashCode),
@@ -207,8 +207,8 @@ class _$Grade extends Grade {
   String toString() {
     return (newBuiltValueToStringHelper('Grade')
           ..add('name', name)
-          ..add('pointsEarned', pointsEarned)
-          ..add('pointsPossible', pointsPossible)
+          ..add('pointsEarnedRaw', pointsEarnedRaw)
+          ..add('pointsPossibleRaw', pointsPossibleRaw)
           ..add('rawLetter', rawLetter)
           ..add('rawDueDate', rawDueDate)
           ..add('rawAssignedDate', rawAssignedDate)
@@ -226,14 +226,15 @@ class GradeBuilder implements Builder<Grade, GradeBuilder> {
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
-  String _pointsEarned;
-  String get pointsEarned => _$this._pointsEarned;
-  set pointsEarned(String pointsEarned) => _$this._pointsEarned = pointsEarned;
+  StringOrNum _pointsEarnedRaw;
+  StringOrNum get pointsEarnedRaw => _$this._pointsEarnedRaw;
+  set pointsEarnedRaw(StringOrNum pointsEarnedRaw) =>
+      _$this._pointsEarnedRaw = pointsEarnedRaw;
 
-  String _pointsPossible;
-  String get pointsPossible => _$this._pointsPossible;
-  set pointsPossible(String pointsPossible) =>
-      _$this._pointsPossible = pointsPossible;
+  StringOrNum _pointsPossibleRaw;
+  StringOrNum get pointsPossibleRaw => _$this._pointsPossibleRaw;
+  set pointsPossibleRaw(StringOrNum pointsPossibleRaw) =>
+      _$this._pointsPossibleRaw = pointsPossibleRaw;
 
   String _rawLetter;
   String get rawLetter => _$this._rawLetter;
@@ -266,8 +267,8 @@ class GradeBuilder implements Builder<Grade, GradeBuilder> {
     final $v = _$v;
     if ($v != null) {
       _name = $v.name;
-      _pointsEarned = $v.pointsEarned;
-      _pointsPossible = $v.pointsPossible;
+      _pointsEarnedRaw = $v.pointsEarnedRaw;
+      _pointsPossibleRaw = $v.pointsPossibleRaw;
       _rawLetter = $v.rawLetter;
       _rawDueDate = $v.rawDueDate;
       _rawAssignedDate = $v.rawAssignedDate;
@@ -297,8 +298,8 @@ class GradeBuilder implements Builder<Grade, GradeBuilder> {
     final _$result = _$v ??
         new _$Grade._(
             name: BuiltValueNullFieldError.checkNotNull(name, 'Grade', 'name'),
-            pointsEarned: pointsEarned,
-            pointsPossible: pointsPossible,
+            pointsEarnedRaw: pointsEarnedRaw,
+            pointsPossibleRaw: pointsPossibleRaw,
             rawLetter: BuiltValueNullFieldError.checkNotNull(
                 rawLetter, 'Grade', 'rawLetter'),
             rawDueDate: BuiltValueNullFieldError.checkNotNull(

@@ -1,6 +1,7 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:intl/intl.dart';
+import 'package:sis_loader/sis_loader.dart';
 
 part 'grade.g.dart';
 
@@ -62,11 +63,21 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
 
   @nullable
   @BuiltValueField(wireName: 'POINTS_EARNED')
-  String get pointsEarned;
+  StringOrNum get pointsEarnedRaw;
+
+  @BuiltValueField(serialize: false)
+  String get pointsEarned {
+    return pointsPossibleRaw.toString() ;
+  }
 
   @nullable
   @BuiltValueField(wireName: 'POINTS_POSSIBLE')
-  String get pointsPossible;
+  StringOrNum get pointsPossibleRaw;
+
+  @BuiltValueField(serialize: false)
+  String get pointsPossible {
+    return pointsPossibleRaw.toString() ;
+  }
 
   @BuiltValueField(serialize: false)
   String get displayGrade {

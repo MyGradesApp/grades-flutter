@@ -47,15 +47,14 @@ class _LoginFormState extends State<LoginForm> {
               ));
           } else {
             // TODO: Show more failure info
-            Scaffold.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                content: Text(
-                  'An error occured',
-                  textAlign: TextAlign.center,
-                ),
-                backgroundColor: Colors.red,
-              ));
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                'An error occured',
+                textAlign: TextAlign.center,
+              ),
+              backgroundColor: Colors.red,
+            ));
           }
         }
         if (state.isSuccess) {

@@ -51,6 +51,7 @@ class _CourseListPageState extends State<CourseListPage> {
               );
             }
             return ListView(
+              controller: ScrollController(),
               children: [
                 buildUpdateCardWidget(),
                 buildStatusCardWidget(),
