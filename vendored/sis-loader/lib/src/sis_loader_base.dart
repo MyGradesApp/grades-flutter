@@ -143,6 +143,14 @@ class SISLoader {
     });
 
     var authResponse = await authRequest.bodyAsString();
+
+    var failMatch = RegExp(
+      r'<span class="field-validation-error text-danger" data-valmsg-for="ErrorMessage" data-valmsg-replace="true">(.*?)</span>'
+    ).firstMatch(authResponse);
+    if (failMatch != null) {
+      throw InvalidAuthException(failMatch.group(1));
+    }
+
     var samlResponseMatch = RegExp(
       r'<input name="SAMLResponse" type="hidden" id="SAMLResponse" value="(.*?)"',
     ).firstMatch(authResponse);

@@ -67,7 +67,7 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
 
   @BuiltValueField(serialize: false)
   String get pointsEarned {
-    return pointsPossibleRaw.toString() ;
+    return pointsPossibleRaw?.maybeString() ;
   }
 
   @nullable
@@ -76,7 +76,7 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
 
   @BuiltValueField(serialize: false)
   String get pointsPossible {
-    return pointsPossibleRaw.toString() ;
+    return pointsPossibleRaw?.maybeString() ;
   }
 
   @BuiltValueField(serialize: false)
@@ -120,7 +120,7 @@ abstract class Grade implements Built<Grade, GradeBuilder> {
   }
 
   String get letter {
-    if (rawLetter == r'<i class="ui check icon"></i>') {
+    if (rawLetter.contains(r'<i class="ui check icon')) {
       return 'Complete';
     } else if (rawLetter == r'<i class="ui x icon"></i>') {
       return 'Incomplete';

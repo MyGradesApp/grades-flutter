@@ -88,6 +88,10 @@ class StringOrNum {
   String toString() {
     return _value.toString();
   }
+
+  String maybeString() {
+    return _value?.toString();
+  }
 }
 
 class StringOrNumSerializer implements PrimitiveSerializer<StringOrNum> {
